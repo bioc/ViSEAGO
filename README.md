@@ -14,12 +14,12 @@ to complete
 
 ```r
 remotes::install_gitlab(
-  "UMR-BOA/ViSEAGO",
+  "umr-boa/viseago",
   host = "forgemia.inra.fr",
   build_opts = c("--no-resave-data","--no-manual")
 )
 ```
 
-## overview
+## Overview
 
 ![](./inst/extdata/figure2_BMCBioData.png)
