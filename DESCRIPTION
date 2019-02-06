@@ -1,0 +1,86 @@
+Package: ViSEAGO
+Version: 0.99.0
+Title: Visualisation, Semantic similarity, Enrichment Analysis of Gene Ontology.
+Authors@R: c(
+	person("Aurelien","Brionne", role=c("aut","cre"),
+	email="aurelien.brionne@inra.fr"),
+	person("Amelie","Juanchich", role="aut",
+	email="amelie.juanchich@inra.fr"),
+	person("Christelle","Hennequet-Antier", role="aut",
+	email="christelle.hennequet-antier@inra.fr"))
+Depends: R (>= 3.5.2)
+Imports: data.table,
+         AnnotationDbi,
+         AnnotationForge,
+         biomaRt,
+         dendextend,
+         DiagrammeR,
+         GOSemSim,
+         DT,
+         dynamicTreeCut,
+         ggplot2,
+         GO.db,
+         heatmaply,
+         htmltools,
+         igraph,
+         org.Mm.eg.db,
+         methods,
+         plotly,
+         topGO,
+         Rcpp,
+         RColorBrewer,
+         Rgraphviz,
+         R.utils,
+         scales,
+         UpSetR,
+         webshot,
+         BiocStyle,
+         knitr,
+         rmarkdown,
+         corrplot,
+         remotes,
+         BiocManager
+Description: The main objective of ViSEAGO workflow is to carry out a data mining of biological functions and establish links between genes involved in the study. We developed ViSEAGO in R to facilitate functional Gene Ontology (GO) analysis of complex experimental design with multiple comparisons of interest. It allows to study large-scale datasets together and visualize GO profiles to capture biological knowledge. It stands for three major concepts: Visualization, Semantic similarity and Enrichment Analysis of Gene Ontology. It provides access to the last current GO annotations, which are retrieved from one of NCBI EntrezGene, Ensembl or Uniprot databases for available species. ViSEAGO extends classical functional GO analysis to focus on functional coherence by aggregating closely related biological themes while studying multiple datasets at once. It provides both a synthetic and detailed view using interactive functionalities respecting the GO graph structure and ensuring functional coherence supplied by semantic similarity. ViSEAGO has been successfully applied on several datasets from different species with a variety of biological questions. Results can be easily shared between bioinformaticians and biologists, enhancing reporting capabilities while maintaining reproducibility.
+VignetteBuilder: knitr
+License: GPL-3
+LazyData: TRUE
+Author: Aurelien Brionne [aut, cre],
+  Amelie Juanchich[aut],
+  christelle Hennequet-Antier [aut]
+Maintainer: Aurelien Brionne <aurelien.brionne@inra.fr>
+Repository: forgemia.inra.fr,
+            bioconductor.org
+URL: https://forgemia.inra.fr/UMR-BOA/ViSEAGO,
+     https://www.bioconductor.org/packages/release/bioc/html/ViSEAGO.html
+BugReports: https://forgemia.inra.fr/UMR-BOA/ViSEAGO/issues
+RoxygenNote: 6.1.1
+Collate: 
+    'genomic_ressource.R'
+    'Bioconductor2GO.R'
+    'Ensembl2GO.R'
+    'EntrezGene2GO.R'
+    'EntrezGene_orthologs.R'
+    'enrich_GO_terms.R'
+    'GO_SS.R'
+    'GO_clusters.R'
+    'GOclusters_heatmap.R'
+    'GOcount.R'
+    'GOterms_heatmap.R'
+    'MDSplot.R'
+    'Uniprot2GO.R'
+    'Upset.R'
+    'annotate.R'
+    'available_organisms.R'
+    'build_GO_SS.R'
+    'clusters_cor.R'
+    'compare_clusters.R'
+    'compute_SS_distances.R'
+    'create_topGOdata.R'
+    'gene2GO.R'
+    'merge_enrich_terms.R'
+    'onAttach.R'
+    'overlapper.R'
+    'pkgdiagram.R'
+    'show_heatmap.R'
+    'show_table.R'
+    'taxonomy.R'

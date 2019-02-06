@@ -1,0 +1,313 @@
+---
+title: "Evaluate impact of Semantic Similiarity choice"
+author:
+- name: Aurelien Brionne
+  affiliation: Institut National de la Recherche Agronomique (INRA)
+- name: Amelie Juanchich
+  affiliation: Institut National de la Recherche Agronomique (INRA)
+- name: Christelle Hennequet-Antier
+  affiliation: Institut National de la Recherche Agronomique (INRA)
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  BiocStyle::html_document:
+    highlight: tango
+vignette: >
+  %\VignetteIndexEntry{3_SS_choice}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: bibliography.bib
+csl: bmc-genomics.csl
+---
+
+```{r setup,include=FALSE,cache=F}
+###################
+# load
+library(ViSEAGO)
+
+###################
+# knitr document options
+knitr::opts_chunk$set(
+  eval=F,fig.path='./data/output/',echo=T,fig.pos = 'H',
+  fig.width=8,message=F,comment=NA,warning=F
+)
+```
+
+# Introduction{-}
+
+In the overview (see`utils::vignette("1_overview", package ="ViSEAGO")`), we explained how to use `r BiocStyle::Biocpkg("ViSEAGO")` package.
+In this vignette we explain how to explore the effect of the GO semantic similarity algorithms on the tree structure, and the effect of the trees clustering based on the mouse_bioconductor vignette dataset (see `utils::vignette("2_mouse_bioconductor", package ="ViSEAGO")`).
+
+# Clusters-heatmap of GO terms
+
+The GO annotations of genes created and enriched GO terms are combined using `ViSEAGO::build_GO_SS`. The Semantic Similarity (SS) between enriched GO terms are calculated using `ViSEAGO::compute_SS_distances` method. We compute all distances methods with  *Resnik*, *Lin*, *Rel*, *Jiang*, and *Wang* algorithms  implemented in the `r BiocStyle::Biocpkg("GOSemSim")` package @pmid20179076. The built object `myGOs` contains all informations of enriched GO terms and the SS distances between them.
+
+Then, a hierarchical clustering method using `ViSEAGO::GOterms_heatmap` is performed based on each SS distance between the enriched GO terms using the `ward.D2` aggregation criteria.  Clusters of enriched GO terms are obtained by cutting branches off the dendrogram. Here, we choose a dynamic branch cutting method based on the shape of clusters using `r BiocStyle::CRANpkg("dynamicTreeCut")` [@pmid18024473; @dynamicTreeCut].
+
+```{r SS_build,eval=F}
+###################        
+# create GO_SS-class object
+myGOs<-ViSEAGO::build_GO_SS(gene2GO=myGENE2GO,enrich_GO_terms=BP_sResults)
+
+###################           
+# compute Semantic Similarity (SS)
+myGOs<-ViSEAGO::compute_SS_distances(
+  myGOs,
+  distance=base::c("Resnik","Lin","Rel","Jiang","Wang")
+)
+```
+
+1. Resnik distance
+
+```{r SS_terms_Resnik-wardD2}
+##################           
+# GO terms heatmap
+Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
+  myGOs,
+  showIC=T,
+  GO.tree=base::list(
+    tree=base::list(
+      distance="Resnik",
+      aggreg.method="ward.D2"
+    ),
+    cut=base::list(
+      dynamic=base::list(
+        deepSplit=2,
+        minClusterSize =2
+        )
+    )
+  ),
+  samples.tree=NULL
+)
+```
+
+2. Lin distance
+
+```{r SS_Lin-wardD2}
+##################           
+# GO terms heatmap
+Lin_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
+  myGOs,
+  showIC=T,
+  GO.tree=base::list(
+    tree=base::list(
+      distance="Lin",
+      aggreg.method="ward.D2"
+    ),
+    cut=base::list(
+      dynamic=base::list(
+        deepSplit=2,
+        minClusterSize =2
+      )
+    )
+  ),
+  samples.tree=NULL
+)
+```
+
+3. Rel distance
+
+```{r SS_ Rel-wardD2}
+##################           
+# GO terms heatmap
+Rel_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
+  myGOs,
+  showIC=T,
+  GO.tree=base::list(
+    tree=base::list(
+      distance="Rel",
+      aggreg.method="ward.D2"
+    ),
+    cut=base::list(
+      dynamic=base::list(
+        deepSplit=2,
+        minClusterSize =2
+      )
+    )
+  ),
+  samples.tree=NULL
+)
+```
+
+4. Jiang distance
+
+```{r SS_Jiang-wardD2}
+##################           
+# GO terms heatmap
+Jiang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
+  myGOs,
+  showIC=T,
+  GO.tree=base::list(
+    tree=base::list(
+      distance="Jiang",
+      aggreg.method="ward.D2"
+    ),
+    cut=base::list(
+      dynamic=base::list(
+        deepSplit=2,
+        minClusterSize =2
+      )
+    )
+  ),
+  samples.tree=NULL
+)
+```
+
+5. Wang distance
+
+```{r SS_Wang-wardD2}
+##################           
+# GO terms heatmap
+Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
+  myGOs,
+  showIC=T,
+  GO.tree=base::list(
+    tree=base::list(
+      distance="Wang",
+      aggreg.method="ward.D2"
+    ),
+    cut=base::list(
+      dynamic=base::list(
+        deepSplit=2,
+        minClusterSize =2
+      )
+    )
+  ),
+  samples.tree=NULL
+)
+```
+
+# Trees comparison
+
+## Global trees comparisons
+
+The `r BiocStyle::CRANpkg("dendextend")` package  @dendextend,  offers a set of functions for extending dendrogram objects in R, letting you visualize and compare trees of hierarchical clusterings (see `utils::vignette("introduction", package ="dendextend")`). In this package we use `dendextend::dendlist` and `dendextend::cor.dendlist` functions in order to calculate a correlation matrix between trees, which is based on the Baker Gamma and cophenetic correlation as mentioned in `r BiocStyle::CRANpkg("dendextend")`.
+
+The correlation matrix can be visualized with the nice `corrplot::corrplot` function from `r BiocStyle::CRANpkg("corrplot")` package @corrplot.
+
+```{r parameters_dend_correlation}
+###################
+# build the list of trees
+dend<- dendextend::dendlist(
+  "Resnik"=Resnik_clusters_wardD2@dendrograms$GO,
+  "Lin"=Lin_clusters_wardD2@dendrograms$GO,
+  "Rel"=Rel_clusters_wardD2@dendrograms$GO,
+  "Jiang"=Jiang_clusters_wardD2@dendrograms$GO,
+  "wang"=Wang_clusters_wardD2@dendrograms$GO
+)
+
+###################
+# build the trees matrix correlation
+dend_cor<-dendextend::cor.dendlist(dend)
+```
+
+```{r parameters_dend_correlation_print}
+###################
+# corrplot
+corrplot::corrplot(
+  dend_cor,
+  "pie",
+  "lower",
+  is.corr=FALSE,
+  cl.lim=c(0,1)
+)
+```
+
+<img src=`r base::system.file("extdata/data/output","dend_cor.png",package="ViSEAGO")` alt="Drawing" style="width: 800px;"/>
+
+As expected, we can easily tells us that GO semantic similarity algorithms based on the Information Content (IC-based)  with *Resnik*, *Lin*, *Rel*, and *Jiang* methods are more similar than the *Wang* method which in based on the topology of the GO graph structure (Graph-based).
+
+## Paired trees comparison
+
+We can also compare the dendrograms build with, for example, the *Resnik* and the *Wang* algorithms using `dendextend::dendlist`, `dendextend::untangle`, and `dendextend::tanglegram` functions.
+The quality of the alignment of the two trees can be calculated with `dendextend::entanglement` (0: good to 1:bad).
+
+```{r parameters_dend_comparison,fig.cap="dendrograms comparison"}
+###################
+# dendrogram list
+dl<-dendextend::dendlist(
+  Resnik_clusters_wardD2@dendrograms$GO,
+  Wang_clusters_wardD2@dendrograms$GO
+)
+
+###################
+# untangle the trees (efficient but very highly time consuming)
+tangle<-dendextend::untangle(dl,"step2side")
+
+###################
+# display the entanglement
+dendextend::entanglement(tangle) # 0.08362968
+
+###################
+# display the tanglegram
+dendextend::tanglegram(
+  tangle,
+  margin_inner=5,
+  edge.lwd=1,
+  lwd = 1,
+  lab.cex=0.8,
+  columns_width = c(5,2,5),
+  common_subtrees_color_lines=F
+)
+```
+
+<img src=`r base::system.file("extdata/data/output","ResnikvsWang_trees_comparison.png",package="ViSEAGO")` alt="Drawing" style="width: 800px;height:800px"/>
+
+# Clusters comparison
+
+Another possibility concerns the comparison of the dendrograms clusters.
+
+## Multiple clusters comparison
+
+We can also explore the GO terms assignation between clusters according the used parameters with `ViSEAGO::clusters_cor` and plot the results with `corrplot::corrplot` using `r BiocStyle::CRANpkg("corrplot")` package.
+
+```{r parameters_clusters_correlation}
+###################
+# clusters to compare
+clusters=base::list(
+  Resnik="Resnik_clusters_wardD2",
+  Lin="Lin_clusters_wardD2",
+  Rel="Rel_clusters_wardD2",
+  Jiang="Jiang_clusters_wardD2",
+  Wang="Wang_clusters_wardD2"
+)
+
+###################
+# global dendrogram partition correlation
+clust_cor<-ViSEAGO::clusters_cor(clusters,method="adjusted.rand")
+```
+
+```{r parameters_clusters_correlation_print}
+###################
+# global dendrogram partition correlation
+corrplot::corrplot(
+  clust_cor,
+  "pie",
+  "lower",
+  is.corr=FALSE,
+  cl.lim=c(0,1)
+)
+```
+
+<img src=`r base::system.file("extdata/data/output","clust_cor.png",package="ViSEAGO")` alt="Drawing" style="width: 800px;"/>
+
+As expected, same as in the global trees comparison, we can easily tells us that GO semantic similarity algorithms based on the Information Content (IC-based) with Resnik, Lin, Rel, and Jiang methods are more similar than the Wang method which in based on the topology of the GO graph structure (Graph-based).
+
+## Paired trees comparison
+
+We can also explore *in details* the GO terms assignation between clusters according the used parameters with `ViSEAGO::compare_clusters`.
+
+```{r parameters_clusters_comparison,fig.height=8}
+###################
+# clusters content comparisons
+ViSEAGO::compare_clusters(clusters)
+```
+
+<img src=`r base::system.file("extdata/data/output","clusters_comp.png",package="ViSEAGO")` alt="Drawing" style="width: 800px;"/>
+
+<u>NB:</u> For this vignette, this illustration is not interactive.
+
+# Conclusion
+
+`r BiocStyle::Biocpkg("ViSEAGO")` package provides convenient methods to explore the effect of the GO semantic similarity algorithms on the tree structure, and the effect of the trees clustering playing a key role to ensuring functional coherence.
+
+# References{-}

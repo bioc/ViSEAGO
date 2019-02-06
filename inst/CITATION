@@ -1,0 +1,21 @@
+citHeader("Please cite 'reference' for using ViSEAGO")
+
+citEntry(entry  ="ARTICLE",
+         title  = "ViSEAGO: an R package for measuring semantic similarity among GO terms and gene products",
+         author = personList(
+             as.person("Brionne Aurelien"),
+             as.person("Juanchich Amelie"),
+             as.person("Hennequet-Antier Christelle")
+             ),
+         journal = "Bioinformatics",
+         year    = "2018",
+         volume  = "",
+         number  = "",
+         pages   = "",
+         PMID    = "",
+         doi     = "",
+         textVersion = paste("Brionne A., Juanchich A., Hennequet-Antier C.",
+             "ViSEAGO: an R package for blabla..","ref")
+         )
+
+
