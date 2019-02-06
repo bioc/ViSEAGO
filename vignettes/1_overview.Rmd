@@ -48,16 +48,16 @@ ViSEAGO::pkgdiagram(x=c("white","white","white","white","white"))
 
 # Installation{-}
 
-Firtsly, install the `r BiocStyle::Biocpkg("ViSEAGO")` R package from [Bioconductor](https://www.bioconductor.org/), or `r Githubpkg("UMR_BOA","ViSEAGO")` from [github](https://github.com/UMR-BOA-project/ViSEAGO) repository.
+Firtsly, install the `r BiocStyle::Biocpkg("ViSEAGO")` R package from [ForgeMIA](https://forgemia.inra.fr/umr-boa/viseago) gitlab at **INRA**.
 
 ```{r ViSEAGO_install}
 ###################
-# load ViSEAGO package from Bioconductor
-BiocManager::install("ViSEAGO", version = "3.8")
-
-###################
-# load ViSEAGO package from github
-remotes::install_github("UMR-BOA-project/ViSEAGO",build_opts = c("--no-resave-data","--no-manual"))
+# load ViSEAGO package from gitLab
+remotes::install_gitlab(
+  "umr-boa/viseago",
+  host = "forgemia.inra.fr",
+  build_opts = c("--no-resave-data","--no-manual")
+)
 ```
 
 You can also optionally create directories to store gene lists in the input folder, store all the intermediate R objects in the cache folder, and export the results in the output folder.
