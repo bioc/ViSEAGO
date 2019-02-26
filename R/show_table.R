@@ -148,6 +148,6 @@ setMethod("show_table",definition=function(object,file) {
 
     ###################
     # write the table
-    data.table::fwrite(data,file=file,na="NA")
+    data.table::fwrite(data,file=file,na="NA",sep="\t")
   }
 })
