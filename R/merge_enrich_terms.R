@@ -26,7 +26,6 @@
 #' Herve Pages, Marc Carlson, Seth Falcon and Nianhua Li (2017). AnnotationDbi: Annotation Database Interface. R package version 1.38.0.
 #' @include enrich_GO_terms.R
 #' @examples
-#' \dontrun{
 #'  ###################
 #'  # load genes identifiants (GeneID,ENS...) universe/background (Expressed genes)
 #'  background_L<-base::scan(
@@ -106,10 +105,9 @@
 #'   L_virginvspregnant=base::c("BP_L_virginvspregnant","elim_BP_L_virginvspregnant")
 #'  )
 #' )
-#' }
 #' @export
 setGeneric(name="merge_enrich_terms", def=function(Input){standardGeneric("merge_enrich_terms")})
-
+#' @importFrom methods setMethod
 setMethod("merge_enrich_terms",definition=function(Input){
 
   ###################
@@ -118,7 +116,7 @@ setMethod("merge_enrich_terms",definition=function(Input){
 
     ###################
     # same ontology ?
-    check.onto=base::unique(base::c(base::sapply(base::seq_along(Input),function(x){
+    check.onto=base::unique(base::c(base::vapply(base::seq_along(Input),function(x){
 
       ###################
       # extract  quering objects names
@@ -142,11 +140,11 @@ setMethod("merge_enrich_terms",definition=function(Input){
 
       ###################
       # objects type
-      obj.type=base::sapply(x,class)
+      obj.type=base::vapply(x,class,"")
 
       ###################
       # extract ontoloy type
-      base::sapply(base::seq_along(x),function(y){
+      base::vapply(base::seq_along(x),function(y){
 
         ###################
         # extract ontology slot
@@ -162,8 +160,8 @@ setMethod("merge_enrich_terms",definition=function(Input){
           # for topGOresult
           base::sub("^.+\nOntology: ","",methods::slot(x[[y]],"description"))
         }
-      })
-    })))
+      },"")
+    },"")))
 
     ###################
     # check ontology
@@ -196,7 +194,7 @@ setMethod("merge_enrich_terms",definition=function(Input){
 
       ###################
       # objects type
-      obj.type=base::sapply(x,class)
+      obj.type=base::vapply(x,class,"")
 
       ###################
       # extract topGO objects summary
@@ -316,7 +314,7 @@ setMethod("merge_enrich_terms",definition=function(Input){
 
       ###################
       # objects type
-      obj.type=base::sapply(Data,class)
+      obj.type=base::vapply(Data,class,"")
 
       ###################
       # objects type
@@ -380,7 +378,7 @@ setMethod("merge_enrich_terms",definition=function(Input){
 
       ###################
       # objects type
-      obj.type=base::sapply(Data,class)
+      obj.type=base::vapply(Data,class,"")
 
       ###################
       # load GOdata
@@ -393,9 +391,9 @@ setMethod("merge_enrich_terms",definition=function(Input){
     ###################
     # check if same gene background
     same_genes_background=base::all(
-      base::sapply(2:length(allgenes),function(x){
+      base::vapply(2:length(allgenes),function(x){
         base::identical(allgenes[[1]],allgenes[[x]])
-      })
+      },TRUE)
     )
 
   ###################
@@ -420,7 +418,7 @@ setMethod("merge_enrich_terms",definition=function(Input){
 
       ###################
       # objects type
-      obj.type=base::sapply(Data,class)
+      obj.type=base::vapply(Data,class,"")
 
       ###################
       # load GOdata
@@ -534,7 +532,7 @@ setMethod("merge_enrich_terms",definition=function(Input){
         # pattern.extract
         pattern.extract=function(query,m){
           query=lapply(seq_along(query),function(i){
-            if(length(na.omit(m[[i]][1]))>0){
+            if(length(stats::na.omit(m[[i]][1]))>0){
               a=attr(m[[i]],"capture.start")
               t(substring(query[i],a,a+attr(m[[i]],"capture.length")-1))
             }else{
@@ -565,7 +563,7 @@ setMethod("merge_enrich_terms",definition=function(Input){
 
           ###################
           # Data submission an retrieve
-          query=base::lapply(1:base::nrow(wpos),function(x){
+          query=base::lapply(base::seq_len(base::nrow(wpos)),function(x){
 
             ###################
             # build block of id
@@ -730,7 +728,7 @@ setMethod("merge_enrich_terms",definition=function(Input){
 
     ##################
     # algoritms
-    algorithms=base::sapply(algorithms,function(x)x@algorithm)
+    algorithms=base::vapply(algorithms,function(x){methods::slot(x,"algorithm")},"")
 
     ##################
     # if use of different algorithms
@@ -743,7 +741,7 @@ setMethod("merge_enrich_terms",definition=function(Input){
 
     ##################
     # return input params
-    input<<-base::c(input,list(algorithms))
+    base::assign("input",base::c(input,list(algorithms)),inherits=T)
 
     ###################
     # combine results
@@ -831,7 +829,7 @@ setMethod("merge_enrich_terms",definition=function(Input){
 
   ##################
   # rename the fisrt 3 columns
-  names(allResults)[1:3]<-base::c("GO.ID","term","definition")
+  names(allResults)[base::seq_len(3)]<-base::c("GO.ID","term","definition")
 
   ##################
   # significant results in at least one condition

@@ -11,7 +11,6 @@
 #' or \code{\link{GO_clusters-class}} objects. The intersections are shown in an upset plot and printed in a table.
 #' @include enrich_GO_terms.R GO_clusters.R
 #' @examples
-#' \dontrun{
 #' ##################
 #' # load object
 #' utils::data(
@@ -26,10 +25,9 @@
 #' ##################
 #' # print upset
 #' ViSEAGO::Upset(Wang_clusters_wardD2)
-#' }
 #' @export
 setGeneric(name="Upset",def=function(object,file="./upset.xls") {standardGeneric("Upset")})
-
+#' @importFrom methods setMethod
 setMethod("Upset",definition=function(object,file){
 
   ###################

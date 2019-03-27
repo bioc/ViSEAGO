@@ -14,7 +14,6 @@
 #' @references
 #' Yihui Xie (2016). DT: A Wrapper of the JavaScript Library 'DataTables'. R package version 0.2. https://CRAN.R-project.org/package=DT
 #' @examples
-#' \dontrun{
 #' ###################
 #' # display merge_enrich_terms output
 #' ViSEAGO::show_table(BP_sResults)
@@ -30,10 +29,9 @@
 #' ###################
 #' # print table of GO_clusters-class object
 #' ViSEAGO::show_table(Wang_clusters_wardD2,"./data/output/Wang_clusters_wardD2.txt")
-#' }
 #' @export
 setGeneric(name="show_table",def=function(object,file=NULL) {standardGeneric("show_table")})
-
+#' @importFrom methods setMethod
 setMethod("show_table",definition=function(object,file) {
 
   ###################
@@ -110,7 +108,7 @@ setMethod("show_table",definition=function(object,file) {
 
             ###################
             # targets columns
-            targets=if(base::class(object)=="enrich_GO_terms"){
+            targets=if(methods::is(object,"enrich_GO_terms")){
               base::c(2:3,base::grep("genes",base::names(data)))
             }else{
               base::c(4:5,base::grep("genes",base::names(data)))

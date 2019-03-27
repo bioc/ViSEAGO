@@ -22,17 +22,15 @@
 #' Herve Pages, Marc Carlson, Seth Falcon and Nianhua Li (2017). AnnotationDbi: Annotation Database Interface. R package version 1.38.0.
 #' @include GO_SS.R
 #' @examples
-#' \dontrun{
 #' ###################
 #' # initialyse object for compute GO Semantic Similarity
 #' myGOs<-ViSEAGO::build_GO_SS(
 #'  gene2GO=myGENE2GO,
 #'  enrich_GO_terms=BP_sResults
 #' )
-#' }
 #' @export
 setGeneric(name="build_GO_SS",def=function(gene2GO,enrich_GO_terms){standardGeneric("build_GO_SS")})
-
+#' @importFrom methods setMethod
 setMethod("build_GO_SS",definition=function(gene2GO,enrich_GO_terms) {
 
   ###################
@@ -89,8 +87,8 @@ setMethod("build_GO_SS",definition=function(gene2GO,enrich_GO_terms) {
 
     ###################
     # add for each term offsprings their counted values
-    cnt <- gocount[goids] + base::sapply(goids, function(i){
-    base::sum(gocount[Offsprings[[i]]], na.rm=TRUE)})
+    cnt <- gocount[goids] + base::vapply(goids, function(i){
+    base::sum(gocount[Offsprings[[i]]], na.rm=TRUE)},0)
     base::names(cnt) <- goids
 
     ###################

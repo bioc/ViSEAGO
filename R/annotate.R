@@ -1,6 +1,7 @@
 #' @title Retrieve GO annotations for a specie from genomic ressource database.
 #' @description This method retrieves and stores GO annotations for the
-#' organism of interest from one of genomic ressource database (Bioconductor, EntrezGene, Ensembl, Uniprot).
+#' organism of interest from one of genomic ressource database
+#' (Bioconductor, EntrezGene, Ensembl, Uniprot).
 #' @importFrom methods setGeneric setMethod new is slot
 #' @importFrom AnnotationDbi select keys
 #' @importFrom biomaRt useDataset getBM
@@ -9,24 +10,27 @@
 #' @family genomic_ressource
 #' @family GO_terms
 #' @param id identifiant corresponding to the organism of interest.
-#' This id name is referenced in the first column of the database used (see \code{\link{available_organisms}}).
-#' @param object a required \code{\link{genomic_ressource-class}} object created by \code{\link{Bioconductor2GO}}, \code{\link{EntrezGene2GO}},
+#' This id name is referenced in the first column of the database
+#' used (see \code{\link{available_organisms}}).
+#' @param object a required \code{\link{genomic_ressource-class}} object created by
+#' \code{\link{Bioconductor2GO}}, \code{\link{EntrezGene2GO}},
 #' \code{\link{Ensembl2GO}}, or \code{\link{Uniprot2GO}} methods.
-#' @param ortholog \code{logical} (default to FALSE). Only available for vertebrates organisms and for object created
-#' by \code{\link{EntrezGene2GO}} method (see Details).
+#' @param ortholog \code{logical} (default to FALSE). Only available for
+#' vertebrates organisms and for object created by \code{\link{EntrezGene2GO}} method (see Details).
 #' @details This method uses a \code{\link{genomic_ressource-class}} object to retrieve
 #' \href{http://www.geneontology.org/page/ontology-documentation}{GO} annotations for the organism of interest.
 #' The stored annotations are structured in 3 slots corresponding to the 3 GO categories: MF (Molecular Function),
 #' BP (Biological Process), and CC (Cellular Component). Each slot contains GO terms with
 #' associated \href{http://www.geneontology.org/page/guide-go-evidence-codes}{evidence code}.
 #'
-#' The \code{\link{genomic_ressource-class}} object is created by one of the four available methods: \code{\link{Bioconductor2GO}}, \code{\link{EntrezGene2GO}},
+#' The \code{\link{genomic_ressource-class}} object is created by one of the four available methods:
+#' \code{\link{Bioconductor2GO}}, \code{\link{EntrezGene2GO}},
 #' \code{\link{Ensembl2GO}}, or \code{\link{Uniprot2GO}}.
 #'
 #' In the case of vertebrates, setting \code{ortholog} argument to \code{TRUE} is required if you need to add GO terms with experimental
 #' \href{http://geneontology.org/page/guide-go-evidence-codes}{evidence codes} from orthologs genes
 #' when using \code{\link{EntrezGene2GO}} method. To display organisms supported by NCBI EntrezGene orthologs pipeline,
-#' set the arguments \code{id=NULL} and \code{ortholog=T}.
+#' set the arguments \code{id=NULL} and \code{ortholog=TRUE}.
 #' This approch is highly similar to the strategy developed by Uniprot-GOA consortium for the Electronic Annotation Method using
 #' \href{http://www.ebi.ac.uk/GOA/compara_go_annotations}{Ensembl Compara}.
 #' @return \code{annotate} produces an object of \code{\link{gene2GO-class}} required by \code{\link{build_GO_SS}} method.
@@ -46,7 +50,6 @@
 #' Matt Dowle and Arun Srinivasan (2017). data.table: Extension of data.frame. R package version 1.10.4. https://CRAN.R-project.org/package=data.table.
 #' @include genomic_ressource.R
 #' @examples
-#' \dontrun{
 #'
 #' ###################
 #' # load Mus musculus (mouse) GO annotations
@@ -84,28 +87,27 @@
 #'  ##################
 #'  # Chicken GO annotation with the add of orthologs GO annotations
 #'  EntrezGene<-ViSEAGO::EntrezGene2GO()
-#'  myGENE2GO<-ViSEAGO::annotate("9031",EntrezGene, ortholog=T)
+#'  myGENE2GO<-ViSEAGO::annotate("9031",EntrezGene, ortholog=TRUE)
 #'
 #'  ##################
 #'  # display organisms supported by NCBI EntrezGene orthologs pipeline
 #'  EntrezGene<-ViSEAGO::EntrezGene2GO()
-#'  ViSEAGO::annotate(NULL,EntrezGene, ortholog=T)
+#'  ViSEAGO::annotate(NULL,EntrezGene, ortholog=TRUE)
 #'
 #'  ##################
 #'  # Coturnix japonica GO annotations with adding orthologs
 #'  EntrezGene<-ViSEAGO::EntrezGene2GO()
-#'  myGENE2GO<-ViSEAGO::annotate("93934",EntrezGene, ortholog=T)
-#'  }
+#'  myGENE2GO<-ViSEAGO::annotate("93934",EntrezGene, ortholog=TRUE)
 #' @export
-setGeneric(name="annotate",def=function(id,object,ortholog=F){standardGeneric("annotate")})
-
+setGeneric(name="annotate",def=function(id,object,ortholog=FALSE){standardGeneric("annotate")})
+#' @importFrom methods setMethod
 setMethod("annotate",definition=function(id,object,ortholog){
 
   ###################
   # check object
   ###################
   if(!methods::is(object,"genomic_ressource"))base::stop("object must be a genomic_ressource class from ViSEAGO::Bioconductor2GO(), ViSEAGO::EntrezGene2GO(), or ViSEAGO::Ensembl2GO()")
-  if(methods::slot(object,"db")!="EntrezGene" & ortholog==T)base::stop("ortholog option is only available for genomic_ressource class object from  ViSEAGO::EntrezGene2GO()")
+  if(methods::slot(object,"db")!="EntrezGene" & ortholog==TRUE)base::stop("ortholog option is only available for genomic_ressource class object from  ViSEAGO::EntrezGene2GO()")
   if(!base::is.null(id) && !base::is.character(id))base::stop("id must be a character value or NULL")
 
   ###################
@@ -118,7 +120,7 @@ setMethod("annotate",definition=function(id,object,ortholog){
 
       ###################
       # for orthologs
-      if(ortholog==T){
+      if(ortholog==TRUE){
 
         ###################
         # select the target species and ortholog
@@ -138,7 +140,7 @@ setMethod("annotate",definition=function(id,object,ortholog){
 
           ###################
           # stop scrip execution
-          base::cat("Set id argument from ViSEAGO::annotate(id,EntrezGene,ortholog=T) with an  available taxid (see below), and retry.",
+          base::cat("Set id argument from ViSEAGO::annotate(id,EntrezGene,ortholog=TRUE) with an  available taxid (see below), and retry.",
           "Available EntrezGene species with orthologs_groups:\n\n",sep="\n")
 
           ###################
@@ -246,7 +248,7 @@ setMethod("annotate",definition=function(id,object,ortholog){
 
       ###################
       # load GO annotations
-      base::require(id,character.only=T)
+      base::require(id,character.only=TRUE)
 
       ###################
       # load GO annotations
@@ -307,7 +309,7 @@ setMethod("annotate",definition=function(id,object,ortholog){
       ###################
       # load the file
       utils::download.file(base::paste('ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/',
-      base::toupper(id),'/goa_',id,'.gaf.gz',sep=""),destfile = "./data/input/annot.gz",quiet=T)
+      base::toupper(id),'/goa_',id,'.gaf.gz',sep=""),destfile = "./data/input/annot.gz",quiet=TRUE)
 
       ###################
       # unzip

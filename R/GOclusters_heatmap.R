@@ -40,7 +40,6 @@
 #' @return a \code{\link{GO_clusters-class}} object.
 #' @include GO_clusters.R
 #' @examples
-#' \dontrun{
 #' ###################
 #' # load object
 #' utils::data(Wang_clusters_wardD2,package="ViSEAGO")
@@ -59,10 +58,9 @@
 #' ####################
 #' # display
 #' ViSEAGO::show_heatmap(Wang_clusters_wardD2,"GOclusters")
-#' }
 #' @export
 setGeneric(name="GOclusters_heatmap",def=function(object,tree=base::list(distance="BMA",aggreg.method="ward.D2",rotate=NULL)){base::standardGeneric("GOclusters_heatmap")})
-
+#' @importFrom methods setMethod
 setMethod("GOclusters_heatmap",signature="GO_clusters",definition=function(object,tree=base::list(distance,aggreg.method,rotate)){
 
   #################
@@ -130,7 +128,7 @@ setMethod("GOclusters_heatmap",signature="GO_clusters",definition=function(objec
 
   ###################
   # colors table
-  colors=data.table::data.table(gp=1:base::nrow(mat),color=colors)
+  colors=data.table::data.table(gp=base::seq_len(base::nrow(mat)),color=colors)
 
   ###################
   # merge cluster term assignation and corresponding color
@@ -138,7 +136,7 @@ setMethod("GOclusters_heatmap",signature="GO_clusters",definition=function(objec
 
   ###################
   # color branches according clusters
-  dend<-dendextend::branches_attr_by_clusters(dend,1:nrow(mat), values =colors$color)
+  dend<-dendextend::branches_attr_by_clusters(dend,base::seq_len(base::nrow(mat)), values =colors$color)
 
   ###################
   # assign text color
@@ -244,7 +242,7 @@ setMethod("GOclusters_heatmap",signature="GO_clusters",definition=function(objec
     yaxis=base::list(
       family="Times New Roman",
       tickmode="array",
-      tickvals=1:nrow(mat),
+      tickvals=base::seq_len(base::nrow(mat)),
       ticktext=row.text,
       tickfont=base::list(size=10)
     ),

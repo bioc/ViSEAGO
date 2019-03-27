@@ -19,7 +19,7 @@ bibliography: bibliography.bib
 csl: bmc-genomics.csl
 ---
 
-```{r setup,include=FALSE,cache=F}
+```{r setup,include=FALSEALSE,cache=FALSE}
 ###################
 # koad ViSEAGO
 library(ViSEAGO)
@@ -27,8 +27,8 @@ library(ViSEAGO)
 ###################
 # knitr document options
 knitr::opts_chunk$set(
-  eval=F,fig.path='./data/output/',echo=T,fig.pos = 'H',
-  fig.width=8,message=F,comment=NA,warning=F
+  eval=FALSE,fig.path='./data/output/',echo=TRUERUE,fig.pos = 'H',
+  fig.width=8,message=FALSE,comment=NA,warning=FALSE
 )
 ```
 
@@ -40,7 +40,7 @@ The main objective of ViSEAGO workflow is to carry out a data mining of biologic
 
 ViSEAGO is like a workflow with input lists of genes and associated genomic resources in order to perform enrichment tests, followed by a clustering of GO terms based on theirs semantic similarity. Most of outputs (tables and graphs) could be visualized in static or interactive mode.
 
-```{r grViz,echo=F,eval=T,fig.height=5.5} 
+```{r grViz,echo=FALSE,eval=TRUE,fig.height=5.5} 
 ###################
 # print diagram without focus
 ViSEAGO::pkgdiagram(x=c("white","white","white","white","white"))
@@ -69,14 +69,14 @@ You can also optionally create directories to store gene lists in the input fold
 ```{r ViSEAGO_directories}
 ###################
 # create data directories (input, cache,output)
-base::dir.create("./data/input",recursive=T,showWarnings=F)
-base::dir.create("./data/output",showWarnings=F)
-base::dir.create("./data/cache",showWarnings=F)
+base::dir.create("./data/input",recursive=TRUE,showWarnings=FALSE)
+base::dir.create("./data/output",showWarnings=FALSE)
+base::dir.create("./data/cache",showWarnings=FALSE)
 ```
 
 # Genes of interest
 
-```{r grViz_genes,echo=F,eval=T,fig.height=4} 
+```{r grViz_genes,echo=FALSE,eval=TRUE,fig.height=4} 
 ###################
 # print diagram with focus one the gene list
 ViSEAGO::pkgdiagram(x=c("black","white","white","white","white"))
@@ -87,16 +87,16 @@ Firstly, you need to provide the gene *background* (= expressed genes) and *sele
 ```{r geneList_input}
 ###################
 # load genes background
-background<-base::scan("./data/input/background.txt",quiet=T,what="")
+background<-base::scan("./data/input/background.txt",quiet=TRUE,what="")
 
 ###################
 # load gene selection
-selection<-base::scan("./data/input/selection.txt",quiet=T,what="")
+selection<-base::scan("./data/input/selection.txt",quiet=TRUE,what="")
 ```
 
 # GO annotation of genes
 
-```{r grViz_annotations,echo=F,eval=T,fig.height=4} 
+```{r grViz_annotations,echo=FALSE,eval=TRUE,fig.height=4} 
 ###################
 # print diagram with a focus on the annotation step
 ViSEAGO::pkgdiagram(x=c("white","black","white","white","white"))
@@ -180,7 +180,7 @@ myGENE2GO<-ViSEAGO::annotate("Uniprot_id",Uniprot)
 
 # Functionnal GO enrichment
 
-```{r grViz_enrichment,echo=F,eval=T,fig.height=4} 
+```{r grViz_enrichment,echo=FALSE,eval=TRUE,fig.height=4} 
 ###################
 # print diagram with a focus on the enrichment step
 ViSEAGO::pkgdiagram(x=c("white","white","black","white","white"))
@@ -260,7 +260,7 @@ ViSEAGO::Upset(BP_sResults,file="./data/output/OLexport.xls")
 
 # GO terms Semantic Similarity
 
-```{r grViz_SS,echo=F,eval=T,fig.height=4} 
+```{r grViz_SS,echo=FALSE,eval=TRUE,fig.height=4} 
 ###################
 # print diagram with a focus on the Semantic Similarity step
 ViSEAGO::pkgdiagram(x=c("white","white","white","black","white"))
@@ -280,7 +280,7 @@ myGOs<-ViSEAGO::compute_SS_distances(myGOs,distance="Wang")
 
 # Visualization and interpretation of enriched GO terms
 
-```{r grViz_vis,echo=F,eval=T,fig.height=4} 
+```{r grViz_vis,echo=FALSE,eval=TRUE,fig.height=4} 
 ###################
 # print diagram with focus on the visualization step
 ViSEAGO::pkgdiagram(x=c("white","white","white","white","black"))
@@ -290,7 +290,7 @@ ViSEAGO::pkgdiagram(x=c("white","white","white","white","black"))
 
 A Multi Dimensional Scale (MDS) plot with `ViSEAGO::MDSplot` method provides a representation of distances among a set of enriched GO terms on the two first dimensions. Some patterns could appear at this time and could be investigated in an interactive mode. The plot could be also printed in a png file.
 
-```{r SS_terms_mdsplot,eval=F}
+```{r SS_terms_mdsplot,eval=FALSE}
 ###################           
 # display MDSplot
 ViSEAGO::MDSplot(myGOs)
@@ -307,7 +307,7 @@ To fully explore the results of this functional analysis, a hierarchical cluster
 Clusters of enriched GO terms are obtained by cutting branches off the dendrogram. Here, we choose a dynamic branch cutting method based on the shape of clusters using `r BiocStyle::CRANpkg("dynamicTreeCut")` [@pmid18024473; @dynamicTreeCut]. It builds clusters in a bottom top manner in two steps. 
 In step 1, branches that satisfy specific criteria for being clusters, based on the merging information of the dendrogram, are detected.
 A simple control of the relative sensitivity to cluster splitting is provided in the parameter *deepSplit* (The higher the value, the more and smaller clusters will be produced), and the minimum cluster size with *minClusterSize*.
-In step 2, all previously unassigned objects are tested for sufficient proximity to clusters detected in the first step using a modified Partitioning Around Medoids (PAM). If the closest cluster is close enough in a precise sense that we define below, the object is assigned to that cluster. The PAM stage will be performed using *pamStage=T* parameter, and respect the dendrogram using *pamRespectsDendro=T* parameter, in the sense an object can be PAM-assigned only to clusters that lie below it on the branch that the object is merged into.
+In step 2, all previously unassigned objects are tested for sufficient proximity to clusters detected in the first step using a modified Partitioning Around Medoids (PAM). If the closest cluster is close enough in a precise sense that we define below, the object is assigned to that cluster. The PAM stage will be performed using *pamStage=TRUE* parameter, and respect the dendrogram using *pamRespectsDendro=TRUE* parameter, in the sense an object can be PAM-assigned only to clusters that lie below it on the branch that the object is merged into.
 
 Enriched GO terms are ranked in a dendrogram as a result of a hierarchical clustering and colored depending on their cluster assignation. Additional illustrations are displayed: the GO description of GO terms (trimmed if more than 50 characters), a heatmap of -log10(pvalue) of enrichment test for each comparison, and optionally the Information Content (IC). The illustration is displayed with `ViSEAGO::show_heatmap` method.
 
@@ -316,7 +316,7 @@ Enriched GO terms are ranked in a dendrogram as a result of a hierarchical clust
 # GOterms heatmap with the default parameters
 Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
   myGOs,
-  showIC=T,
+  showIC=TRUE,
   GO.tree=base::list(
     tree=base::list(
       distance="Wang",
@@ -324,8 +324,8 @@ Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
     ),
     cut=base::list(
       dynamic=base::list(
-        pamStage=T,
-        pamRespectsDendro=T,
+        pamStage=TRUE,
+        pamRespectsDendro=TRUE,
         deepSplit=2,
         minClusterSize =2)
       )
@@ -367,7 +367,7 @@ ViSEAGO::show_table(
 
 We also display a Multi Dimensional Scale (MDS) plot with the overlay of GO terms clusters from `Wang_clusters_wardD2` object with `ViSEAGO::MDSplot` method. It is a way to check the coherence of GO terms clusters on the MDS plot.
 
-```{r SS_Wang-ward.D2_mdsplot,eval=F}
+```{r SS_Wang-ward.D2_mdsplot,eval=FALSE}
 ###################           
 # display colored MDSplot
 ViSEAGO::MDSplot(Wang_clusters_wardD2)
@@ -405,14 +405,14 @@ Wang_clusters_wardD2<-ViSEAGO::compute_SS_distances(
 # build and highlight in an interactive MDSplot grouped clusters for one distance object
 ViSEAGO::MDSplot(
   Wang_clusters_wardD2,
-  show_clusters=T
+  show_clusters=TRUE
 )
 
 ###################           
 # build and highlight in MDSplot grouped clusters for one distance object
 ViSEAGO::MDSplot(
   Wang_clusters_wardD2,
-  show_clusters=T,
+  show_clusters=TRUE,
   file="./data/output/mdsplot2.png"
 )
 ```
@@ -451,7 +451,7 @@ Moreover, we can explore the effect of the GO semantic similarity algorithms on 
  
 # Information session{-}
 
-```{r session,eval=T,echo=F} 
+```{r session,eval=TRUE,echo=FALSE} 
 base::version
 ```
 

@@ -19,7 +19,7 @@ setClass("enrich_GO_terms",
          )
 )
 #' @importFrom methods setMethod
-setMethod("show", "enrich_GO_terms",function(object) {
+setMethod("show", "enrich_GO_terms",function(object){
 
   ###################
   # Extract table
@@ -33,7 +33,7 @@ setMethod("show", "enrich_GO_terms",function(object) {
   # count significant pvalues by condition
   Data<-Data[,
     lapply(.SD,function(x){base::sum(x<0.01,na.rm = T)}),
-    .SDcols=1:base::ncol(Data)
+    .SDcols=base::seq_len(base::ncol(Data))
   ]
 
   ###################
@@ -55,7 +55,7 @@ setMethod("show", "enrich_GO_terms",function(object) {
 
   ###################
   # format topGO information
-  topGO<-base::sapply(base::names(topGO),function(x){
+  topGO<-base::vapply(base::names(topGO),function(x){
 
     ###################
     # topGO subset
@@ -63,7 +63,7 @@ setMethod("show", "enrich_GO_terms",function(object) {
 
     ###################
     # summery by element
-    elems<-base::paste(base::sapply(base::names(Data),function(y){
+    elems<-base::paste(base::vapply(base::names(Data),function(y){
 
       ###################
       # summery by element
@@ -78,19 +78,19 @@ setMethod("show", "enrich_GO_terms",function(object) {
           collapse="\n        "
         )
       )
-    }),collapse="\n  ")
+    },""),collapse="\n  ")
 
     ###################
     # summery by element
     base::paste(base::paste(x,elems,sep ="\n  "),"\n ")
-  })
+  },"")
 
   ###################
   # cat some text
   base::cat("- object class: enrich_GO_terms",
     "\n- ontology: ",methods::slot(object,"ont"),
     "\n- input:\n        ", paste(paste(base::names(object@input),
-    base::sapply(methods::slot(object,"input"),function(x){base::paste(x,collapse=", ")}),sep=": "),collapse="\n        "),
+    base::vapply(methods::slot(object,"input"),function(x){base::paste(x,collapse=", ")},""),sep=": "),collapse="\n        "),
     "\n- topGO summary:\n ", topGO,
     "\n- enrich GOs data.table (p<0.01 in at least one list): ",base::nrow(methods::slot(object,"data"))," GO terms of ",base::nrow(Data)," conditions.",
     base::paste("\n       ",Data$conditions,":",Data$`significant GO terms number`,"terms"),sep=""

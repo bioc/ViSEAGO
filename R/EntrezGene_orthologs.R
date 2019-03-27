@@ -14,7 +14,7 @@ EntrezGene_orthologs=function(){
 
   ###################
   # import gene_group from NCBI
-  utils::download.file("ftp://ftp.ncbi.nih.gov/gene/DATA/gene_orthologs.gz",quiet=T,
+  utils::download.file("ftp://ftp.ncbi.nih.gov/gene/DATA/gene_orthologs.gz",quiet=TRUE,
   destfile = "gene_orthologs.gz")
 
   ##################
@@ -23,7 +23,7 @@ EntrezGene_orthologs=function(){
 
   ##################
   # read the file
-  gene_orthologs=data.table::fread("gene_orthologs",verbose=F,showProgress=F)
+  gene_orthologs=data.table::fread("gene_orthologs",verbose=FALSE,showProgress=FALSE)
 
   ###################
   # unlink gz file

@@ -5,20 +5,21 @@
 #' @details This internal function use build all sets combinations intersections needed for \code{\link{upset}}.
 #' @return a \code{\link[base]{list}}.
 #' @examples
-#' \dontrun{
 #' ###################
 #' # build all intersections combinations
 #' ViSEAGO::overLapper(setlist)
-#' }
 #' @keywords internal
 #' @export
 overLapper <- function(setlist) {
 
   ###################
   # Create intersect matrix (removes duplicates!)
-  complexity=1:base::length(setlist)
+  complexity=base::seq_len(base::length(setlist))
   setunion <- base::sort(base::unique(base::unlist(setlist)))
-  setmatrix <- base::sapply(base::names(setlist), function(x) setunion %in% base::unique(setlist[[x]]))
+  setmatrix <- base::vapply(base::names(setlist), function(x){
+    setunion %in% base::unique(setlist[[x]])},
+    base::rep(TRUE,base::length(setunion))
+  )
   base::rownames(setmatrix) <- setunion
   base::storage.mode(setmatrix) <- "numeric"
 
@@ -27,7 +28,7 @@ overLapper <- function(setlist) {
   labels <- base::names(setlist)
   allcombl <- base::lapply(complexity, function(x) utils::combn(labels, m=x, simplify=FALSE))
   allcombl <- base::unlist(allcombl, recursive=FALSE)
-  complevels <- base::sapply(allcombl, length)
+  complevels <- base::vapply(allcombl, length,0)
 
   ###################
   # vennSets function
@@ -41,10 +42,10 @@ overLapper <- function(setlist) {
 
   ###################
   # apply vennSets to all conbinations
-  vennOLlist <- base::sapply(seq(along=allcombl), function(x){
+  vennOLlist <- base::lapply(seq(along=allcombl), function(x){
     vennSets(setmatrix=setmatrix, allcombl=allcombl, index=x)
   })
-  base::names(vennOLlist) <- sapply(allcombl, paste, collapse="-")
+  base::names(vennOLlist) <- vapply(allcombl, paste, collapse="-","")
 
   ###################
   # returnvennOLlist

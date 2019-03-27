@@ -19,7 +19,7 @@ bibliography: bibliography.bib
 csl: bmc-genomics.csl
 ---
 
-```{r setup,include=FALSE,cache=F}
+```{r setup,include=FALSEALSE,cache=FALSE}
 ###################
 # load
 library(ViSEAGO)
@@ -27,8 +27,8 @@ library(ViSEAGO)
 ###################
 # knitr document options
 knitr::opts_chunk$set(
-  eval=F,fig.path='./data/output/',echo=T,fig.pos = 'H',
-  fig.width=8,message=F,comment=NA,warning=F
+  eval=FALSE,fig.path='./data/output/',echo=TRUE,fig.pos = 'H',
+  fig.width=8,message=FALSE,comment=NA,warning=FALSE
 )
 ```
 
@@ -43,7 +43,7 @@ The GO annotations of genes created and enriched GO terms are combined using `Vi
 
 Then, a hierarchical clustering method using `ViSEAGO::GOterms_heatmap` is performed based on each SS distance between the enriched GO terms using the `ward.D2` aggregation criteria.  Clusters of enriched GO terms are obtained by cutting branches off the dendrogram. Here, we choose a dynamic branch cutting method based on the shape of clusters using `r BiocStyle::CRANpkg("dynamicTreeCut")` [@pmid18024473; @dynamicTreeCut].
 
-```{r SS_build,eval=F}
+```{r SS_build,eval=FALSE}
 ###################        
 # create GO_SS-class object
 myGOs<-ViSEAGO::build_GO_SS(gene2GO=myGENE2GO,enrich_GO_terms=BP_sResults)
@@ -63,7 +63,7 @@ myGOs<-ViSEAGO::compute_SS_distances(
 # GO terms heatmap
 Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
   myGOs,
-  showIC=T,
+  showIC=TRUE,
   GO.tree=base::list(
     tree=base::list(
       distance="Resnik",
@@ -87,7 +87,7 @@ Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 # GO terms heatmap
 Lin_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
   myGOs,
-  showIC=T,
+  showIC=TRUE,
   GO.tree=base::list(
     tree=base::list(
       distance="Lin",
@@ -111,7 +111,7 @@ Lin_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 # GO terms heatmap
 Rel_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
   myGOs,
-  showIC=T,
+  showIC=TRUE,
   GO.tree=base::list(
     tree=base::list(
       distance="Rel",
@@ -135,7 +135,7 @@ Rel_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 # GO terms heatmap
 Jiang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
   myGOs,
-  showIC=T,
+  showIC=TRUE,
   GO.tree=base::list(
     tree=base::list(
       distance="Jiang",
@@ -159,7 +159,7 @@ Jiang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 # GO terms heatmap
 Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
   myGOs,
-  showIC=T,
+  showIC=TRUE,
   GO.tree=base::list(
     tree=base::list(
       distance="Wang",
@@ -188,11 +188,11 @@ The correlation matrix can be visualized with the nice `corrplot::corrplot` func
 ###################
 # build the list of trees
 dend<- dendextend::dendlist(
-  "Resnik"=Resnik_clusters_wardD2@dendrograms$GO,
-  "Lin"=Lin_clusters_wardD2@dendrograms$GO,
-  "Rel"=Rel_clusters_wardD2@dendrograms$GO,
-  "Jiang"=Jiang_clusters_wardD2@dendrograms$GO,
-  "wang"=Wang_clusters_wardD2@dendrograms$GO
+  "Resnik"=methods::slot(Resnik_clusters_wardD2,"dendrograms")$GO,
+  "Lin"=methods::slot(Lin_clusters_wardD2,"dendrograms")$GO,
+  "Rel"=methods::slot(Rel_clusters_wardD2,"dendrograms")$GO,
+  "Jiang"=methods::slot(Jiang_clusters_wardD2,"dendrograms")$GO,
+  "wang"=methods::slot(Wang_clusters_wardD2,"dendrograms")$GO
 )
 
 ###################
@@ -207,7 +207,7 @@ corrplot::corrplot(
   dend_cor,
   "pie",
   "lower",
-  is.corr=FALSE,
+  is.corr=FALSEALSE,
   cl.lim=c(0,1)
 )
 ```
@@ -225,8 +225,8 @@ The quality of the alignment of the two trees can be calculated with `dendextend
 ###################
 # dendrogram list
 dl<-dendextend::dendlist(
-  Resnik_clusters_wardD2@dendrograms$GO,
-  Wang_clusters_wardD2@dendrograms$GO
+  methods::slot(Resnik_clusters_wardD2,"dendrograms")$GO,
+  methods::slot(Wang_clusters_wardD2,"dendrograms")$GO
 )
 
 ###################
@@ -246,7 +246,7 @@ dendextend::tanglegram(
   lwd = 1,
   lab.cex=0.8,
   columns_width = c(5,2,5),
-  common_subtrees_color_lines=F
+  common_subtrees_color_lines=FALSE
 )
 ```
 
@@ -283,7 +283,7 @@ corrplot::corrplot(
   clust_cor,
   "pie",
   "lower",
-  is.corr=FALSE,
+  is.corr=FALSEALSE,
   cl.lim=c(0,1)
 )
 ```

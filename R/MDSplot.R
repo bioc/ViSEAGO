@@ -34,7 +34,7 @@
 #' ViSEAGO::MDSplot(Wang_clusters_wardD2,show_clusters=TRUE)
 #' @export
 setGeneric(name="MDSplot",def=function(object,show_clusters=FALSE,file=NULL) {standardGeneric("MDSplot")})
-
+#' @importFrom methods setMethod
 setMethod("MDSplot",definition=function(object,show_clusters,file) {
 
   #################
@@ -93,7 +93,7 @@ setMethod("MDSplot",definition=function(object,show_clusters,file) {
 
       #################
       # for GO_SS
-      if(base::class(object)=="GO_SS"){
+      if(methods::is(object,"GO_SS")){
 
         #################
         # GO names
@@ -219,11 +219,11 @@ setMethod("MDSplot",definition=function(object,show_clusters,file) {
 
     #################
     # for GO_SS
-    if(base::class(object)=="GO_SS"){
+    if(methods::is(object,"GO_SS")){
 
       ################
       # add trace to plot by measure
-      for(x in 1:length(measures)){
+      for(x in base::seq_len(length(measures))){
 
         ################
         # default visualization
@@ -278,7 +278,7 @@ setMethod("MDSplot",definition=function(object,show_clusters,file) {
             x = 0.1,
             y = 1.1,
 
-            buttons = base::lapply(1:length(measures),function(x){
+            buttons = base::lapply(base::seq_len(length(measures)),function(x){
 
               #################
               # init visibility to all FASLE
@@ -301,7 +301,7 @@ setMethod("MDSplot",definition=function(object,show_clusters,file) {
 
     #################
     # for GO_SS
-    if(base::class(object)=="GO_clusters"){
+    if(methods::is(object,"GO_clusters")){
 
       ###################
       # color labels of cutting tree
@@ -382,7 +382,7 @@ setMethod("MDSplot",definition=function(object,show_clusters,file) {
 
         ################
         # add trace to plot by measure
-        for(x in 1:base::length(measures)){
+        for(x in base::seq_len(base::length(measures))){
 
           ################
           # default visualization
@@ -440,7 +440,7 @@ setMethod("MDSplot",definition=function(object,show_clusters,file) {
               x = 0.1,
               y = 1.1,
 
-              buttons = base::lapply(1:length(measures),function(x){
+              buttons = base::lapply(base::seq_len(length(measures)),function(x){
 
                 #################
                 # init visibility to all FASLE

@@ -25,7 +25,7 @@
 #' ViSEAGO::GOcount(BP_sResults)
 #' @export
 setGeneric(name="GOcount",def=function(object,file=NULL){standardGeneric("GOcount")})
-
+#' @importFrom methods setMethod
 setMethod("GOcount",signature="enrich_GO_terms",definition=function(object,file) {
 
   ###################
@@ -68,7 +68,7 @@ setMethod("GOcount",signature="enrich_GO_terms",definition=function(object,file)
 
           res
         }
-        }),.SDcols=1:base::ncol(Data)]
+        }),.SDcols=base::seq_len(base::ncol(Data))]
     )
 
     ###################

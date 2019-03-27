@@ -53,7 +53,7 @@ setMethod("show", "GO_clusters",function(object) {
   ###################
   # count significant pvalues by condition
   Data<-Data[,lapply(.SD,function(x){base::sum(x<0.01,na.rm = T)}),
-             .SDcols=1:base::ncol(Data)
+             .SDcols=base::seq_len(base::ncol(Data))
              ]
 
   ###################
@@ -76,7 +76,7 @@ setMethod("show", "GO_clusters",function(object) {
 
   ###################
   # format topGO information
-  topGO<-base::sapply(base::names(topGO),function(x){
+  topGO<-base::vapply(base::names(topGO),function(x){
 
     ###################
     # topGO subset
@@ -84,7 +84,7 @@ setMethod("show", "GO_clusters",function(object) {
 
     ###################
     # summery by element
-    elems<-base::paste(base::sapply(base::names(Data),function(y){
+    elems<-base::paste(base::vapply(base::names(Data),function(y){
 
       ###################
       # summery by element
@@ -99,12 +99,12 @@ setMethod("show", "GO_clusters",function(object) {
           collapse="\n        "
         )
       )
-    }),collapse="\n  ")
+    },""),collapse="\n  ")
 
     ###################
     # summery by element
     base::paste(base::paste(x,elems,sep ="\n  "),"\n ")
-  })
+  },"")
 
   ###################
   # cat some text
@@ -123,7 +123,7 @@ setMethod("show", "GO_clusters",function(object) {
             ),
           "input")
         ),
-        base::sapply(
+        base::vapply(
           methods::slot(
             methods::slot(
               object,
@@ -132,7 +132,7 @@ setMethod("show", "GO_clusters",function(object) {
             "input"
           ),
           function(x){base::paste(x,collapse=", ")}
-        ),
+        ,""),
         sep=": "),
         collapse="\n        "
       ),

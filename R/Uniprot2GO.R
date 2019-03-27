@@ -13,17 +13,15 @@
 #' @return a  \code{\link{genomic_ressource-class}} object required by \code{\link{annotate}}.
 #' @include genomic_ressource.R
 #' @examples
-#' \dontrun{
 #' ###################
 #' # List Uniprot-GOA available organisms
 #' Uniprot<-ViSEAGO::Uniprot2GO()
-#' }
 #' @export
 Uniprot2GO=function(){
 
   #################
   # load current release
-  Data<-data.table::fread("ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/current_release_numbers.txt",verbose=F,showProgress=F)
+  Data<-data.table::fread("ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/current_release_numbers.txt",verbose=FALSE,showProgress=FALSE)
 
   ###################
   # return data

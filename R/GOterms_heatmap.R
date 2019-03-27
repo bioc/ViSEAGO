@@ -123,7 +123,7 @@
 #' @export
 setGeneric(name="GOterms_heatmap",def=function(myGOs,showIC=TRUE,showGOlabels=TRUE,GO.tree=base::list(tree=base::list(distance="Wang",aggreg.method="ward.D2",rotate=NULL),
 cut=base::list(dynamic=base::list(pamStage=TRUE,pamRespectsDendro=TRUE,deepSplit=2,minClusterSize =2))),samples.tree=NULL){base::standardGeneric("GOterms_heatmap")})
-
+#' @importFrom methods setMethod
 setMethod("GOterms_heatmap",signature="GO_SS",definition=function(myGOs,showIC,showGOlabels,GO.tree,samples.tree){
 
   ###################
@@ -309,7 +309,7 @@ setMethod("GOterms_heatmap",signature="GO_SS",definition=function(myGOs,showIC,s
 
     ###################
     # if Inf in -log10pvalue, set 9
-    for(i in 1:ncol(mat)){mat[mat[,i]=="Inf",i]<-9}
+    for(i in  base::seq_len(base::ncol(mat))){mat[mat[,i]=="Inf",i]<-9}
 
     ###################
     #  remove Data
@@ -478,7 +478,7 @@ setMethod("GOterms_heatmap",signature="GO_SS",definition=function(myGOs,showIC,s
 
         ###################
         # ordering vector ni null according column and row
-        if(i=="col_tree"){Dat<-1:base::nrow(x)}else{Dat<-1:base::ncol(x)}
+        if(i=="col_tree"){Dat<-base::seq_len(base::nrow(x))}else{Dat<-base::seq_len(base::ncol(x))}
 
         ###################
         # create ordering vector
@@ -545,7 +545,7 @@ setMethod("GOterms_heatmap",signature="GO_SS",definition=function(myGOs,showIC,s
 
               ###################
               # new clusters names table
-              clust=data.table::data.table(ini=clust,new=1:length(clust))
+              clust=data.table::data.table(ini=clust,new=base::seq_len(length(clust)))
 
               ###################
               # convert gp to data.table
@@ -808,7 +808,7 @@ setMethod("GOterms_heatmap",signature="GO_SS",definition=function(myGOs,showIC,s
 
     ###################
     # with column dendrogram and showIC
-    col=base::sapply(hm$x$data,function(x){base::length(x$text)})
+    col=base::vapply(hm$x$data,function(x){base::length(x$text)},0)
     col<-base::which(col==(base::nrow(mat)*base::ncol(mat)))
 
     ###################
@@ -817,7 +817,7 @@ setMethod("GOterms_heatmap",signature="GO_SS",definition=function(myGOs,showIC,s
 
     ###################
     # for each column
-    for (i in 1:base::ncol(text)){
+    for (i in base::seq_len(base::ncol(text))){
       text[,i]<-base::gsub("(<br>|^)row: ","",text[,i])
     }
 
@@ -910,7 +910,7 @@ setMethod("GOterms_heatmap",signature="GO_SS",definition=function(myGOs,showIC,s
           domain=base::c(0,0.95),
           family="Times New Roman",
           tickmode="array",
-          tickvals=1:nrow(mat),
+          tickvals=base::seq_len(base::nrow(mat)),
           ticktext=row.text,
           tickfont=base::list(size=10),
           showticklabels=showGOlabels
@@ -928,7 +928,7 @@ setMethod("GOterms_heatmap",signature="GO_SS",definition=function(myGOs,showIC,s
         yaxis=base::list(
           family="Times New Roman",
           tickmode="array",
-          tickvals=if(showGOlabels==TRUE){1:nrow(mat)}else{NULL},
+          tickvals=if(showGOlabels==TRUE){base::seq_len(base::nrow(mat))}else{NULL},
           ticktext=row.text,
           tickfont=base::list(size=10),
           showticklabels=showGOlabels

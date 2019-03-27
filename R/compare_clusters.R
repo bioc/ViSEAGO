@@ -15,7 +15,6 @@
 #'  plotly: Create Interactive Web Graphics via 'plotly.js'. R package version 4.6.0. https://CRAN.R-project.org/package=plotly
 #' @include GO_clusters.R
 #' @examples
-#' \dontrun{
 #' ###################
 #' # create GO_SS-class object
 #' myGOs<-ViSEAGO::build_GO_SS(
@@ -143,10 +142,9 @@
 #' ###################
 #' # clusters content comparisons
 #' clusters_comp<-ViSEAGO::compare_clusters(clusters)
-#' }
 #' @export
 setGeneric(name="compare_clusters",def=function(clusters) {standardGeneric("compare_clusters")})
-
+#' @importFrom methods setMethod
 setMethod("compare_clusters",definition=function(clusters) {
 
   ###################
@@ -228,7 +226,7 @@ setMethod("compare_clusters",definition=function(clusters) {
 
     ###################
     # rectangle shape definition
-    coord<-base::unlist(recursive =F,lapply(1:base::length(methods),function(x){
+    coord<-base::unlist(recursive =F,lapply(base::seq_len(base::length(methods)),function(x){
 
       ###################
       # x coordinates
