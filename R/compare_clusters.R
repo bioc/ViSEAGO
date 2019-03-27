@@ -142,9 +142,9 @@
 #' ###################
 #' # clusters content comparisons
 #' clusters_comp<-ViSEAGO::compare_clusters(clusters)
-#' @export
+#' @exportMethod compare_clusters
 setGeneric(name="compare_clusters",def=function(clusters) {standardGeneric("compare_clusters")})
-#' @importFrom methods setMethod
+
 setMethod("compare_clusters",definition=function(clusters) {
 
   ###################

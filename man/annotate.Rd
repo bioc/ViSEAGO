@@ -4,24 +4,27 @@
 \alias{annotate}
 \title{Retrieve GO annotations for a specie from genomic ressource database.}
 \usage{
-annotate(id, object, ortholog = F)
+annotate(id, object, ortholog = FALSE)
 }
 \arguments{
 \item{id}{identifiant corresponding to the organism of interest.
-This id name is referenced in the first column of the database used (see \code{\link{available_organisms}}).}
+This id name is referenced in the first column of the database
+used (see \code{\link{available_organisms}}).}
 
-\item{object}{a required \code{\link{genomic_ressource-class}} object created by \code{\link{Bioconductor2GO}}, \code{\link{EntrezGene2GO}},
+\item{object}{a required \code{\link{genomic_ressource-class}} object created by
+\code{\link{Bioconductor2GO}}, \code{\link{EntrezGene2GO}},
 \code{\link{Ensembl2GO}}, or \code{\link{Uniprot2GO}} methods.}
 
-\item{ortholog}{\code{logical} (default to FALSE). Only available for vertebrates organisms and for object created
-by \code{\link{EntrezGene2GO}} method (see Details).}
+\item{ortholog}{\code{logical} (default to FALSE). Only available for
+vertebrates organisms and for object created by \code{\link{EntrezGene2GO}} method (see Details).}
 }
 \value{
 \code{annotate} produces an object of \code{\link{gene2GO-class}} required by \code{\link{build_GO_SS}} method.
 }
 \description{
 This method retrieves and stores GO annotations for the
-organism of interest from one of genomic ressource database (Bioconductor, EntrezGene, Ensembl, Uniprot).
+organism of interest from one of genomic ressource database
+(Bioconductor, EntrezGene, Ensembl, Uniprot).
 }
 \details{
 This method uses a \code{\link{genomic_ressource-class}} object to retrieve
@@ -30,19 +33,19 @@ The stored annotations are structured in 3 slots corresponding to the 3 GO categ
 BP (Biological Process), and CC (Cellular Component). Each slot contains GO terms with
 associated \href{http://www.geneontology.org/page/guide-go-evidence-codes}{evidence code}.
 
-The \code{\link{genomic_ressource-class}} object is created by one of the four available methods: \code{\link{Bioconductor2GO}}, \code{\link{EntrezGene2GO}},
+The \code{\link{genomic_ressource-class}} object is created by one of the four available methods:
+\code{\link{Bioconductor2GO}}, \code{\link{EntrezGene2GO}},
 \code{\link{Ensembl2GO}}, or \code{\link{Uniprot2GO}}.
 
 In the case of vertebrates, setting \code{ortholog} argument to \code{TRUE} is required if you need to add GO terms with experimental
 \href{http://geneontology.org/page/guide-go-evidence-codes}{evidence codes} from orthologs genes
 when using \code{\link{EntrezGene2GO}} method. To display organisms supported by NCBI EntrezGene orthologs pipeline,
-set the arguments \code{id=NULL} and \code{ortholog=T}.
+set the arguments \code{id=NULL} and \code{ortholog=TRUE}.
 This approch is highly similar to the strategy developed by Uniprot-GOA consortium for the Electronic Annotation Method using
 \href{http://www.ebi.ac.uk/GOA/compara_go_annotations}{Ensembl Compara}.
 }
 \examples{
 \dontrun{
-
 ###################
 # load Mus musculus (mouse) GO annotations
 ###################
@@ -79,17 +82,17 @@ This approch is highly similar to the strategy developed by Uniprot-GOA consorti
  ##################
  # Chicken GO annotation with the add of orthologs GO annotations
  EntrezGene<-ViSEAGO::EntrezGene2GO()
- myGENE2GO<-ViSEAGO::annotate("9031",EntrezGene, ortholog=T)
+ myGENE2GO<-ViSEAGO::annotate("9031",EntrezGene, ortholog=TRUE)
 
  ##################
  # display organisms supported by NCBI EntrezGene orthologs pipeline
  EntrezGene<-ViSEAGO::EntrezGene2GO()
- ViSEAGO::annotate(NULL,EntrezGene, ortholog=T)
+ ViSEAGO::annotate(NULL,EntrezGene, ortholog=TRUE)
 
  ##################
  # Coturnix japonica GO annotations with adding orthologs
  EntrezGene<-ViSEAGO::EntrezGene2GO()
- myGENE2GO<-ViSEAGO::annotate("93934",EntrezGene, ortholog=T)
+ myGENE2GO<-ViSEAGO::annotate("93934",EntrezGene, ortholog=TRUE)
  }
 }
 \references{

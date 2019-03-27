@@ -19,7 +19,6 @@ a distance or a correlation matrix.
 Build a distance or correlation matrix between partitions from dendrograms.
 }
 \examples{
-\dontrun{
 ###################
 # load objects
 utils::data(
@@ -156,7 +155,6 @@ clusters<-base::list(
 ###################
 # global dendrogram clustering correlation
 clust_cor<-ViSEAGO::clusters_cor(clusters,method="adjusted.rand")
-}
 }
 \references{
 Csardi G, Nepusz T: The igraph software package for complex network research, InterJournal, Complex Systems 1695. 2006. http://igraph.org.

@@ -1,6 +1,7 @@
 #' @title Build a clustering heatmap on GO groups.
 #' @description This method computes a clustering heatmap based on GO groups semantic similarity.
 #' @importFrom data.table data.table .N
+#' @importFrom methods setGeneric setMethod
 #' @importFrom ggplot2 scale_fill_gradient
 #' @importFrom plotly layout
 #' @importFrom heatmaply heatmaply
@@ -42,7 +43,10 @@
 #' @examples
 #' ###################
 #' # load object
-#' utils::data(Wang_clusters_wardD2,package="ViSEAGO")
+#' utils::data(
+#'  Wang_clusters_wardD2,
+#'  package="ViSEAGO"
+#' )
 #'
 #' ###################
 #' # GOclusters heatmap
@@ -58,9 +62,9 @@
 #' ####################
 #' # display
 #' ViSEAGO::show_heatmap(Wang_clusters_wardD2,"GOclusters")
-#' @export
+#' @exportMethod GOclusters_heatmap
 setGeneric(name="GOclusters_heatmap",def=function(object,tree=base::list(distance="BMA",aggreg.method="ward.D2",rotate=NULL)){base::standardGeneric("GOclusters_heatmap")})
-#' @importFrom methods setMethod
+
 setMethod("GOclusters_heatmap",signature="GO_clusters",definition=function(object,tree=base::list(distance,aggreg.method,rotate)){
 
   #################

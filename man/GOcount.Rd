@@ -26,7 +26,10 @@ A static image (in png) could be printed by setting \code{file} argument.
 \examples{
 ###################
 # load object
-utils::data(BP_sResults,package="ViSEAGO")
+utils::data(
+ BP_sResults,
+ package="ViSEAGO"
+)
 
 ###################
 # barplot for the count of GO terms

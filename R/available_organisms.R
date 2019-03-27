@@ -1,6 +1,7 @@
 #' @title Display available organisms from a specified database.
 #' @description Display an interactive table with available organisms from a genomic ressource database (Bioconductor, EntrezGene, Ensembl, Uniprot).
 #' @importFrom DT datatable
+#' @importFrom methods setMethod
 #' @family genomic_ressource
 #' @family visualization
 #' @param object a  \code{\link{genomic_ressource-class}} object created by \code{\link{Bioconductor2GO}}, \code{\link{EntrezGene2GO}},
@@ -31,9 +32,9 @@
 #' # display Uniprot table
 #' Uniprot<-ViSEAGO::Uniprot2GO()
 #' ViSEAGO::available_organisms(Uniprot)
-#' @export
+#' @exportMethod available_organisms
 setGeneric(name="available_organisms",def=function(object) {standardGeneric("available_organisms")})
-#' @importFrom methods setMethod
+
 setMethod("available_organisms",signature="genomic_ressource",definition=function(object) {
 
   ##################

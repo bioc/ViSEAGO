@@ -19,7 +19,6 @@ This function displays the intersections of enriched GO terms (p<0.01) between a
 or \code{\link{GO_clusters-class}} objects. The intersections are shown in an upset plot and printed in a table.
 }
 \examples{
-\dontrun{
 ##################
 # load object
 utils::data(
@@ -34,7 +33,6 @@ ViSEAGO::Upset(BP_sResults)
 ##################
 # print upset
 ViSEAGO::Upset(Wang_clusters_wardD2)
-}
 }
 \seealso{
 Other enrich_GO_terms: \code{\link{enrich_GO_terms-class}},

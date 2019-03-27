@@ -50,7 +50,7 @@
 #' Matt Dowle and Arun Srinivasan (2017). data.table: Extension of data.frame. R package version 1.10.4. https://CRAN.R-project.org/package=data.table.
 #' @include genomic_ressource.R
 #' @examples
-#'
+#' \dontrun{
 #' ###################
 #' # load Mus musculus (mouse) GO annotations
 #' ###################
@@ -98,9 +98,10 @@
 #'  # Coturnix japonica GO annotations with adding orthologs
 #'  EntrezGene<-ViSEAGO::EntrezGene2GO()
 #'  myGENE2GO<-ViSEAGO::annotate("93934",EntrezGene, ortholog=TRUE)
-#' @export
+#'  }
+#' @exportMethod annotate
 setGeneric(name="annotate",def=function(id,object,ortholog=FALSE){standardGeneric("annotate")})
-#' @importFrom methods setMethod
+
 setMethod("annotate",definition=function(id,object,ortholog){
 
   ###################
@@ -309,26 +310,36 @@ setMethod("annotate",definition=function(id,object,ortholog){
       ###################
       # load the file
       utils::download.file(base::paste('ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/',
-      base::toupper(id),'/goa_',id,'.gaf.gz',sep=""),destfile = "./data/input/annot.gz",quiet=TRUE)
+      base::toupper(id),'/goa_',id,'.gaf.gz',sep=""),destfile = "annot.gz",quiet=TRUE)
 
       ###################
       # unzip
-      R.utils::gunzip("./data/input/annot.gz")
+      R.utils::gunzip("annot.gz")
 
       ###################
       # remove the zipped file
-      base::unlink("./data/input/annot.gz")
+      base::unlink("annot.gz")
 
       #################
       # read file
-      annot<-base::unique(data.table::fread("./data/input/annot",quote="!",
-      select=c(2,5,7,9),col.names=c("gene_id","GOID","evidence","category")))
+      annot<-base::unique(
+        data.table::fread(
+          "annot",
+          skip=12,
+          select=base::c(2,5,7,9),
+          col.names=base::c("gene_id","GOID","evidence","category")
+        )
+      )
 
       ###################
       # Extract species annotation from data slot
       annot[category=="F",category:="MF"]
       annot[category=="P",category:="BP"]
       annot[category=="C",category:="CC"]
+
+      ###################
+      # GO database stamp
+      stamp=methods::slot(object,"stamp")
     }
 
   ###################

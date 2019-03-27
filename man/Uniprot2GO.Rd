@@ -17,11 +17,9 @@ This function downloads the current_release_numbers file (ftp://ftp.ebi.ac.uk/pu
 \href{http://www.ebi.ac.uk/GOA}{Uniprot-GOA} which contains available organisms.
 }
 \examples{
-\dontrun{
 ###################
 # List Uniprot-GOA available organisms
 Uniprot<-ViSEAGO::Uniprot2GO()
-}
 }
 \references{
 Matt Dowle and Arun Srinivasan (2017). data.table: Extension of `data.frame`. R package version 1.10.4. https://CRAN.R-project.org/package=data.table.

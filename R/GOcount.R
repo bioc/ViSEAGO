@@ -2,6 +2,7 @@
 #' @description This method displays in barplot the count of GO terms splitted in two categories (significant or not)
 #' for each result of GO enrichment tests.
 #' @importFrom data.table data.table melt :=
+#' @importFrom methods setGeneric setMethod
 #' @importFrom plotly plot_ly layout add_trace
 #' @family GO_terms
 #' @family visualization
@@ -18,14 +19,17 @@
 #' @examples
 #' ###################
 #' # load object
-#' utils::data(BP_sResults,package="ViSEAGO")
+#' utils::data(
+#'  BP_sResults,
+#'  package="ViSEAGO"
+#' )
 #'
 #' ###################
 #' # barplot for the count of GO terms
 #' ViSEAGO::GOcount(BP_sResults)
-#' @export
+#' @exportMethod GOcount
 setGeneric(name="GOcount",def=function(object,file=NULL){standardGeneric("GOcount")})
-#' @importFrom methods setMethod
+
 setMethod("GOcount",signature="enrich_GO_terms",definition=function(object,file) {
 
   ###################

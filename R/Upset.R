@@ -1,6 +1,7 @@
 #' @title Enriched GO terms intersections plot.
 #' @description This method allows to visualize GO terms intersections between results of enrichment tests.
 #' @importFrom data.table data.table .SD
+#' @importFrom methods setGeneric setMethod slot is
 #' @importFrom UpSetR upset
 #' @family enrich_GO_terms
 #' @family visualization
@@ -25,9 +26,9 @@
 #' ##################
 #' # print upset
 #' ViSEAGO::Upset(Wang_clusters_wardD2)
-#' @export
+#' @exportMethod Upset
 setGeneric(name="Upset",def=function(object,file="./upset.xls") {standardGeneric("Upset")})
-#' @importFrom methods setMethod
+
 setMethod("Upset",definition=function(object,file){
 
   ###################

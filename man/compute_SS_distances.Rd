@@ -31,6 +31,19 @@ Semantic Similarity computations are based on \code{\link[GOSemSim]{mgoSim}} met
 \examples{
 \dontrun{
 ###################
+# load objects
+utils::data(
+ list=base::c("myGENE2GO","BP_sResults","Wang_clusters_wardD2"),
+ package="ViSEAGO"
+)
+
+###################
+# initialyse object for compute GO Semantic Similarity
+myGOs<-ViSEAGO::build_GO_SS(
+ gene2GO=myGENE2GO,
+ enrich_GO_terms=BP_sResults
+)
+###################
 # compute GO terms Semantic Similarity distances
 myGOs<-ViSEAGO::compute_SS_distances(
  myGOs,

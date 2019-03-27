@@ -28,6 +28,20 @@
 #' Herve Pages, Marc Carlson, Seth Falcon and Nianhua Li (2017). AnnotationDbi: Annotation Database Interface. R package version 1.38.0.
 #' @include GO_SS.R GO_clusters.R
 #' @examples
+#' \dontrun{
+#' ###################
+#' # load objects
+#' utils::data(
+#'  list=base::c("myGENE2GO","BP_sResults","Wang_clusters_wardD2"),
+#'  package="ViSEAGO"
+#' )
+#'
+#' ###################
+#' # initialyse object for compute GO Semantic Similarity
+#' myGOs<-ViSEAGO::build_GO_SS(
+#'  gene2GO=myGENE2GO,
+#'  enrich_GO_terms=BP_sResults
+#' )
 #' ###################
 #' # compute GO terms Semantic Similarity distances
 #' myGOs<-ViSEAGO::compute_SS_distances(
@@ -41,9 +55,10 @@
 #'  Wang_clusters_wardD2,
 #'  distance=c("max","avg","rcmax","BMA")
 #' )
-#' @export
+#' }
+#' @exportMethod compute_SS_distances
 setGeneric(name="compute_SS_distances",def=function(object,distance) {standardGeneric("compute_SS_distances")})
-#' @importFrom methods setMethod
+
 setMethod("compute_SS_distances",definition=function(object,distance) {
 
   ##################

@@ -23,14 +23,21 @@
 #' @include GO_SS.R
 #' @examples
 #' ###################
+#' # load objects
+#' utils::data(
+#'  list=base::c("myGENE2GO","BP_sResults"),
+#'  package="ViSEAGO"
+#' )
+#'
+#' ###################
 #' # initialyse object for compute GO Semantic Similarity
 #' myGOs<-ViSEAGO::build_GO_SS(
 #'  gene2GO=myGENE2GO,
 #'  enrich_GO_terms=BP_sResults
 #' )
-#' @export
+#' @exportMethod build_GO_SS
 setGeneric(name="build_GO_SS",def=function(gene2GO,enrich_GO_terms){standardGeneric("build_GO_SS")})
-#' @importFrom methods setMethod
+
 setMethod("build_GO_SS",definition=function(gene2GO,enrich_GO_terms) {
 
   ###################

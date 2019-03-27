@@ -19,7 +19,7 @@ bibliography: bibliography.bib
 csl: bmc-genomics.csl  
 ---
 
-```{r setup,include=FALSEALSE,cache=FALSE}
+```{r setup,include=FALSE,cache=FALSE}
 ###################
 # koad ViSEAGO
 library(ViSEAGO)

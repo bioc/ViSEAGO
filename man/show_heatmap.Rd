@@ -21,7 +21,13 @@ This method displays an interactive heatmap (if \code{file}=NULL) from \code{\li
 A static png image could be printed by setting \code{file} argument.
 }
 \examples{
-\dontrun{
+###################
+# load object
+utils::data(
+ Wang_clusters_wardD2,
+ package="ViSEAGO"
+)
+
 ##################
 # Display GO terms heatmap
 ViSEAGO::show_heatmap(Wang_clusters_wardD2,"GOterms")
@@ -37,7 +43,6 @@ ViSEAGO::show_heatmap(Wang_clusters_wardD2,"GOterms","./data/output/GOterms_heat
 ##################
 # Print GO clusters heatmap
 ViSEAGO::show_heatmap(Wang_clusters_wardD2,"GOclusters","./data/output/GOclusters_heatmap.png")
-}
 }
 \seealso{
 Other enrich_GO_terms: \code{\link{Upset}},

@@ -19,11 +19,9 @@ This function gives genome wide annotation for available organisms databases pac
 It uses \code{\link[AnnotationForge]{loadAnnDbPkgIndex}} from \pkg{AnnotationForge} package.
 }
 \examples{
-\dontrun{
 ###################
 # Check Bioconductor OrgDb available organisms
 Bioconductor<-ViSEAGO::Bioconductor2GO()
-}
 }
 \references{
 Carlson M and Pages H (2017). AnnotationForge: Code for Building Annotation Database Packages. R package version 1.18.0.

@@ -32,9 +32,9 @@
 #' ###################
 #' # build MDS plot for a GO_clusters-class distance object, highlighting GO groups clusters.
 #' ViSEAGO::MDSplot(Wang_clusters_wardD2,show_clusters=TRUE)
-#' @export
+#' @exportMethod MDSplot
 setGeneric(name="MDSplot",def=function(object,show_clusters=FALSE,file=NULL) {standardGeneric("MDSplot")})
-#' @importFrom methods setMethod
+
 setMethod("MDSplot",definition=function(object,show_clusters,file) {
 
   #################

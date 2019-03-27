@@ -41,9 +41,7 @@ It uses the \code{\link[biomaRt]{useEnsembl}} and  \code{\link[biomaRt]{listData
 ###################
 # check the Ensembl available biomart (if not known)
 # for Animals (host="www.ensembl.org", the default)
-if(base::interactive()){
  biomaRt::listEnsembl()
-}
 
 ###################
 # List Ensembl available organisms

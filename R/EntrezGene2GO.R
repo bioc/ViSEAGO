@@ -18,9 +18,11 @@
 #' Maglott, D, Ostell, J, Pruitt, KD, Tatusova, T (2011). Entrez Gene: gene-centered information at NCBI. Nucleic Acids Res., 39, Database issue:D52-7.
 #' @include genomic_ressource.R
 #' @examples
+#' \dontrun{
 #' ###################
 #' # Download EntrezGene available organisms GO annotations
 #' EntrezGene<-ViSEAGO::EntrezGene2GO()
+#' }
 #' @export
 EntrezGene2GO=function(){
 

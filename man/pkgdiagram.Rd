@@ -19,7 +19,6 @@ This function build the ViSEAGO package diagram available displayed in the vigne
 This function use \pkg{DiagrammeR} package \code{\link[DiagrammeR]{grViz}} to display the ViSEAGO methods diagram with colored or not subgraphs rectangles.
 }
 \examples{
-\dontrun{
 ###################
 # print diagram without focus
 ViSEAGO::pkgdiagram(x=c("white","white","white","white","white"))
@@ -43,7 +42,6 @@ ViSEAGO::pkgdiagram(x=c("white","white","white","black","white"))
 ###################
  # print diagram with focus on the visualization step
 ViSEAGO::pkgdiagram(x=c("white","white","white","white","black"))
-}
 }
 \references{
 Knut Sveidqvist, Mike Bostock, Chris Pettitt, Mike Daines, Andrei Kashcha and Richard Iannone (2017). DiagrammeR: Create Graph Diagrams and Flowcharts Using R.

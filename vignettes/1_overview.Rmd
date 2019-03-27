@@ -19,7 +19,7 @@ bibliography: bibliography.bib
 csl: bmc-genomics.csl
 ---
 
-```{r setup,include=FALSEALSE,cache=FALSE}
+```{r setup,include=FALSE,cache=FALSE}
 ###################
 # koad ViSEAGO
 library(ViSEAGO)
@@ -27,7 +27,7 @@ library(ViSEAGO)
 ###################
 # knitr document options
 knitr::opts_chunk$set(
-  eval=FALSE,fig.path='./data/output/',echo=TRUERUE,fig.pos = 'H',
+  eval=FALSE,fig.path='./data/output/',echo=TRUE,fig.pos = 'H',
   fig.width=8,message=FALSE,comment=NA,warning=FALSE
 )
 ```

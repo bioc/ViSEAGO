@@ -120,10 +120,10 @@
 #' ####################
 #' # display
 #' ViSEAGO::show_heatmap(Wang_clusters_wardD2,"GOterms")
-#' @export
+#' @exportMethod GOterms_heatmap
 setGeneric(name="GOterms_heatmap",def=function(myGOs,showIC=TRUE,showGOlabels=TRUE,GO.tree=base::list(tree=base::list(distance="Wang",aggreg.method="ward.D2",rotate=NULL),
 cut=base::list(dynamic=base::list(pamStage=TRUE,pamRespectsDendro=TRUE,deepSplit=2,minClusterSize =2))),samples.tree=NULL){base::standardGeneric("GOterms_heatmap")})
-#' @importFrom methods setMethod
+
 setMethod("GOterms_heatmap",signature="GO_SS",definition=function(myGOs,showIC,showGOlabels,GO.tree,samples.tree){
 
   ###################

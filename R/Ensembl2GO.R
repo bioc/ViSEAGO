@@ -25,6 +25,7 @@
 #' Matt Dowle and Arun Srinivasan (2017). data.table: Extension of data.frame. R package version 1.10.4. https://CRAN.R-project.org/package=data.table.
 #' @include genomic_ressource.R
 #' @examples
+#' \dontrun{
 #' ###################
 #' # host address to use for Ensembl vertebrate/Plants/Protists/Metazoa/Fungi
 #' # host="www.ensembl.org" # vertebrate
@@ -37,9 +38,7 @@
 #' ###################
 #' # check the Ensembl available biomart (if not known)
 #' # for Animals (host="www.ensembl.org", the default)
-#' if(base::interactive()){
 #'  biomaRt::listEnsembl()
-#' }
 #'
 #' ###################
 #' # List Ensembl available organisms
@@ -48,6 +47,7 @@
 #'  host="www.ensembl.org",
 #'  version=NULL
 #' )
+#' }
 #' @export
 Ensembl2GO=function(biomart="ensembl",host="www.ensembl.org",version=NULL){
 

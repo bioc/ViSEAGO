@@ -148,9 +148,9 @@
 #' ###################
 #' # global dendrogram clustering correlation
 #' clust_cor<-ViSEAGO::clusters_cor(clusters,method="adjusted.rand")
-#' @export
+#' @exportMethod clusters_cor
 setGeneric(name="clusters_cor",def=function(clusters,method="adjusted.rand") {standardGeneric("clusters_cor")})
-#' @importFrom methods setMethod
+
 setMethod("clusters_cor",definition=function(clusters,method) {
 
   ###################

@@ -21,7 +21,6 @@ Build an interactive heatmap of common GO terms frequency between partitions fro
 \code{\link{GO_clusters-class}} objects.
 }
 \examples{
-\dontrun{
 ###################
 # create GO_SS-class object
 myGOs<-ViSEAGO::build_GO_SS(
@@ -149,7 +148,6 @@ clusters<-base::list(
 ###################
 # clusters content comparisons
 clusters_comp<-ViSEAGO::compare_clusters(clusters)
-}
 }
 \references{
 Carson Sievert, Chris Parmer, Toby Hocking, Scott Chamberlain, Karthik Ram, Marianne Corvellec and Pedro Despouy (2017).
