@@ -2,7 +2,7 @@
 % Please edit documentation in R/compare_clusters.R
 \name{compare_clusters}
 \alias{compare_clusters}
-\title{Heatmap to compare partitions.}
+\title{Heatmap to compare partitions}
 \usage{
 compare_clusters(clusters)
 }
@@ -21,6 +21,7 @@ Build an interactive heatmap of common GO terms frequency between partitions fro
 \code{\link{GO_clusters-class}} objects.
 }
 \examples{
+\dontrun{
 ###################
 # create GO_SS-class object
 myGOs<-ViSEAGO::build_GO_SS(
@@ -131,8 +132,9 @@ Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
        minClusterSize =2
      )
    )
- ),
- samples.tree=NULL
+  ),
+  samples.tree=NULL
+ )
 
 ###################
 # clusters to compare
@@ -147,6 +149,7 @@ clusters<-base::list(
 ###################
 # clusters content comparisons
 clusters_comp<-ViSEAGO::compare_clusters(clusters)
+}
 }
 \references{
 Carson Sievert, Chris Parmer, Toby Hocking, Scott Chamberlain, Karthik Ram, Marianne Corvellec and Pedro Despouy (2017).

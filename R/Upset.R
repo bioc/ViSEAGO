@@ -1,5 +1,6 @@
 #' @title Enriched GO terms intersections plot.
 #' @description This method allows to visualize GO terms intersections between results of enrichment tests.
+#' @importFrom data.table data.table .SD
 #' @importFrom UpSetR upset
 #' @family enrich_GO_terms
 #' @family visualization
@@ -10,6 +11,14 @@
 #' or \code{\link{GO_clusters-class}} objects. The intersections are shown in an upset plot and printed in a table.
 #' @include enrich_GO_terms.R GO_clusters.R
 #' @examples
+#' \dontrun{
+#' ##################
+#' # load object
+#' utils::data(
+#'  list=base::c("BP_sResults","Wang_clusters_wardD2"),
+#'  package="ViSEAGO"
+#' )
+#'
 #' ##################
 #' # print upset
 #' ViSEAGO::Upset(BP_sResults)
@@ -17,6 +26,7 @@
 #' ##################
 #' # print upset
 #' ViSEAGO::Upset(Wang_clusters_wardD2)
+#' }
 #' @export
 setGeneric(name="Upset",def=function(object,file="./upset.xls") {standardGeneric("Upset")})
 
@@ -28,21 +38,28 @@ setMethod("Upset",definition=function(object,file){
 
   ##################
   # extract data.table from enrich_GO_terms or GO_clusters class object.
-  if(base::class(object)=="enrich_GO_terms"){
+  if(methods::is(object,"enrich_GO_terms")){
 
     ##################
     # extract data.table from enrich_GO_terms class object
-    Data<-object@data
+    Data<-methods::slot(object,"data")
+
   }else{
 
     ##################
     # extract data.table from GO_clusters class object
-    Data<-object@enrich_GOs@data
+    Data<-methods::slot(
+      methods::slot(
+        object,
+        "enrich_GOs"
+        ),
+      "data"
+    )
   }
 
   ##################
   # keep only GOterms and pvalues by condition
-  Data<-Data[,base::c(1,base::grep("\\.pvalue",base::names(Data))),with=F]
+  Data<-Data[,base::grep("GO\\.ID|\\.pvalue",base::names(Data)),with=F]
 
   ##################
   # remove pvalues in columns names

@@ -1,6 +1,6 @@
 #' @title gene2GO class object definition.
 #' @description This class is invoked by \code{\link{annotate}} method in order to store GO annotations for each category (MF, BP, CC).
-#' @importFrom methods setClass
+#' @importFrom methods setClass slot
 #' @family GO_terms
 #' @slot db database source in \code{character}.
 #' @slot stamp date of stamp  in \code{character}.
@@ -24,17 +24,17 @@ setMethod("show", "gene2GO",function(object) {
   ###################
   # cat some text
   base::cat("- object class: gene2GO",
-    "\n- database: ",object@db,
-    "\n- stamp/version: ",object@stamp,
-    "\n- organism id: ",object@organism,
+    "\n- database: ",methods::slot(object,"db"),
+    "\n- stamp/version: ",methods::slot(object,"stamp"),
+    "\n- organism id: ",methods::slot(object,"organism"),
     "\n\nGO annotations:",
-    "\n- Molecular Function (MF): ",base::length(object@MF)," annotated genes with ",
-    base::sum(base::lengths(object@MF))," terms (",base::length(base::unique(base::unlist(object@MF))),
+    "\n- Molecular Function (MF): ",base::length(methods::slot(object,"MF"))," annotated genes with ",
+    base::sum(base::lengths(methods::slot(object,"MF")))," terms (",base::length(base::unique(base::unlist(methods::slot(object,"MF")))),
     " unique terms)",
-    "\n- Biological Process (BP): ",base::length(object@BP)," annotated genes with ",
-    base::sum(base::lengths(object@BP))," terms (",base::length(base::unique(base::unlist(object@BP))),
+    "\n- Biological Process (BP): ",base::length(methods::slot(object,"BP"))," annotated genes with ",
+    base::sum(base::lengths(methods::slot(object,"BP")))," terms (",base::length(base::unique(base::unlist(methods::slot(object,"BP")))),
     " unique terms)",
-    "\n- Cellular Component (CC): ",base::length(object@CC)," annotated genes with ",
-    base::sum(base::lengths(object@CC))," terms (",base::length(base::unique(base::unlist(object@CC))),
+    "\n- Cellular Component (CC): ",base::length(methods::slot(object,"CC"))," annotated genes with ",
+    base::sum(base::lengths(methods::slot(object,"CC")))," terms (",base::length(base::unique(base::unlist(methods::slot(object,"CC")))),
     " unique terms)",sep="")
 })

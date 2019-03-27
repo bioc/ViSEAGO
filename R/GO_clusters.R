@@ -1,6 +1,6 @@
 #' @title GO_clusters class object
 #' @description This class is invoked by \code{\link{GOterms_heatmap}} and  \code{\link{GOclusters_heatmap}} methods to store all results produced.
-#' @importFrom methods setClass
+#' @importFrom methods setClass slot
 #' @family GO_clusters
 #' @slot db database source.
 #' @slot stamp date of stamp.
@@ -38,7 +38,13 @@ setMethod("show", "GO_clusters",function(object) {
 
   ###################
   # Extract table
-  Data<-object@enrich_GOs@data
+  Data<-methods::slot(
+    methods::slot(
+      object,
+      "enrich_GOs"
+    ),
+  "data"
+  )
 
   ###################
   # Extract pvalues
@@ -103,39 +109,182 @@ setMethod("show", "GO_clusters",function(object) {
   ###################
   # cat some text
   base::cat("- object class: GO_clusters",
-    "\n- database: ",object@db,
-    "\n- stamp/version: ",object@stamp,
-    "\n- organism id: ",object@organism,
-    "\n- ontology: ",object@ont,
-    "\n- input:\n        ", paste(paste(base::names(object@enrich_GOs@input),
-    base::sapply(object@enrich_GOs@input,function(x){base::paste(x,collapse=", ")}),
-    sep=": "),collapse="\n        "),
-    "\n- topGO summary:\n ", topGO,
-    "\n- enrich GOs data.table: ",base::nrow(object@enrich_GOs@data)," GO terms of ",
-    base::length(base::grep("\\.pvalue",base::names(object@enrich_GOs@data)))," conditions.",
-    base::paste("\n       ",Data$conditions,":",Data$`significant GO terms number`,"terms"),
-    "\n- clusters distances: ",base::paste(base::names(object@clusters_dist),collapse=", "),
+    "\n- database: ",methods::slot(object,"db"),
+    "\n- stamp/version: ",methods::slot(object,"stamp"),
+    "\n- organism id: ",methods::slot(object,"organism"),
+    "\n- ontology: ",methods::slot(object,"ont"),
+    "\n- input:\n        ",
+      paste(
+        paste(base::names(
+          methods::slot(
+            methods::slot(
+              object,
+              "enrich_GOs"
+            ),
+          "input")
+        ),
+        base::sapply(
+          methods::slot(
+            methods::slot(
+              object,
+              "enrich_GOs"
+              ),
+            "input"
+          ),
+          function(x){base::paste(x,collapse=", ")}
+        ),
+        sep=": "),
+        collapse="\n        "
+      ),
+    "\n- topGO summary:\n ",
+    topGO,
+    "\n- enrich GOs data.table: ",
+      base::nrow(
+        methods::slot(
+          methods::slot(
+            object,
+            "enrich_GOs"
+          ),
+          "data"
+        )
+      ),
+    " GO terms of ",
+    base::length(
+      base::grep(
+        "\\.pvalue",
+        base::names(
+          methods::slot(
+            methods::slot(
+              object,
+              "enrich_GOs"
+            ),
+            "data"
+          )
+        )
+      )
+    ),
+    " conditions.",
+    base::paste(
+      "\n       ",
+      Data$conditions,
+      ":",
+      Data$`significant GO terms number`,
+      "terms"
+    ),
+    "\n- clusters distances: ",
+    base::paste(
+      base::names(
+        methods::slot(object,"clusters_dist")
+      ),
+      collapse=", "
+    ),
     "\n- Heatmap:",
-    "\n          * GOterms: ",!base::is.null(object@heatmap$GOterms),
+    "\n          * GOterms: ",
+    !base::is.null(
+      methods::slot(object,"heatmap")$GOterms
+    ),
     "\n                    - GO.tree:\n                              ",
-    paste(base::paste(base::names(base::unlist(object@hcl_params$GO.tree)),
-    base::unlist(object@hcl_params$GO.tree),sep=": "),collapse="\n                              "),
+    paste(
+      base::paste(
+        base::names(
+          base::unlist(
+            methods::slot(object,"hcl_params")$GO.tree
+          )
+        ),
+        base::unlist(
+          methods::slot(object,"hcl_params")$GO.tree
+        ),sep=": "),
+      collapse="\n                              "
+    ),
     "\n                              number of clusters: ",
-    base::length(base::unique(object@enrich_GOs@data[,GO.cluster])),
+    base::length(
+      base::unique(
+        methods::slot(
+          methods::slot(
+            object,
+            "enrich_GOs"
+          ),
+          "data"
+        )[,GO.cluster]
+      )
+    ),
     "\n                              clusters min size: ",
-    base::round(base::min(object@enrich_GOs@data[,GO.cluster]),digits=0),
+    base::round(
+      base::min(
+        methods::slot(
+          methods::slot(
+            object,
+            "enrich_GOs"
+          ),
+          "data"
+        )[,GO.cluster]
+      ),
+      digits=0
+    ),
     "\n                              clusters mean size: ",
-    base::round(base::mean(object@enrich_GOs@data[,GO.cluster]),digits=0),
+    base::round(
+      base::mean(
+        methods::slot(
+          methods::slot(
+            object,
+            "enrich_GOs"
+          ),
+          "data"
+        )[,GO.cluster]
+      ),
+      digits=0
+    ),
     "\n                              clusters max size: ",
-    base::round(base::max(object@enrich_GOs@data[,GO.cluster]),digits=0),
+    base::round(
+      base::max(
+        methods::slot(
+          methods::slot(
+            object,
+            "enrich_GOs"
+          ),
+          "data"
+        )[,GO.cluster]
+      ),
+      digits=0
+    ),
     "\n                   - sample.tree: ",
-    paste(base::paste(base::names(base::unlist(object@hcl_params$samples.tree)),
-    base::unlist(object@hcl_params$samples.tree),sep=": "),collapse="\n                                 "),
-    if(base::is.null(object@hcl_params$samples.tree)){"FALSE"},
-    "\n          * GOclusters: ",!base::is.null(object@heatmap$GOclusters),
-    if(!base::is.null(object@heatmap$GOclusters)){
-      paste("\n                       - tree:\n                             ",
-        base::paste(base::paste(base::names(base::unlist(object@hcl_params$GO.clusters)),
-        base::unlist(object@hcl_params$GO.clusters),sep=": "),collapse="\n                              "),collapse="")
-    },sep="")
+    paste(
+      base::paste(
+        base::names(
+          base::unlist(
+            methods::slot(object,"hcl_params")$samples.tree
+          )
+        ),
+        base::unlist(
+          object@hcl_params$samples.tree
+        ),
+        sep=": "
+      ),collapse="\n                                 "
+    ),
+    if(base::is.null(methods::slot(object,"hcl_params")$samples.tree)){"FALSE"},
+    "\n          * GOclusters: ",
+    !base::is.null(
+      methods::slot(object,"heatmap")$GOclusters
+    ),
+    if(!base::is.null(methods::slot(object,"heatmap")$GOclusters)){
+      paste(
+        "\n                       - tree:\n                             ",
+        base::paste(
+          base::paste(
+            base::names(
+              base::unlist(
+                methods::slot(object,"hcl_params")$GO.clusters
+              )
+            ),
+          base::unlist(
+            methods::slot(object,"hcl_params")$GO.clusters
+          ),
+          sep=": "
+        ),
+        collapse="\n                              "),
+      collapse=""
+    )
+    },
+    sep=""
+  )
 })

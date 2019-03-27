@@ -12,6 +12,7 @@
 #'  Yihui Xie (2016). DT: A Wrapper of the JavaScript Library 'DataTables'. R package version 0.2. https://CRAN.R-project.org/package=DT
 #' @include genomic_ressource.R
 #' @examples
+#' \dontrun{
 #' ###################
 #' # display Bioconductor table
 #' Bioconductor<-ViSEAGO::Bioconductor2GO()
@@ -31,7 +32,7 @@
 #' # display Uniprot table
 #' Uniprot<-ViSEAGO::Uniprot2GO()
 #' ViSEAGO::available_organisms(Uniprot)
-#'
+#' }
 #' @export
 setGeneric(name="available_organisms",def=function(object) {standardGeneric("available_organisms")})
 
@@ -39,7 +40,7 @@ setMethod("available_organisms",signature="genomic_ressource",definition=functio
 
   ##################
   # create a datatable
-  DT::datatable(object@organisms,
+  DT::datatable(methods::slot(object,"organisms"),
 
     ###################
     # table width

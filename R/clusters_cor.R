@@ -12,6 +12,16 @@
 #' Csardi G, Nepusz T: The igraph software package for complex network research, InterJournal, Complex Systems 1695. 2006. http://igraph.org.
 #' @include GO_clusters.R
 #' @examples
+#' \dontrun{
+#' ###################
+#' # load objects
+#' utils::data(
+#'  list=base::c(
+#'   "myGENE2GO",
+#'   "BP_sResults"
+#'  )
+#' )
+#'
 #' ###################
 #' # create GO_SS-class object
 #' myGOs<-ViSEAGO::build_GO_SS(
@@ -124,10 +134,11 @@
 #'    )
 #'  ),
 #'  samples.tree=NULL
+#' )
 #'
 #' ###################
 #' # clusters to compare
-#' clusters=base::list(
+#' clusters<-base::list(
 #'  Resnik="Resnik_clusters_wardD2",
 #'  Lin="Lin_clusters_wardD2",
 #'  Rel="Rel_clusters_wardD2",
@@ -138,10 +149,11 @@
 #' ###################
 #' # global dendrogram clustering correlation
 #' clust_cor<-ViSEAGO::clusters_cor(clusters,method="adjusted.rand")
+#' }
 #' @export
-setGeneric(name="clusters_cor",def=function(clusters,method) {standardGeneric("clusters_cor")})
+setGeneric(name="clusters_cor",def=function(clusters,method="adjusted.rand") {standardGeneric("clusters_cor")})
 
-setMethod("clusters_cor",definition=function(clusters,method="adjusted.rand") {
+setMethod("clusters_cor",definition=function(clusters,method) {
 
   ###################
   # method
@@ -161,11 +173,17 @@ setMethod("clusters_cor",definition=function(clusters,method="adjusted.rand") {
 
       #################
       # check class
-      if(!base::class(object)=="GO_clusters") base::stop("object must come from ViSEAGO::GOterms_heatmap()")
+      if(!methods::is(object,"GO_clusters")) base::stop("object must come from ViSEAGO::GOterms_heatmap()")
 
       ###################
       # extract GO.ID and correspond cluster assignation to a list
-      object<-object@enrich_GOs@data[,.(GO.ID,GO.cluster)]
+      object<- methods::slot(
+        methods::slot(
+          object,
+          "enrich_GOs"
+        ),
+        "data"
+      )[,.(GO.ID,GO.cluster)]
 
       ###################
       # ordering by GO.ID

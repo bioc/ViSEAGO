@@ -20,7 +20,7 @@ This method displays an interactive table (if file=NULL) from \code{\link{enrich
 The table could be printed by setting file argument.
 }
 \examples{
-
+\dontrun{
 ###################
 # display merge_enrich_terms output
 ViSEAGO::show_table(BP_sResults)
@@ -36,6 +36,7 @@ ViSEAGO::show_table(Wang_clusters_wardD2)
 ###################
 # print table of GO_clusters-class object
 ViSEAGO::show_table(Wang_clusters_wardD2,"./data/output/Wang_clusters_wardD2.txt")
+}
 }
 \references{
 Yihui Xie (2016). DT: A Wrapper of the JavaScript Library 'DataTables'. R package version 0.2. https://CRAN.R-project.org/package=DT

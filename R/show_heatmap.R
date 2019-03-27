@@ -1,6 +1,6 @@
 #' @title Display an interactive or static heatmap.
 #' @description Display a heatmap in interactive or static mode.
-#' @importFrom methods setGeneric setMethod
+#' @importFrom methods setGeneric setMethod slot is
 #' @importFrom plotly export
 #' @importFrom webshot install_phantomjs
 #' @family enrich_GO_terms
@@ -13,6 +13,7 @@
 #' This method displays an interactive heatmap (if \code{file}=NULL) from \code{\link{GO_clusters-class}} object for "GOterms" or "GOclusters" type.\cr
 #' A static png image could be printed by setting \code{file} argument.
 #' @examples
+#' \dontrun{
 #' ##################
 #' # Display GO terms heatmap
 #' ViSEAGO::show_heatmap(Wang_clusters_wardD2,"GOterms")
@@ -28,7 +29,7 @@
 #' ##################
 #' # Print GO clusters heatmap
 #' ViSEAGO::show_heatmap(Wang_clusters_wardD2,"GOclusters","./data/output/GOclusters_heatmap.png")
-#'
+#' }
 #' @export
 setGeneric(name="show_heatmap",def=function(object,type,file=NULL) {standardGeneric("show_heatmap")})
 
@@ -44,11 +45,11 @@ setMethod("show_heatmap",signature="GO_clusters",definition=function(object,type
 
     ##################
     # GOTermsHeatmap
-    GOterms=object@heatmap$GOterms,
+    GOterms=methods::slot(object,"heatmap")$GOterms,
 
     ##################
     # GOclusters_heatmap
-    GOclusters=object@heatmap$GOclusters
+    GOclusters=methods::slot(object,"heatmap")$GOclusters
   )
 
   ##################
@@ -65,7 +66,15 @@ setMethod("show_heatmap",signature="GO_clusters",definition=function(object,type
 
       ##################
       # number of rows
-      rowlen=base::nrow(object@enrich_GOs@data)
+      rowlen=base::nrow(
+        methods::slot(
+          methods::slot(
+            object,
+            "enrich_GOs"
+          ),
+          "data"
+        )
+      )
 
       ##################
       # adjust minimum size

@@ -4,7 +4,7 @@
 \alias{clusters_cor}
 \title{Compute distance matrix between dendrograms partitions.}
 \usage{
-clusters_cor(clusters, method)
+clusters_cor(clusters, method = "adjusted.rand")
 }
 \arguments{
 \item{clusters}{a \code{list} of \code{\link{GO_clusters-class}} objects,
@@ -19,6 +19,16 @@ a distance or a correlation matrix.
 Build a distance or correlation matrix between partitions from dendrograms.
 }
 \examples{
+\dontrun{
+###################
+# load objects
+utils::data(
+ list=base::c(
+  "myGENE2GO",
+  "BP_sResults"
+ )
+)
+
 ###################
 # create GO_SS-class object
 myGOs<-ViSEAGO::build_GO_SS(
@@ -131,10 +141,11 @@ Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
    )
  ),
  samples.tree=NULL
+)
 
 ###################
 # clusters to compare
-clusters=base::list(
+clusters<-base::list(
  Resnik="Resnik_clusters_wardD2",
  Lin="Lin_clusters_wardD2",
  Rel="Rel_clusters_wardD2",
@@ -145,6 +156,7 @@ clusters=base::list(
 ###################
 # global dendrogram clustering correlation
 clust_cor<-ViSEAGO::clusters_cor(clusters,method="adjusted.rand")
+}
 }
 \references{
 Csardi G, Nepusz T: The igraph software package for complex network research, InterJournal, Complex Systems 1695. 2006. http://igraph.org.

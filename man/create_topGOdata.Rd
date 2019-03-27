@@ -36,6 +36,7 @@ the list of genes of interest (\code{geneSel} argument) against the correspondin
 separately, or grouped together in a \code{factor} (\code{geneList} argument).
 }
 \examples{
+\dontrun{
  ###################
  # load genes identifiants (GeneID,ENS...) background (Expressed genes)
  background_L<-base::scan(
@@ -105,6 +106,7 @@ elim_BP_L_virginvspregnant<-topGO::runTest(
  algorithm ="elim",
  statistic = "fisher"
 )
+}
 }
 \references{
 Alexa A, Rahnenfuhrer J, Lengauer T. Improved scoring of functional groups from gene expression data by

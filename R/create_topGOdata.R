@@ -1,7 +1,7 @@
 #' @title Create topGOdata object for enrichment test with topGO package.
 #' @description This method create a \code{\link[topGO]{topGOdata-class}} object required by \pkg{topGO} package in order
 #' to perform GO enrichment test.
-#' @importFrom methods setGeneric setMethod new slot
+#' @importFrom methods setGeneric setMethod new slot is
 #' @import topGO
 #' @importFrom topGO annFUN.gene2GO
 #' @family GO_terms
@@ -22,6 +22,7 @@
 #' Alexa A, Rahnenfuhrer J, Lengauer T. Improved scoring of functional groups from gene expression data by
 #' decorrelating GO graph structure. Bioinformatics 2006; 22:1600-1607.
 #' @examples
+#' \dontrun{
 #'  ###################
 #'  # load genes identifiants (GeneID,ENS...) background (Expressed genes)
 #'  background_L<-base::scan(
@@ -91,6 +92,7 @@
 #'  algorithm ="elim",
 #'  statistic = "fisher"
 #' )
+#' }
 #' @export
 setGeneric(name="create_topGOdata",def=function(geneSel,allGenes,geneList=NULL,gene2GO,ont,nodeSize){standardGeneric("create_topGOdata")})
 
@@ -102,7 +104,7 @@ setMethod("create_topGOdata",definition=function(geneSel,allGenes,geneList,gene2
 
     ###################
     # check object class
-    if (class(gene2GO)!="gene2GO")base::stop("object must be a GENE2GO class obtained using ViSEAGO::annotate()")
+    if(!methods::is(gene2GO,"gene2GO"))base::stop("object must be a GENE2GO class obtained using ViSEAGO::annotate()")
 
     ###################
     # check ontology
@@ -182,6 +184,17 @@ setMethod("create_topGOdata",definition=function(geneSel,allGenes,geneList,gene2
 
     ###################
     # create GOdata
-    methods::new("topGOdata",description=base::paste(gene2GO@db,gene2GO@organism,gene2GO@stamp),ontology =ont,allGenes = AllGenes,
-    annot = topGO::annFUN.gene2GO,nodeSize =nodeSize,gene2GO =methods::slot(gene2GO,ont))
+    methods::new(
+      "topGOdata",
+      description=base::paste(
+        methods::slot(gene2GO,"db"),
+        methods::slot(gene2GO,"organism"),
+        methods::slot(gene2GO,"stamp")
+      ),
+      ontology =ont,
+      allGenes = AllGenes,
+      annot = topGO::annFUN.gene2GO,
+      nodeSize =nodeSize,
+      gene2GO =methods::slot(gene2GO,ont)
+    )
 })

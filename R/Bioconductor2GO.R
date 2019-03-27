@@ -14,9 +14,11 @@
 #' @return a  \code{\link{genomic_ressource-class}} object required by \code{\link{annotate}} method.
 #' @include genomic_ressource.R
 #' @examples
+#' \dontrun{
 #' ###################
 #' # Check Bioconductor OrgDb available organisms
 #' Bioconductor<-ViSEAGO::Bioconductor2GO()
+#' }
 #' @export
 Bioconductor2GO=function(){
 

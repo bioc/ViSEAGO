@@ -1,7 +1,7 @@
 #' @title Build a clustering heatmap on GO terms.
 #' @description This method computes a clustering heatmap based on GO terms semantic similarity.
 #' @importFrom data.table data.table
-#' @importFrom methods setGeneric setMethod new
+#' @importFrom methods setGeneric setMethod new slot is
 #' @importFrom ggplot2 scale_fill_gradientn
 #' @importFrom plotly layout
 #' @importFrom heatmaply heatmaply
@@ -14,6 +14,7 @@
 #' @family visualization
 #' @param myGOs a \code{\link{GO_SS-class}} object from \code{\link{compute_SS_distances}}.
 #' @param showIC \code{logical} (default to TRUE) to display the GO terms Information Content (IC) side bar.
+#' @param showGOlabels \code{logical} (default to TRUE) to display the GO terms ticks on y axis.
 #' @param GO.tree a named \code{list} of parameters to build and cut the GO terms \code{dendrogram}.
 #'  \describe{
 #'      \item{tree (a named \code{list} with:)}{
@@ -35,8 +36,8 @@
 #'               options values below)
 #'               }{
 #'                 \describe{
-#'                     \item{pamStage (default to T)}{second (PAM-like) stage will be performed.}
-#'                     \item{pamRespectsDendro (default to T)}{PAM stage will respect the dendrogram in the sense that objects
+#'                     \item{pamStage (default to TRUE)}{second (PAM-like) stage will be performed.}
+#'                     \item{pamRespectsDendro (default to TRUE)}{PAM stage will respect the dendrogram in the sense that objects
 #'                      and small clusters will only be assigned to clusters that belong to the same branch that the objects or small
 #'                      clusters being assigned belong to.}
 #'                     \item{deepSplit (default to 2)}{provides a rough control over sensitivity for cluster splitting (range 0 to 4).
@@ -88,12 +89,16 @@
 #' H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2009.
 #' @include GO_clusters.R
 #' @examples
+#' ##################
+#' # load object
+#' utils::data(myGOs,package="ViSEAGO")
 #'
 #' ##################
 #' # GOtermsHeatmap with default parameters
 #' Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 #'  myGOs,
-#'  showIC=T,
+#'  showIC=TRUE,
+#'  showGOlabels=TRUE,
 #'  GO.tree=base::list(
 #'   tree=base::list(
 #'    distance="Wang",
@@ -102,8 +107,8 @@
 #'   ),
 #'   cut=base::list(
 #'    dynamic=base::list(
-#'     pamStage=T,
-#'     pamRespectsDendro=T,
+#'     pamStage=TRUE,
+#'     pamRespectsDendro=TRUE,
 #'     deepSplit=2,
 #'     minClusterSize =2
 #'    )
@@ -116,15 +121,15 @@
 #' # display
 #' ViSEAGO::show_heatmap(Wang_clusters_wardD2,"GOterms")
 #' @export
-setGeneric(name="GOterms_heatmap",def=function(myGOs,showIC=T,GO.tree=base::list(tree=base::list(distance="Wang",aggreg.method="ward.D2",rotate=NULL),
-cut=base::list(dynamic=base::list(pamStage=T,pamRespectsDendro=T,deepSplit=2,minClusterSize =2))),samples.tree=NULL){base::standardGeneric("GOterms_heatmap")})
+setGeneric(name="GOterms_heatmap",def=function(myGOs,showIC=TRUE,showGOlabels=TRUE,GO.tree=base::list(tree=base::list(distance="Wang",aggreg.method="ward.D2",rotate=NULL),
+cut=base::list(dynamic=base::list(pamStage=TRUE,pamRespectsDendro=TRUE,deepSplit=2,minClusterSize =2))),samples.tree=NULL){base::standardGeneric("GOterms_heatmap")})
 
-setMethod("GOterms_heatmap",signature="GO_SS",definition=function(myGOs,showIC,GO.tree,samples.tree){
+setMethod("GOterms_heatmap",signature="GO_SS",definition=function(myGOs,showIC,showGOlabels,GO.tree,samples.tree){
 
   ###################
   # check entry
   ###################
-  if(base::length(myGOs@terms_dist)==0) stop("Please compute Semantic Similarity distance with ViSEAGO::compute_SS_distances()")
+  if(base::length(methods::slot(myGOs,"terms_dist"))==0) stop("Please compute Semantic Similarity distance with ViSEAGO::compute_SS_distances()")
 
   ###################
   # creates trees
@@ -200,11 +205,11 @@ setMethod("GOterms_heatmap",signature="GO_SS",definition=function(myGOs,showIC,G
 
             ###################
             # default aggreg.method if not available
-            if("pamStage"%in%tree){pamStage<-Tree$cut$dynamic$pamStage}else{pamStage=T}
+            if("pamStage"%in%tree){pamStage<-Tree$cut$dynamic$pamStage}else{pamStage=TRUE}
 
             ###################
             # default aggreg.method if not available
-            if("pamRespectsDendro"%in%tree){pamRespectsDendro<-Tree$cut$dynamic$pamRespectsDendro}else{pamRespectsDendro=T}
+            if("pamRespectsDendro"%in%tree){pamRespectsDendro<-Tree$cut$dynamic$pamRespectsDendro}else{pamRespectsDendro=TRUE}
 
             ###################
             # default aggreg.method if not available
@@ -270,7 +275,7 @@ setMethod("GOterms_heatmap",signature="GO_SS",definition=function(myGOs,showIC,G
     # check dendrogram entry
     if(base::is.null(row.tree$tree$distance)){
       base::stop(paste("please enter a myGOs object computed SS distance name (",
-      paste(base::names(myGOs@terms_dist),collapse=", "),") in the GO.tree distance argument",sep=""))
+      paste(base::names(methods::slot(myGOs,"terms_dist")),collapse=", "),") in the GO.tree distance argument",sep=""))
     }
 
   ###################
@@ -279,7 +284,12 @@ setMethod("GOterms_heatmap",signature="GO_SS",definition=function(myGOs,showIC,G
 
     ###################
     # data input
-    sResults<-myGOs@enrich_GOs@data
+    sResults<-methods::slot(
+      methods::slot(
+        myGOs,
+        "enrich_GOs"),
+      "data"
+    )
 
     ###################
     # extract pvalues columns
@@ -311,11 +321,11 @@ setMethod("GOterms_heatmap",signature="GO_SS",definition=function(myGOs,showIC,G
 
     ###################
     # Add IC in panes
-    if(showIC==T){
+    if(showIC==TRUE){
 
       ###################
       # extract values
-      IC<-base::round(myGOs@IC[sResults$GO.ID],digits=2)
+      IC<-base::round(methods::slot(myGOs,"IC")[sResults$GO.ID],digits=2)
     }
 
   ###################
@@ -386,7 +396,7 @@ setMethod("GOterms_heatmap",signature="GO_SS",definition=function(myGOs,showIC,G
 
     ###################
     # row distance (precalculated distance based on similarity of GO terms)
-    row.dist<-myGOs@terms_dist[[row.tree$tree$distance]]
+    row.dist<-methods::slot(myGOs,"terms_dist")[[row.tree$tree$distance]]
 
   ###################
   # aggregation
@@ -709,7 +719,7 @@ setMethod("GOterms_heatmap",signature="GO_SS",definition=function(myGOs,showIC,G
 
     ###################
     # If gene background not the same
-    if(myGOs@enrich_GOs@same_genes_background==F){
+    if(methods::slot(methods::slot(myGOs,"enrich_GOs"),"same_genes_background")==F){
 
       ###################
       # show warning
@@ -738,11 +748,11 @@ setMethod("GOterms_heatmap",signature="GO_SS",definition=function(myGOs,showIC,G
       x=mat,
 
       ###################
-      # row label
+      # row labels
       labRow=base::row.names(mat),
 
       ###################
-      # row label
+      # columns labels
       labCol=base::colnames(mat),
 
       ###################
@@ -755,15 +765,15 @@ setMethod("GOterms_heatmap",signature="GO_SS",definition=function(myGOs,showIC,G
 
       ###################
       # the IC information
-      RowSideColors=if(showIC==T){data.table::data.table(IC=IC)}else{NULL},
+      RowSideColors=if(showIC==TRUE){data.table::data.table(IC=IC)}else{NULL},
 
       ###################
       # the IC information
-      row_side_palette =if(showIC==T){grDevices::colorRampPalette(c("#FFFFFF","#49006A"))}else{NULL},
+      row_side_palette =if(showIC==TRUE){grDevices::colorRampPalette(c("#FFFFFF","#49006A"))}else{NULL},
 
       ###################
       # the color palette
-      scale_fill_gradient_fun=if(myGOs@enrich_GOs@same_genes_background==T){
+      scale_fill_gradient_fun=if(methods::slot(methods::slot(myGOs,"enrich_GOs"),"same_genes_background")==T){
 
         ###################
         # if same gene background
@@ -817,7 +827,7 @@ setMethod("GOterms_heatmap",signature="GO_SS",definition=function(myGOs,showIC,G
 
     ###################
     # modify row_side_color hover text
-    if(showIC==T){
+    if(showIC==TRUE){
 
       ###################
       # if column dendrogram
@@ -902,7 +912,8 @@ setMethod("GOterms_heatmap",signature="GO_SS",definition=function(myGOs,showIC,G
           tickmode="array",
           tickvals=1:nrow(mat),
           ticktext=row.text,
-          tickfont=base::list(size=10)
+          tickfont=base::list(size=10),
+          showticklabels=showGOlabels
         )
       )
     }else{
@@ -917,16 +928,17 @@ setMethod("GOterms_heatmap",signature="GO_SS",definition=function(myGOs,showIC,G
         yaxis=base::list(
           family="Times New Roman",
           tickmode="array",
-          tickvals=1:nrow(mat),
+          tickvals=if(showGOlabels==TRUE){1:nrow(mat)}else{NULL},
           ticktext=row.text,
-          tickfont=base::list(size=10)
+          tickfont=base::list(size=10),
+          showticklabels=showGOlabels
         )
       )
     }
 
     ###################
     # modify layout
-    if(showIC==T){
+    if(showIC==TRUE){
 
       hm<-plotly::layout(hm,
 
@@ -987,7 +999,7 @@ setMethod("GOterms_heatmap",signature="GO_SS",definition=function(myGOs,showIC,G
 
     ###################
     # replace data by sResults in myGOs
-    myGOs@enrich_GOs@data<-sResults
+    methods::slot(methods::slot(myGOs,"enrich_GOs"),"data")<-sResults
 
     ###################
     # remove not used elements in row.tree

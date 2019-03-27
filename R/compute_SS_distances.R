@@ -1,10 +1,10 @@
 #' @title Compute distance between GO terms or GO clusters based on semantic similarity.
 #' @description This method computes distance between GO terms or GO clusters based on semantic similarity.
-#' @importFrom methods setGeneric setMethod
+#' @importFrom methods setGeneric setMethod slot is
 #' @importFrom GO.db GOMFANCESTOR GOBPANCESTOR GOCCANCESTOR
 #' @importFrom GOSemSim mgoSim
 #' @importFrom AnnotationDbi select
-#' @importFrom data.table data.table
+#' @importFrom data.table data.table .I
 #' @family  GO_semantic_similarity
 #' @param object a \code{\link{GO_SS-class}}, or  \code{\link{GO_clusters-class}} objects created by \code{\link{build_GO_SS}}
 #'  or \code{\link{GOterms_heatmap}} methods, respectively.
@@ -28,6 +28,7 @@
 #' Herve Pages, Marc Carlson, Seth Falcon and Nianhua Li (2017). AnnotationDbi: Annotation Database Interface. R package version 1.38.0.
 #' @include GO_SS.R GO_clusters.R
 #' @examples
+#' \dontrun{
 #' ###################
 #' # compute GO terms Semantic Similarity distances
 #' myGOs<-ViSEAGO::compute_SS_distances(
@@ -41,6 +42,7 @@
 #'  Wang_clusters_wardD2,
 #'  distance=c("max","avg","rcmax","BMA")
 #' )
+#' }
 #' @export
 setGeneric(name="compute_SS_distances",def=function(object,distance) {standardGeneric("compute_SS_distances")})
 
@@ -50,11 +52,17 @@ setMethod("compute_SS_distances",definition=function(object,distance) {
   # check object
   if(!base::class(object)%in%c("GO_SS","GO_clusters"))base::stop("object must be a GO_SS or GO_clusters class from ViSEAGO::build_GO_SS() or ViSEAGO::GOterms_heatmap(), respectively")
 
-  if(base::class(object)=="GO_SS"){
+  if(methods::is(object,"GO_SS")){
 
     ###################
     # extract GO terms
-    Terms<-object@enrich_GOs@data$GO.ID
+    Terms<-methods::slot(
+      methods::slot(
+        object,
+        "enrich_GOs"
+      ),
+      "data"
+    )$GO.ID
 
     ###################
     # for each distance
@@ -75,13 +83,19 @@ setMethod("compute_SS_distances",definition=function(object,distance) {
 
       ###################
       # return values
-      object@terms_dist<-base::c(object@terms_dist,values)
+      methods::slot(object,"terms_dist")<-base::c(methods::slot(object,"terms_dist"),values)
     }
   }else{
 
     ###################
     # extract only selected colmuns from GOsResults
-    GOclusters<-object@enrich_GOs@data[,.(GO.ID,term,GO.cluster)]
+    GOclusters<-methods::slot(
+      methods::slot(
+        object,
+        "enrich_GOs"
+      ),
+      "data"
+    )[,.(GO.ID,term,GO.cluster)]
 
     ###################
     # cluster names
@@ -93,7 +107,7 @@ setMethod("compute_SS_distances",definition=function(object,distance) {
 
     ###################
     # get ancestors
-    onto=base::switch(object@ont,MF=GO.db::GOMFANCESTOR,BP=GO.db::GOBPANCESTOR,CC=GO.db::GOCCANCESTOR)
+    onto=base::switch(methods::slot(object,"ont"),MF=GO.db::GOMFANCESTOR,BP=GO.db::GOBPANCESTOR,CC=GO.db::GOCCANCESTOR)
 
     ###################
     # convert in list
@@ -109,11 +123,24 @@ setMethod("compute_SS_distances",definition=function(object,distance) {
 
     ###################
     # add enrich terms
-    onto=base::rbind(onto,base::cbind(values=clusters$GO.ID,ind=clusters$GO.ID))
+    onto=base::rbind(
+      onto,
+      base::cbind(
+        values=clusters$GO.ID,
+        ind=clusters$GO.ID
+      )
+    )
 
     ###################
     # merge onto with GOclusters
-    onto=merge(clusters[,.(GO.ID,GO.cluster)],onto,by.x="GO.ID",by.y="ind",all.y=T,sort=F)
+    onto=merge(
+      clusters[,.(GO.ID,GO.cluster)],
+      onto,
+      by.x="GO.ID",
+      by.y="ind",
+      all.y=T,
+      sort=F
+    )
 
     ###################
     # remove GO.ID

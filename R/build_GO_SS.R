@@ -5,7 +5,7 @@
 #' between enriched GO terms or groups of terms.
 #' @importFrom topGO inverseList
 #' @importFrom AnnotationDbi select keys as.list
-#' @importFrom methods setGeneric setMethod new
+#' @importFrom methods setGeneric setMethod new is slot
 #' @family GO_semantic_similarity
 #' @param gene2GO a \code{\link{gene2GO-class}} object from \code{\link{annotate}} method.
 #' @param enrich_GO_terms a \code{\link{enrich_GO_terms-class}} from \code{\link{merge_enrich_terms}} method.
@@ -22,12 +22,14 @@
 #' Herve Pages, Marc Carlson, Seth Falcon and Nianhua Li (2017). AnnotationDbi: Annotation Database Interface. R package version 1.38.0.
 #' @include GO_SS.R
 #' @examples
+#' \dontrun{
 #' ###################
 #' # initialyse object for compute GO Semantic Similarity
 #' myGOs<-ViSEAGO::build_GO_SS(
 #'  gene2GO=myGENE2GO,
 #'  enrich_GO_terms=BP_sResults
 #' )
+#' }
 #' @export
 setGeneric(name="build_GO_SS",def=function(gene2GO,enrich_GO_terms){standardGeneric("build_GO_SS")})
 
@@ -37,8 +39,8 @@ setMethod("build_GO_SS",definition=function(gene2GO,enrich_GO_terms) {
   # check object class
   ###################
 
-    if(base::class(gene2GO)!="gene2GO")base::stop("object must be a gene2GO class object from ViSEAGO::annotate()")
-    if(base::class(enrich_GO_terms)!="enrich_GO_terms")base::stop("object must be a enrich_GO_terms class object from ViSEAGO::merge_enrich_terms()")
+    if(!methods::is(gene2GO,"gene2GO"))base::stop("object must be a gene2GO class object from ViSEAGO::annotate()")
+    if(!methods::is(enrich_GO_terms,"enrich_GO_terms"))base::stop("object must be a enrich_GO_terms class object from ViSEAGO::merge_enrich_terms()")
 
   ###################
   # load data
@@ -46,7 +48,7 @@ setMethod("build_GO_SS",definition=function(gene2GO,enrich_GO_terms) {
 
     ###################
     # onto match argument
-    ont<-enrich_GO_terms@ont
+    ont<-methods::slot(enrich_GO_terms,"ont")
 
     ###################
     # from GO database
@@ -87,7 +89,7 @@ setMethod("build_GO_SS",definition=function(gene2GO,enrich_GO_terms) {
 
     ###################
     # add for each term offsprings their counted values
-    cnt <- gocount[goids] + sapply(goids, function(i){
+    cnt <- gocount[goids] + base::sapply(goids, function(i){
     base::sum(gocount[Offsprings[[i]]], na.rm=TRUE)})
     base::names(cnt) <- goids
 

@@ -1,7 +1,7 @@
-#' @title Heatmap to compare partitions.
+#' @title Heatmap to compare partitions
 #' @description Build an interactive heatmap of the common GO terms frequency between several partitions.
 #' @importFrom data.table data.table
-#' @importFrom methods setGeneric setMethod
+#' @importFrom methods setGeneric setMethod slot
 #' @importFrom plotly plot_ly layout
 #' @family GO_clusters
 #' @param clusters  a \code{list} of named \code{\link{GO_clusters-class}} objects,
@@ -15,6 +15,7 @@
 #'  plotly: Create Interactive Web Graphics via 'plotly.js'. R package version 4.6.0. https://CRAN.R-project.org/package=plotly
 #' @include GO_clusters.R
 #' @examples
+#' \dontrun{
 #' ###################
 #' # create GO_SS-class object
 #' myGOs<-ViSEAGO::build_GO_SS(
@@ -125,8 +126,9 @@
 #'        minClusterSize =2
 #'      )
 #'    )
-#'  ),
-#'  samples.tree=NULL
+#'   ),
+#'   samples.tree=NULL
+#'  )
 #'
 #' ###################
 #' # clusters to compare
@@ -141,6 +143,7 @@
 #' ###################
 #' # clusters content comparisons
 #' clusters_comp<-ViSEAGO::compare_clusters(clusters)
+#' }
 #' @export
 setGeneric(name="compare_clusters",def=function(clusters) {standardGeneric("compare_clusters")})
 
@@ -164,11 +167,19 @@ setMethod("compare_clusters",definition=function(clusters) {
 
       #################
       # check class
-      if(!base::class(object)=="GO_clusters") base::stop("object must come from ViSEAGO::GOterms_heatmap()")
+      if(!methods::is(object,"GO_clusters")) base::stop("object must come from ViSEAGO::GOterms_heatmap()")
 
       ###################
       # extract GO.ID and correspond cluster assignation to a list
-      object=utils::unstack(object@enrich_GOs@data[,base::c("GO.ID","GO.cluster"),with=F])
+      object=utils::unstack(
+        methods::slot(
+          methods::slot(
+            object,
+            "enrich_GOs"
+          ),
+          "data"
+        )[,.(GO.ID,GO.cluster)]
+      )
 
       ###################
       # names of list elements

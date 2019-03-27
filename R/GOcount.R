@@ -17,6 +17,10 @@
 #' @include enrich_GO_terms.R
 #' @examples
 #' ###################
+#' # load object
+#' utils::data(BP_sResults,package="ViSEAGO")
+#'
+#' ###################
 #' # barplot for the count of GO terms
 #' ViSEAGO::GOcount(BP_sResults)
 #' @export
@@ -26,7 +30,7 @@ setMethod("GOcount",signature="enrich_GO_terms",definition=function(object,file)
 
   ###################
   # data
-  data=object@data
+  data=methods::slot(object,"data")
 
   ###################
   # find pvalues columns

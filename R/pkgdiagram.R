@@ -8,6 +8,7 @@
 #' R package version 0.9.0. https://CRAN.R-project.org/package=DiagrammeR.
 #' @return an html diagram
 #' @examples
+#' \dontrun{
 #' ###################
 #' # print diagram without focus
 #' ViSEAGO::pkgdiagram(x=c("white","white","white","white","white"))
@@ -31,6 +32,7 @@
 #' ###################
 #'  # print diagram with focus on the visualization step
 #' ViSEAGO::pkgdiagram(x=c("white","white","white","white","black"))
+#' }
 #' @keywords internal
 #' @export
 pkgdiagram<-function(x=c("white","white","white","white","white")){

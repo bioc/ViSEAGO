@@ -17,9 +17,11 @@ This internal function use \href{https://www.ncbi.nlm.nih.gov/books/NBK25500/}{E
  \code{\link[data.table]{data.table}} Organism Scientific name and common name, form a \code{\link[base]{vector}} of taxid.
 }
 \examples{
+\dontrun{
 ###################
 # Organism Scientific and common name from taxid
 ViSEAGO::taxonomy(taxid="9031")
+}
 }
 \seealso{
 Other genomic_ressource: \code{\link{Bioconductor2GO}},

@@ -5,9 +5,11 @@
 #' @details This internal function use build all sets combinations intersections needed for \code{\link{upset}}.
 #' @return a \code{\link[base]{list}}.
 #' @examples
+#' \dontrun{
 #' ###################
 #' # build all intersections combinations
 #' ViSEAGO::overLapper(setlist)
+#' }
 #' @keywords internal
 #' @export
 overLapper <- function(setlist) {

@@ -1,7 +1,7 @@
 #' @title Retrieve GO annotations for a specie from genomic ressource database.
 #' @description This method retrieves and stores GO annotations for the
 #' organism of interest from one of genomic ressource database (Bioconductor, EntrezGene, Ensembl, Uniprot).
-#' @importFrom methods setGeneric setMethod new
+#' @importFrom methods setGeneric setMethod new is slot
 #' @importFrom AnnotationDbi select keys
 #' @importFrom biomaRt useDataset getBM
 #' @importFrom data.table data.table
@@ -46,6 +46,8 @@
 #' Matt Dowle and Arun Srinivasan (2017). data.table: Extension of data.frame. R package version 1.10.4. https://CRAN.R-project.org/package=data.table.
 #' @include genomic_ressource.R
 #' @examples
+#' \dontrun{
+#'
 #' ###################
 #' # load Mus musculus (mouse) GO annotations
 #' ###################
@@ -93,6 +95,7 @@
 #'  # Coturnix japonica GO annotations with adding orthologs
 #'  EntrezGene<-ViSEAGO::EntrezGene2GO()
 #'  myGENE2GO<-ViSEAGO::annotate("93934",EntrezGene, ortholog=T)
+#'  }
 #' @export
 setGeneric(name="annotate",def=function(id,object,ortholog=F){standardGeneric("annotate")})
 
@@ -101,8 +104,8 @@ setMethod("annotate",definition=function(id,object,ortholog){
   ###################
   # check object
   ###################
-  if(base::class(object)!="genomic_ressource")base::stop("object must be a genomic_ressource class from ViSEAGO::Bioconductor2GO(), ViSEAGO::EntrezGene2GO(), or ViSEAGO::Ensembl2GO()")
-  if(object@db!="EntrezGene" & ortholog==T)base::stop("ortholog option is only available for genomic_ressource class object from  ViSEAGO::EntrezGene2GO()")
+  if(!methods::is(object,"genomic_ressource"))base::stop("object must be a genomic_ressource class from ViSEAGO::Bioconductor2GO(), ViSEAGO::EntrezGene2GO(), or ViSEAGO::Ensembl2GO()")
+  if(methods::slot(object,"db")!="EntrezGene" & ortholog==T)base::stop("ortholog option is only available for genomic_ressource class object from  ViSEAGO::EntrezGene2GO()")
   if(!base::is.null(id) && !base::is.character(id))base::stop("id must be a character value or NULL")
 
   ###################
@@ -111,7 +114,7 @@ setMethod("annotate",definition=function(id,object,ortholog){
 
     ###################
     # EntrezGene
-    if(object@db=="EntrezGene"){
+    if(methods::slot(object,"db")=="EntrezGene"){
 
       ###################
       # for orthologs
@@ -176,7 +179,7 @@ setMethod("annotate",definition=function(id,object,ortholog){
 
           ###################
           # Extract otholog species annotation from data slot
-          ortho<-object@data[evidence%in%c("EXP","IDA","IPI","IMP","IGI", "IEP")]
+          ortho<-methods::slot(object,"data")[evidence%in%c("EXP","IDA","IPI","IMP","IGI", "IEP")]
 
           ###################
           # merge experimental GO anotation from orthologs
@@ -196,7 +199,7 @@ setMethod("annotate",definition=function(id,object,ortholog){
 
           ###################
           # Extract species annotation from data slot
-          annot<-object@data[taxid==base::as.numeric(id)]
+          annot<-methods::slot(object,"data")[taxid==base::as.numeric(id)]
 
           ###################
           # add orthologs annotation to species annotation
@@ -207,7 +210,7 @@ setMethod("annotate",definition=function(id,object,ortholog){
 
         ###################
         # Extract species annotation from data slot
-        annot<-object@data[taxid==base::as.numeric(id)]
+        annot<-methods::slot(object,"data")[taxid==base::as.numeric(id)]
       }
 
       ###################
@@ -218,16 +221,19 @@ setMethod("annotate",definition=function(id,object,ortholog){
 
       ###################
       # GO database stamp
-      stamp=object@stamp
+      stamp=methods::slot(object,"stamp")
     }
 
     ###################
     # BioConductor
-    if(object@db=="Bioconductor"){
+    if(methods::slot(object,"db")=="Bioconductor"){
 
       ###################
       # check id
-      id=base::match.arg(id,ViSEAGO::Bioconductor2GO()@organisms$Package)
+      id=base::match.arg(
+        id,
+        methods::slot(ViSEAGO::Bioconductor2GO(),"organisms")$Package
+      )
 
       ###################
       # install package if needed
@@ -235,11 +241,7 @@ setMethod("annotate",definition=function(id,object,ortholog){
 
         ###################
         # bioclite source
-        source("https://bioconductor.org/biocLite.R")
-
-        ###################
-        # install the desired Organism package (Gallus gallus for example)
-        biocLite(id)
+        BiocManager::install(id)
       }
 
       ###################
@@ -262,11 +264,11 @@ setMethod("annotate",definition=function(id,object,ortholog){
 
     ###################
     # Ensembl
-    if(object@db=="Ensembl"){
+    if(methods::slot(object,"db")=="Ensembl"){
 
       ###################
       # connect to ensembl specified dataset
-      myspecies<-biomaRt::useDataset(id,object@mart[[1]])
+      myspecies<-biomaRt::useDataset(id,methods::slot(object,"mart")[[1]])
 
       ###################
       # with go name according biomart version
@@ -295,12 +297,12 @@ setMethod("annotate",definition=function(id,object,ortholog){
 
       ###################
       # GO database stamp
-      stamp=object@stamp
+      stamp=methods::slot(object,"stamp")
     }
 
     ###################
     # Uniprot
-    if(object@db=="Uniprot-GOA"){
+    if(methods::slot(object,"db")=="Uniprot-GOA"){
 
       ###################
       # load the file
@@ -367,7 +369,7 @@ setMethod("annotate",definition=function(id,object,ortholog){
   ###################
 
   methods::new("gene2GO",
-    db=object@db,
+    db=methods::slot(object,"db"),
     stamp=stamp,
     organism=id,
     MF=Data[[1]],

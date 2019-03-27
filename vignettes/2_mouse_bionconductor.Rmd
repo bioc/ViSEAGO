@@ -30,6 +30,16 @@ knitr::opts_chunk$set(
   fig.path='./data/output/',echo=T,fig.pos = 'H',
   fig.width=6,message=F,comment=NA,warning=F
 )
+
+###################
+# load vignette data
+utils::data(
+  list=base::c(
+    "Bioconductor","myGENE2GO","BP_sResults",
+    "myGOs","Wang_clusters_wardD2"
+  ),
+  package="ViSEAGO"
+)
 ```
 
 # Introduction{-}
@@ -374,7 +384,7 @@ A functional Gene Ontology (GO) enrichment analysis was performed using `r BiocS
 # Information session{-}
 
 ```{r session,eval=T,echo=F} 
-base::version
+utils::sessionInfo()
 ```
 
 # References{-}

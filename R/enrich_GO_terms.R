@@ -1,6 +1,6 @@
 #' @title enrich_GO_terms class object definition.
 #' @description This class is invoked by \code{\link{merge_enrich_terms}} method in order to store the merged \code{data.table} and associated metadata.
-#' @importFrom methods setClass
+#' @importFrom methods setClass slot
 #' @family enrich_GO_terms
 #' @slot same_genes_background logical.
 #' @slot input a list containing named elements. Each element must contain the name of \code{\link[topGO]{topGOdata-class}}
@@ -88,11 +88,11 @@ setMethod("show", "enrich_GO_terms",function(object) {
   ###################
   # cat some text
   base::cat("- object class: enrich_GO_terms",
-    "\n- ontology: ",object@ont,
+    "\n- ontology: ",methods::slot(object,"ont"),
     "\n- input:\n        ", paste(paste(base::names(object@input),
-    base::sapply(object@input,function(x){base::paste(x,collapse=", ")}),sep=": "),collapse="\n        "),
+    base::sapply(methods::slot(object,"input"),function(x){base::paste(x,collapse=", ")}),sep=": "),collapse="\n        "),
     "\n- topGO summary:\n ", topGO,
-    "\n- enrich GOs data.table (p<0.01 in at least one list): ",base::nrow(object@data)," GO terms of ",base::nrow(Data)," conditions.",
+    "\n- enrich GOs data.table (p<0.01 in at least one list): ",base::nrow(methods::slot(object,"data"))," GO terms of ",base::nrow(Data)," conditions.",
     base::paste("\n       ",Data$conditions,":",Data$`significant GO terms number`,"terms"),sep=""
   )
 })

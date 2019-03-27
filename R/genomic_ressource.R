@@ -1,7 +1,7 @@
 #' @title genomic_ressource class object definition.
 #' @description This class stores the annotations and associated metadata obtained by \code{\link{Bioconductor2GO}},
 #' \code{\link{EntrezGene2GO}}, \code{\link{Ensembl2GO}}, or \code{\link{Uniprot2GO}} methods.
-#' @importFrom methods setClass
+#' @importFrom methods setClass slot
 #' @family genomic_ressource
 #' @slot db name of database used (Bioconductor, EntrezGene, Ensembl, or Uniprot).
 #' @slot stamp date of stamp (for Bioconductor, EntrezGene, and Uniprot), or annotation version for Ensembl database.
@@ -18,13 +18,13 @@ setClass("genomic_ressource",
         )
 )
 #' @importFrom methods setMethod
-setMethod("show", "genomic_ressource",function(object) {
+setMethod("show", "genomic_ressource",function(object){
 
   ###################
   # cat some text
   base::cat("- object class: genomic_ressource",
-    "\n- database: ",object@db,
-    "\n- stamp/version: ",object@stamp,
-    "\n- available organisms: ",base::nrow(object@organisms),
+    "\n- database: ",methods::slot(object,"db"),
+    "\n- stamp/version: ",methods::slot(object,"stamp"),
+    "\n- available organisms: ",base::nrow(methods::slot(object,"organisms")),
   sep="")
 })

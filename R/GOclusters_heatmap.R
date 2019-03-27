@@ -1,6 +1,6 @@
 #' @title Build a clustering heatmap on GO groups.
 #' @description This method computes a clustering heatmap based on GO groups semantic similarity.
-#' @importFrom data.table data.table
+#' @importFrom data.table data.table .N
 #' @importFrom ggplot2 scale_fill_gradient
 #' @importFrom plotly layout
 #' @importFrom heatmaply heatmaply
@@ -40,6 +40,11 @@
 #' @return a \code{\link{GO_clusters-class}} object.
 #' @include GO_clusters.R
 #' @examples
+#' \dontrun{
+#' ###################
+#' # load object
+#' utils::data(Wang_clusters_wardD2,package="ViSEAGO")
+#'
 #' ###################
 #' # GOclusters heatmap
 #' Wang_clusters_wardD2<-ViSEAGO::GOclusters_heatmap(
@@ -54,6 +59,7 @@
 #' ####################
 #' # display
 #' ViSEAGO::show_heatmap(Wang_clusters_wardD2,"GOclusters")
+#' }
 #' @export
 setGeneric(name="GOclusters_heatmap",def=function(object,tree=base::list(distance="BMA",aggreg.method="ward.D2",rotate=NULL)){base::standardGeneric("GOclusters_heatmap")})
 
@@ -61,19 +67,22 @@ setMethod("GOclusters_heatmap",signature="GO_clusters",definition=function(objec
 
   #################
   # if empty
-  if(is.null(object@clusters_dist))stop("Please use GO_clusters class object with computed clusters distances using ViSEAGO::compute_SS_distance()")
+  if(is.null(methods::slot(object,"clusters_dist")))stop("Please use GO_clusters class object with computed clusters distances using ViSEAGO::compute_SS_distance()")
 
   #################
   # if empty
-  if(!tree$distance%in%base::names(object@clusters_dist))stop(paste("Please use GO_clusters class object with",tree$distance,"computed clusters distances using ViSEAGO::compute_SS_distance()"))
+  if(!tree$distance%in%base::names(methods::slot(object,"clusters_dist")))stop(paste("Please use GO_clusters class object with",tree$distance,"computed clusters distances using ViSEAGO::compute_SS_distance()"))
 
   ###################
   # add calculated distance
-  dist<-object@clusters_dist[[tree$distance]]
+  dist<-methods::slot(object,"clusters_dist")[[tree$distance]]
 
   ###################
   # perform hclust
-  Tree<-stats::hclust(dist,method =tree$aggreg.method)
+  Tree<-stats::hclust(
+    dist,
+    method =tree$aggreg.method
+  )
 
   ###################
   # create dendrogram
@@ -82,7 +91,10 @@ setMethod("GOclusters_heatmap",signature="GO_clusters",definition=function(objec
   ###################
   # rotate
   if(!base::is.null(tree$rotate)){
-    dend<-dendextend::rotate(dend,tree$rotate)
+    dend<-dendextend::rotate(
+      dend,
+      tree$rotate
+    )
   }
 
   ###################
@@ -91,11 +103,22 @@ setMethod("GOclusters_heatmap",signature="GO_clusters",definition=function(objec
 
   ###################
   # color labels of cutting tree
-  colors= base::unique(dendextend::get_leaves_attr(object@dendrograms$GO,"edgePar"))
+  colors= base::unique(
+    dendextend::get_leaves_attr(
+      methods::slot(object,"dendrograms")$GO,
+      "edgePar"
+    )
+  )
 
   ###################
   # extract GO terms and clusters
-  mat<-object@enrich_GOs@data[,.(GO.cluster,GO.ID)]
+  mat<-methods::slot(
+    methods::slot(
+      object,
+      "enrich_GOs"
+      ),
+    "data"
+  )[,.(GO.cluster,GO.ID)]
 
   ###################
   # count terms by clusters
@@ -238,11 +261,11 @@ setMethod("GOclusters_heatmap",signature="GO_clusters",definition=function(objec
 
   ###################
   # give names to hm list
-  object@heatmap<-c(object@heatmap,hm)
+  methods::slot(object,"heatmap")<-c(methods::slot(object,"heatmap"),hm)
 
   ###################
   # add hcl params
-  object@hcl_params=base::c(object@hcl_params,GO.clusters=base::list(tree))
+  methods::slot(object,"hcl_params")<-base::c(methods::slot(object,"hcl_params"),GO.clusters=base::list(tree))
 
   ###################
   # return the object

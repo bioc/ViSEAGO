@@ -4,12 +4,12 @@
 \alias{MDSplot}
 \title{Multi Dimensional Scale (MDS) plot}
 \usage{
-MDSplot(object, show_clusters = F, file = NULL)
+MDSplot(object, show_clusters = FALSE, file = NULL)
 }
 \arguments{
 \item{object}{a \code{\link{GO_SS-class}} or \code{\link{GO_clusters-class}} objects from distances computed with \code{\link{compute_SS_distances}}.}
 
-\item{show_clusters}{boolean (default to F)}
+\item{show_clusters}{boolean (default to FALSE)}
 
 \item{file}{static image output file name (default to NULL).}
 }
@@ -26,6 +26,13 @@ A static png image could be printed by setting \code{file} argument.
 }
 \examples{
 ###################
+# load object
+utils::data(
+ list=base::c("myGOs","Wang_clusters_wardD2"),
+ package="ViSEAGO"
+)
+
+###################
 # build MDS plot for a GO_SS-class distance object
 ViSEAGO::MDSplot(myGOs)
 
@@ -35,6 +42,6 @@ ViSEAGO::MDSplot(Wang_clusters_wardD2)
 
 ###################
 # build MDS plot for a GO_clusters-class distance object, highlighting GO groups clusters.
-ViSEAGO::MDSplot(Wang_clusters_wardD2,show_clusters=T)
+ViSEAGO::MDSplot(Wang_clusters_wardD2,show_clusters=TRUE)
 }
 \concept{GO_terms GO_clusters semantic_similarity visualization}

@@ -1,7 +1,8 @@
 #' @title Display an interactive or static table.
 #' @description This method is used to display or print the table for \code{\link{enrich_GO_terms-class}} or \code{\link{GO_clusters-class}} objects.
-#' @importFrom methods setGeneric setMethod
-#' @importFrom DT datatable JS
+#' @importFrom methods setGeneric setMethod slot is
+#' @importFrom DT datatable
+#' @importFrom htmlwidgets JS
 #' @family enrich_GO_terms
 #' @family GO_clusters
 #' @family visualization
@@ -13,7 +14,7 @@
 #' @references
 #' Yihui Xie (2016). DT: A Wrapper of the JavaScript Library 'DataTables'. R package version 0.2. https://CRAN.R-project.org/package=DT
 #' @examples
-#'
+#' \dontrun{
 #' ###################
 #' # display merge_enrich_terms output
 #' ViSEAGO::show_table(BP_sResults)
@@ -29,6 +30,7 @@
 #' ###################
 #' # print table of GO_clusters-class object
 #' ViSEAGO::show_table(Wang_clusters_wardD2,"./data/output/Wang_clusters_wardD2.txt")
+#' }
 #' @export
 setGeneric(name="show_table",def=function(object,file=NULL) {standardGeneric("show_table")})
 
@@ -44,10 +46,16 @@ setMethod("show_table",definition=function(object,file) {
 
   ###################
   # remove gene identifiants for printing
-  if(base::class(object)=="enrich_GO_terms"){
-    data<-object@data
+  if(methods::is(object,"enrich_GO_terms")){
+    data<-methods::slot(object,"data")
   }else{
-    data<-object@enrich_GOs@data
+    data<-methods::slot(
+      methods::slot(
+        object,
+        "enrich_GOs"
+        ),
+      "data"
+    )
   }
 
   ###################

@@ -29,6 +29,7 @@ provided by \code{\link{GO_clusters-class}} object.\cr
 Semantic Similarity computations are based on \code{\link[GOSemSim]{mgoSim}} method from the \pkg{GoSemSim} package.
 }
 \examples{
+\dontrun{
 ###################
 # compute GO terms Semantic Similarity distances
 myGOs<-ViSEAGO::compute_SS_distances(
@@ -42,6 +43,7 @@ Wang_clusters_wardD2<-ViSEAGO::compute_SS_distances(
  Wang_clusters_wardD2,
  distance=c("max","avg","rcmax","BMA")
 )
+}
 }
 \references{
 Marc Carlson (2017). GO.db: A set of annotation maps describing the entire Gene Ontology. R package version 3.4.1.

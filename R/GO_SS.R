@@ -2,6 +2,7 @@
 #' @description This class is invoked by \code{\link{build_GO_SS}} method in order to store \code{\link{enrich_GO_terms-class}} object, Information Content (IC),
 #' and GO terms or groups distances objects based on semantic similarity.
 #' @importFrom methods setClass
+#' @importFrom data.table melt.data.table .SD
 #' @family GO_semantic_similarity
 #' @slot db should be "Bioconductor", "EntrezGene", "Ensembl", or "Uniprot" ressource name.
 #' @slot stamp date of stamp or annotation version if available in \code{character}.
@@ -24,12 +25,18 @@ setClass("GO_SS",
            terms_dist="list"
         )
 )
-#' @importFrom methods setMethod
+#' @importFrom methods setMethod slot is
 setMethod("show", "GO_SS",function(object) {
 
   ###################
   # Extract table
-  Data<-object@enrich_GOs@data
+  Data<-methods::slot(
+    methods::slot(
+      object,
+      "enrich_GOs"
+      ),
+    "data"
+  )
 
   ###################
   # Extract pvalues
@@ -93,18 +100,73 @@ setMethod("show", "GO_SS",function(object) {
   ###################
   # cat some text
   base::cat("- object class: GO_SS",
-    "\n- database: ",object@db,
-    "\n- stamp/version: ",object@stamp,
-    "\n- organism id: ",object@organism,
-    "\n- ontology: ",object@ont,
-    "\n- input:\n        ", paste(paste(base::names(object@enrich_GOs@input),
-    base::sapply(object@enrich_GOs@input,function(x){base::paste(x,collapse=", ")}),
-    sep=": "),collapse="\n        "),
-    "\n- topGO summary:\n ", topGO,
-    "\n- enrich GOs data.table: ",base::nrow(object@enrich_GOs@data)," GO terms of ",base::nrow(Data)," conditions.",
-    base::paste("\n       ",Data$conditions,":",Data$`significant GO terms number`,"terms"),
+    "\n- database: ",
+    methods::slot(object,"db"),
+    "\n- stamp/version: ",
+    methods::slot(object,"stamp"),
+    "\n- organism id: ",
+    methods::slot(object,"organism"),
+    "\n- ontology: ",
+    methods::slot(object,"ont"),
+    "\n- input:\n        ",
+    paste(
+      paste(
+        base::names(
+          methods::slot(
+            methods::slot(
+              object,
+              "enrich_GOs"
+              ),
+            "input"
+          )
+        ),
+      base::sapply(
+        methods::slot(
+          methods::slot(
+            object,
+            "enrich_GOs"
+          ),
+          "input"
+        ),
+        function(x){base::paste(x,collapse=", ")}
+      ),
+      sep=": "
+      ),
+      collapse="\n        "
+    ),
+    "\n- topGO summary:\n ",
+    topGO,
+    "\n- enrich GOs data.table: ",
+    base::nrow(
+      methods::slot(
+        methods::slot(
+          object,
+          "enrich_GOs"
+        ),
+        "data"
+      )
+    ),
+    " GO terms of ",
+    base::nrow(Data),
+    " conditions.",
+    base::paste(
+      "\n       ",
+      Data$conditions,
+      ":",
+      Data$`significant GO terms number`,
+      "terms"
+    ),
     if(base::length(object@terms_dist)>0){
-      base::paste("\n- terms distances: ",base::paste(base::names(object@terms_dist),collapse=", "))
-    } ,
-  sep="")
+      base::paste(
+        "\n- terms distances: ",
+        base::paste(
+          base::names(
+            methods::slot(object,"terms_dist")
+          ),
+          collapse=", "
+        )
+      )
+    },
+    sep=""
+  )
 })

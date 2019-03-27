@@ -27,6 +27,7 @@ At the last, this method builds a merged data.table of enriched GO terms (p<0.01
 at least once and provides all mentionned columns.
 }
 \examples{
+\dontrun{
  ###################
  # load genes identifiants (GeneID,ENS...) universe/background (Expressed genes)
  background_L<-base::scan(
@@ -106,6 +107,7 @@ BP_sResults<-ViSEAGO::merge_enrich_terms(
   L_virginvspregnant=base::c("BP_L_virginvspregnant","elim_BP_L_virginvspregnant")
  )
 )
+}
 }
 \references{
 Alexa A and Rahnenfuhrer J (2016). topGO: Enrichment Analysis for Gene Ontology. R package version 2.28.0.

@@ -3,7 +3,7 @@
 #' for a given ontology (MF, BP, or CC).
 #' @importFrom data.table data.table rbindlist
 #' @importFrom topGO scoresInTerm
-#' @importFrom methods setGeneric setMethod slot
+#' @importFrom methods setGeneric setMethod slot is
 #' @importFrom biomaRt useDataset getBM
 #' @importFrom topGO termStat
 #' @importFrom AnnotationDbi select
@@ -26,6 +26,7 @@
 #' Herve Pages, Marc Carlson, Seth Falcon and Nianhua Li (2017). AnnotationDbi: Annotation Database Interface. R package version 1.38.0.
 #' @include enrich_GO_terms.R
 #' @examples
+#' \dontrun{
 #'  ###################
 #'  # load genes identifiants (GeneID,ENS...) universe/background (Expressed genes)
 #'  background_L<-base::scan(
@@ -105,6 +106,7 @@
 #'   L_virginvspregnant=base::c("BP_L_virginvspregnant","elim_BP_L_virginvspregnant")
 #'  )
 #' )
+#' }
 #' @export
 setGeneric(name="merge_enrich_terms", def=function(Input){standardGeneric("merge_enrich_terms")})
 

@@ -4,15 +4,18 @@
 \alias{GOterms_heatmap}
 \title{Build a clustering heatmap on GO terms.}
 \usage{
-GOterms_heatmap(myGOs, showIC = T, GO.tree = base::list(tree =
-  base::list(distance = "Wang", aggreg.method = "ward.D2", rotate = NULL),
-  cut = base::list(dynamic = base::list(pamStage = T, pamRespectsDendro =
-  T, deepSplit = 2, minClusterSize = 2))), samples.tree = NULL)
+GOterms_heatmap(myGOs, showIC = TRUE, showGOlabels = TRUE,
+  GO.tree = base::list(tree = base::list(distance = "Wang", aggreg.method
+  = "ward.D2", rotate = NULL), cut = base::list(dynamic =
+  base::list(pamStage = TRUE, pamRespectsDendro = TRUE, deepSplit = 2,
+  minClusterSize = 2))), samples.tree = NULL)
 }
 \arguments{
 \item{myGOs}{a \code{\link{GO_SS-class}} object from \code{\link{compute_SS_distances}}.}
 
 \item{showIC}{\code{logical} (default to TRUE) to display the GO terms Information Content (IC) side bar.}
+
+\item{showGOlabels}{\code{logical} (default to TRUE) to display the GO terms ticks on y axis.}
 
 \item{GO.tree}{a named \code{list} of parameters to build and cut the GO terms \code{dendrogram}.
  \describe{
@@ -35,8 +38,8 @@ GOterms_heatmap(myGOs, showIC = T, GO.tree = base::list(tree =
               options values below)
               }{
                 \describe{
-                    \item{pamStage (default to T)}{second (PAM-like) stage will be performed.}
-                    \item{pamRespectsDendro (default to T)}{PAM stage will respect the dendrogram in the sense that objects
+                    \item{pamStage (default to TRUE)}{second (PAM-like) stage will be performed.}
+                    \item{pamRespectsDendro (default to TRUE)}{PAM stage will respect the dendrogram in the sense that objects
                      and small clusters will only be assigned to clusters that belong to the same branch that the objects or small
                      clusters being assigned belong to.}
                     \item{deepSplit (default to 2)}{provides a rough control over sensitivity for cluster splitting (range 0 to 4).
@@ -76,12 +79,16 @@ The dendrogram produced could be cutted in static or dynamic mode.\cr
  }
 }
 \examples{
+##################
+# load object
+utils::data(myGOs,package="ViSEAGO")
 
 ##################
 # GOtermsHeatmap with default parameters
 Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
  myGOs,
- showIC=T,
+ showIC=TRUE,
+ showGOlabels=TRUE,
  GO.tree=base::list(
   tree=base::list(
    distance="Wang",
@@ -90,8 +97,8 @@ Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
   ),
   cut=base::list(
    dynamic=base::list(
-    pamStage=T,
-    pamRespectsDendro=T,
+    pamStage=TRUE,
+    pamRespectsDendro=TRUE,
     deepSplit=2,
     minClusterSize =2
    )

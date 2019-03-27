@@ -1,12 +1,12 @@
 #' @title Multi Dimensional Scale (MDS) plot
 #' @description Generate a Multi Dimensional Scale (MDS) plot from distance objects.
 #' @importFrom data.table data.table
-#' @importFrom methods setGeneric setMethod
+#' @importFrom methods setGeneric setMethod slot is
 #' @importFrom dendextend get_leaves_attr
 #' @importFrom plotly plot_ly add_markers layout
 #' @family GO_terms GO_clusters semantic_similarity visualization
 #' @param object a \code{\link{GO_SS-class}} or \code{\link{GO_clusters-class}} objects from distances computed with \code{\link{compute_SS_distances}}.
-#' @param show_clusters boolean (default to F)
+#' @param show_clusters boolean (default to FALSE)
 #' @param file static image output file name (default to NULL).
 #' @details This method build and display the javascript MDSplot (if \code{file}=NULL) from \code{\link{GO_SS-class}} or \code{\link{GO_clusters-class}}
 #' objects.\cr
@@ -14,6 +14,13 @@
 #' @return a MDS plot.
 #' @include GO_SS.R GO_clusters.R
 #' @examples
+#' ###################
+#' # load object
+#' utils::data(
+#'  list=base::c("myGOs","Wang_clusters_wardD2"),
+#'  package="ViSEAGO"
+#' )
+#'
 #' ###################
 #' # build MDS plot for a GO_SS-class distance object
 #' ViSEAGO::MDSplot(myGOs)
@@ -24,9 +31,9 @@
 #'
 #' ###################
 #' # build MDS plot for a GO_clusters-class distance object, highlighting GO groups clusters.
-#' ViSEAGO::MDSplot(Wang_clusters_wardD2,show_clusters=T)
+#' ViSEAGO::MDSplot(Wang_clusters_wardD2,show_clusters=TRUE)
 #' @export
-setGeneric(name="MDSplot",def=function(object,show_clusters=F,file=NULL) {standardGeneric("MDSplot")})
+setGeneric(name="MDSplot",def=function(object,show_clusters=FALSE,file=NULL) {standardGeneric("MDSplot")})
 
 setMethod("MDSplot",definition=function(object,show_clusters,file) {
 
@@ -36,15 +43,15 @@ setMethod("MDSplot",definition=function(object,show_clusters,file) {
 
   #################
   # check class
-  if(base::class(object)=="GO_SS" & show_clusters==T) base::stop("show_clusters is only available for GO_clusters class after clusters SS distance calculation with ViSEAGO::compute_SS_distances()")
+  if(methods::is(object,"GO_SS") & show_clusters==T) base::stop("show_clusters is only available for GO_clusters class after clusters SS distance calculation with ViSEAGO::compute_SS_distances()")
 
   #################
   # for SS_dist from object
-  if(show_clusters==F){
+  if(show_clusters==FALSE){
 
     #################
     # import SS_dist from object
-    d=object@terms_dist
+    d=methods::slot(object,"terms_dist")
 
     #################
     # if empty
@@ -72,8 +79,12 @@ setMethod("MDSplot",definition=function(object,show_clusters,file) {
 
         #################
         # convert to data.table
-        data.table::data.table(GO.ID=base::attr(res.mds,"dimnames")[[1]],
-        Dim.1=res.mds[,1],Dim.2=res.mds[,2],measure=x)
+        data.table::data.table(
+          GO.ID=base::attr(res.mds,"dimnames")[[1]],
+          Dim.1=res.mds[,1],
+          Dim.2=res.mds[,2],
+          measure=x
+        )
       })
 
       #################
@@ -86,7 +97,15 @@ setMethod("MDSplot",definition=function(object,show_clusters,file) {
 
         #################
         # GO names
-        res.mds=data.table::data.table(res.mds,term=object@enrich_GOs@data$term)
+        res.mds=data.table::data.table(
+          res.mds,term=methods::slot(
+            methods::slot(
+              object,
+              "enrich_GOs"
+            ),
+            "data"
+          )$term
+        )
 
         #################
         # add levels to measures
@@ -96,7 +115,18 @@ setMethod("MDSplot",definition=function(object,show_clusters,file) {
 
         #################
         # add clusters and GO names
-        res.mds=merge(res.mds,object@enrich_GOs@data[,.(GO.cluster,GO.ID,term)],by="GO.ID",sort=F)
+        res.mds=merge(
+          res.mds,
+          methods::slot(
+            methods::slot(
+              object,
+              "enrich_GOs"
+            ),
+            "data"
+          )[,.(GO.cluster,GO.ID,term)],
+          by="GO.ID",
+          sort=F
+          )
 
         #################
         # ordering by cluster
@@ -138,8 +168,12 @@ setMethod("MDSplot",definition=function(object,show_clusters,file) {
 
       #################
       # convert to data.table
-      data.table::data.table(GO.cluster=base::attr(res.mds,"dimnames")[[1]],
-      Dim.1=res.mds[,1],Dim.2=res.mds[,2],measure=x)
+      data.table::data.table(
+        GO.cluster=base::attr(res.mds,"dimnames")[[1]],
+        Dim.1=res.mds[,1],
+        Dim.2=res.mds[,2],
+        measure=x
+      )
     })
 
     #################
@@ -193,13 +227,25 @@ setMethod("MDSplot",definition=function(object,show_clusters,file) {
 
         ################
         # default visualization
-        if(x==1){visible=T}else{visible=F}
+        if(x==1){visible=TRUE}else{visible=FALSE}
 
         ################
         # create trace
-        p<-plotly::add_markers(p,data=res.mds[measure==measures[x]],x=~Dim.1,y=~Dim.2,
-        name=measures[x],text = ~paste('GO.ID:',GO.ID,'<br>GO.name:',term),showlegend=F,
-        marker =base::list(size =20,opacity = 0.4,color="royalblue"),visible=visible)
+        p<-plotly::add_markers(
+          p,
+          data=res.mds[measure==measures[x]],
+          x=~Dim.1,
+          y=~Dim.2,
+         name=measures[x],
+         text = ~paste('GO.ID:',GO.ID,'<br>GO.name:',term),
+         showlegend=F,
+          marker =base::list(
+            size =20,
+            opacity = 0.4,
+            color="royalblue"
+          ),
+         visible=visible
+        )
       }
 
       #################
@@ -259,11 +305,19 @@ setMethod("MDSplot",definition=function(object,show_clusters,file) {
 
       ###################
       # color labels of cutting tree
-      colors= base::unique(dendextend::get_leaves_attr(object@dendrograms$GO,"edgePar"))
+      colors= base::unique(
+        dendextend::get_leaves_attr(methods::slot(object,"dendrograms")$GO,"edgePar")
+      )
 
       ###################
       # extract the GO. cluster column
-      count<-object@enrich_GOs@data[,.(GO.cluster)]
+      count<-methods::slot(
+        methods::slot(
+          object,
+          "enrich_GOs"
+        ),
+        "data"
+      )[,.(GO.cluster)]
 
       ###################
       # count the number of terms by clusters
@@ -279,10 +333,27 @@ setMethod("MDSplot",definition=function(object,show_clusters,file) {
 
         ################
         # create trace
-        p<-plotly::add_markers(p,data=res.mds,x=~Dim.1,y=~Dim.2,color=~GO.cluster,
-        text = ~paste('cluster:',GO.cluster,'<br>GO.ID:',
-        GO.ID,'<br>GO.name:',term),showlegend=T,colors=colors,
-        marker =base::list(size =20,opacity = 0.4))
+        p<-plotly::add_markers(
+          p,
+          data=res.mds,
+          x=~Dim.1,
+          y=~Dim.2,
+          color=~GO.cluster,
+          text = ~paste(
+            "cluster:",
+            GO.cluster,
+            "<br>GO.ID:",
+            GO.ID,
+            "<br>GO.name:",
+            term
+          ),
+          showlegend=T,
+          colors=colors,
+          marker =base::list(
+            size =20,
+            opacity = 0.4
+          )
+        )
 
         #################
         # add custom layout with dropdown menu
@@ -319,8 +390,16 @@ setMethod("MDSplot",definition=function(object,show_clusters,file) {
 
           ################
           # create trace
-          p<-plotly::add_markers(p,data=res.mds[measure==measures[x]],x=~Dim.1,y=~Dim.2,
-            name=measures[x],text = ~text,showlegend=F,sizes=base::c(20,50),size=~nb,
+          p<-plotly::add_markers(
+            p,
+            data=res.mds[measure==measures[x]],
+            x=~Dim.1,
+            y=~Dim.2,
+            name=measures[x],
+            text = ~text,
+            showlegend=F,
+            sizes=base::c(20,50),
+            size=~nb,
             marker =base::list(
               sizemode = 'diameter',
               opacity = 0.4,
