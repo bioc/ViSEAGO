@@ -28,7 +28,6 @@
 #' Herve Pages, Marc Carlson, Seth Falcon and Nianhua Li (2017). AnnotationDbi: Annotation Database Interface. R package version 1.38.0.
 #' @include GO_SS.R GO_clusters.R
 #' @examples
-#' \dontrun{
 #' ###################
 #' # load objects
 #' utils::data(
@@ -80,7 +79,6 @@
 #'  Wang_clusters_wardD2,
 #'  distance=c("max","avg","rcmax","BMA")
 #' )
-#' }
 #' @exportMethod compute_SS_distances
 setGeneric(name="compute_SS_distances",def=function(object,distance) {standardGeneric("compute_SS_distances")})
 

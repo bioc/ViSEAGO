@@ -18,11 +18,9 @@ This function downloads the \href{https://ftp.ncbi.nih.gov/gene/DATA/gene2go.gz}
 \href{https://ftp.ncbi.nih.gov/gene/DATA}{EntrezGene ftp} which contains available organisms (taxid) with the corresponding GO annotations.
 }
 \examples{
-\dontrun{
 ###################
 # Download EntrezGene available organisms GO annotations
 EntrezGene<-ViSEAGO::EntrezGene2GO()
-}
 }
 \references{
 Matt Dowle and Arun Srinivasan (2017). data.table: Extension of `data.frame`. R package version 1.10.4. https://CRAN.R-project.org/package=data.table.

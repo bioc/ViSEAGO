@@ -22,7 +22,6 @@
 #' Alexa A, Rahnenfuhrer J, Lengauer T. Improved scoring of functional groups from gene expression data by
 #' decorrelating GO graph structure. Bioinformatics 2006; 22:1600-1607.
 #' @examples
-#' \dontrun{
 #'  ###################
 #'  # load genes identifiants (GeneID,ENS...) background (Expressed genes)
 #'  background_L<-base::scan(
@@ -92,7 +91,6 @@
 #'  algorithm ="elim",
 #'  statistic = "fisher"
 #' )
-#' }
 #' @exportMethod create_topGOdata
 setGeneric(name="create_topGOdata",def=function(geneSel,allGenes,geneList=NULL,gene2GO,ont,nodeSize){standardGeneric("create_topGOdata")})
 

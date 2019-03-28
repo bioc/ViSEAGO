@@ -172,7 +172,7 @@ elim_BP_VirginvsPregnant<-topGO::runTest(
 ## Combine enriched GO terms
 
 We combine the results of the three enrichment tests into an object using `ViSEAGO::merge_enrich_terms` method. A table of enriched GO terms in at least one comparison is displayed in interactive mode, or printed in a file using `ViSEAGO::show_table` method.
-The printed table ([BP_sResults.xls](`r base::system.file("extdata/data/output","BP_sResults.xls",package="ViSEAGO")`)) contains for each enriched GO terms, additional columns including the list of significant genes and frequency (ratio between the number of significant genes and number of background genes in a specific GO tag) evaluated by comparison. 
+The printed table contains for each enriched GO terms, additional columns including the list of significant genes and frequency (ratio between the number of significant genes and number of background genes in a specific GO tag) evaluated by comparison. 
 
 ```{r Enrichment_merge,eval=FALSE}
 ###################
@@ -192,11 +192,15 @@ BP_sResults<-ViSEAGO::merge_enrich_terms(
 BP_sResults
 ```
 
-```{r Enrichment_merge_display,fig.cap="merged enrich GO terms table"}
+```{r Enrichment_merge_display,eval=FALSE}
 ###################
 # show table in interactive mode
 ViSEAGO::show_table(BP_sResults)
 ```
+
+<img src=`r base::system.file("extdata/data/output","bioconductor_table1.png",package="ViSEAGO")` alt="bioconductor_table1" style="width:100%;height:100%;"/>
+
+<u>NB:</u> For this vignette, this illustration is not interactive.
 
 ## Graphs of GO enrichment tests
 
@@ -250,7 +254,7 @@ ViSEAGO::MDSplot(myGOs)
 
 <img src=`r base::system.file("extdata/data/output","bioconductor_mds1.png",package="ViSEAGO")` alt="mds1" style="width:100%;height:100%;"/>
 
-<u>NB:</u> For this vignette, this illustration is not interactive. You can display it interactively by running `ViSEAGO::MDSplot(myGOs)`.
+<u>NB:</u> For this vignette, this illustration is not interactive.
 
 ## Clustering heatmap of GO terms
 
@@ -292,16 +296,20 @@ ViSEAGO::show_heatmap(Wang_clusters_wardD2,"GOterms")
 
 <img src=`r base::system.file("extdata/data/output","bioconductor_GOtermsheatmap.png",package="ViSEAGO")` alt="GOtermsheatmap"  style="width:100%;height:100%;"/>
 
-<u>NB:</u> For this vignette, this illustration is not interactive. You can display it interactively by running `ViSEAGO::show_heatmap(Wang_clusters_wardD2,"GOterms")`.
+<u>NB:</u> For this vignette, this illustration is not interactive.
 
 A table of enriched GO terms in at least one of the comparison is displayed in interactive mode, or printed in a file using `ViSEAGO::show_table` method. The columns GO cluster number and IC value are added to the previous table of enriched terms table. 
-The printed table [Wang_clusters_wardD2.xls](`r base::system.file("extdata/data/output","Wang_clusters_wardD2.xls",package="ViSEAGO")`) contains for each enriched GO terms, additional columns including the list of significant genes and frequency (ratio between the number of significant genes and number of background genes in a specific GO tag) evaluated by comparison. 
+The printed table contains for each enriched GO terms, additional columns including the list of significant genes and frequency (ratio between the number of significant genes and number of background genes in a specific GO tag) evaluated by comparison. 
 
-```{r SS_Wang-ward.D2_table}
+```{r SS_Wang-ward.D2_table,eval=F}
 ###################
 # display table
 ViSEAGO::show_table(Wang_clusters_wardD2)
 ```
+
+<img src=`r base::system.file("extdata/data/output","bioconductor_table2.png",package="ViSEAGO")` alt="bioconductor_table2" style="width:100%;height:100%;"/>
+
+<u>NB:</u> For this vignette, this illustration is not interactive.
 
 ## Multi Dimensional Scaling of GO terms
 
@@ -315,7 +323,7 @@ ViSEAGO::MDSplot(Wang_clusters_wardD2)
 
 <img src=`r base::system.file("extdata/data/output","bioconductor_mds2.png",package="ViSEAGO")` alt="mds2" style="width:100%;height:100%;"/>
 
-<u>NB:</u> For this vignette, this illustration is not interactive. You can display it interactively by running `ViSEAGO::MDSplot(Wang_clusters_wardD2)`.
+<u>NB:</u> For this vignette, this illustration is not interactive.
 
 # Visualization and interpretation of GO clusters
 
@@ -344,7 +352,7 @@ ViSEAGO::MDSplot(Wang_clusters_wardD2,show_clusters=TRUE)
 
 <img src=`r base::system.file("extdata/data/output","bioconductor_mds3.png",package="ViSEAGO")` alt="mds3" style="width:100%;height:100%;"/>
 
-<u>NB:</u> For this vignette, this illustration is not interactive. You can display it interactively by running `ViSEAGO::MDSplot(Wang_clusters_wardD2,show_clusters=TRUE)`.
+<u>NB:</u> For this vignette, this illustration is not interactive.
 
 ## GO clusters semantic similarities heatmap
 
@@ -369,7 +377,7 @@ ViSEAGO::show_heatmap(Wang_clusters_wardD2,"GOclusters")
 
 <img src=`r base::system.file("extdata/data/output","bioconductor_BMA.png",package="ViSEAGO")` alt="BMA" style="width:100%;height:100%;"/>
 
-<u>NB:</u> For this vignette, this illustration is not interactive. You can display it interactively by running `ViSEAGO::show_heatmap(Wang_clusters_wardD2,"GOclusters")`.
+<u>NB:</u> For this vignette, this illustration is not interactive.
 
 An history of the enrichment functional analysis is reported.
 

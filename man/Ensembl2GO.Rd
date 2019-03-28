@@ -28,7 +28,6 @@ This function gives referenced organisms genomes at \href{http://ensemblgenomes.
 It uses the \code{\link[biomaRt]{useEnsembl}} and  \code{\link[biomaRt]{listDatasets}} from \pkg{biomaRt} package.
 }
 \examples{
-\dontrun{
 ###################
 # host address to use for Ensembl vertebrate/Plants/Protists/Metazoa/Fungi
 # host="www.ensembl.org" # vertebrate
@@ -50,7 +49,6 @@ Ensembl<-ViSEAGO::Ensembl2GO(
  host="www.ensembl.org",
  version=NULL
 )
-}
 }
 \references{
 Durinck S, Spellman P, Birney E and Huber W (2009).

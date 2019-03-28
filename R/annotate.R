@@ -107,9 +107,15 @@ setMethod("annotate",definition=function(id,object,ortholog){
   ###################
   # check object
   ###################
-  if(!methods::is(object,"genomic_ressource"))base::stop("object must be a genomic_ressource class from ViSEAGO::Bioconductor2GO(), ViSEAGO::EntrezGene2GO(), or ViSEAGO::Ensembl2GO()")
-  if(methods::slot(object,"db")!="EntrezGene" & ortholog==TRUE)base::stop("ortholog option is only available for genomic_ressource class object from  ViSEAGO::EntrezGene2GO()")
-  if(!base::is.null(id) && !base::is.character(id))base::stop("id must be a character value or NULL")
+  if(!methods::is(object,"genomic_ressource")){
+    base::stop("object must be a genomic_ressource class from ViSEAGO::Bioconductor2GO(), ViSEAGO::EntrezGene2GO(), or ViSEAGO::Ensembl2GO()")
+  }
+  if(methods::slot(object,"db")!="EntrezGene" & ortholog==TRUE){
+    base::stop("ortholog option is only available for genomic_ressource class object from  ViSEAGO::EntrezGene2GO()")
+  }
+  if(!base::is.null(id) && !base::is.character(id)){
+    base::stop("id must be a character value or NULL")
+  }
 
   ###################
   # Annotate

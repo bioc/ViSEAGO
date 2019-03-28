@@ -29,6 +29,13 @@
 #' )
 #'
 #' ###################
+#' # compute GO terms Semantic Similarity distances
+#' myGOs<-ViSEAGO::compute_SS_distances(
+#'  myGOs,
+#'  distance="Wang"
+#' )
+#'
+#' ###################
 #' # build MDS plot for a GO_SS-class distance object
 #' ViSEAGO::MDSplot(myGOs)
 #'

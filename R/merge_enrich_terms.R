@@ -26,7 +26,6 @@
 #' Herve Pages, Marc Carlson, Seth Falcon and Nianhua Li (2017). AnnotationDbi: Annotation Database Interface. R package version 1.38.0.
 #' @include enrich_GO_terms.R
 #' @examples
-#' \dontrun{
 #'  ###################
 #'  # load genes identifiants (GeneID,ENS...) universe/background (Expressed genes)
 #'  background_L<-base::scan(
@@ -106,7 +105,6 @@
 #'   L_virginvspregnant=base::c("BP_L_virginvspregnant","elim_BP_L_virginvspregnant")
 #'  )
 #' )
-#' }
 #' @exportMethod merge_enrich_terms
 setGeneric(name="merge_enrich_terms", def=function(Input){standardGeneric("merge_enrich_terms")})
 

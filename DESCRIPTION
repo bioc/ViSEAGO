@@ -1,5 +1,5 @@
 Package: ViSEAGO
-Version: 0.99.3
+Version: 0.99.4
 Title: Visualisation, Semantic similarity, Enrichment Analysis of Gene Ontology
 Authors@R: c(
 	person("Aurelien","Brionne", role=c("aut","cre"),
@@ -32,6 +32,8 @@ Imports: data.table,
          RColorBrewer,
          R.utils,
          scales,
+         stats,
+         graphics,
          UpSetR,
          webshot
 Depends: R (>= 3.5)
