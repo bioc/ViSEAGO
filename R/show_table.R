@@ -47,7 +47,9 @@ setMethod("show_table",definition=function(object,file) {
 
   ###################
   # check the class
-  if(!base::class(object)%in%c("enrich_GO_terms","GO_clusters"))base::stop("object must be ViSEAGO::merge_enrich_terms() or from ViSEAGO::GOterms_heatmap()")
+  if(!base::class(object)%in%c("enrich_GO_terms","GO_clusters")){
+   base::stop("object must be ViSEAGO::merge_enrich_terms() or from ViSEAGO::GOterms_heatmap()")
+  }
 
   ###################
   # remove gene identifiants for printing

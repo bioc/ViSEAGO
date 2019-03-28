@@ -11,7 +11,7 @@
 #' @family semantic_similiarity
 #' @family visualization
 #' @param object a  \code{\link{GO_clusters-class}} object from \code{\link{compute_SS_distances}}.
-##' @param tree a named list with:
+#' @param tree a named list with:
 #'  \describe{
 #'      \item{distance ("BMA" by default)}{
 #'      distance computed from the semantic similarity for GO groups which could be "max", "avg", "rcmax",or "BMA".}
@@ -42,10 +42,55 @@
 #' @include GO_clusters.R
 #' @examples
 #' ###################
-#' # load object
+#' # load objects
 #' utils::data(
-#'  Wang_clusters_wardD2,
+#'  list=base::c("myGENE2GO","BP_sResults"),
 #'  package="ViSEAGO"
+#' )
+#'
+#' ###################
+#' # initialyse object for compute GO Semantic Similarity
+#' myGOs<-ViSEAGO::build_GO_SS(
+#'  gene2GO=myGENE2GO,
+#'  enrich_GO_terms=BP_sResults
+#' )
+#'
+#' ###################
+#' # compute GO terms Semantic Similarity distances
+#' myGOs<-ViSEAGO::compute_SS_distances(
+#'  myGOs,
+#'  distance="Wang"
+#' )
+#'
+#' ##################
+#' # GOtermsHeatmap with default parameters
+#' Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
+#'  myGOs,
+#'  showIC=TRUE,
+#'  showGOlabels=TRUE,
+#'  GO.tree=base::list(
+#'   tree=base::list(
+#'    distance="Wang",
+#'    aggreg.method="ward.D2",
+#'    rotate=NULL
+#'   ),
+#'   cut=base::list(
+#'    dynamic=base::list(
+#'     pamStage=TRUE,
+#'     pamRespectsDendro=TRUE,
+#'     deepSplit=2,
+#'     minClusterSize =2
+#'    )
+#'   )
+#'  ),
+#'  samples.tree=NULL
+#' )
+#'
+#' ###################
+#' # compute clusters of GO terms Semantic Similarity distances
+#' Wang_clusters_wardD2<-ViSEAGO::compute_SS_distances(
+#'  Wang_clusters_wardD2,
+#'  distance="BMA"
 #' )
 #'
 #' ###################

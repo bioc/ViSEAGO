@@ -79,9 +79,26 @@ The dendrogram produced could be cutted in static or dynamic mode.\cr
  }
 }
 \examples{
-##################
-# load object
-utils::data(myGOs,package="ViSEAGO")
+###################
+# load objects
+utils::data(
+ list=base::c("myGENE2GO","BP_sResults"),
+ package="ViSEAGO"
+)
+
+###################
+# initialyse object for compute GO Semantic Similarity
+myGOs<-ViSEAGO::build_GO_SS(
+ gene2GO=myGENE2GO,
+ enrich_GO_terms=BP_sResults
+)
+
+###################
+# compute GO terms Semantic Similarity distances
+myGOs<-ViSEAGO::compute_SS_distances(
+ myGOs,
+ distance="Wang"
+)
 
 ##################
 # GOtermsHeatmap with default parameters

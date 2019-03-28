@@ -32,7 +32,7 @@ EntrezGene2GO=function(){
 
     ###################
     # import Gene to Gene Ontology from NCBI Gene database
-    utils::download.file("ftp://ftp.ncbi.nih.gov/gene/DATA/gene2go.gz",quiet=T,destfile = "gene2go.gz")
+    utils::download.file("ftp://ftp.ncbi.nih.gov/gene/DATA/gene2go.gz",quiet=TRUE,destfile = "gene2go.gz")
 
     ##################
     #  uncompress

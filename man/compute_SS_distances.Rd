@@ -33,7 +33,7 @@ Semantic Similarity computations are based on \code{\link[GOSemSim]{mgoSim}} met
 ###################
 # load objects
 utils::data(
- list=base::c("myGENE2GO","BP_sResults","Wang_clusters_wardD2"),
+ list=base::c("myGENE2GO","BP_sResults"),
  package="ViSEAGO"
 )
 
@@ -43,11 +43,36 @@ myGOs<-ViSEAGO::build_GO_SS(
  gene2GO=myGENE2GO,
  enrich_GO_terms=BP_sResults
 )
+
 ###################
 # compute GO terms Semantic Similarity distances
 myGOs<-ViSEAGO::compute_SS_distances(
  myGOs,
  distance=c("Resnik","Lin","Rel","Jiang","Wang")
+)
+
+##################
+# GOtermsHeatmap with default parameters
+Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
+ myGOs,
+ showIC=TRUE,
+ showGOlabels=TRUE,
+ GO.tree=base::list(
+  tree=base::list(
+   distance="Wang",
+   aggreg.method="ward.D2",
+   rotate=NULL
+  ),
+  cut=base::list(
+   dynamic=base::list(
+    pamStage=TRUE,
+    pamRespectsDendro=TRUE,
+    deepSplit=2,
+    minClusterSize =2
+   )
+  )
+ ),
+ samples.tree=NULL
 )
 
 ###################

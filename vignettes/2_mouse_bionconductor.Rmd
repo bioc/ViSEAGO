@@ -35,8 +35,9 @@ knitr::opts_chunk$set(
 # load vignette data
 utils::data(
   list=base::c(
-    "Bioconductor","myGENE2GO","BP_sResults",
-    "myGOs","Wang_clusters_wardD2"
+    "Bioconductor",
+    "myGENE2GO",
+    "BP_sResults"
   ),
   package="ViSEAGO"
 )
@@ -219,7 +220,7 @@ ViSEAGO::Upset(BP_sResults,file="./data/output/upset.xls")
 
 GO annotations of genes created at a previous step and enriched GO terms are combined using `ViSEAGO::build_GO_SS` method. The Semantic Similarity (SS) between enriched GO terms are calculated using `ViSEAGO::compute_SS_distances` method which is a wrapper of functions implemented in the `r BiocStyle::Biocpkg("GOSemSim")` package @pmid20179076. Here, we choose *Wang* method based on the topology of GO graph structure. The built object `myGOs` contains all informations of enriched GO terms and the SS distances between them.
 
-```{r SS_build,eval=FALSE}
+```{r SS_build}
 ###################        
 # create GO_SS-class object
 myGOs<-ViSEAGO::build_GO_SS(gene2GO=myGENE2GO,enrich_GO_terms=BP_sResults)
@@ -259,12 +260,13 @@ Clusters of enriched GO terms are obtained by cutting branches off the dendrogra
 
 Enriched GO terms are ranked in a dendrogram and colored depending on their cluster assignation. Additional illustrations are displayed: the GO description of terms (trimmed if more than 50 characters), a heatmap of -log10(pvalue) of enrichment test for each comparison, and optionally the Information Content (IC). The IC of a GO term is computed by the negative log probability of the term occurring in the GO annotations database of the studied species. A rarely used term contains a greater amount of IC. The illustration is displayed with `ViSEAGO::show_heatmap` method.
 
-```{r SS_Wang-wardD2,eval=FALSE}
+```{r SS_Wang-wardD2}
 ##################           
 # Create GOterms heatmap
 Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
   myGOs,
   showIC=TRUE,
+  showGOlabels = TRUE,
   GO.tree=base::list(
     tree=base::list(
       distance="Wang",
@@ -325,7 +327,7 @@ A Semantic Similarity (SS) between clusters of GO terms, previously defined, is 
 
 A colored Multi Dimensional Scale (MDS) plot with `ViSEAGO::MDSplot` method provides a representation of distances between the clusters of GO terms. Each circle represents a cluster of GO terms and its size depends on the number of GO terms that it contains. Clusters of GO terms that are close should share a functional coherence.
 
-```{r SS_Wang-wardD2_groups,eval=FALSE} 
+```{r SS_Wang-wardD2_groups} 
 ###################           
 # calculate semantic similarites between clusters of GO terms
 Wang_clusters_wardD2<-ViSEAGO::compute_SS_distances(
@@ -350,7 +352,7 @@ A new hierarchical clustering using `ViSEAGO::GOclusters_heatmap` is performed b
 
 Clusters of GO terms are ranked in a dendrogram and colored depending on their cluster assignation. Additional illustrations are displayed: the definition of the cluster of GO terms corresponds to the first common GO term ancestor followed by the cluster label in brackets, and the heatmap of GO terms count in the corresponding cluster. The illustration is displayed with `ViSEAGO::show_heatmap` method.
 
-```{r SS_Wang-wardD2_groups_heatmap,eval=FALSE} 
+```{r SS_Wang-wardD2_groups_heatmap} 
 ###################
 # GOclusters heatmap
 Wang_clusters_wardD2<-ViSEAGO::GOclusters_heatmap(

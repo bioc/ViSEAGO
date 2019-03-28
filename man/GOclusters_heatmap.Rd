@@ -33,10 +33,55 @@ The dendrogram branches are colored according to GO terms clusters.
 }
 \examples{
 ###################
-# load object
+# load objects
 utils::data(
- Wang_clusters_wardD2,
+ list=base::c("myGENE2GO","BP_sResults"),
  package="ViSEAGO"
+)
+
+###################
+# initialyse object for compute GO Semantic Similarity
+myGOs<-ViSEAGO::build_GO_SS(
+ gene2GO=myGENE2GO,
+ enrich_GO_terms=BP_sResults
+)
+
+###################
+# compute GO terms Semantic Similarity distances
+myGOs<-ViSEAGO::compute_SS_distances(
+ myGOs,
+ distance="Wang"
+)
+
+##################
+# GOtermsHeatmap with default parameters
+Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
+ myGOs,
+ showIC=TRUE,
+ showGOlabels=TRUE,
+ GO.tree=base::list(
+  tree=base::list(
+   distance="Wang",
+   aggreg.method="ward.D2",
+   rotate=NULL
+  ),
+  cut=base::list(
+   dynamic=base::list(
+    pamStage=TRUE,
+    pamRespectsDendro=TRUE,
+    deepSplit=2,
+    minClusterSize =2
+   )
+  )
+ ),
+ samples.tree=NULL
+)
+
+###################
+# compute clusters of GO terms Semantic Similarity distances
+Wang_clusters_wardD2<-ViSEAGO::compute_SS_distances(
+ Wang_clusters_wardD2,
+ distance="BMA"
 )
 
 ###################

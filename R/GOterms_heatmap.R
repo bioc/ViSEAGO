@@ -1,6 +1,8 @@
 #' @title Build a clustering heatmap on GO terms.
 #' @description This method computes a clustering heatmap based on GO terms semantic similarity.
 #' @importFrom data.table data.table
+#' @importFrom graphics text
+#' @importFrom stats as.dist end start
 #' @importFrom methods setGeneric setMethod new slot is
 #' @importFrom ggplot2 scale_fill_gradientn
 #' @importFrom plotly layout
@@ -89,9 +91,26 @@
 #' H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2009.
 #' @include GO_clusters.R
 #' @examples
-#' ##################
-#' # load object
-#' utils::data(myGOs,package="ViSEAGO")
+#' ###################
+#' # load objects
+#' utils::data(
+#'  list=base::c("myGENE2GO","BP_sResults"),
+#'  package="ViSEAGO"
+#' )
+#'
+#' ###################
+#' # initialyse object for compute GO Semantic Similarity
+#' myGOs<-ViSEAGO::build_GO_SS(
+#'  gene2GO=myGENE2GO,
+#'  enrich_GO_terms=BP_sResults
+#' )
+#'
+#' ###################
+#' # compute GO terms Semantic Similarity distances
+#' myGOs<-ViSEAGO::compute_SS_distances(
+#'  myGOs,
+#'  distance="Wang"
+#' )
 #'
 #' ##################
 #' # GOtermsHeatmap with default parameters
@@ -121,15 +140,35 @@
 #' # display
 #' ViSEAGO::show_heatmap(Wang_clusters_wardD2,"GOterms")
 #' @exportMethod GOterms_heatmap
-setGeneric(name="GOterms_heatmap",def=function(myGOs,showIC=TRUE,showGOlabels=TRUE,GO.tree=base::list(tree=base::list(distance="Wang",aggreg.method="ward.D2",rotate=NULL),
-cut=base::list(dynamic=base::list(pamStage=TRUE,pamRespectsDendro=TRUE,deepSplit=2,minClusterSize =2))),samples.tree=NULL){base::standardGeneric("GOterms_heatmap")})
+setGeneric(name="GOterms_heatmap",def=function(
+  myGOs,
+  showIC=TRUE,
+  showGOlabels=TRUE,
+  GO.tree=base::list(
+    tree=base::list(
+      distance="Wang",
+      aggreg.method="ward.D2",
+      rotate=NULL),
+    cut=base::list(
+      dynamic=base::list(
+        pamStage=TRUE,
+        pamRespectsDendro=TRUE
+        ,deepSplit=2,
+        minClusterSize =2
+      )
+    )
+  ),
+  samples.tree=NULL
+){base::standardGeneric("GOterms_heatmap")})
 
 setMethod("GOterms_heatmap",signature="GO_SS",definition=function(myGOs,showIC,showGOlabels,GO.tree,samples.tree){
 
   ###################
   # check entry
   ###################
-  if(base::length(methods::slot(myGOs,"terms_dist"))==0) stop("Please compute Semantic Similarity distance with ViSEAGO::compute_SS_distances()")
+  if(base::length(methods::slot(myGOs,"terms_dist"))==0){
+    base::stop("Please compute Semantic Similarity distance with ViSEAGO::compute_SS_distances()")
+  }
 
   ###################
   # creates trees
@@ -195,7 +234,11 @@ setMethod("GOterms_heatmap",signature="GO_SS",definition=function(myGOs,showIC,s
 
           ###################
           # default static cut tree method if not available
-          if("static"%in%tree){static<-Tree$cut$static}else{static=NULL}
+          if("static"%in%tree){
+            static<-Tree$cut$static
+          }else{
+            static=NULL
+          }
 
           if(base::is.null(static)){
 
@@ -205,19 +248,35 @@ setMethod("GOterms_heatmap",signature="GO_SS",definition=function(myGOs,showIC,s
 
             ###################
             # default aggreg.method if not available
-            if("pamStage"%in%tree){pamStage<-Tree$cut$dynamic$pamStage}else{pamStage=TRUE}
+            if("pamStage"%in%tree){
+              pamStage<-Tree$cut$dynamic$pamStage
+            }else{
+              pamStage=TRUE
+            }
 
             ###################
             # default aggreg.method if not available
-            if("pamRespectsDendro"%in%tree){pamRespectsDendro<-Tree$cut$dynamic$pamRespectsDendro}else{pamRespectsDendro=TRUE}
+            if("pamRespectsDendro"%in%tree){
+              pamRespectsDendro<-Tree$cut$dynamic$pamRespectsDendro
+            }else{
+              pamRespectsDendro=TRUE
+            }
 
             ###################
             # default aggreg.method if not available
-            if("deepSplit"%in%tree){deepSplit<-Tree$cut$dynamic$deepSplit}else{deepSplit=2}
+            if("deepSplit"%in%tree){
+              deepSplit<-Tree$cut$dynamic$deepSplit
+            }else{
+              deepSplit=2
+            }
 
             ###################
             # default aggreg.method if not available
-            if("minClusterSize"%in%tree){minClusterSize<-Tree$cut$dynamic$minClusterSize}else{minClusterSize =2}
+            if("minClusterSize"%in%tree){
+              minClusterSize<-Tree$cut$dynamic$minClusterSize
+            }else{
+                minClusterSize =2
+            }
 
             ###################
             # build dynamic
@@ -275,7 +334,17 @@ setMethod("GOterms_heatmap",signature="GO_SS",definition=function(myGOs,showIC,s
     # check dendrogram entry
     if(base::is.null(row.tree$tree$distance)){
       base::stop(paste("please enter a myGOs object computed SS distance name (",
-      paste(base::names(methods::slot(myGOs,"terms_dist")),collapse=", "),") in the GO.tree distance argument",sep=""))
+      paste(
+        base::names(
+          methods::slot(
+            myGOs,
+            "terms_dist"
+            )
+          ),
+        collapse=", "),
+      ") in the GO.tree distance argument",
+      sep="")
+      )
     }
 
   ###################

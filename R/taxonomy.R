@@ -76,7 +76,7 @@ taxonomy=function(...){
 
   ###################
   # submit and retrieve
-  query=base::paste(base::scan(query, what ="",sep="\n",quiet = T),collapse="")
+  query=base::paste(base::scan(query, what ="",sep="\n",quiet = TRUE),collapse="")
 
   ###################
   # parse results

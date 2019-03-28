@@ -104,7 +104,7 @@ setMethod("Upset",definition=function(object,file){
     ##################
     # build matrix
     OLexport <-base::as.matrix(
-      base::unlist(base::sapply(OLlist, base::paste, collapse=";"))
+      base::unlist(base::vapply(OLlist, base::paste, collapse=";",""))
     )
 
     ##################

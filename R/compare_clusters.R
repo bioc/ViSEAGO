@@ -33,7 +33,7 @@
 #' # GO terms heatmap with Resnik distance
 #' Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 #'  myGOs,
-#'  showIC=T,
+#'  showIC=TRUE,
 #'  GO.tree=base::list(
 #'    tree=base::list(
 #'      distance="Resnik",
@@ -53,7 +53,7 @@
 #' # GO terms heatmap with Lin distance
 #' Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 #'  myGOs,
-#'  showIC=T,
+#'  showIC=TRUE,
 #'  GO.tree=base::list(
 #'    tree=base::list(
 #'      distance="Lin",
@@ -73,7 +73,7 @@
 #' # GO terms heatmap with Rel distance
 #' Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 #'  myGOs,
-#'  showIC=T,
+#'  showIC=TRUE,
 #'  GO.tree=base::list(
 #'    tree=base::list(
 #'      distance="Rel",
@@ -93,7 +93,7 @@
 #' # GO terms heatmap with Jiang distance
 #' Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 #'  myGOs,
-#'  showIC=T,
+#'  showIC=TRUE,
 #'  GO.tree=base::list(
 #'    tree=base::list(
 #'      distance="Jiang",
@@ -113,7 +113,7 @@
 #' # GO terms heatmap with Wang distance
 #' Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 #'  myGOs,
-#'  showIC=T,
+#'  showIC=TRUE,
 #'  GO.tree=base::list(
 #'    tree=base::list(
 #'      distance="Wang",
@@ -344,7 +344,7 @@ setMethod("compare_clusters",definition=function(clusters) {
       '<br>y GO sum:',
       base::rep(clusters.length[base::row.names(col_prc)],
       each=base::ncol(col_prc))),ncol=base::ncol(col_prc),
-    byrow=T)
+    byrow=TRUE)
 
     ###################
     # create hover text matrix
@@ -366,12 +366,12 @@ setMethod("compare_clusters",definition=function(clusters) {
     ###################
     # Draw heatmap with y%
     p<-plotly::add_heatmap(p,x=colnames(col_prc),y=row.names(col_prc),z =col_prc,
-    colorscale = "Greys",name="x identity%",hoverinfo='text',text=hover.text,visible=T)
+    colorscale = "Greys",name="x identity%",hoverinfo='text',text=hover.text,visible=TRUE)
 
     ###################
     # Draw heatmap with y%
     p<-plotly::add_heatmap(p,x=colnames(row_prc),y=row.names(row_prc),z =row_prc,
-    colorscale = "Greys",name="y identity%",hoverinfo='text',text=hover.text,visible=F)
+    colorscale = "Greys",name="y identity%",hoverinfo='text',text=hover.text,visible=FALSE)
 
     #################
     # add custom layout with dropdown menu
@@ -411,11 +411,11 @@ setMethod("compare_clusters",definition=function(clusters) {
 
           #################
           # x output button
-          base::list(method ="restyle",args = base::list("visible",base::list(T,F)),label="x identity%"),
+          base::list(method ="restyle",args = base::list("visible",base::list(TRUE,FALSE)),label="x identity%"),
 
           #################
           # y output button
-          base::list(method ="restyle",args = base::list("visible",base::list(F,T)),label="y indentity%")
+          base::list(method ="restyle",args = base::list("visible",base::list(FALSE,TRUE)),label="y indentity%")
 
         )
       )

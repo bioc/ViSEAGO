@@ -111,7 +111,7 @@ However, there are important differences between supported species, and correspo
 More precisely, since December 2006, the GOA and [Ensembl Compara](http://www.ebi.ac.uk/GOA/compara_go_annotations) teams have used the gene orthology data obtained from Ensembl Compara to project GO terms from a source species onto one or more target species. For this pipeline, only one to one and apparent one to one orthologies are used, and only manually annotated GO terms with an experimental evidence type of either EXP, IDA, IEP, IGI, IMP or IPI are projected. GO annotations created using this technique receive the evidence code 'IEA' (Inferred from Electronic Annotation).
 
 A similar approach for [EntrezGene](https://www.ncbi.nlm.nih.gov/gene) database and with the [orthologs_groups](https://www.ncbi.nlm.nih.gov/genome/annotation_euk/process/) @pmid24063302 from the NCBI annotation pipeline.
-This method is available using the `ViSEAGO::annotate(id,EntrezGene,ortholog = T)`.
+This method is available using the `ViSEAGO::annotate(id,EntrezGene,ortholog = TRUE)`.
 
 The easy access to GO annotations for all the availables species from these databases are provided by:
 
@@ -167,7 +167,7 @@ myGENE2GO<-ViSEAGO::annotate("EntrezGene_id",EntrezGene)
 ###################
 # load GO annotations from EntrezGene
 # with the add of GO annotations from orthologs genes (see above)
-myGENE2GO<-ViSEAGO::annotate("EntrezGene_id",EntrezGene,ortholog = T)
+myGENE2GO<-ViSEAGO::annotate("EntrezGene_id",EntrezGene,ortholog = TRUE)
 
 ###################
 # load GO annotations from Ensembl

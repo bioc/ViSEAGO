@@ -39,7 +39,7 @@
 #' # GO terms heatmap with Resnik distance
 #' Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 #'  myGOs,
-#'  showIC=T,
+#'  showIC=TRUE,
 #'  GO.tree=base::list(
 #'    tree=base::list(
 #'      distance="Resnik",
@@ -59,7 +59,7 @@
 #' # GO terms heatmap with Lin distance
 #' Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 #'  myGOs,
-#'  showIC=T,
+#'  showIC=TRUE,
 #'  GO.tree=base::list(
 #'    tree=base::list(
 #'      distance="Lin",
@@ -79,7 +79,7 @@
 #' # GO terms heatmap with Rel distance
 #' Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 #'  myGOs,
-#'  showIC=T,
+#'  showIC=TRUE,
 #'  GO.tree=base::list(
 #'    tree=base::list(
 #'      distance="Rel",
@@ -99,7 +99,7 @@
 #' # GO terms heatmap with Jiang distance
 #' Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 #'  myGOs,
-#'  showIC=T,
+#'  showIC=TRUE,
 #'  GO.tree=base::list(
 #'    tree=base::list(
 #'      distance="Jiang",
@@ -119,7 +119,7 @@
 #' # GO terms heatmap with Wang distance
 #' Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 #'  myGOs,
-#'  showIC=T,
+#'  showIC=TRUE,
 #'  GO.tree=base::list(
 #'    tree=base::list(
 #'      distance="Wang",

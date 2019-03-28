@@ -19,17 +19,3 @@
 #' @usage data(myGENE2GO,package="ViSEAGO")
 #' @format An object of class \code{\link{gene2GO-class}}.
 "myGENE2GO"
-#' @title myGOs dataset
-#' @description  an example of object returned by \code{\link{build_GO_SS}} method.
-#' @importFrom utils data
-#' @docType data
-#' @usage data(myGOs,package="ViSEAGO")
-#' @format An object of class \code{\link{GO_SS-class}}.
-"myGOs"
-#' @title Wang_clusters_wardD2 dataset
-#' @description  an example of object returned by \code{\link{GOclusters_heatmap}} method.
-#' @importFrom utils data
-#' @docType data
-#' @usage data(Wang_clusters_wardD2,package="ViSEAGO")
-#' @format An object of class \code{\link{GO_clusters-class}}.
-"Wang_clusters_wardD2"

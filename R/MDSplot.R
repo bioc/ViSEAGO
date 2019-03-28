@@ -15,23 +15,64 @@
 #' @include GO_SS.R GO_clusters.R
 #' @examples
 #' ###################
-#' # load object
+#' # load objects
 #' utils::data(
-#'  list=base::c("myGOs","Wang_clusters_wardD2"),
+#'  list=base::c("myGENE2GO","BP_sResults"),
 #'  package="ViSEAGO"
+#' )
+#'
+#' ###################
+#' # initialyse object for compute GO Semantic Similarity
+#' myGOs<-ViSEAGO::build_GO_SS(
+#'  gene2GO=myGENE2GO,
+#'  enrich_GO_terms=BP_sResults
 #' )
 #'
 #' ###################
 #' # build MDS plot for a GO_SS-class distance object
 #' ViSEAGO::MDSplot(myGOs)
 #'
+#' ##################
+#' # GOtermsHeatmap with default parameters
+#' Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
+#'  myGOs,
+#'  showIC=TRUE,
+#'  showGOlabels=TRUE,
+#'  GO.tree=base::list(
+#'   tree=base::list(
+#'    distance="Wang",
+#'    aggreg.method="ward.D2",
+#'    rotate=NULL
+#'   ),
+#'   cut=base::list(
+#'    dynamic=base::list(
+#'     pamStage=TRUE,
+#'     pamRespectsDendro=TRUE,
+#'     deepSplit=2,
+#'     minClusterSize =2
+#'    )
+#'   )
+#'  ),
+#'  samples.tree=NULL
+#' )
+#'
 #' ###################
 #' # build MDS plot for a GO_clusters-class distance object, highlighting GO terms clusters.
 #' ViSEAGO::MDSplot(Wang_clusters_wardD2)
 #'
 #' ###################
+#' # compute clusters of GO terms Semantic Similarity distances
+#' Wang_clusters_wardD2<-ViSEAGO::compute_SS_distances(
+#'  Wang_clusters_wardD2,
+#'  distance="BMA"
+#' )
+#'
+#' ###################
 #' # build MDS plot for a GO_clusters-class distance object, highlighting GO groups clusters.
-#' ViSEAGO::MDSplot(Wang_clusters_wardD2,show_clusters=TRUE)
+#' ViSEAGO::MDSplot(
+#'  Wang_clusters_wardD2,
+#'  show_clusters=TRUE
+#' )
 #' @exportMethod MDSplot
 setGeneric(name="MDSplot",def=function(object,show_clusters=FALSE,file=NULL) {standardGeneric("MDSplot")})
 
@@ -39,11 +80,15 @@ setMethod("MDSplot",definition=function(object,show_clusters,file) {
 
   #################
   # check class
-  if(!base::class(object)%in%c("GO_SS","GO_clusters")) base::stop("object must come from ViSEAGO::compute_SS_distances() or ViSEAGO::GOterms_heatmap()")
+  if(!base::class(object)%in%c("GO_SS","GO_clusters")){
+    base::stop("object must come from ViSEAGO::compute_SS_distances() or ViSEAGO::GOterms_heatmap()")
+  }
 
   #################
   # check class
-  if(methods::is(object,"GO_SS") & show_clusters==T) base::stop("show_clusters is only available for GO_clusters class after clusters SS distance calculation with ViSEAGO::compute_SS_distances()")
+  if(methods::is(object,"GO_SS") & show_clusters==T){
+    base::stop("show_clusters is only available for GO_clusters class after clusters SS distance calculation with ViSEAGO::compute_SS_distances()")
+  }
 
   #################
   # for SS_dist from object
@@ -55,7 +100,9 @@ setMethod("MDSplot",definition=function(object,show_clusters,file) {
 
     #################
     # if empty
-    if(base::length(d)==0)stop("Please use GO_terms class object with computed SS distances using ViSEAGO::compute_SS_distance()")
+    if(base::length(d)==0){
+      stop("Please use GO_terms class object with computed SS distances using ViSEAGO::compute_SS_distance()")
+    }
 
     #################
     # measures
@@ -140,11 +187,13 @@ setMethod("MDSplot",definition=function(object,show_clusters,file) {
 
     #################
     # import SS_dist from object
-    d=object@clusters_dist
+    d=methods::slot(object,"clusters_dist")
 
     #################
     # if empty
-    if(base::length(d)==0)stop("Please use GO_clusters class object with computed clusters distances using ViSEAGO::compute_SS_distance()")
+    if(base::length(d)==0){
+      stop("Please use GO_clusters class object with computed clusters distances using ViSEAGO::compute_SS_distance()")
+    }
 
     #################
     # measures

@@ -32,7 +32,7 @@
 #' ###################
 #' # load objects
 #' utils::data(
-#'  list=base::c("myGENE2GO","BP_sResults","Wang_clusters_wardD2"),
+#'  list=base::c("myGENE2GO","BP_sResults"),
 #'  package="ViSEAGO"
 #' )
 #'
@@ -42,11 +42,36 @@
 #'  gene2GO=myGENE2GO,
 #'  enrich_GO_terms=BP_sResults
 #' )
+#'
 #' ###################
 #' # compute GO terms Semantic Similarity distances
 #' myGOs<-ViSEAGO::compute_SS_distances(
 #'  myGOs,
 #'  distance=c("Resnik","Lin","Rel","Jiang","Wang")
+#' )
+#'
+#' ##################
+#' # GOtermsHeatmap with default parameters
+#' Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
+#'  myGOs,
+#'  showIC=TRUE,
+#'  showGOlabels=TRUE,
+#'  GO.tree=base::list(
+#'   tree=base::list(
+#'    distance="Wang",
+#'    aggreg.method="ward.D2",
+#'    rotate=NULL
+#'   ),
+#'   cut=base::list(
+#'    dynamic=base::list(
+#'     pamStage=TRUE,
+#'     pamRespectsDendro=TRUE,
+#'     deepSplit=2,
+#'     minClusterSize =2
+#'    )
+#'   )
+#'  ),
+#'  samples.tree=NULL
 #' )
 #'
 #' ###################
@@ -63,7 +88,9 @@ setMethod("compute_SS_distances",definition=function(object,distance) {
 
   ##################
   # check object
-  if(!base::class(object)%in%c("GO_SS","GO_clusters"))base::stop("object must be a GO_SS or GO_clusters class from ViSEAGO::build_GO_SS() or ViSEAGO::GOterms_heatmap(), respectively")
+  if(!base::class(object)%in%c("GO_SS","GO_clusters")){
+    base::stop("object must be a GO_SS or GO_clusters class from ViSEAGO::build_GO_SS() or ViSEAGO::GOterms_heatmap(), respectively")
+  }
 
   if(methods::is(object,"GO_SS")){
 
@@ -116,7 +143,7 @@ setMethod("compute_SS_distances",definition=function(object,distance) {
 
     ###################
     # convert clusters in factor
-    clusters[,GO.cluster:=factor(GO.cluster,levels = unique(GO.cluster))]
+    clusters[,GO.cluster:=base::factor(GO.cluster,levels = base::unique(GO.cluster))]
 
     ###################
     # get ancestors
@@ -185,7 +212,7 @@ setMethod("compute_SS_distances",definition=function(object,distance) {
 
     ###################
     # convert clusters in factor
-    clusters<-utils::unstack(data.frame(clusters))
+    clusters<-utils::unstack(base::data.frame(clusters))
 
     ###################
     # rename clusters
@@ -213,7 +240,7 @@ setMethod("compute_SS_distances",definition=function(object,distance) {
 
         ###################
         # create default scores matrix
-        for (i in base::seq_along(clusters)) {
+        for (i in base::seq_along(clusters)){
 
           ###################
           # extract the first cluster GO terms
@@ -221,7 +248,7 @@ setMethod("compute_SS_distances",definition=function(object,distance) {
 
           ###################
           # extract second cluster GO terms
-          for (j in base::seq_along(i)) {
+          for (j in base::seq_len(i)){
 
             ###################
             # extract the second cluster GO terms
@@ -229,8 +256,13 @@ setMethod("compute_SS_distances",definition=function(object,distance) {
 
             ###################
             # calculate
-            scores[i, j] <-GOSemSim::mgoSim(GO1,GO2,semData = object,
-            measure =base::names(object@terms_dist), combine =x)
+            scores[i, j] <-GOSemSim::mgoSim(
+              GO1,
+              GO2,
+              semData = object,
+              measure =base::names(methods::slot(object,"terms_dist")),
+              combine =x
+            )
 
             ###################
             # add to upper part
@@ -253,7 +285,7 @@ setMethod("compute_SS_distances",definition=function(object,distance) {
 
         ###################
         # return values
-        object@clusters_dist<-c(object@clusters_dist,values)
+        methods::slot(object,"clusters_dist")<-c(methods::slot(object,"clusters_dist"),values)
     }
   }
 

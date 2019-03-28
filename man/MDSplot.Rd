@@ -26,22 +26,63 @@ A static png image could be printed by setting \code{file} argument.
 }
 \examples{
 ###################
-# load object
+# load objects
 utils::data(
- list=base::c("myGOs","Wang_clusters_wardD2"),
+ list=base::c("myGENE2GO","BP_sResults"),
  package="ViSEAGO"
+)
+
+###################
+# initialyse object for compute GO Semantic Similarity
+myGOs<-ViSEAGO::build_GO_SS(
+ gene2GO=myGENE2GO,
+ enrich_GO_terms=BP_sResults
 )
 
 ###################
 # build MDS plot for a GO_SS-class distance object
 ViSEAGO::MDSplot(myGOs)
 
+##################
+# GOtermsHeatmap with default parameters
+Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
+ myGOs,
+ showIC=TRUE,
+ showGOlabels=TRUE,
+ GO.tree=base::list(
+  tree=base::list(
+   distance="Wang",
+   aggreg.method="ward.D2",
+   rotate=NULL
+  ),
+  cut=base::list(
+   dynamic=base::list(
+    pamStage=TRUE,
+    pamRespectsDendro=TRUE,
+    deepSplit=2,
+    minClusterSize =2
+   )
+  )
+ ),
+ samples.tree=NULL
+)
+
 ###################
 # build MDS plot for a GO_clusters-class distance object, highlighting GO terms clusters.
 ViSEAGO::MDSplot(Wang_clusters_wardD2)
 
 ###################
+# compute clusters of GO terms Semantic Similarity distances
+Wang_clusters_wardD2<-ViSEAGO::compute_SS_distances(
+ Wang_clusters_wardD2,
+ distance="BMA"
+)
+
+###################
 # build MDS plot for a GO_clusters-class distance object, highlighting GO groups clusters.
-ViSEAGO::MDSplot(Wang_clusters_wardD2,show_clusters=TRUE)
+ViSEAGO::MDSplot(
+ Wang_clusters_wardD2,
+ show_clusters=TRUE
+)
 }
 \concept{GO_terms GO_clusters semantic_similarity visualization}
