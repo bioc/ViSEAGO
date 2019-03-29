@@ -40,11 +40,7 @@ The main objective of ViSEAGO workflow is to carry out a data mining of biologic
 
 ViSEAGO is like a workflow with input lists of genes and associated genomic resources in order to perform enrichment tests, followed by a clustering of GO terms based on theirs semantic similarity. Most of outputs (tables and graphs) could be visualized in static or interactive mode.
 
-```{r grViz,echo=FALSE,eval=TRUE,fig.height=5.5} 
-###################
-# print diagram without focus
-ViSEAGO::pkgdiagram(x=c("white","white","white","white","white"))
-```
+<img src=`r base::system.file("extdata/","workflow.png",package="ViSEAGO")` alt="workflow" style="width:100%;height:100%;"/>
 
 # Installation{-}
 
@@ -64,43 +60,45 @@ remotes::install_gitlab(
 )
 ```
 
-You can also optionally create directories to store gene lists in the input folder, store all the intermediate R objects in the cache folder, and export the results in the output folder.
+You can also optionally create directories to store gene lists in the input folder, and export the results in the output folder.
 
 ```{r ViSEAGO_directories}
 ###################
 # create data directories (input, cache,output)
-base::dir.create("./data/input",recursive=TRUE,showWarnings=FALSE)
-base::dir.create("./data/output",showWarnings=FALSE)
-base::dir.create("./data/cache",showWarnings=FALSE)
+base::dir.create(
+  "./data/input",
+  recursive=TRUE,
+  showWarnings=FALSE
+)
+base::dir.create(
+  "./data/output",
+  showWarnings=FALSE
+)
 ```
 
 # Genes of interest
-
-```{r grViz_genes,echo=FALSE,eval=TRUE,fig.height=4} 
-###################
-# print diagram with focus one the gene list
-ViSEAGO::pkgdiagram(x=c("black","white","white","white","white"))
-```
 
 Firstly, you need to provide the gene *background* (= expressed genes) and *selection* in the created `./data/input/` subfolder, before reading the files.
 
 ```{r geneList_input}
 ###################
 # load genes background
-background<-base::scan("./data/input/background.txt",quiet=TRUE,what="")
+background<-base::scan(
+  "./data/input/background.txt",
+  quiet=TRUE,
+  what=""
+)
 
 ###################
 # load gene selection
-selection<-base::scan("./data/input/selection.txt",quiet=TRUE,what="")
+selection<-base::scan(
+  "./data/input/selection.txt",
+  quiet=TRUE,
+  what=""
+)
 ```
 
 # GO annotation of genes
-
-```{r grViz_annotations,echo=FALSE,eval=TRUE,fig.height=4} 
-###################
-# print diagram with a focus on the annotation step
-ViSEAGO::pkgdiagram(x=c("white","black","white","white","white"))
-```
 
 The [Gene Ontology](http://www.geneontology.org) (GO) is a community-based bioinformatics resource that supplies information about gene product function using ontologies to represent biological knowledge @pmid25428369.
 
@@ -158,33 +156,43 @@ At this step, we need to provide the **organism  key identifiant** based on the 
 ```{r annotate}
 ###################
 # load GO annotations from Bioconductor
-myGENE2GO<-ViSEAGO::annotate("bioconductor_id",Bioconductor)
+myGENE2GO<-ViSEAGO::annotate(
+  "bioconductor_id",
+  Bioconductor
+)
 
 ###################
 # load GO annotations from EntrezGene
-myGENE2GO<-ViSEAGO::annotate("EntrezGene_id",EntrezGene)
+myGENE2GO<-ViSEAGO::annotate(
+  "EntrezGene_id",
+  EntrezGene
+)
 
 ###################
 # load GO annotations from EntrezGene
 # with the add of GO annotations from orthologs genes (see above)
-myGENE2GO<-ViSEAGO::annotate("EntrezGene_id",EntrezGene,ortholog = TRUE)
+myGENE2GO<-ViSEAGO::annotate(
+  "EntrezGene_id",
+  EntrezGene,
+  ortholog = TRUE
+)
 
 ###################
 # load GO annotations from Ensembl
-myGENE2GO<-ViSEAGO::annotate("Ensembl_id",Ensembl)
+myGENE2GO<-ViSEAGO::annotate(
+  "Ensembl_id",
+  Ensembl
+)
 
 ###################
 # load GO annotations from Uniprot
-myGENE2GO<-ViSEAGO::annotate("Uniprot_id",Uniprot)
+myGENE2GO<-ViSEAGO::annotate(
+  "Uniprot_id",
+  Uniprot
+)
 ```
 
 # Functionnal GO enrichment
-
-```{r grViz_enrichment,echo=FALSE,eval=TRUE,fig.height=4} 
-###################
-# print diagram with a focus on the enrichment step
-ViSEAGO::pkgdiagram(x=c("white","white","black","white","white"))
-```
 
 ## GO enrichment tests
 
@@ -239,7 +247,10 @@ ViSEAGO::show_table(BP_sResults)
 
 ###################
 # print the merged table in a file
-ViSEAGO::show_table(BP_sResults,"./data/output/BP_sResults.xls")
+ViSEAGO::show_table(
+  BP_sResults,
+  "./data/output/BP_sResults.xls"
+)
 ```
 
 ## Graphs of GO enrichment tests
@@ -255,36 +266,33 @@ ViSEAGO::GOcount(BP_sResults)
 ```{r Enrichment_merge_interactions,fig.height=4}
 ###################           
 # display interactions
-ViSEAGO::Upset(BP_sResults,file="./data/output/OLexport.xls")
+ViSEAGO::Upset(
+  BP_sResults,
+  file="./data/output/OLexport.xls"
+)
 ```
 
 # GO terms Semantic Similarity
-
-```{r grViz_SS,echo=FALSE,eval=TRUE,fig.height=4} 
-###################
-# print diagram with a focus on the Semantic Similarity step
-ViSEAGO::pkgdiagram(x=c("white","white","white","black","white"))
-```
 
 GO annotations of genes created at a previous step and enriched GO terms are combined using `ViSEAGO::build_GO_SS` method. The Semantic Similarity (SS) between enriched GO terms are calculated using `ViSEAGO::compute_SS_distances` method which is a wrapper of functions implemented in the `r BiocStyle::Biocpkg("GOSemSim")` package @pmid20179076. Among the SS algorithms between GO terms, 4 of them use information content (IC) of a GO term which is computed by the negative log probability of the term occurring in GO corpus. A rarely used term contains a greater amount of information. These IC-based mehods are *Resnik*, *Lin*, *Rel*, and *Jiang*. A Graph-based method, using the topology of GO graph structure to compute semantic similarity is also available with the *Wang* method. The built object `myGOs` contains all informations of enriched GO terms and computed SS distances between them.
 
 ```{r SS_build}
 ###################        
 # initialyse 
-myGOs<-ViSEAGO::build_GO_SS(gene2GO=myGENE2GO,enrich_GO_terms=BP_sResults)
+myGOs<-ViSEAGO::build_GO_SS(
+  gene2GO=myGENE2GO,
+  enrich_GO_terms=BP_sResults
+)
 
 ###################           
 # compute all available Semantic Similarity (SS) measures
-myGOs<-ViSEAGO::compute_SS_distances(myGOs,distance="Wang")
+myGOs<-ViSEAGO::compute_SS_distances(
+  myGOs,
+  distance="Wang"
+)
 ```
 
 # Visualization and interpretation of enriched GO terms
-
-```{r grViz_vis,echo=FALSE,eval=TRUE,fig.height=4} 
-###################
-# print diagram with focus on the visualization step
-ViSEAGO::pkgdiagram(x=c("white","white","white","white","black"))
-```
 
 ## Multi Dimensional Scaling of GO terms - A preview
 
@@ -297,7 +305,10 @@ ViSEAGO::MDSplot(myGOs)
 
 ###################           
 # print MDSplot
-ViSEAGO::MDSplot(myGOs,file="./data/output/mdsplot1.png")
+ViSEAGO::MDSplot(
+  myGOs,
+  file="./data/output/mdsplot1.png"
+)
 ```
 
 ## Clustering heatmap of GO terms
@@ -317,6 +328,7 @@ Enriched GO terms are ranked in a dendrogram as a result of a hierarchical clust
 Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
   myGOs,
   showIC=TRUE,
+  showGOlabels=TRUE,
   GO.tree=base::list(
     tree=base::list(
       distance="Wang",
@@ -337,7 +349,10 @@ Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 ```{r SS_Wang-wardD2_clusters-heatmap} 
 ###################           
 # Display the clusters-heatmap
-ViSEAGO::show_heatmap(Wang_clusters_wardD2,"GOterms")
+ViSEAGO::show_heatmap(
+  Wang_clusters_wardD2,
+  "GOterms"
+)
    
 ###################    
 # print the clusters-heatmap
@@ -428,19 +443,28 @@ Clusters of GO terms are ranked in a dendrogram and branches are colored dependi
 # GOclusters heatmap
 Wang_clusters_wardD2<-ViSEAGO::GOclusters_heatmap(
   Wang_clusters_wardD2,
-  tree=list(distance="BMA",aggreg.method="ward.D2")
+  tree=list(
+    distance="BMA",
+    aggreg.method="ward.D2"
+  )
 )
 ```
 
 ```{r SS_Wang-ward.D2_groups_heatmap_display} 
 ###################           
 # sisplay the GOClusters heatmap
-ViSEAGO::show_heatmap(Wang_clusters_wardD2,"GOclusters")
+ViSEAGO::show_heatmap(
+  Wang_clusters_wardD2,
+  "GOclusters"
+)
 
 ###################           
 # print the GOClusters heatmap in a file
-ViSEAGO::show_heatmap(Wang_clusters_wardD2,"GOclusters",
-"./data/output/Wang_clusters_wardD2_heatmap_groups.png")
+ViSEAGO::show_heatmap(
+  Wang_clusters_wardD2,
+  "GOclusters",
+  "./data/output/Wang_clusters_wardD2_heatmap_groups.png"
+)
 ```
 
 # Conclusion

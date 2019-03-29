@@ -12,6 +12,9 @@ or \code{\link{GO_clusters-class}} object from \code{\link{GOterms_heatmap}}.}
 
 \item{file}{table output file name (default to NULL).}
 }
+\value{
+display or print table
+}
 \description{
 This method is used to display or print the table for \code{\link{enrich_GO_terms-class}} or \code{\link{GO_clusters-class}} objects.
 }

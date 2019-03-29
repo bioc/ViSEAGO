@@ -32,7 +32,51 @@ GO group description is defined as the first common GO ancestor with the cluster
 The dendrogram branches are colored according to GO terms clusters.
 }
 \examples{
-\dontrun{
+###################
+# load data example
+utils::data(
+ myGOs,
+ package="ViSEAGO"
+)
+
+###################
+# compute GO terms Semantic Similarity distances
+myGOs<-ViSEAGO::compute_SS_distances(
+ myGOs,
+ distance="Wang"
+)
+
+##################
+# GOtermsHeatmap with default parameters
+Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
+ myGOs,
+ showIC=TRUE,
+ showGOlabels=TRUE,
+ GO.tree=base::list(
+  tree=base::list(
+   distance="Wang",
+   aggreg.method="ward.D2",
+   rotate=NULL
+  ),
+  cut=base::list(
+   dynamic=base::list(
+    pamStage=TRUE,
+    pamRespectsDendro=TRUE,
+    deepSplit=2,
+    minClusterSize =2
+   )
+  )
+ ),
+ samples.tree=NULL
+)
+
+###################
+# compute clusters of GO terms Semantic Similarity distances
+Wang_clusters_wardD2<-ViSEAGO::compute_SS_distances(
+ Wang_clusters_wardD2,
+ distance="BMA"
+)
+
 ###################
 # GOclusters heatmap
 Wang_clusters_wardD2<-ViSEAGO::GOclusters_heatmap(
@@ -43,7 +87,6 @@ Wang_clusters_wardD2<-ViSEAGO::GOclusters_heatmap(
   rotate=NULL
  )
 )
-}
 }
 \references{
 Matt Dowle and Arun Srinivasan (2017). data.table: Extension of `data.frame`. R package version 1.10.4. https://CRAN.R-project.org/package=data.table.

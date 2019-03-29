@@ -11,6 +11,7 @@
 #' @param file table output file name (default to NULL).
 #' @details This method displays an interactive table (if file=NULL) from \code{\link{enrich_GO_terms-class}} or \code{\link{GO_clusters-class}} objects.\cr
 #' The table could be printed by setting file argument.
+#' @return display or print table
 #' @references
 #' Yihui Xie (2016). DT: A Wrapper of the JavaScript Library 'DataTables'. R package version 0.2. https://CRAN.R-project.org/package=DT
 #' @examples

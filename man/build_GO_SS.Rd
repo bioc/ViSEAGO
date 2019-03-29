@@ -24,19 +24,21 @@ This method use \code{\link{annotate}} and \code{\link{merge_enrich_terms}} outp
 and compute the Information content (IC) using the internal code of \code{\link[GOSemSim]{godata}} function from \pkg{GOSemSim} package.
 }
 \examples{
-###################
-# load objects
-utils::data(
- list=base::c("myGENE2GO","BP_sResults"),
- package="ViSEAGO"
-)
-
+\dontrun{
 ###################
 # initialyse object for compute GO Semantic Similarity
 myGOs<-ViSEAGO::build_GO_SS(
  gene2GO=myGENE2GO,
  enrich_GO_terms=BP_sResults
 )
+}
+###################
+# load data example
+utils::data(
+ myGOs,
+ package="ViSEAGO"
+)
+
 }
 \references{
 Alexa A, Rahnenfuhrer J, Lengauer T. Improved scoring of functional groups from gene expression data by

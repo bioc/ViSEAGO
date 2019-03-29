@@ -41,7 +41,51 @@
 #' @return a \code{\link{GO_clusters-class}} object.
 #' @include GO_clusters.R
 #' @examples
-#' \dontrun{
+#' ###################
+#' # load data example
+#' utils::data(
+#'  myGOs,
+#'  package="ViSEAGO"
+#' )
+#'
+#' ###################
+#' # compute GO terms Semantic Similarity distances
+#' myGOs<-ViSEAGO::compute_SS_distances(
+#'  myGOs,
+#'  distance="Wang"
+#' )
+#'
+#' ##################
+#' # GOtermsHeatmap with default parameters
+#' Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
+#'  myGOs,
+#'  showIC=TRUE,
+#'  showGOlabels=TRUE,
+#'  GO.tree=base::list(
+#'   tree=base::list(
+#'    distance="Wang",
+#'    aggreg.method="ward.D2",
+#'    rotate=NULL
+#'   ),
+#'   cut=base::list(
+#'    dynamic=base::list(
+#'     pamStage=TRUE,
+#'     pamRespectsDendro=TRUE,
+#'     deepSplit=2,
+#'     minClusterSize =2
+#'    )
+#'   )
+#'  ),
+#'  samples.tree=NULL
+#' )
+#'
+#' ###################
+#' # compute clusters of GO terms Semantic Similarity distances
+#' Wang_clusters_wardD2<-ViSEAGO::compute_SS_distances(
+#'  Wang_clusters_wardD2,
+#'  distance="BMA"
+#' )
+#'
 #' ###################
 #' # GOclusters heatmap
 #' Wang_clusters_wardD2<-ViSEAGO::GOclusters_heatmap(
@@ -52,7 +96,6 @@
 #'   rotate=NULL
 #'  )
 #' )
-#' }
 #' @exportMethod GOclusters_heatmap
 setGeneric(name="GOclusters_heatmap",def=function(object,tree=base::list(distance="BMA",aggreg.method="ward.D2",rotate=NULL)){base::standardGeneric("GOclusters_heatmap")})
 

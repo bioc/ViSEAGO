@@ -45,7 +45,6 @@ This approch is highly similar to the strategy developed by Uniprot-GOA consorti
 \href{http://www.ebi.ac.uk/GOA/compara_go_annotations}{Ensembl Compara}.
 }
 \examples{
-\dontrun{
 ###################
 # load Mus musculus (mouse) GO annotations
 ###################
@@ -65,6 +64,7 @@ This approch is highly similar to the strategy developed by Uniprot-GOA consorti
  Ensembl<-ViSEAGO::Ensembl2GO()
  myGENE2GO<-ViSEAGO::annotate("mmusculus_gene_ensembl",Ensembl)
 
+\dontrun{
  ###################
  # from Uniprot
  Uniprot<-ViSEAGO::Uniprot2GO()
@@ -83,17 +83,11 @@ This approch is highly similar to the strategy developed by Uniprot-GOA consorti
  # Chicken GO annotation with the add of orthologs GO annotations
  EntrezGene<-ViSEAGO::EntrezGene2GO()
  myGENE2GO<-ViSEAGO::annotate("9031",EntrezGene, ortholog=TRUE)
-
+}
  ##################
  # display organisms supported by NCBI EntrezGene orthologs pipeline
  EntrezGene<-ViSEAGO::EntrezGene2GO()
  ViSEAGO::annotate(NULL,EntrezGene, ortholog=TRUE)
-
- ##################
- # Coturnix japonica GO annotations with adding orthologs
- EntrezGene<-ViSEAGO::EntrezGene2GO()
- myGENE2GO<-ViSEAGO::annotate("93934",EntrezGene, ortholog=TRUE)
- }
 }
 \references{
 Durinck S, Spellman P, Birney E and Huber W (2009). Mapping identifiers for the integration of genomic datasets with the R/Bioconductor

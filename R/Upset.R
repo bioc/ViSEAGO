@@ -10,6 +10,7 @@
 #' @details
 #' This function displays the intersections of enriched GO terms (p<0.01) between all results provided by \code{\link{enrich_GO_terms-class}}
 #' or \code{\link{GO_clusters-class}} objects. The intersections are shown in an upset plot and printed in a table.
+#' @return print table and upset.
 #' @include enrich_GO_terms.R GO_clusters.R
 #' @examples
 #' ##################
@@ -29,7 +30,9 @@ setMethod("Upset",definition=function(object,file){
 
   ###################
   # check the class
-  if(!base::class(object)%in%c("enrich_GO_terms","GO_clusters"))base::stop("object must be ViSEAGO::merge_enrich_terms() or from ViSEAGO::GOterms_heatmap()")
+  if(!base::class(object)%in%c("enrich_GO_terms","GO_SS","GO_clusters")){
+    base::stop("object must be enrich_GO_terms, GO_SS, or GO_clusters class objects")
+  }
 
   ##################
   # extract data.table from enrich_GO_terms or GO_clusters class object.

@@ -12,7 +12,6 @@
 #' Csardi G, Nepusz T: The igraph software package for complex network research, InterJournal, Complex Systems 1695. 2006. http://igraph.org.
 #' @include GO_clusters.R
 #' @examples
-#' \dontrun{
 #' ###################
 #' # clusters to compare
 #' clusters<-base::list(
@@ -23,9 +22,13 @@
 #'  Wang="Wang_clusters_wardD2"
 #' )
 #'
+#' \dontrun{
 #' ###################
 #' # global dendrogram clustering correlation
-#' clust_cor<-ViSEAGO::clusters_cor(clusters,method="adjusted.rand")
+#' clust_cor<-ViSEAGO::clusters_cor(
+#'  clusters,
+#'  method="adjusted.rand"
+#' )
 #' }
 #' @exportMethod clusters_cor
 setGeneric(name="clusters_cor",def=function(clusters,method="adjusted.rand") {standardGeneric("clusters_cor")})

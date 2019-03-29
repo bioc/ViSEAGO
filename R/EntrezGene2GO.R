@@ -30,7 +30,11 @@ EntrezGene2GO=function(){
 
     ###################
     # import Gene to Gene Ontology from NCBI Gene database
-    utils::download.file("ftp://ftp.ncbi.nih.gov/gene/DATA/gene2go.gz",quiet=TRUE,destfile = "gene2go.gz")
+    utils::download.file(
+      "ftp://ftp.ncbi.nih.gov/gene/DATA/gene2go.gz",
+      quiet=TRUE,
+      destfile = "gene2go.gz"
+    )
 
     ##################
     #  uncompress
@@ -38,7 +42,11 @@ EntrezGene2GO=function(){
 
     ##################
     # read the file (linux and windows)
-    gene2go=data.table::fread("gene2go",verbose=F,showProgress=F)
+    gene2go=data.table::fread(
+      "gene2go",
+      verbose=FALSE,
+      showProgress=FALSE
+    )
 
     ###################
     # unlink gz file

@@ -11,6 +11,9 @@ Upset(object, file = "./upset.xls")
 
 \item{file}{output file name (default to "./upset.xls")}
 }
+\value{
+print table and upset.
+}
 \description{
 This method allows to visualize GO terms intersections between results of enrichment tests.
 }

@@ -50,7 +50,6 @@
 #' Matt Dowle and Arun Srinivasan (2017). data.table: Extension of data.frame. R package version 1.10.4. https://CRAN.R-project.org/package=data.table.
 #' @include genomic_ressource.R
 #' @examples
-#' \dontrun{
 #' ###################
 #' # load Mus musculus (mouse) GO annotations
 #' ###################
@@ -70,6 +69,7 @@
 #'  Ensembl<-ViSEAGO::Ensembl2GO()
 #'  myGENE2GO<-ViSEAGO::annotate("mmusculus_gene_ensembl",Ensembl)
 #'
+#' \dontrun{
 #'  ###################
 #'  # from Uniprot
 #'  Uniprot<-ViSEAGO::Uniprot2GO()
@@ -88,17 +88,11 @@
 #'  # Chicken GO annotation with the add of orthologs GO annotations
 #'  EntrezGene<-ViSEAGO::EntrezGene2GO()
 #'  myGENE2GO<-ViSEAGO::annotate("9031",EntrezGene, ortholog=TRUE)
-#'
+#' }
 #'  ##################
 #'  # display organisms supported by NCBI EntrezGene orthologs pipeline
 #'  EntrezGene<-ViSEAGO::EntrezGene2GO()
 #'  ViSEAGO::annotate(NULL,EntrezGene, ortholog=TRUE)
-#'
-#'  ##################
-#'  # Coturnix japonica GO annotations with adding orthologs
-#'  EntrezGene<-ViSEAGO::EntrezGene2GO()
-#'  myGENE2GO<-ViSEAGO::annotate("93934",EntrezGene, ortholog=TRUE)
-#'  }
 #' @exportMethod annotate
 setGeneric(name="annotate",def=function(id,object,ortholog=FALSE){standardGeneric("annotate")})
 

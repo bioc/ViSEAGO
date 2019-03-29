@@ -19,7 +19,6 @@ a distance or a correlation matrix.
 Build a distance or correlation matrix between partitions from dendrograms.
 }
 \examples{
-\dontrun{
 ###################
 # clusters to compare
 clusters<-base::list(
@@ -30,9 +29,13 @@ clusters<-base::list(
  Wang="Wang_clusters_wardD2"
 )
 
+\dontrun{
 ###################
 # global dendrogram clustering correlation
-clust_cor<-ViSEAGO::clusters_cor(clusters,method="adjusted.rand")
+clust_cor<-ViSEAGO::clusters_cor(
+ clusters,
+ method="adjusted.rand"
+)
 }
 }
 \references{

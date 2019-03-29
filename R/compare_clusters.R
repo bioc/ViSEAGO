@@ -15,7 +15,6 @@
 #'  plotly: Create Interactive Web Graphics via 'plotly.js'. R package version 4.6.0. https://CRAN.R-project.org/package=plotly
 #' @include GO_clusters.R
 #' @examples
-#' \dontrun{
 #' ###################
 #' # clusters to compare
 #' clusters<-base::list(
@@ -26,6 +25,7 @@
 #'  Wang="Wang_clusters_wardD2"
 #' )
 #'
+#' \dontrun{
 #' ###################
 #' # clusters content comparisons
 #' clusters_comp<-ViSEAGO::compare_clusters(clusters)

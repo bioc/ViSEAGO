@@ -30,15 +30,40 @@
 #' @exportMethod GOcount
 setGeneric(name="GOcount",def=function(object,file=NULL){standardGeneric("GOcount")})
 
-setMethod("GOcount",signature="enrich_GO_terms",definition=function(object,file) {
+setMethod("GOcount",definition=function(object,file) {
 
-  ###################
-  # data
-  data=methods::slot(object,"data")
+  #################
+  # check class
+  if(!base::class(object)%in%c("enrich_GO_terms","GO_SS","GO_clusters")){
+    base::stop("object must be enrich_GO_terms, GO_SS, or GO_clusters class objects")
+  }
+
+  #################
+  # Extract data
+  if(methods::is(object,"enrich_GO_terms")){
+
+    ###################
+    # data
+    data<-methods::slot(
+      object,
+      "data"
+    )
+  }else{
+
+    ###################
+    # data
+    data<-methods::slot(
+      methods::slot(
+        object,
+        "enrich_GOs"
+        ),
+      "data"
+    )
+  }
 
   ###################
   # find pvalues columns
-  pvalues=base::grep("\\.pvalue",base::names(data))
+  pvalues<-base::grep("\\.pvalue",base::names(data))
 
   ###################
   # check more than one pvalues

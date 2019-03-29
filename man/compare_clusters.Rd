@@ -21,7 +21,6 @@ Build an interactive heatmap of common GO terms frequency between partitions fro
 \code{\link{GO_clusters-class}} objects.
 }
 \examples{
-\dontrun{
 ###################
 # clusters to compare
 clusters<-base::list(
@@ -32,6 +31,7 @@ clusters<-base::list(
  Wang="Wang_clusters_wardD2"
 )
 
+\dontrun{
 ###################
 # clusters content comparisons
 clusters_comp<-ViSEAGO::compare_clusters(clusters)

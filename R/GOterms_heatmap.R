@@ -91,7 +91,20 @@
 #' H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2009.
 #' @include GO_clusters.R
 #' @examples
-#' \dontrun{
+#' ###################
+#' # load data example
+#' utils::data(
+#'  myGOs,
+#'  package="ViSEAGO"
+#' )
+#'
+#' ###################
+#' # compute GO terms Semantic Similarity distances
+#' myGOs<-ViSEAGO::compute_SS_distances(
+#'  myGOs,
+#'  distance="Wang"
+#' )
+#'
 #' ##################
 #' # GOtermsHeatmap with default parameters
 #' Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
@@ -115,7 +128,6 @@
 #'  ),
 #'  samples.tree=NULL
 #' )
-#' }
 #' @exportMethod GOterms_heatmap
 setGeneric(name="GOterms_heatmap",def=function(
   myGOs,

@@ -37,6 +37,19 @@ knitr::opts_chunk$set(
 In the overview (see`utils::vignette("1_overview", package ="ViSEAGO")`), we explained how to use `r BiocStyle::Biocpkg("ViSEAGO")` package.
 In this vignette we explain how to explore the effect of the GO semantic similarity algorithms on the tree structure, and the effect of the trees clustering based on the mouse_bioconductor vignette dataset (see `utils::vignette("2_mouse_bioconductor", package ="ViSEAGO")`).
 
+# Data{-}
+
+Vignette build convenience (for less build time and size) need that data were pre-calculated (provided by the package), and that illustrations were not interactive.
+
+```{r vignette_data_used}
+###################
+# load vignette data
+utils::data(
+  myGOs,
+  package="ViSEAGO"
+)
+```
+
 # Clusters-heatmap of GO terms
 
 The GO annotations of genes created and enriched GO terms are combined using `ViSEAGO::build_GO_SS`. The Semantic Similarity (SS) between enriched GO terms are calculated using `ViSEAGO::compute_SS_distances` method. We compute all distances methods with  *Resnik*, *Lin*, *Rel*, *Jiang*, and *Wang* algorithms  implemented in the `r BiocStyle::Biocpkg("GOSemSim")` package @pmid20179076. The built object `myGOs` contains all informations of enriched GO terms and the SS distances between them.
@@ -44,10 +57,6 @@ The GO annotations of genes created and enriched GO terms are combined using `Vi
 Then, a hierarchical clustering method using `ViSEAGO::GOterms_heatmap` is performed based on each SS distance between the enriched GO terms using the `ward.D2` aggregation criteria.  Clusters of enriched GO terms are obtained by cutting branches off the dendrogram. Here, we choose a dynamic branch cutting method based on the shape of clusters using `r BiocStyle::CRANpkg("dynamicTreeCut")` [@pmid18024473; @dynamicTreeCut].
 
 ```{r SS_build,eval=FALSE}
-###################        
-# create GO_SS-class object
-myGOs<-ViSEAGO::build_GO_SS(gene2GO=myGENE2GO,enrich_GO_terms=BP_sResults)
-
 ###################           
 # compute Semantic Similarity (SS)
 myGOs<-ViSEAGO::compute_SS_distances(
@@ -64,6 +73,7 @@ myGOs<-ViSEAGO::compute_SS_distances(
 Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
   myGOs,
   showIC=TRUE,
+  showGOlabels=TRUE,
   GO.tree=base::list(
     tree=base::list(
       distance="Resnik",
@@ -88,6 +98,7 @@ Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 Lin_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
   myGOs,
   showIC=TRUE,
+  showGOlabels=TRUE,
   GO.tree=base::list(
     tree=base::list(
       distance="Lin",
@@ -112,6 +123,7 @@ Lin_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 Rel_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
   myGOs,
   showIC=TRUE,
+  showGOlabels=TRUE,
   GO.tree=base::list(
     tree=base::list(
       distance="Rel",
@@ -136,6 +148,7 @@ Rel_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 Jiang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
   myGOs,
   showIC=TRUE,
+  showGOlabels=TRUE,
   GO.tree=base::list(
     tree=base::list(
       distance="Jiang",
@@ -160,6 +173,7 @@ Jiang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
   myGOs,
   showIC=TRUE,
+  showGOlabels=TRUE,
   GO.tree=base::list(
     tree=base::list(
       distance="Wang",
@@ -188,11 +202,26 @@ The correlation matrix can be visualized with the nice `corrplot::corrplot` func
 ###################
 # build the list of trees
 dend<- dendextend::dendlist(
-  "Resnik"=methods::slot(Resnik_clusters_wardD2,"dendrograms")$GO,
-  "Lin"=methods::slot(Lin_clusters_wardD2,"dendrograms")$GO,
-  "Rel"=methods::slot(Rel_clusters_wardD2,"dendrograms")$GO,
-  "Jiang"=methods::slot(Jiang_clusters_wardD2,"dendrograms")$GO,
-  "wang"=methods::slot(Wang_clusters_wardD2,"dendrograms")$GO
+  "Resnik"=methods::slot(
+    Resnik_clusters_wardD2,
+    "dendrograms"
+  )$GO,
+  "Lin"=methods::slot(
+    Lin_clusters_wardD2,
+    "dendrograms"
+  )$GO,
+  "Rel"=methods::slot(
+    Rel_clusters_wardD2,
+    "dendrograms"
+  )$GO,
+  "Jiang"=methods::slot(
+    Jiang_clusters_wardD2,
+    "dendrograms"
+  )$GO,
+  "wang"=methods::slot(
+    Wang_clusters_wardD2,
+    "dendrograms"
+  )$GO
 )
 
 ###################
@@ -225,13 +254,22 @@ The quality of the alignment of the two trees can be calculated with `dendextend
 ###################
 # dendrogram list
 dl<-dendextend::dendlist(
-  methods::slot(Resnik_clusters_wardD2,"dendrograms")$GO,
-  methods::slot(Wang_clusters_wardD2,"dendrograms")$GO
+  methods::slot(
+    Resnik_clusters_wardD2,
+    "dendrograms"
+  )$GO,
+  methods::slot(
+    Wang_clusters_wardD2,
+    "dendrograms"
+  )$GO
 )
 
 ###################
 # untangle the trees (efficient but very highly time consuming)
-tangle<-dendextend::untangle(dl,"step2side")
+tangle<-dendextend::untangle(
+  dl,
+  "step2side"
+)
 
 ###################
 # display the entanglement
@@ -273,7 +311,10 @@ clusters=base::list(
 
 ###################
 # global dendrogram partition correlation
-clust_cor<-ViSEAGO::clusters_cor(clusters,method="adjusted.rand")
+clust_cor<-ViSEAGO::clusters_cor(
+  clusters,
+  method="adjusted.rand"
+)
 ```
 
 ```{r parameters_clusters_correlation_print}

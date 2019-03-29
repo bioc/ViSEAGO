@@ -29,7 +29,13 @@ provided by \code{\link{GO_clusters-class}} object.\cr
 Semantic Similarity computations are based on \code{\link[GOSemSim]{mgoSim}} method from the \pkg{GoSemSim} package.
 }
 \examples{
-\dontrun{
+###################
+# load data example
+utils::data(
+ myGOs,
+ package="ViSEAGO"
+)
+
 ###################
 # compute GO terms Semantic Similarity distances
 myGOs<-ViSEAGO::compute_SS_distances(
@@ -37,6 +43,7 @@ myGOs<-ViSEAGO::compute_SS_distances(
  distance=c("Resnik","Lin","Rel","Jiang","Wang")
 )
 
+\dontrun{
 ###################
 # compute clusters of GO terms Semantic Similarity distances
 Wang_clusters_wardD2<-ViSEAGO::compute_SS_distances(

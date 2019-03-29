@@ -29,25 +29,44 @@
 #'  ###################
 #'  # load genes identifiants (GeneID,ENS...) universe/background (Expressed genes)
 #'  background_L<-base::scan(
-#'   base::system.file("extdata/data/input","background_L.txt",package = "ViSEAGO"),
-#'   quiet=T,what=""
+#'   base::system.file(
+#'   "extdata/data/input",
+#'   "background_L.txt",
+#'   package = "ViSEAGO"
+#'   ),
+#'   quiet=TRUE,
+#'   what=""
 #'  )
 #'
 #'  ###################
 #'  # load Differentialy Expressed (DE) gene identifiants from files
 #'  L_pregnantvslactateDE<-base::scan(
-#'   base::system.file("extdata/data/input","L_pregnantvslactateDE.txt",package = "ViSEAGO"),
-#'   quiet=T,what=""
+#'   base::system.file(
+#'    "extdata/data/input",
+#'    "L_pregnantvslactateDE.txt",
+#'     package = "ViSEAGO"
+#'   ),
+#'   quiet=TRUE,
+#'   what=""
 #'  )
 #'
 #'  L_virginvslactateDE<-base::scan(
-#'   base::system.file("extdata/data/input","L_virginvslactateDE.txt",package = "ViSEAGO"),
-#'   quiet=T,what=""
+#'   base::system.file(
+#'    "extdata/data/input",
+#'    "L_virginvslactateDE.txt",
+#'    package = "ViSEAGO"
+#'  ),
+#'   quiet=TRUE,what=""
 #'  )
 #'
 #'  L_virginvspregnantDE<-base::scan(
-#'   base::system.file("extdata/data/input","L_virginvspregnantDE.txt",package = "ViSEAGO"),
-#'   quiet=T,what=""
+#'   base::system.file(
+#'   "extdata/data/input",
+#'   "L_virginvspregnantDE.txt",
+#'    package = "ViSEAGO"
+#'   ),
+#'   quiet=TRUE,
+#'   what=""
 #'  )
 #'
 #' ###################
@@ -132,7 +151,9 @@ setMethod("merge_enrich_terms",definition=function(Input){
 
       ###################
       # check existance
-      if(!base::all(available))base::stop(base::paste("objects not found:",paste(x[!available],collapse=", "),sep="\n"))
+      if(!base::all(available)){
+        base::stop(base::paste("objects not found:",paste(x[!available],collapse=", "),sep="\n"))
+      }
 
       ###################
       # get objects
@@ -226,7 +247,7 @@ setMethod("merge_enrich_terms",definition=function(Input){
 
             ###################
             # feasibles genes significant
-            feasible_genes_significant=base::table(methods::slot(x[[y]],"allScores")==1 & methods::slot(x[[y]],"feasible")==T)[2],
+            feasible_genes_significant=base::table(methods::slot(x[[y]],"allScores")==1 & methods::slot(x[[y]],"feasible")==TRUE)[2],
 
             ###################
             # nodes with at least  x genes
@@ -500,7 +521,7 @@ setMethod("merge_enrich_terms",definition=function(Input){
 
           # ###################
           # load GeneID and symbols
-          genes<-merge(genes,annot,by.x="Significant_genes",by.y="ENTREZID",all.x=T)
+          genes<-merge(genes,annot,by.x="Significant_genes",by.y="ENTREZID",all.x=TRUE)
 
         }else{
 
@@ -591,7 +612,7 @@ setMethod("merge_enrich_terms",definition=function(Input){
 
           ###################
           # locate elements
-          m1=base::gregexpr(base::paste(pattern,collapse=""),query,perl=T)
+          m1=base::gregexpr(base::paste(pattern,collapse=""),query,perl=TRUE)
 
           ###################
           # extract elements
@@ -616,7 +637,7 @@ setMethod("merge_enrich_terms",definition=function(Input){
 
           ###################
           # load GeneID and symbols
-          genes<-merge(genes,annot,by.x="Significant_genes",by.y="Id",all.x=T)
+          genes<-merge(genes,annot,by.x="Significant_genes",by.y="Id",all.x=TRUE)
 
         }else{
 
@@ -654,7 +675,7 @@ setMethod("merge_enrich_terms",definition=function(Input){
 
           ###################
           # load GeneID and symbols
-          genes<-merge(genes,annot,by.x="Significant_genes",by.y="ensembl_gene_id",all.x=T)
+          genes<-merge(genes,annot,by.x="Significant_genes",by.y="ensembl_gene_id",all.x=TRUE)
 
         }else{
 
@@ -741,7 +762,7 @@ setMethod("merge_enrich_terms",definition=function(Input){
 
     ##################
     # return input params
-    base::assign("input",base::c(input,list(algorithms)),inherits=T)
+    base::assign("input",base::c(input,list(algorithms)),inherits=TRUE)
 
     ###################
     # combine results

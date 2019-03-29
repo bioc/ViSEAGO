@@ -22,19 +22,21 @@
 #' Herve Pages, Marc Carlson, Seth Falcon and Nianhua Li (2017). AnnotationDbi: Annotation Database Interface. R package version 1.38.0.
 #' @include GO_SS.R
 #' @examples
-#' ###################
-#' # load objects
-#' utils::data(
-#'  list=base::c("myGENE2GO","BP_sResults"),
-#'  package="ViSEAGO"
-#' )
-#'
+#' \dontrun{
 #' ###################
 #' # initialyse object for compute GO Semantic Similarity
 #' myGOs<-ViSEAGO::build_GO_SS(
 #'  gene2GO=myGENE2GO,
 #'  enrich_GO_terms=BP_sResults
 #' )
+#' }
+#' ###################
+#' # load data example
+#' utils::data(
+#'  myGOs,
+#'  package="ViSEAGO"
+#' )
+#'
 #' @exportMethod build_GO_SS
 setGeneric(name="build_GO_SS",def=function(gene2GO,enrich_GO_terms){standardGeneric("build_GO_SS")})
 

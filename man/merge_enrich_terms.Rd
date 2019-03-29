@@ -30,25 +30,44 @@ at least once and provides all mentionned columns.
  ###################
  # load genes identifiants (GeneID,ENS...) universe/background (Expressed genes)
  background_L<-base::scan(
-  base::system.file("extdata/data/input","background_L.txt",package = "ViSEAGO"),
-  quiet=T,what=""
+  base::system.file(
+  "extdata/data/input",
+  "background_L.txt",
+  package = "ViSEAGO"
+  ),
+  quiet=TRUE,
+  what=""
  )
 
  ###################
  # load Differentialy Expressed (DE) gene identifiants from files
  L_pregnantvslactateDE<-base::scan(
-  base::system.file("extdata/data/input","L_pregnantvslactateDE.txt",package = "ViSEAGO"),
-  quiet=T,what=""
+  base::system.file(
+   "extdata/data/input",
+   "L_pregnantvslactateDE.txt",
+    package = "ViSEAGO"
+  ),
+  quiet=TRUE,
+  what=""
  )
 
  L_virginvslactateDE<-base::scan(
-  base::system.file("extdata/data/input","L_virginvslactateDE.txt",package = "ViSEAGO"),
-  quiet=T,what=""
+  base::system.file(
+   "extdata/data/input",
+   "L_virginvslactateDE.txt",
+   package = "ViSEAGO"
+ ),
+  quiet=TRUE,what=""
  )
 
  L_virginvspregnantDE<-base::scan(
-  base::system.file("extdata/data/input","L_virginvspregnantDE.txt",package = "ViSEAGO"),
-  quiet=T,what=""
+  base::system.file(
+  "extdata/data/input",
+  "L_virginvspregnantDE.txt",
+   package = "ViSEAGO"
+  ),
+  quiet=TRUE,
+  what=""
  )
 
 ###################

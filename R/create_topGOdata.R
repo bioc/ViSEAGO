@@ -26,14 +26,14 @@
 #'  # load genes identifiants (GeneID,ENS...) background (Expressed genes)
 #'  background_L<-base::scan(
 #'   base::system.file("extdata/data/input","background_L.txt",package = "ViSEAGO"),
-#'   quiet=T,what=""
+#'   quiet=TRUE,what=""
 #'  )
 #'
 #'  ###################
 #'  # load Differentialy Expressed (DE) gene identifiants from files
 #'  L_pregnantvslactateDE<-base::scan(
 #'   base::system.file("extdata/data/input","L_pregnantvslactateDE.txt",package = "ViSEAGO"),
-#'   quiet=T,what=""
+#'   quiet=TRUE,what=""
 #'  )
 #'
 #' ###################

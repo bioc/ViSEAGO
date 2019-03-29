@@ -1,21 +1,11 @@
-#' @title Bioconductor dataset
-#' @description  an example of object returned by \code{\link{Bioconductor2GO}} method.
+#' @title myGOs dataset
+#' @description  an example of object returned by \code{\link{build_GO_SS}} method
+#' from mouse functional analysis of mouse mammary gland RNA-Seq (2_mouse_bioconductor vignette)
 #' @importFrom utils data
 #' @docType data
-#' @usage data(Bioconductor,package="ViSEAGO")
-#' @format An object of class \code{\link{genomic_ressource-class}}.
-"Bioconductor"
-#' @title BP_sResults dataset
-#' @description  an example of object returned by \code{\link{merge_enrich_terms}} method from functional analysis of mouse mammary gland RNA-Seq.
-#' @importFrom utils data
-#' @docType data
-#' @usage data(BP_sResults,package="ViSEAGO")
-#' @format An object of class \code{\link{enrich_GO_terms-class}}.
-"BP_sResults"
-#' @title myGENE2GO dataset
-#' @description  an example of object returned by \code{\link{annotate}} method from mouse bioconductor annotation.
-#' @importFrom utils data
-#' @docType data
-#' @usage data(myGENE2GO,package="ViSEAGO")
-#' @format An object of class \code{\link{gene2GO-class}}.
-"myGENE2GO"
+#' @usage data(myGOs,package="ViSEAGO")
+#' @format An object of class \code{\link{GO_SS-class}}.
+"myGOs"
+
+
+

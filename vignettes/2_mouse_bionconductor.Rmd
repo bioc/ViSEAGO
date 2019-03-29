@@ -40,17 +40,13 @@ As described in edgeR user guide, we tested for significant differential express
 
 # Data{-}
 
-Vignette build convenience (for less build time and size) need that data were pre-calculated (provided by the package) and that illustrations were not interactive.
+Vignette build convenience (for less build time and size) need that data were pre-calculated (provided by the package), and that illustrations were not interactive.
 
 ```{r vignette_data_used}
 ###################
 # load vignette data
 utils::data(
-  list=base::c(
-    "Bioconductor",
-    "myGENE2GO",
-    "BP_sResults"
-  ),
+  myGOs,
   package="ViSEAGO"
 )
 ```
@@ -63,23 +59,43 @@ We load examples files from `r BiocStyle::Biocpkg("ViSEAGO")` package using `bas
 ###################
 # load genes identifiants (GeneID,ENS...) background (expressed genes) 
 background<-base::scan(
-  base::system.file("extdata/data/input","background_L.txt",package = "ViSEAGO"),
-  quiet=TRUE,what=""
+  base::system.file(
+    "extdata/data/input",
+    "background_L.txt",
+    package = "ViSEAGO"
+  ),
+  quiet=TRUE,
+  what=""
 )
 
 ###################
 # load Differentialy Expressed (DE) gene identifiants from lists
 PregnantvsLactateDE<-base::scan(
-  base::system.file("extdata/data/input","pregnantvslactateDE.txt", package = "ViSEAGO"),
-  quiet=TRUE,what=""
+  base::system.file(
+    "extdata/data/input",
+    "pregnantvslactateDE.txt",
+    package = "ViSEAGO"
+  ),
+  quiet=TRUE,
+  what=""
 )
 VirginvsLactateDE<-base::scan(
-  base::system.file("extdata/data/input","virginvslactateDE.txt", package = "ViSEAGO"),
-  quiet=TRUE,what=""
+  base::system.file(
+    "extdata/data/input",
+    "virginvslactateDE.txt",
+    package = "ViSEAGO"
+  ),
+  quiet=TRUE,
+  what=""
 )
 VirginvsPregnantDE<-base::scan(
-  base::system.file("extdata/data/input","virginvspregnantDE.txt", package = "ViSEAGO"),
-  quiet=TRUE,what=""
+  base::system.file(
+    "extdata/data/input",
+    "virginvspregnantDE.txt",
+    package = "ViSEAGO"
+  ),
+  quiet=TRUE,
+  what=""
 )
 ```
 
@@ -97,20 +113,37 @@ In this study, we build a `myGENE2GO` object using the Bioconductor `r BiocStyle
 
 <u>NB</u>: Don't forget to check if the last current annotation database version is installed in your R session! See `ViSEAGO::available_organisms(Bioconductor)`.
 
-```{r Genomic-ressources_target-species_GO,eval=FALSE}
+```{r Genomic-ressources,eval=FALSE}
 ###################
 # connect to Bioconductor
 Bioconductor<-ViSEAGO::Bioconductor2GO()
 
 ###################
 # load GO annotations from Bioconductor
-myGENE2GO<-ViSEAGO::annotate("org.Mm.eg.db",Bioconductor)
+myGENE2GO<-ViSEAGO::annotate(
+  "org.Mm.eg.db",
+  Bioconductor
+)
 ```
  
-```{r Genomic-ressources_target-species_dipslay_print}
+```{r Genomic-ressources_show,eval=FALSE}
 ###################
 # display summary
 myGENE2GO
+```
+
+```{r Genomic-ressources_display,echo=FALSE}
+base::cat(
+"- object class: gene2GO
+- database: Bioconductor
+- stamp/version: 2018-Apr4
+- organism id: org.Mm.eg.db
+
+GO annotations:
+- Molecular Function (MF): 23049 annotated genes with 92018 terms (4118 unique terms)
+- Biological Process (BP): 23843 annotated genes with 162583 terms (11881 unique terms)
+- Cellular Component (CC): 23583 annotated genes with 102801 terms (1662 unique terms)"  
+)
 ```
 
 # Functional GO enrichment
@@ -192,74 +225,25 @@ BP_sResults<-ViSEAGO::merge_enrich_terms(
 )
 ```
 
-```{r Enrichment_merge_show}
+```{r Enrichment_merge_show,eval=FALSE}
 ###################
 # display a summary
 BP_sResults
 ```
 
-```{r Enrichment_merge_display,eval=FALSE}
-###################
-# show table in interactive mode
-ViSEAGO::show_table(BP_sResults)
-```
-
-<img src=`r base::system.file("extdata/data/output","bioconductor_table1.png",package="ViSEAGO")` alt="bioconductor_table1" style="width:100%;height:100%;"/>
-
-## Graphs of GO enrichment tests
-
-Several graphs summarize important features. An interactive barchart showing the number of GO terms enriched or not in each comparison, using `ViSEAGO::GOcount` method. Intersections of lists of enriched GO terms between comparisons are displayed in an Upset plot using `ViSEAGO::Upset` method.
-
-```{r Enrichment_merge_count,eval=FALSE}
-###################           
-# barchart of significant (or not) GO terms by comparison
-ViSEAGO::GOcount(BP_sResults)
-```
-
-<img src=`r base::system.file("extdata/data/output","gocount.png",package="ViSEAGO")` alt="gocount" style="width:100%;height:100%;"/>
-
-```{r Enrichment_merge_interactions,eval=FALSE}
-###################           
-# display intersections
-ViSEAGO::Upset(BP_sResults,file="./data/output/upset.xls")
-```
-
-<img src=`r base::system.file("extdata/data/output","upset.png",package="ViSEAGO")` alt="upset" style="width:100%;height:100%;"/>
-
-# GO terms Semantic Similarity
-
-GO annotations of genes created at a previous step and enriched GO terms are combined using `ViSEAGO::build_GO_SS` method. The Semantic Similarity (SS) between enriched GO terms are calculated using `ViSEAGO::compute_SS_distances` method which is a wrapper of functions implemented in the `r BiocStyle::Biocpkg("GOSemSim")` package @pmid20179076. Here, we choose *Wang* method based on the topology of GO graph structure. The built object `myGOs` contains all informations of enriched GO terms and the SS distances between them.
-
-```{r SS_build,eval=FALSE}
-###################        
-# create GO_SS-class object
-myGOs<-ViSEAGO::build_GO_SS(
-  gene2GO=myGENE2GO,
-  enrich_GO_terms=BP_sResults
-)
-
-###################           
-# compute Semantic Similarity (SS)
-myGOs<-ViSEAGO::compute_SS_distances(
-  myGOs,
-  distance="Wang"
-)
-```
-
-```{r SS_build_compute_show,eval=FALSE}
-###################
-# display a summary
-myGOs
-```
-
-```{r SS_build_compute_display,echo=FALSE}
-###################
-# display a summary
+```{r Enrichment_merge_display,echo=FALSE}
 base::cat(
-"- object class: GO_SS
+"- object class: gene2GO
 - database: Bioconductor
 - stamp/version: 2018-Apr4
 - organism id: org.Mm.eg.db
+
+GO annotations:
+- Molecular Function (MF): 23049 annotated genes with 92018 terms (4118 unique terms)
+- Biological Process (BP): 23843 annotated genes with 162583 terms (11881 unique terms)
+- Cellular Component (CC): 23583 annotated genes with 102801 terms (1662 unique terms)
+> BP_sResults
+- object class: enrich_GO_terms
 - ontology: BP
 - input:
         PregnantvsLactate: elim
@@ -327,11 +311,70 @@ base::cat(
         genes_nodeSize: 5
         Nontrivial_nodes: 8143 
  
-- enrich GOs data.table: 509 GO terms of 3 conditions.
+- enrich GOs data.table (p<0.01 in at least one list): 509 GO terms of 3 conditions.
         PregnantvsLactate : 198 terms
         VirginvsLactate : 151 terms
-        VirginvsPregnant : 232 terms
-- terms distances:  Wang)")
+        VirginvsPregnant : 232 terms"
+)
+```
+
+```{r Enrichment_merge_table,eval=FALSE}
+###################
+# show table in interactive mode
+ViSEAGO::show_table(BP_sResults)
+```
+
+<img src=`r base::system.file("extdata/data/output","bioconductor_table1.png",package="ViSEAGO")` alt="bioconductor_table1" style="width:100%;height:100%;"/>
+
+## Graphs of GO enrichment tests
+
+Several graphs summarize important features. An interactive barchart showing the number of GO terms enriched or not in each comparison, using `ViSEAGO::GOcount` method. Intersections of lists of enriched GO terms between comparisons are displayed in an Upset plot using `ViSEAGO::Upset` method.
+
+```{r Enrichment_merge_count,eval=FALSE}
+###################           
+# barchart of significant (or not) GO terms by comparison
+ViSEAGO::GOcount(BP_sResults)
+```
+
+<img src=`r base::system.file("extdata/data/output","gocount.png",package="ViSEAGO")` alt="gocount" style="width:100%;height:100%;"/>
+
+```{r Enrichment_merge_interactions,eval=FALSE}
+###################           
+# display intersections
+ViSEAGO::Upset(
+  BP_sResults,
+  file="./data/output/upset.xls"
+)
+```
+
+<img src=`r base::system.file("extdata/data/output","upset.png",package="ViSEAGO")` alt="upset" style="width:100%;height:100%;"/>
+
+# GO terms Semantic Similarity
+
+GO annotations of genes created at a previous step and enriched GO terms are combined using `ViSEAGO::build_GO_SS` method. The Semantic Similarity (SS) between enriched GO terms are calculated using `ViSEAGO::compute_SS_distances` method which is a wrapper of functions implemented in the `r BiocStyle::Biocpkg("GOSemSim")` package @pmid20179076. Here, we choose *Wang* method based on the topology of GO graph structure. The built object `myGOs` contains all informations of enriched GO terms and the SS distances between them.
+
+```{r SS_build,eval=FALSE}
+###################        
+# create GO_SS-class object
+myGOs<-ViSEAGO::build_GO_SS(
+  gene2GO=myGENE2GO,
+  enrich_GO_terms=BP_sResults
+)
+```
+
+```{r SS_compute}
+###################           
+# compute Semantic Similarity (SS)
+myGOs<-ViSEAGO::compute_SS_distances(
+  myGOs,
+  distance="Wang"
+)
+```
+
+```{r SS_build_compute_show}
+###################
+# display a summary
+myGOs
 ```
 
 # Visualization and interpretation of enriched GO terms
@@ -383,7 +426,10 @@ Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 ```{r SS_Wang-wardD2_heatmap_display,eval=FALSE} 
 ###################           
 # display the heatmap
-ViSEAGO::show_heatmap(Wang_clusters_wardD2,"GOterms")
+ViSEAGO::show_heatmap(
+  Wang_clusters_wardD2,
+  "GOterms"
+)
 ```
 
 <img src=`r base::system.file("extdata/data/output","bioconductor_GOtermsheatmap.png",package="ViSEAGO")` alt="GOtermsheatmap"  style="width:100%;height:100%;"/>
