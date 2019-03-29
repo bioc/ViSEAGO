@@ -7,7 +7,7 @@
 Upset(object, file = "./upset.xls")
 }
 \arguments{
-\item{object}{an \code{\link{enrich_GO_terms-class}} object from \code{\link{merge_enrich_terms}}}
+\item{object}{an \code{\link{enrich_GO_terms-class}} or \code{\link{GO_clusters-class}} objects.}
 
 \item{file}{output file name (default to "./upset.xls")}
 }
@@ -20,19 +20,15 @@ or \code{\link{GO_clusters-class}} objects. The intersections are shown in an up
 }
 \examples{
 ##################
-# load object
+# load example object
 utils::data(
- list=base::c("BP_sResults","Wang_clusters_wardD2"),
+ BP_sResults,
  package="ViSEAGO"
 )
 
 ##################
 # print upset
 ViSEAGO::Upset(BP_sResults)
-
-##################
-# print upset
-ViSEAGO::Upset(Wang_clusters_wardD2)
 }
 \seealso{
 Other enrich_GO_terms: \code{\link{enrich_GO_terms-class}},

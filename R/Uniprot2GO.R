@@ -21,7 +21,11 @@ Uniprot2GO=function(){
 
   #################
   # load current release
-  Data<-data.table::fread("ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/current_release_numbers.txt",verbose=FALSE,showProgress=FALSE)
+  Data<-data.table::fread(
+    "ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/current_release_numbers.txt",
+    verbose=FALSE,
+    showProgress=FALSE
+  )
 
   ###################
   # return data

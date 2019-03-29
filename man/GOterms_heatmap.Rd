@@ -79,27 +79,7 @@ The dendrogram produced could be cutted in static or dynamic mode.\cr
  }
 }
 \examples{
-###################
-# load objects
-utils::data(
- list=base::c("myGENE2GO","BP_sResults"),
- package="ViSEAGO"
-)
-
-###################
-# initialyse object for compute GO Semantic Similarity
-myGOs<-ViSEAGO::build_GO_SS(
- gene2GO=myGENE2GO,
- enrich_GO_terms=BP_sResults
-)
-
-###################
-# compute GO terms Semantic Similarity distances
-myGOs<-ViSEAGO::compute_SS_distances(
- myGOs,
- distance="Wang"
-)
-
+\dontrun{
 ##################
 # GOtermsHeatmap with default parameters
 Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
@@ -123,10 +103,7 @@ Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
  ),
  samples.tree=NULL
 )
-
-####################
-# display
-ViSEAGO::show_heatmap(Wang_clusters_wardD2,"GOterms")
+}
 }
 \references{
 Matt Dowle and Arun Srinivasan (2017). data.table: Extension of `data.frame`. R package version 1.10.4. https://CRAN.R-project.org/package=data.table.

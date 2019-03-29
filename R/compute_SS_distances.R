@@ -28,49 +28,12 @@
 #' Herve Pages, Marc Carlson, Seth Falcon and Nianhua Li (2017). AnnotationDbi: Annotation Database Interface. R package version 1.38.0.
 #' @include GO_SS.R GO_clusters.R
 #' @examples
-#' ###################
-#' # load objects
-#' utils::data(
-#'  list=base::c("myGENE2GO","BP_sResults"),
-#'  package="ViSEAGO"
-#' )
-#'
-#' ###################
-#' # initialyse object for compute GO Semantic Similarity
-#' myGOs<-ViSEAGO::build_GO_SS(
-#'  gene2GO=myGENE2GO,
-#'  enrich_GO_terms=BP_sResults
-#' )
-#'
+#' \dontrun{
 #' ###################
 #' # compute GO terms Semantic Similarity distances
 #' myGOs<-ViSEAGO::compute_SS_distances(
 #'  myGOs,
 #'  distance=c("Resnik","Lin","Rel","Jiang","Wang")
-#' )
-#'
-#' ##################
-#' # GOtermsHeatmap with default parameters
-#' Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
-#'  myGOs,
-#'  showIC=TRUE,
-#'  showGOlabels=TRUE,
-#'  GO.tree=base::list(
-#'   tree=base::list(
-#'    distance="Wang",
-#'    aggreg.method="ward.D2",
-#'    rotate=NULL
-#'   ),
-#'   cut=base::list(
-#'    dynamic=base::list(
-#'     pamStage=TRUE,
-#'     pamRespectsDendro=TRUE,
-#'     deepSplit=2,
-#'     minClusterSize =2
-#'    )
-#'   )
-#'  ),
-#'  samples.tree=NULL
 #' )
 #'
 #' ###################
@@ -79,6 +42,7 @@
 #'  Wang_clusters_wardD2,
 #'  distance=c("max","avg","rcmax","BMA")
 #' )
+#' }
 #' @exportMethod compute_SS_distances
 setGeneric(name="compute_SS_distances",def=function(object,distance) {standardGeneric("compute_SS_distances")})
 

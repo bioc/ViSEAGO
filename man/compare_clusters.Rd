@@ -21,120 +21,7 @@ Build an interactive heatmap of common GO terms frequency between partitions fro
 \code{\link{GO_clusters-class}} objects.
 }
 \examples{
-###################
-# create GO_SS-class object
-myGOs<-ViSEAGO::build_GO_SS(
- gene2GO=myGENE2GO,
- enrich_GO_terms=BP_sResults
-)
-
-###################
-# compute Semantic Similarity (SS)
-myGOs<-ViSEAGO::compute_SS_distances(
-  myGOs,
-  distance=base::c("Resnik","Lin","Rel","Jiang","Wang")
-)
-
-##################
-# GO terms heatmap with Resnik distance
-Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
- myGOs,
- showIC=TRUE,
- GO.tree=base::list(
-   tree=base::list(
-     distance="Resnik",
-     aggreg.method="ward.D2"
-   ),
-   cut=base::list(
-     dynamic=base::list(
-       deepSplit=2,
-       minClusterSize =2
-     )
-   )
- ),
- samples.tree=NULL
-)
-
-##################
-# GO terms heatmap with Lin distance
-Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
- myGOs,
- showIC=TRUE,
- GO.tree=base::list(
-   tree=base::list(
-     distance="Lin",
-     aggreg.method="ward.D2"
-   ),
-   cut=base::list(
-     dynamic=base::list(
-       deepSplit=2,
-       minClusterSize =2
-     )
-   )
- ),
- samples.tree=NULL
-)
-
-##################
-# GO terms heatmap with Rel distance
-Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
- myGOs,
- showIC=TRUE,
- GO.tree=base::list(
-   tree=base::list(
-     distance="Rel",
-     aggreg.method="ward.D2"
-   ),
-   cut=base::list(
-     dynamic=base::list(
-       deepSplit=2,
-       minClusterSize =2
-     )
-   )
- ),
- samples.tree=NULL
-)
-
-##################
-# GO terms heatmap with Jiang distance
-Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
- myGOs,
- showIC=TRUE,
- GO.tree=base::list(
-   tree=base::list(
-     distance="Jiang",
-     aggreg.method="ward.D2"
-   ),
-   cut=base::list(
-     dynamic=base::list(
-       deepSplit=2,
-       minClusterSize =2
-     )
-   )
- ),
- samples.tree=NULL
-)
-
-##################
-# GO terms heatmap with Wang distance
-Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
- myGOs,
- showIC=TRUE,
- GO.tree=base::list(
-   tree=base::list(
-     distance="Wang",
-     aggreg.method="ward.D2"
-   ),
-   cut=base::list(
-     dynamic=base::list(
-       deepSplit=2,
-       minClusterSize =2
-     )
-   )
-  ),
-  samples.tree=NULL
- )
-
+\dontrun{
 ###################
 # clusters to compare
 clusters<-base::list(
@@ -148,6 +35,7 @@ clusters<-base::list(
 ###################
 # clusters content comparisons
 clusters_comp<-ViSEAGO::compare_clusters(clusters)
+}
 }
 \references{
 Carson Sievert, Chris Parmer, Toby Hocking, Scott Chamberlain, Karthik Ram, Marianne Corvellec and Pedro Despouy (2017).

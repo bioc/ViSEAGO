@@ -9,6 +9,6 @@
 data(myGENE2GO,package="ViSEAGO")
 }
 \description{
-an example of object returned by \code{\link{annotate}} method.
+an example of object returned by \code{\link{annotate}} method from mouse bioconductor annotation.
 }
 \keyword{datasets}

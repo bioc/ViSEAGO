@@ -5,7 +5,7 @@
 #' @importFrom UpSetR upset
 #' @family enrich_GO_terms
 #' @family visualization
-#' @param object an \code{\link{enrich_GO_terms-class}} object from \code{\link{merge_enrich_terms}}
+#' @param object an \code{\link{enrich_GO_terms-class}} or \code{\link{GO_clusters-class}} objects.
 #' @param file output file name (default to "./upset.xls")
 #' @details
 #' This function displays the intersections of enriched GO terms (p<0.01) between all results provided by \code{\link{enrich_GO_terms-class}}
@@ -13,19 +13,15 @@
 #' @include enrich_GO_terms.R GO_clusters.R
 #' @examples
 #' ##################
-#' # load object
+#' # load example object
 #' utils::data(
-#'  list=base::c("BP_sResults","Wang_clusters_wardD2"),
+#'  BP_sResults,
 #'  package="ViSEAGO"
 #' )
 #'
 #' ##################
 #' # print upset
 #' ViSEAGO::Upset(BP_sResults)
-#'
-#' ##################
-#' # print upset
-#' ViSEAGO::Upset(Wang_clusters_wardD2)
 #' @exportMethod Upset
 setGeneric(name="Upset",def=function(object,file="./upset.xls") {standardGeneric("Upset")})
 

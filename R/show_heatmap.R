@@ -13,28 +13,37 @@
 #' This method displays an interactive heatmap (if \code{file}=NULL) from \code{\link{GO_clusters-class}} object for "GOterms" or "GOclusters" type.\cr
 #' A static png image could be printed by setting \code{file} argument.
 #' @examples
-#' ###################
-#' # load object
-#' utils::data(
+#' \dontrun{
+#' ##################
+#' # Display GO terms heatmap
+#' ViSEAGO::show_heatmap(
 #'  Wang_clusters_wardD2,
-#'  package="ViSEAGO"
+#'  "GOterms"
 #' )
 #'
 #' ##################
-#' # Display GO terms heatmap
-#' ViSEAGO::show_heatmap(Wang_clusters_wardD2,"GOterms")
-#'
-#' ##################
 #' # Display GO clusters heatmap
-#' ViSEAGO::show_heatmap(Wang_clusters_wardD2,"GOclusters")
+#' ViSEAGO::show_heatmap(
+#'  Wang_clusters_wardD2,
+#'  "GOclusters"
+#' )
 #'
 #' ##################
 #' # Print GO terms heatmap
-#' ViSEAGO::show_heatmap(Wang_clusters_wardD2,"GOterms","./data/output/GOterms_heatmap.png")
+#' ViSEAGO::show_heatmap(
+#'  Wang_clusters_wardD2,
+#'  "GOterms",
+#'  "./data/output/GOterms_heatmap.png"
+#' )
 #'
 #' ##################
 #' # Print GO clusters heatmap
-#' ViSEAGO::show_heatmap(Wang_clusters_wardD2,"GOclusters","./data/output/GOclusters_heatmap.png")
+#' ViSEAGO::show_heatmap(
+#'  Wang_clusters_wardD2,
+#'  "GOclusters",
+#'   "./data/output/GOclusters_heatmap.png"
+#' )
+#' }
 #' @exportMethod show_heatmap
 setGeneric(name="show_heatmap",def=function(object,type,file=NULL) {standardGeneric("show_heatmap")})
 

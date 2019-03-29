@@ -32,58 +32,7 @@ GO group description is defined as the first common GO ancestor with the cluster
 The dendrogram branches are colored according to GO terms clusters.
 }
 \examples{
-###################
-# load objects
-utils::data(
- list=base::c("myGENE2GO","BP_sResults"),
- package="ViSEAGO"
-)
-
-###################
-# initialyse object for compute GO Semantic Similarity
-myGOs<-ViSEAGO::build_GO_SS(
- gene2GO=myGENE2GO,
- enrich_GO_terms=BP_sResults
-)
-
-###################
-# compute GO terms Semantic Similarity distances
-myGOs<-ViSEAGO::compute_SS_distances(
- myGOs,
- distance="Wang"
-)
-
-##################
-# GOtermsHeatmap with default parameters
-Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
- myGOs,
- showIC=TRUE,
- showGOlabels=TRUE,
- GO.tree=base::list(
-  tree=base::list(
-   distance="Wang",
-   aggreg.method="ward.D2",
-   rotate=NULL
-  ),
-  cut=base::list(
-   dynamic=base::list(
-    pamStage=TRUE,
-    pamRespectsDendro=TRUE,
-    deepSplit=2,
-    minClusterSize =2
-   )
-  )
- ),
- samples.tree=NULL
-)
-
-###################
-# compute clusters of GO terms Semantic Similarity distances
-Wang_clusters_wardD2<-ViSEAGO::compute_SS_distances(
- Wang_clusters_wardD2,
- distance="BMA"
-)
-
+\dontrun{
 ###################
 # GOclusters heatmap
 Wang_clusters_wardD2<-ViSEAGO::GOclusters_heatmap(
@@ -94,10 +43,7 @@ Wang_clusters_wardD2<-ViSEAGO::GOclusters_heatmap(
   rotate=NULL
  )
 )
-
-####################
-# display
-ViSEAGO::show_heatmap(Wang_clusters_wardD2,"GOclusters")
+}
 }
 \references{
 Matt Dowle and Arun Srinivasan (2017). data.table: Extension of `data.frame`. R package version 1.10.4. https://CRAN.R-project.org/package=data.table.

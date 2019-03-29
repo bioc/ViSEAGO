@@ -12,129 +12,7 @@
 #' Csardi G, Nepusz T: The igraph software package for complex network research, InterJournal, Complex Systems 1695. 2006. http://igraph.org.
 #' @include GO_clusters.R
 #' @examples
-#' ###################
-#' # load objects
-#' utils::data(
-#'  list=base::c(
-#'   "myGENE2GO",
-#'   "BP_sResults"
-#'  )
-#' )
-#'
-#' ###################
-#' # create GO_SS-class object
-#' myGOs<-ViSEAGO::build_GO_SS(
-#'  gene2GO=myGENE2GO,
-#'  enrich_GO_terms=BP_sResults
-#' )
-#'
-#' ###################
-#' # compute Semantic Similarity (SS)
-#' myGOs<-ViSEAGO::compute_SS_distances(
-#'   myGOs,
-#'   distance=base::c("Resnik","Lin","Rel","Jiang","Wang")
-#' )
-#'
-#' ##################
-#' # GO terms heatmap with Resnik distance
-#' Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
-#'  myGOs,
-#'  showIC=TRUE,
-#'  GO.tree=base::list(
-#'    tree=base::list(
-#'      distance="Resnik",
-#'      aggreg.method="ward.D2"
-#'    ),
-#'    cut=base::list(
-#'      dynamic=base::list(
-#'        deepSplit=2,
-#'        minClusterSize =2
-#'      )
-#'    )
-#'  ),
-#'  samples.tree=NULL
-#' )
-#'
-#' ##################
-#' # GO terms heatmap with Lin distance
-#' Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
-#'  myGOs,
-#'  showIC=TRUE,
-#'  GO.tree=base::list(
-#'    tree=base::list(
-#'      distance="Lin",
-#'      aggreg.method="ward.D2"
-#'    ),
-#'    cut=base::list(
-#'      dynamic=base::list(
-#'        deepSplit=2,
-#'        minClusterSize =2
-#'      )
-#'    )
-#'  ),
-#'  samples.tree=NULL
-#' )
-#'
-#' ##################
-#' # GO terms heatmap with Rel distance
-#' Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
-#'  myGOs,
-#'  showIC=TRUE,
-#'  GO.tree=base::list(
-#'    tree=base::list(
-#'      distance="Rel",
-#'      aggreg.method="ward.D2"
-#'    ),
-#'    cut=base::list(
-#'      dynamic=base::list(
-#'        deepSplit=2,
-#'        minClusterSize =2
-#'      )
-#'    )
-#'  ),
-#'  samples.tree=NULL
-#' )
-#'
-#' ##################
-#' # GO terms heatmap with Jiang distance
-#' Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
-#'  myGOs,
-#'  showIC=TRUE,
-#'  GO.tree=base::list(
-#'    tree=base::list(
-#'      distance="Jiang",
-#'      aggreg.method="ward.D2"
-#'    ),
-#'    cut=base::list(
-#'      dynamic=base::list(
-#'        deepSplit=2,
-#'        minClusterSize =2
-#'      )
-#'    )
-#'  ),
-#'  samples.tree=NULL
-#' )
-#'
-#' ##################
-#' # GO terms heatmap with Wang distance
-#' Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
-#'  myGOs,
-#'  showIC=TRUE,
-#'  GO.tree=base::list(
-#'    tree=base::list(
-#'      distance="Wang",
-#'      aggreg.method="ward.D2"
-#'    ),
-#'    cut=base::list(
-#'      dynamic=base::list(
-#'        deepSplit=2,
-#'        minClusterSize =2
-#'      )
-#'    )
-#'  ),
-#'  samples.tree=NULL
-#' )
-#'
+#' \dontrun{
 #' ###################
 #' # clusters to compare
 #' clusters<-base::list(
@@ -148,6 +26,7 @@
 #' ###################
 #' # global dendrogram clustering correlation
 #' clust_cor<-ViSEAGO::clusters_cor(clusters,method="adjusted.rand")
+#' }
 #' @exportMethod clusters_cor
 setGeneric(name="clusters_cor",def=function(clusters,method="adjusted.rand") {standardGeneric("clusters_cor")})
 

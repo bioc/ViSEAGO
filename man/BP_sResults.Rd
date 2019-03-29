@@ -9,6 +9,6 @@
 data(BP_sResults,package="ViSEAGO")
 }
 \description{
-an example of object returned by \code{\link{merge_enrich_terms}} method.
+an example of object returned by \code{\link{merge_enrich_terms}} method from functional analysis of mouse mammary gland RNA-Seq.
 }
 \keyword{datasets}

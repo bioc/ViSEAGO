@@ -14,65 +14,14 @@
 #' @return a MDS plot.
 #' @include GO_SS.R GO_clusters.R
 #' @examples
-#' ###################
-#' # load objects
-#' utils::data(
-#'  list=base::c("myGENE2GO","BP_sResults"),
-#'  package="ViSEAGO"
-#' )
-#'
-#' ###################
-#' # initialyse object for compute GO Semantic Similarity
-#' myGOs<-ViSEAGO::build_GO_SS(
-#'  gene2GO=myGENE2GO,
-#'  enrich_GO_terms=BP_sResults
-#' )
-#'
-#' ###################
-#' # compute GO terms Semantic Similarity distances
-#' myGOs<-ViSEAGO::compute_SS_distances(
-#'  myGOs,
-#'  distance="Wang"
-#' )
-#'
+#' \dontrun{
 #' ###################
 #' # build MDS plot for a GO_SS-class distance object
 #' ViSEAGO::MDSplot(myGOs)
 #'
-#' ##################
-#' # GOtermsHeatmap with default parameters
-#' Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
-#'  myGOs,
-#'  showIC=TRUE,
-#'  showGOlabels=TRUE,
-#'  GO.tree=base::list(
-#'   tree=base::list(
-#'    distance="Wang",
-#'    aggreg.method="ward.D2",
-#'    rotate=NULL
-#'   ),
-#'   cut=base::list(
-#'    dynamic=base::list(
-#'     pamStage=TRUE,
-#'     pamRespectsDendro=TRUE,
-#'     deepSplit=2,
-#'     minClusterSize =2
-#'    )
-#'   )
-#'  ),
-#'  samples.tree=NULL
-#' )
-#'
 #' ###################
 #' # build MDS plot for a GO_clusters-class distance object, highlighting GO terms clusters.
 #' ViSEAGO::MDSplot(Wang_clusters_wardD2)
-#'
-#' ###################
-#' # compute clusters of GO terms Semantic Similarity distances
-#' Wang_clusters_wardD2<-ViSEAGO::compute_SS_distances(
-#'  Wang_clusters_wardD2,
-#'  distance="BMA"
-#' )
 #'
 #' ###################
 #' # build MDS plot for a GO_clusters-class distance object, highlighting GO groups clusters.
@@ -80,6 +29,7 @@
 #'  Wang_clusters_wardD2,
 #'  show_clusters=TRUE
 #' )
+#' }
 #' @exportMethod MDSplot
 setGeneric(name="MDSplot",def=function(object,show_clusters=FALSE,file=NULL) {standardGeneric("MDSplot")})
 

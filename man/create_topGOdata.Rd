@@ -50,16 +50,6 @@ separately, or grouped together in a \code{factor} (\code{geneList} argument).
   quiet=T,what=""
  )
 
- L_virginvslactateDE<-base::scan(
-  base::system.file("extdata/data/input","L_virginvslactateDE.txt",package = "ViSEAGO"),
-  quiet=T,what=""
- )
-
- L_virginvspregnantDE<-base::scan(
-  base::system.file("extdata/data/input","L_virginvspregnantDE.txt",package = "ViSEAGO"),
-  quiet=T,what=""
- )
-
 ###################
 # create topGOdata for BP for each list of DE genes
 BP_L_pregnantvslactate<-ViSEAGO::create_topGOdata(
@@ -68,42 +58,6 @@ BP_L_pregnantvslactate<-ViSEAGO::create_topGOdata(
  gene2GO=myGENE2GO,
  ont="BP",
  nodeSize=5
-)
-
-BP_L_virginvslactate<-ViSEAGO::create_topGOdata(
- geneSel=L_virginvslactateDE,
- allGenes=background_L,
- gene2GO=myGENE2GO,
- ont="BP",
- nodeSize=5
-)
-
-BP_L_virginvspregnant<-ViSEAGO::create_topGOdata(
- geneSel=L_virginvspregnantDE,
- allGenes=background_L,
- gene2GO=myGENE2GO,
- ont="BP",
- nodeSize=5
-)
-
-###################
-# perform topGO tests
-elim_BP_L_pregnantvslactate<-topGO::runTest(
- BP_L_pregnantvslactate,
- algorithm ="elim",
- statistic = "fisher"
-)
-
-elim_BP_L_virginvslactate<-topGO::runTest(
- BP_L_virginvslactate,
- algorithm ="elim",
- statistic = "fisher"
-)
-
-elim_BP_L_virginvspregnant<-topGO::runTest(
- BP_L_virginvspregnant,
- algorithm ="elim",
- statistic = "fisher"
 )
 }
 \references{

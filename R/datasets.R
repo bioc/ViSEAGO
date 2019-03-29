@@ -6,14 +6,14 @@
 #' @format An object of class \code{\link{genomic_ressource-class}}.
 "Bioconductor"
 #' @title BP_sResults dataset
-#' @description  an example of object returned by \code{\link{merge_enrich_terms}} method.
+#' @description  an example of object returned by \code{\link{merge_enrich_terms}} method from functional analysis of mouse mammary gland RNA-Seq.
 #' @importFrom utils data
 #' @docType data
 #' @usage data(BP_sResults,package="ViSEAGO")
 #' @format An object of class \code{\link{enrich_GO_terms-class}}.
 "BP_sResults"
 #' @title myGENE2GO dataset
-#' @description  an example of object returned by \code{\link{annotate}} method.
+#' @description  an example of object returned by \code{\link{annotate}} method from mouse bioconductor annotation.
 #' @importFrom utils data
 #' @docType data
 #' @usage data(myGENE2GO,package="ViSEAGO")
