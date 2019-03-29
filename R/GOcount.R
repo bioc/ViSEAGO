@@ -20,13 +20,13 @@
 #' ###################
 #' # load object
 #' utils::data(
-#'  BP_sResults,
+#'  myGOs,
 #'  package="ViSEAGO"
 #' )
 #'
 #' ###################
 #' # barplot for the count of GO terms
-#' ViSEAGO::GOcount(BP_sResults)
+#' ViSEAGO::GOcount( myGOs)
 #' @exportMethod GOcount
 setGeneric(name="GOcount",def=function(object,file=NULL){standardGeneric("GOcount")})
 

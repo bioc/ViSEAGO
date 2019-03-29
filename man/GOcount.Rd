@@ -27,13 +27,13 @@ A static image (in png) could be printed by setting \code{file} argument.
 ###################
 # load object
 utils::data(
- BP_sResults,
+ myGOs,
  package="ViSEAGO"
 )
 
 ###################
 # barplot for the count of GO terms
-ViSEAGO::GOcount(BP_sResults)
+ViSEAGO::GOcount( myGOs)
 }
 \references{
 Carson Sievert, Chris Parmer, Toby Hocking, Scott Chamberlain, Karthik Ram, Marianne Corvellec and Pedro Despouy (2017).
