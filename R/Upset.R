@@ -16,13 +16,13 @@
 #' ##################
 #' # load example object
 #' utils::data(
-#'  BP_sResults,
+#'  myGOs,
 #'  package="ViSEAGO"
 #' )
 #'
 #' ##################
 #' # print upset
-#' ViSEAGO::Upset(BP_sResults)
+#' ViSEAGO::Upset(myGOs)
 #' @exportMethod Upset
 setGeneric(name="Upset",def=function(object,file="./upset.xls") {standardGeneric("Upset")})
 
