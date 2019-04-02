@@ -16,9 +16,11 @@ build all sets combinations intersections
 This internal function use build all sets combinations intersections needed for \code{\link{upset}}.
 }
 \examples{
+\dontrun{
 ###################
 # build all intersections combinations
 ViSEAGO::overLapper(setlist)
+}
 }
 \seealso{
 Other enrich_GO_terms: \code{\link{Upset}},

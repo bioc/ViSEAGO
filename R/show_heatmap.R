@@ -1,6 +1,6 @@
 #' @title Display an interactive or static heatmap.
 #' @description Display a heatmap in interactive or static mode.
-#' @importFrom methods setGeneric setMethod slot is
+#' @importFrom methods setGeneric setMethod slot is signature
 #' @importFrom plotly export
 #' @importFrom webshot install_phantomjs
 #' @family enrich_GO_terms
@@ -20,7 +20,7 @@
 #'  myGOs,
 #'  package="ViSEAGO"
 #' )
-#'
+#' \dontrun{
 #' ###################
 #' # compute GO terms Semantic Similarity distances
 #' myGOs<-ViSEAGO::compute_SS_distances(
@@ -103,10 +103,21 @@
 #'  "GOclusters",
 #'  "GOclusters_heatmap.png"
 #' )
+#' }
+#' @name show_heatmap
+#' @rdname show_heatmap-methods
 #' @exportMethod show_heatmap
-setGeneric(name="show_heatmap",def=function(object,type,file=NULL) {standardGeneric("show_heatmap")})
+setGeneric(name="show_heatmap",def=function(object,type,file=NULL) {
+  standardGeneric("show_heatmap")
+})
 
-setMethod("show_heatmap",signature="GO_clusters",definition=function(object,type,file=NULL) {
+#' @rdname show_heatmap-methods
+#' @aliases show_heatmap
+setMethod("show_heatmap",
+  methods::signature(
+    object="GO_clusters",
+    type="character"
+  ),definition=function(object,type,file) {
 
   ##################
   # check type argument

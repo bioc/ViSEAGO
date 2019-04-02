@@ -12,14 +12,14 @@ output:
   BiocStyle::html_document:
     highlight: tango
 vignette: >
-  %\VignetteIndexEntry{2_mouse_bionconductor}
+  %\VignetteIndexEntry{2: mouse_bionconductor}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-bibliography: bibliography.bib
-csl: bmc-genomics.csl  
+bibliography: "`r base::system.file('extdata/','bibliography.bib',package='ViSEAGO')`"
+csl: "`r base::system.file('extdata/','bmc-genomics.csl',package='ViSEAGO')`"
 ---
 
-```{r setup,include=FALSE,cache=FALSE}
+```{r setup,include=FALSE}
 ###################
 # koad ViSEAGO
 library(ViSEAGO)
@@ -218,9 +218,18 @@ The printed table contains for each enriched GO terms, additional columns includ
 # merge topGO results
 BP_sResults<-ViSEAGO::merge_enrich_terms(
   Input=base::list(
-    PregnantvsLactate=base::c("BP_PregnantvsLactate","elim_BP_PregnantvsLactate"),
-    VirginvsLactate=base::c("BP_VirginvsLactate","elim_BP_VirginvsLactate"),
-    VirginvsPregnant=base::c("BP_VirginvsPregnant","elim_BP_VirginvsPregnant")
+    PregnantvsLactate=base::c(
+      "BP_PregnantvsLactate",
+      "elim_BP_PregnantvsLactate"
+    ),
+    VirginvsLactate=base::c(
+      "BP_VirginvsLactate",
+      "elim_BP_VirginvsLactate"
+    ),
+    VirginvsPregnant=base::c(
+      "BP_VirginvsPregnant",
+      "elim_BP_VirginvsPregnant"
+    )
   )
 )
 ```

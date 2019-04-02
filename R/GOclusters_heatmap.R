@@ -1,7 +1,7 @@
 #' @title Build a clustering heatmap on GO groups.
 #' @description This method computes a clustering heatmap based on GO groups semantic similarity.
 #' @importFrom data.table data.table .N
-#' @importFrom methods setGeneric setMethod
+#' @importFrom methods setGeneric setMethod signature
 #' @importFrom ggplot2 scale_fill_gradient
 #' @importFrom plotly layout
 #' @importFrom heatmaply heatmaply
@@ -47,7 +47,7 @@
 #'  myGOs,
 #'  package="ViSEAGO"
 #' )
-#'
+#' \dontrun{
 #' ###################
 #' # compute GO terms Semantic Similarity distances
 #' myGOs<-ViSEAGO::compute_SS_distances(
@@ -96,18 +96,38 @@
 #'   rotate=NULL
 #'  )
 #' )
+#' }
 #' @exportMethod GOclusters_heatmap
-setGeneric(name="GOclusters_heatmap",def=function(object,tree=base::list(distance="BMA",aggreg.method="ward.D2",rotate=NULL)){base::standardGeneric("GOclusters_heatmap")})
+#' @name GOclusters_heatmap
+#' @rdname GOclusters_heatmap-methods
+#' @exportMethod GOclusters_heatmap
+setGeneric(
+  name="GOclusters_heatmap",
+  def=function(object,tree=base::list(distance="BMA",aggreg.method="ward.D2",rotate=NULL)){
+    base::standardGeneric("GOclusters_heatmap")
+  }
+)
 
-setMethod("GOclusters_heatmap",signature="GO_clusters",definition=function(object,tree=base::list(distance,aggreg.method,rotate)){
+#' @rdname GOclusters_heatmap-methods
+#' @aliases GOclusters_heatmap
+setMethod("GOclusters_heatmap",
+  methods::signature(
+    object="GO_clusters",
+    tree="list"
+  ),
+  definition=function(object,tree=base::list(distance,aggreg.method,rotate)){
 
   #################
   # if empty
-  if(is.null(methods::slot(object,"clusters_dist")))stop("Please use GO_clusters class object with computed clusters distances using ViSEAGO::compute_SS_distance()")
+  if(is.null(methods::slot(object,"clusters_dist"))){
+    stop("Please use GO_clusters class object with computed clusters distances using ViSEAGO::compute_SS_distance()")
+  }
 
   #################
   # if empty
-  if(!tree$distance%in%base::names(methods::slot(object,"clusters_dist")))stop(paste("Please use GO_clusters class object with",tree$distance,"computed clusters distances using ViSEAGO::compute_SS_distance()"))
+  if(!tree$distance%in%base::names(methods::slot(object,"clusters_dist"))){
+    stop(paste("Please use GO_clusters class object with",tree$distance,"computed clusters distances using ViSEAGO::compute_SS_distance()"))
+  }
 
   ###################
   # add calculated distance

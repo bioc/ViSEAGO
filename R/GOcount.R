@@ -28,9 +28,14 @@
 #' # barplot for the count of GO terms
 #' ViSEAGO::GOcount( myGOs)
 #' @exportMethod GOcount
+#' @name GOcount
+#' @rdname GOcount-methods
+#' @exportMethod GOcount
 setGeneric(name="GOcount",def=function(object,file=NULL){standardGeneric("GOcount")})
 
-setMethod("GOcount",definition=function(object,file) {
+#' @rdname GOcount-methods
+#' @aliases GOcount
+setMethod("GOcount",signature="ANY",definition=function(object,file){
 
   #################
   # check class

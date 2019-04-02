@@ -18,7 +18,7 @@ setClass("genomic_ressource",
         )
 )
 #' @importFrom methods setMethod
-setMethod("show", "genomic_ressource",function(object){
+setMethod("show", signature="genomic_ressource",function(object){
 
   ###################
   # cat some text

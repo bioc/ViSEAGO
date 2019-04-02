@@ -19,7 +19,7 @@ This internal function use \href{https://www.ncbi.nlm.nih.gov/books/NBK25500/}{E
 \examples{
 ###################
 # Organism Scientific and common name from taxid
-ViSEAGO::taxonomy(taxid="9031")
+Data<-ViSEAGO::taxonomy("9031")
 }
 \seealso{
 Other genomic_ressource: \code{\link{Bioconductor2GO}},

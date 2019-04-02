@@ -23,10 +23,14 @@
 #' ##################
 #' # print upset
 #' ViSEAGO::Upset(myGOs)
+#' @name Upset
+#' @rdname Upset-methods
 #' @exportMethod Upset
 setGeneric(name="Upset",def=function(object,file="./upset.xls") {standardGeneric("Upset")})
 
-setMethod("Upset",definition=function(object,file){
+#' @rdname Upset-methods
+#' @aliases Upset
+setMethod("Upset",signature="ANY",definition=function(object,file){
 
   ###################
   # check the class

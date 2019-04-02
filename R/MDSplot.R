@@ -1,7 +1,7 @@
 #' @title Multi Dimensional Scale (MDS) plot
 #' @description Generate a Multi Dimensional Scale (MDS) plot from distance objects.
 #' @importFrom data.table data.table
-#' @importFrom methods setGeneric setMethod slot is
+#' @importFrom methods setGeneric setMethod slot is signature
 #' @importFrom dendextend get_leaves_attr
 #' @importFrom plotly plot_ly add_markers layout
 #' @family GO_terms GO_clusters semantic_similarity visualization
@@ -20,7 +20,7 @@
 #'  myGOs,
 #'  package="ViSEAGO"
 #' )
-#'
+#' \dontrun{
 #' ###################
 #' # compute GO terms Semantic Similarity distances
 #' myGOs<-ViSEAGO::compute_SS_distances(
@@ -84,10 +84,18 @@
 #'  Wang_clusters_wardD2,
 #'  show_clusters=TRUE
 #' )
+#' }
 #' @exportMethod MDSplot
-setGeneric(name="MDSplot",def=function(object,show_clusters=FALSE,file=NULL) {standardGeneric("MDSplot")})
+#' @name MDSplot
+#' @rdname MDSplot-methods
+#' @exportMethod MDSplot
+setGeneric(name="MDSplot",def=function(object,show_clusters=FALSE,file=NULL){
+  standardGeneric("MDSplot")
+})
 
-setMethod("MDSplot",definition=function(object,show_clusters,file) {
+#' @rdname MDSplot-methods
+#' @aliases MDSplot
+setMethod("MDSplot",signature="ANY",definition=function(object,show_clusters,file) {
 
   #################
   # check class

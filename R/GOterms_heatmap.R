@@ -3,7 +3,7 @@
 #' @importFrom data.table data.table
 #' @importFrom graphics text
 #' @importFrom stats as.dist end start
-#' @importFrom methods setGeneric setMethod new slot is
+#' @importFrom methods setGeneric setMethod new slot is signature
 #' @importFrom ggplot2 scale_fill_gradientn
 #' @importFrom plotly layout
 #' @importFrom heatmaply heatmaply
@@ -97,11 +97,10 @@
 #'  myGOs,
 #'  package="ViSEAGO"
 #' )
-#'
+#' \dontrun{
 #' ###################
 #' # compute GO terms Semantic Similarity distances
 #' myGOs<-ViSEAGO::compute_SS_distances(
-#'  myGOs,
 #'  distance="Wang"
 #' )
 #'
@@ -128,6 +127,9 @@
 #'  ),
 #'  samples.tree=NULL
 #' )
+#' }
+#' @name GOterms_heatmap
+#' @rdname GOterms_heatmap-methods
 #' @exportMethod GOterms_heatmap
 setGeneric(name="GOterms_heatmap",def=function(
   myGOs,
@@ -148,9 +150,17 @@ setGeneric(name="GOterms_heatmap",def=function(
     )
   ),
   samples.tree=NULL
-){base::standardGeneric("GOterms_heatmap")})
+){
+  base::standardGeneric("GOterms_heatmap")
+})
 
-setMethod("GOterms_heatmap",signature="GO_SS",definition=function(myGOs,showIC,showGOlabels,GO.tree,samples.tree){
+#' @rdname GOterms_heatmap-methods
+#' @aliases GOterms_heatmap
+setMethod("GOterms_heatmap",
+  methods::signature(
+    myGOs="GO_SS"
+  ),
+  definition=function(myGOs,showIC,showGOlabels,GO.tree,samples.tree){
 
   ###################
   # check entry

@@ -12,14 +12,14 @@ output:
   BiocStyle::html_document:
     highlight: tango
 vignette: >
-  %\VignetteIndexEntry{1_overview}
+  %\VignetteIndexEntry{1: overview}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-bibliography: bibliography.bib
-csl: bmc-genomics.csl
+bibliography: "`r base::system.file('extdata/','bibliography.bib',package='ViSEAGO')`"
+csl: "`r base::system.file('extdata/','bmc-genomics.csl',package='ViSEAGO')`"
 ---
 
-```{r setup,include=FALSE,cache=FALSE}
+```{r setup,include=FALSE}
 ###################
 # koad ViSEAGO
 library(ViSEAGO)

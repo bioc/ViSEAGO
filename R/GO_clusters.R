@@ -34,7 +34,7 @@ setClass("GO_clusters",
          )
 )
 #' @importFrom methods setMethod
-setMethod("show", "GO_clusters",function(object) {
+setMethod("show",signature="GO_clusters",function(object) {
 
   ###################
   # Extract table

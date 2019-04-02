@@ -1,5 +1,5 @@
 Package: ViSEAGO
-Version: 0.99.9
+Version: 0.99.10
 Title: ViSEAGO: Easier data mining of biological functions organized into clusters using Gene Ontology and semantic similarity
 Author: Aurelien Brionne [aut, cre],
         Amelie Juanchich [aut],
@@ -30,7 +30,7 @@ Imports: data.table,
          UpSetR,
          utils,
          webshot
-Depends: R (>= 3.5)
+Depends: R (>= 3.6)
 Suggests: htmltools,
           org.Mm.eg.db,
           Rgraphviz,
@@ -67,13 +67,13 @@ Collate:
     'Upset.R'
     'annotate.R'
     'available_organisms.R'
+    'gene2GO.R'
     'build_GO_SS.R'
     'clusters_cor.R'
     'compare_clusters.R'
     'compute_SS_distances.R'
     'create_topGOdata.R'
     'datasets.R'
-    'gene2GO.R'
     'merge_enrich_terms.R'
     'overlapper.R'
     'pkgdiagram.R'

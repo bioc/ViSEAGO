@@ -20,6 +20,8 @@
 #' among GO terms and gene products. Bioinformatics 2010 26(7):976-978.
 #'
 #' Herve Pages, Marc Carlson, Seth Falcon and Nianhua Li (2017). AnnotationDbi: Annotation Database Interface. R package version 1.38.0.
+#' @include gene2GO.R
+#' @include enrich_GO_terms.R
 #' @include GO_SS.R
 #' @examples
 #' \dontrun{
@@ -36,18 +38,32 @@
 #'  myGOs,
 #'  package="ViSEAGO"
 #' )
-#'
+#' @name build_GO_SS
+#' @rdname build_GO_SS-methods
 #' @exportMethod build_GO_SS
-setGeneric(name="build_GO_SS",def=function(gene2GO,enrich_GO_terms){standardGeneric("build_GO_SS")})
+setGeneric(name="build_GO_SS",def=function(gene2GO,enrich_GO_terms){
+  standardGeneric("build_GO_SS")
+})
 
-setMethod("build_GO_SS",definition=function(gene2GO,enrich_GO_terms) {
+#' @rdname build_GO_SS-methods
+#' @aliases build_GO_SS
+setMethod("build_GO_SS",
+  methods::signature(
+    gene2GO="gene2GO",
+    enrich_GO_terms="enrich_GO_terms"
+  ),
+  definition=function(gene2GO,enrich_GO_terms){
 
-  ###################
-  # check object class
-  ###################
+    ###################
+    # check object class
+    ###################
 
-    if(!methods::is(gene2GO,"gene2GO"))base::stop("object must be a gene2GO class object from ViSEAGO::annotate()")
-    if(!methods::is(enrich_GO_terms,"enrich_GO_terms"))base::stop("object must be a enrich_GO_terms class object from ViSEAGO::merge_enrich_terms()")
+    if(!methods::is(gene2GO,"gene2GO")){
+      base::stop("object must be a gene2GO class object from ViSEAGO::annotate()")
+    }
+    if(!methods::is(enrich_GO_terms,"enrich_GO_terms")){
+      base::stop("object must be a enrich_GO_terms class object from ViSEAGO::merge_enrich_terms()")
+    }
 
   ###################
   # load data
@@ -59,7 +75,11 @@ setMethod("build_GO_SS",definition=function(gene2GO,enrich_GO_terms) {
 
     ###################
     # from GO database
-    go<-AnnotationDbi::select(GO.db::GO.db,keys=AnnotationDbi::keys(GO.db::GO.db),columns=c("GOID","ONTOLOGY"))
+    go<-AnnotationDbi::select(
+      GO.db::GO.db,
+      keys=AnnotationDbi::keys(GO.db::GO.db),
+      columns=c("GOID","ONTOLOGY")
+    )
 
     ###################
     # select a given category (MF,BP,CC)

@@ -2,7 +2,7 @@
 #' @description Build a distance or correlation matrix between partitions from dendrograms.
 #' @importFrom data.table data.table
 #' @importFrom igraph compare
-#' @importFrom methods setGeneric setMethod
+#' @importFrom methods setGeneric setMethod signature
 #' @family GO_clusters
 #' @param clusters  a \code{list} of \code{\link{GO_clusters-class}} objects,
 #' from \code{\link{GOterms_heatmap}} or \code{\link{GOclusters_heatmap}}, named as \code{character}.
@@ -12,6 +12,127 @@
 #' Csardi G, Nepusz T: The igraph software package for complex network research, InterJournal, Complex Systems 1695. 2006. http://igraph.org.
 #' @include GO_clusters.R
 #' @examples
+#' ###################
+#' # load example object
+#' utils::data(
+#'  myGOs,
+#'  package="ViSEAGO"
+#' )
+#'
+#' \dontrun{
+#' ###################
+#' # compute Semantic Similarity (SS)
+#' myGOs<-ViSEAGO::compute_SS_distances(
+#'  myGOs,
+#'  distance=base::c("Resnik","Lin","Rel","Jiang","Wang")
+#' )
+#'
+#' ##################
+#' # Resnik distance GO terms heatmap
+#' Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
+#'   myGOs,
+#'   showIC=TRUE,
+#'   showGOlabels=TRUE,
+#'   GO.tree=base::list(
+#'     tree=base::list(
+#'       distance="Resnik",
+#'       aggreg.method="ward.D2"
+#'     ),
+#'     cut=base::list(
+#'       dynamic=base::list(
+#'         deepSplit=2,
+#'         minClusterSize =2
+#'       )
+#'     )
+#'   ),
+#'   samples.tree=NULL
+#' )
+#'
+#' ##################
+#' # Lin distance GO terms heatmap
+#' Lin_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
+#'   myGOs,
+#'   showIC=TRUE,
+#'   showGOlabels=TRUE,
+#'   GO.tree=base::list(
+#'     tree=base::list(
+#'       distance="Lin",
+#'       aggreg.method="ward.D2"
+#'     ),
+#'     cut=base::list(
+#'       dynamic=base::list(
+#'         deepSplit=2,
+#'         minClusterSize =2
+#'       )
+#'     )
+#'   ),
+#'   samples.tree=NULL
+#' )
+#'
+#' ##################
+#' # Rel distance GO terms heatmap
+#' Rel_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
+#'   myGOs,
+#'   showIC=TRUE,
+#'   showGOlabels=TRUE,
+#'   GO.tree=base::list(
+#'     tree=base::list(
+#'       distance="Rel",
+#'       aggreg.method="ward.D2"
+#'     ),
+#'     cut=base::list(
+#'       dynamic=base::list(
+#'         deepSplit=2,
+#'         minClusterSize =2
+#'       )
+#'     )
+#'   ),
+#'   samples.tree=NULL
+#' )
+#'
+#' ##################
+#' # Jiang distance GO terms heatmap
+#' Jiang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
+#'   myGOs,
+#'   showIC=TRUE,
+#'   showGOlabels=TRUE,
+#'   GO.tree=base::list(
+#'     tree=base::list(
+#'       distance="Jiang",
+#'       aggreg.method="ward.D2"
+#'     ),
+#'     cut=base::list(
+#'       dynamic=base::list(
+#'         deepSplit=2,
+#'         minClusterSize =2
+#'       )
+#'     )
+#'   ),
+#'   samples.tree=NULL
+#' )
+#'
+#' ##################
+#' # Wang distance GO terms heatmap
+#' Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
+#'   myGOs,
+#'   showIC=TRUE,
+#'   showGOlabels=TRUE,
+#'   GO.tree=base::list(
+#'     tree=base::list(
+#'       distance="Wang",
+#'       aggreg.method="ward.D2"
+#'     ),
+#'     cut=base::list(
+#'       dynamic=base::list(
+#'         deepSplit=2,
+#'         minClusterSize =2
+#'       )
+#'     )
+#'   ),
+#'   samples.tree=NULL
+#' )
+#' }
+#'
 #' ###################
 #' # clusters to compare
 #' clusters<-base::list(
@@ -30,10 +151,19 @@
 #'  method="adjusted.rand"
 #' )
 #' }
+#' @name clusters_cor
+#' @rdname clusters_cor-methods
 #' @exportMethod clusters_cor
 setGeneric(name="clusters_cor",def=function(clusters,method="adjusted.rand") {standardGeneric("clusters_cor")})
 
-setMethod("clusters_cor",definition=function(clusters,method) {
+#' @rdname clusters_cor-methods
+#' @aliases clusters_cor
+setMethod("clusters_cor",
+  methods::signature(
+    clusters="list",
+    method="character"
+  ),
+  definition=function(clusters,method) {
 
   ###################
   # method

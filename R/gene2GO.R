@@ -18,8 +18,9 @@ setClass("gene2GO",
            CC="list"
          )
 )
+
 #' @importFrom methods setMethod
-setMethod("show", "gene2GO",function(object) {
+setMethod("show",signature="gene2GO",function(object){
 
   ###################
   # cat some text

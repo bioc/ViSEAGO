@@ -32,9 +32,15 @@
 #' # display Uniprot table
 #' Uniprot<-ViSEAGO::Uniprot2GO()
 #' ViSEAGO::available_organisms(Uniprot)
+#' @name available_organisms
+#' @rdname available_organisms-methods
 #' @exportMethod available_organisms
-setGeneric(name="available_organisms",def=function(object) {standardGeneric("available_organisms")})
+setGeneric(name="available_organisms",def=function(object){
+  standardGeneric("available_organisms")
+})
 
+#' @rdname available_organisms-methods
+#' @aliases available_organisms
 setMethod("available_organisms",signature="genomic_ressource",definition=function(object) {
 
   ##################

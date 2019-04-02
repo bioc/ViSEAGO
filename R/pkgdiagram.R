@@ -123,7 +123,7 @@ pkgdiagram<-function(x=c("white","white","white","white","white")){
     create_topGOdata-> {RunTest merge_enrich_terms}
     RunTest->merge_enrich_terms
     merge_enrich_terms->{build_GO_SS show_table GOcount Upset}
-    build_GO_SS->{compute_SS_distances GOcount Upset}
+    build_GO_SS->{compute_SS_distances show_table GOcount Upset}
     compute_SS_distances->{GOcount MDSplot Upset GOterms_heatmap GOclusters_heatmap}
     GOterms_heatmap->{compute_SS_distances show_table show_heatmap compare_clusters}
     GOclusters_heatmap->{show_table show_heatmap MDSplot}

@@ -18,22 +18,51 @@
 #' ###################
 #' # load example object
 #' utils::data(
-#'  BP_sResults,
+#'  myGOs,
 #'  package="ViSEAGO"
 #' )
 #'
 #' ###################
 #' # display merge_enrich_terms output
-#' ViSEAGO::show_table(BP_sResults)
+#' ViSEAGO::show_table(myGOs)
 #'
 #' ###################
 #' # print merge_enrich_terms output
 #' ViSEAGO::show_table(
-#'  BP_sResults,
-#'  "./data/output/BP_sResults.txt"
+#'  myGOs,
+#'  "myGOs.txt"
 #' )
 #'
 #' \dontrun{
+#' ###################
+#' # compute GO terms Semantic Similarity distances
+#' myGOs<-ViSEAGO::compute_SS_distances(
+#'  distance="Wang"
+#' )
+#'
+#' ##################
+#' # GOtermsHeatmap with default parameters
+#' Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
+#'  myGOs,
+#'  showIC=TRUE,
+#'  showGOlabels=TRUE,
+#'  GO.tree=base::list(
+#'   tree=base::list(
+#'    distance="Wang",
+#'    aggreg.method="ward.D2",
+#'    rotate=NULL
+#'   ),
+#'   cut=base::list(
+#'    dynamic=base::list(
+#'     pamStage=TRUE,
+#'     pamRespectsDendro=TRUE,
+#'     deepSplit=2,
+#'     minClusterSize =2
+#'    )
+#'   )
+#'  ),
+#'  samples.tree=NULL
+#' )
 #' ###################
 #' # display table of GO_clusters-class object
 #' ViSEAGO::show_table(Wang_clusters_wardD2)
@@ -42,34 +71,43 @@
 #' # print table of GO_clusters-class object
 #' ViSEAGO::show_table(
 #'  Wang_clusters_wardD2,
-#'  "./data/output/Wang_clusters_wardD2.txt"
+#'  "Wang_clusters_wardD2.txt"
 #' )
 #' }
+#' @name show_table
+#' @rdname show_table-methods
 #' @exportMethod show_table
 setGeneric(name="show_table",def=function(object,file=NULL) {standardGeneric("show_table")})
 
-setMethod("show_table",definition=function(object,file) {
+#' @rdname show_table-methods
+#' @aliases show_table
+setMethod("show_table",signature="ANY",definition=function(object,file){
 
-  ###################
-  # load data.table
-  base::require("data.table")
-
-  ###################
-  # check the class
-  if(!base::class(object)%in%c("enrich_GO_terms","GO_clusters")){
-   base::stop("object must be ViSEAGO::merge_enrich_terms() or from ViSEAGO::GOterms_heatmap()")
+  #################
+  # check class
+  if(!base::class(object)%in%c("enrich_GO_terms","GO_SS","GO_clusters")){
+    base::stop("object must be enrich_GO_terms, GO_SS, or GO_clusters class objects")
   }
 
-  ###################
-  # remove gene identifiants for printing
+  #################
+  # Extract data
   if(methods::is(object,"enrich_GO_terms")){
-    data<-methods::slot(object,"data")
+
+    ###################
+    # data
+    data<-methods::slot(
+      object,
+      "data"
+    )
   }else{
+
+    ###################
+    # data
     data<-methods::slot(
       methods::slot(
         object,
         "enrich_GOs"
-        ),
+      ),
       "data"
     )
   }

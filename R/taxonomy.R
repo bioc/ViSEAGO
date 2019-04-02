@@ -8,7 +8,7 @@
 #' @examples
 #' ###################
 #' # Organism Scientific and common name from taxid
-#' ViSEAGO::taxonomy(taxid="9031")
+#' Data<-ViSEAGO::taxonomy("9031")
 #' @keywords internal
 #' @export
 taxonomy=function(...){
@@ -19,11 +19,11 @@ taxonomy=function(...){
 
   ###################
   # internal function for pattern  extraction
-  pattern.extract=function(query,m){
+  pattern.extract<-function(query,m){
 
     ###################
     # for each query line
-    Data=base::lapply(seq_along(query),function(i){
+    Data=base::lapply(base::seq_along(query),function(i){
 
       ###################
       # if not empty m match
@@ -35,11 +35,15 @@ taxonomy=function(...){
 
         ###################
         # extract corresponding values in query
-        capture=base::substring(query[i], capture,capture+base::attr(m[[i]],"capture.length")-1)
+        capture=base::substring(
+          query[i],
+          capture,
+          capture+base::attr(m[[i]],"capture.length")-1
+        )
 
         ###################
         # convert in data.table
-        capture=data.table::data.table(base::t(capture))
+        data.table::data.table(base::t(capture))
 
       }else{
 
@@ -63,7 +67,7 @@ taxonomy=function(...){
 
     ###################
     # return query
-    Data
+    base::return(Data)
   }
 
   ###################
@@ -72,16 +76,45 @@ taxonomy=function(...){
 
   ###################
   # create submission query
-  query <-base::paste(core,"&id=",base::paste(taxid,collapse=","),sep = "")
+  query <-base::paste(
+    core,
+    "&id=",
+    base::paste(
+      taxid,
+      collapse=","
+    ),
+    sep = ""
+  )
 
   ###################
   # submit and retrieve
-  query=base::paste(base::scan(query, what ="",sep="\n",quiet = TRUE),collapse="")
+  query=base::paste(
+    base::scan(
+      query,
+      what ="",
+      sep="\n",
+      quiet = TRUE
+      ),
+    collapse=""
+  )
 
   ###################
   # parse results
-  query<-base::substring(query,base::unlist(gregexpr("<DocumentSummary ",query)),
-  base::unlist(base::gregexpr("</DocumentSummary>",query)))
+  query<-base::substring(
+    query,
+    base::unlist(
+      base::gregexpr(
+        "<DocumentSummary ",
+        query
+        )
+      ),
+      base::unlist(
+        base::gregexpr(
+          "</DocumentSummary>",
+          query
+          )
+        )
+    )
 
   ###################
   # extraction pattern
@@ -91,7 +124,13 @@ taxonomy=function(...){
 
   ###################
   # find pattern
-  m=base::gregexpr(base::paste(pattern,collapse=""),query,perl=TRUE)
+  m=base::gregexpr(
+    base::paste(
+      pattern,
+      collapse=""
+    ),
+    query,perl=TRUE
+  )
 
   ###################
   # extract  results in data.frame and return

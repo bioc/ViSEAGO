@@ -2,7 +2,7 @@
 #' @description This method retrieves and stores GO annotations for the
 #' organism of interest from one of genomic ressource database
 #' (Bioconductor, EntrezGene, Ensembl, Uniprot).
-#' @importFrom methods setGeneric setMethod new is slot
+#' @importFrom methods setGeneric setMethod new is slot signature
 #' @importFrom AnnotationDbi select keys
 #' @importFrom biomaRt useDataset getBM
 #' @importFrom data.table data.table
@@ -50,6 +50,7 @@
 #' Matt Dowle and Arun Srinivasan (2017). data.table: Extension of data.frame. R package version 1.10.4. https://CRAN.R-project.org/package=data.table.
 #' @include genomic_ressource.R
 #' @examples
+#' \dontrun{
 #' ###################
 #' # load Mus musculus (mouse) GO annotations
 #' ###################
@@ -57,23 +58,34 @@
 #'  ###################
 #'  # from Bioconductor
 #'  Bioconductor<-ViSEAGO::Bioconductor2GO()
-#'  myGENE2GO<-ViSEAGO::annotate("org.Mm.eg.db",Bioconductor)
+#'  myGENE2GO<-ViSEAGO::annotate(
+#'   id="org.Mm.eg.db",
+#'   object=Bioconductor
+#'  )
 #'
 #'  ###################
 #'  # from EntrezGene
 #'  EntrezGene<-ViSEAGO::EntrezGene2GO()
-#'  myGENE2GO<-ViSEAGO::annotate("10090",EntrezGene)
+#'  myGENE2GO<-ViSEAGO::annotate(
+#'   id="10090",
+#'   object=EntrezGene
+#'  )
 #'
 #'  ###################
 #'  # from EntrezGene
 #'  Ensembl<-ViSEAGO::Ensembl2GO()
-#'  myGENE2GO<-ViSEAGO::annotate("mmusculus_gene_ensembl",Ensembl)
+#'  myGENE2GO<-ViSEAGO::annotate(
+#'   id="mmusculus_gene_ensembl",
+#'   object=Ensembl
+#'   )
 #'
-#' \dontrun{
 #'  ###################
 #'  # from Uniprot
 #'  Uniprot<-ViSEAGO::Uniprot2GO()
-#'  myGENE2GO<-ViSEAGO::annotate("mouse",Uniprot)
+#'  myGENE2GO<-ViSEAGO::annotate(
+#'   id="mouse",
+#'   object=Uniprot
+#'  )
 #'
 #' ###################
 #' # specific options for EntrezGene database
@@ -82,21 +94,47 @@
 #'  ##################
 #'   # Chicken GO annotations without adding orthologs
 #'  EntrezGene<-ViSEAGO::EntrezGene2GO()
-#'  myGENE2GO<-ViSEAGO::annotate("9031",EntrezGene)
+#'  myGENE2GO<-ViSEAGO::annotate(
+#'   id="9031",
+#'   object=EntrezGene
+#'  )
 #'
 #'  ##################
 #'  # Chicken GO annotation with the add of orthologs GO annotations
 #'  EntrezGene<-ViSEAGO::EntrezGene2GO()
-#'  myGENE2GO<-ViSEAGO::annotate("9031",EntrezGene, ortholog=TRUE)
-#' }
+#'  myGENE2GO<-ViSEAGO::annotate(
+#'   id="9031",
+#'   object=EntrezGene,
+#'   ortholog=TRUE
+#'  )
+#'
 #'  ##################
 #'  # display organisms supported by NCBI EntrezGene orthologs pipeline
 #'  EntrezGene<-ViSEAGO::EntrezGene2GO()
-#'  ViSEAGO::annotate(NULL,EntrezGene, ortholog=TRUE)
+#'  ViSEAGO::annotate(
+#'   id=NULL,
+#'   object=EntrezGene,
+#'   ortholog=TRUE
+#'  )
+#' }
+#' @name annotate
+#' @rdname annotate-methods
 #' @exportMethod annotate
-setGeneric(name="annotate",def=function(id,object,ortholog=FALSE){standardGeneric("annotate")})
+setGeneric(
+  name="annotate",
+  def=function(id,object,ortholog=FALSE){
+    standardGeneric("annotate")
+  }
+)
 
-setMethod("annotate",definition=function(id,object,ortholog){
+#' @rdname annotate-methods
+#' @aliases annotate
+setMethod("annotate",
+  methods::signature(
+    id="character",
+    object="genomic_ressource"
+  ),
+  definition=function(id,object,ortholog){
 
   ###################
   # check object
@@ -106,9 +144,6 @@ setMethod("annotate",definition=function(id,object,ortholog){
   }
   if(methods::slot(object,"db")!="EntrezGene" & ortholog==TRUE){
     base::stop("ortholog option is only available for genomic_ressource class object from  ViSEAGO::EntrezGene2GO()")
-  }
-  if(!base::is.null(id) && !base::is.character(id)){
-    base::stop("id must be a character value or NULL")
   }
 
   ###################

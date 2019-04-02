@@ -12,14 +12,14 @@ output:
   BiocStyle::html_document:
     highlight: tango
 vignette: >
-  %\VignetteIndexEntry{3_SS_choice}
+  %\VignetteIndexEntry{3: SS_choice}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-bibliography: bibliography.bib
-csl: bmc-genomics.csl
+bibliography: "`r base::system.file('extdata','bibliography.bib',package='ViSEAGO')`"
+csl: "`r base::system.file('extdata','bmc-genomics.csl',package='ViSEAGO')`"
 ---
 
-```{r setup,include=FALSE,cache=FALSE}
+```{r setup,include=FALSE}
 ###################
 # load
 library(ViSEAGO)
@@ -34,7 +34,7 @@ knitr::opts_chunk$set(
 
 # Introduction{-}
 
-In the overview (see`utils::vignette("1_overview", package ="ViSEAGO")`), we explained how to use `r BiocStyle::Biocpkg("ViSEAGO")` package.
+In the overview (see`utils::vignette("overview", package ="ViSEAGO")`), we explained how to use `r BiocStyle::Biocpkg("ViSEAGO")` package.
 In this vignette we explain how to explore the effect of the GO semantic similarity algorithms on the tree structure, and the effect of the trees clustering based on the mouse_bioconductor vignette dataset (see `utils::vignette("2_mouse_bioconductor", package ="ViSEAGO")`).
 
 # Data{-}

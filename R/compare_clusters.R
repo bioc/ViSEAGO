@@ -16,6 +16,127 @@
 #' @include GO_clusters.R
 #' @examples
 #' ###################
+#' # load example object
+#' utils::data(
+#'  myGOs,
+#'  package="ViSEAGO"
+#' )
+#'
+#' \dontrun{
+#' ###################
+#' # compute Semantic Similarity (SS)
+#' myGOs<-ViSEAGO::compute_SS_distances(
+#'  myGOs,
+#'  distance=base::c("Resnik","Lin","Rel","Jiang","Wang")
+#' )
+#'
+#' ##################
+#' # Resnik distance GO terms heatmap
+#' Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
+#'   myGOs,
+#'   showIC=TRUE,
+#'   showGOlabels=TRUE,
+#'   GO.tree=base::list(
+#'     tree=base::list(
+#'       distance="Resnik",
+#'       aggreg.method="ward.D2"
+#'     ),
+#'     cut=base::list(
+#'       dynamic=base::list(
+#'         deepSplit=2,
+#'         minClusterSize =2
+#'       )
+#'     )
+#'   ),
+#'   samples.tree=NULL
+#' )
+#'
+#' ##################
+#' # Lin distance GO terms heatmap
+#' Lin_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
+#'   myGOs,
+#'   showIC=TRUE,
+#'   showGOlabels=TRUE,
+#'   GO.tree=base::list(
+#'     tree=base::list(
+#'       distance="Lin",
+#'       aggreg.method="ward.D2"
+#'     ),
+#'     cut=base::list(
+#'       dynamic=base::list(
+#'         deepSplit=2,
+#'         minClusterSize =2
+#'       )
+#'     )
+#'   ),
+#'   samples.tree=NULL
+#' )
+#'
+#' ##################
+#' # Rel distance GO terms heatmap
+#' Rel_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
+#'   myGOs,
+#'   showIC=TRUE,
+#'   showGOlabels=TRUE,
+#'   GO.tree=base::list(
+#'     tree=base::list(
+#'       distance="Rel",
+#'       aggreg.method="ward.D2"
+#'     ),
+#'     cut=base::list(
+#'       dynamic=base::list(
+#'         deepSplit=2,
+#'         minClusterSize =2
+#'       )
+#'     )
+#'   ),
+#'   samples.tree=NULL
+#' )
+#'
+#' ##################
+#' # Jiang distance GO terms heatmap
+#' Jiang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
+#'   myGOs,
+#'   showIC=TRUE,
+#'   showGOlabels=TRUE,
+#'   GO.tree=base::list(
+#'     tree=base::list(
+#'       distance="Jiang",
+#'       aggreg.method="ward.D2"
+#'     ),
+#'     cut=base::list(
+#'       dynamic=base::list(
+#'         deepSplit=2,
+#'         minClusterSize =2
+#'       )
+#'     )
+#'   ),
+#'   samples.tree=NULL
+#' )
+#'
+#' ##################
+#' # Wang distance GO terms heatmap
+#' Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
+#'   myGOs,
+#'   showIC=TRUE,
+#'   showGOlabels=TRUE,
+#'   GO.tree=base::list(
+#'     tree=base::list(
+#'       distance="Wang",
+#'       aggreg.method="ward.D2"
+#'     ),
+#'     cut=base::list(
+#'       dynamic=base::list(
+#'         deepSplit=2,
+#'         minClusterSize =2
+#'       )
+#'     )
+#'   ),
+#'   samples.tree=NULL
+#' )
+#' }
+#'
+#' ###################
 #' # clusters to compare
 #' clusters<-base::list(
 #'  Resnik="Resnik_clusters_wardD2",
@@ -30,14 +151,15 @@
 #' # clusters content comparisons
 #' clusters_comp<-ViSEAGO::compare_clusters(clusters)
 #' }
+#' @name compare_clusters
+#' @rdname compare_clusters-methods
 #' @exportMethod compare_clusters
 setGeneric(name="compare_clusters",def=function(clusters) {standardGeneric("compare_clusters")})
 
-setMethod("compare_clusters",definition=function(clusters) {
 
-  ###################
-  # load data.table
-  base::require(data.table)
+#' @rdname compare_clusters-methods
+#' @aliases compare_clusters
+setMethod("compare_clusters",signature ="list",definition=function(clusters) {
 
   ###################
   # convert GO.ID GO.clusters column in list

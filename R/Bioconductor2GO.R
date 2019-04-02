@@ -27,7 +27,10 @@ Bioconductor2GO=function(){
 
   ###################
   # select organisms lines and only selected columns
-  Orgs.db<-Orgs.db[data.table::like(Package,"^org"),.(Package,Version,species)]
+  Orgs.db<-Orgs.db[
+    data.table::like(Package,"^org"),
+    .(Package,Version,species)
+  ]
 
   ###################
   # return data

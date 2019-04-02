@@ -1,6 +1,6 @@
 #' @title Compute distance between GO terms or GO clusters based on semantic similarity.
 #' @description This method computes distance between GO terms or GO clusters based on semantic similarity.
-#' @importFrom methods setGeneric setMethod slot is
+#' @importFrom methods setGeneric setMethod slot is signature
 #' @importFrom GO.db GOMFANCESTOR GOBPANCESTOR GOCCANCESTOR
 #' @importFrom GOSemSim mgoSim
 #' @importFrom AnnotationDbi select
@@ -35,6 +35,7 @@
 #'  package="ViSEAGO"
 #' )
 #'
+#' \dontrun{
 #' ###################
 #' # compute GO terms Semantic Similarity distances
 #' myGOs<-ViSEAGO::compute_SS_distances(
@@ -42,7 +43,30 @@
 #'  distance=c("Resnik","Lin","Rel","Jiang","Wang")
 #' )
 #'
-#' \dontrun{
+#' ##################
+#' # GOtermsHeatmap with default parameters
+#' Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
+#'  myGOs,
+#'  showIC=TRUE,
+#'  showGOlabels=TRUE,
+#'  GO.tree=base::list(
+#'   tree=base::list(
+#'    distance="Wang",
+#'    aggreg.method="ward.D2",
+#'    rotate=NULL
+#'   ),
+#'   cut=base::list(
+#'    dynamic=base::list(
+#'     pamStage=TRUE,
+#'     pamRespectsDendro=TRUE,
+#'     deepSplit=2,
+#'     minClusterSize =2
+#'    )
+#'   )
+#'  ),
+#'  samples.tree=NULL
+#' )
+#'
 #' ###################
 #' # compute clusters of GO terms Semantic Similarity distances
 #' Wang_clusters_wardD2<-ViSEAGO::compute_SS_distances(
@@ -50,10 +74,18 @@
 #'  distance=c("max","avg","rcmax","BMA")
 #' )
 #' }
+#' @name compute_SS_distances
+#' @rdname compute_SS_distances-methods
 #' @exportMethod compute_SS_distances
-setGeneric(name="compute_SS_distances",def=function(object,distance) {standardGeneric("compute_SS_distances")})
+setGeneric(name="compute_SS_distances",def=function(object,distance){standardGeneric("compute_SS_distances")})
 
-setMethod("compute_SS_distances",definition=function(object,distance) {
+#' @rdname compute_SS_distances-methods
+#' @aliases compute_SS_distances
+setMethod("compute_SS_distances",
+  methods::signature(
+    object="ANY",
+    distance="character"
+  ),definition=function(object,distance) {
 
   ##################
   # check object

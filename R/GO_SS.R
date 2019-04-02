@@ -16,17 +16,18 @@
 setClass("GO_SS",
          slots=c(
            db="character",
-           stamp = "character",
+           stamp ="character",
            organism="character",
            ont="character",
            topGO="list",
-           IC = "numeric",
+           IC ="numeric",
            enrich_GOs="enrich_GO_terms",
            terms_dist="list"
         )
 )
+
 #' @importFrom methods setMethod slot is
-setMethod("show", "GO_SS",function(object) {
+setMethod("show",signature="GO_SS",function(object){
 
   ###################
   # Extract table

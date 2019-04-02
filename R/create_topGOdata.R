@@ -1,7 +1,7 @@
 #' @title Create topGOdata object for enrichment test with topGO package.
 #' @description This method create a \code{\link[topGO]{topGOdata-class}} object required by \pkg{topGO} package in order
 #' to perform GO enrichment test.
-#' @importFrom methods setGeneric setMethod new slot is
+#' @importFrom methods setGeneric setMethod new slot is signature
 #' @import topGO
 #' @importFrom topGO annFUN.gene2GO
 #' @family GO_terms
@@ -21,34 +21,58 @@
 #' @references
 #' Alexa A, Rahnenfuhrer J, Lengauer T. Improved scoring of functional groups from gene expression data by
 #' decorrelating GO graph structure. Bioinformatics 2006; 22:1600-1607.
+#' @include gene2GO.R
 #' @examples
 #'  ###################
 #'  # load genes identifiants (GeneID,ENS...) background (Expressed genes)
-#'  background_L<-base::scan(
-#'   base::system.file("extdata/data/input","background_L.txt",package = "ViSEAGO"),
-#'   quiet=TRUE,what=""
+#'  background<-base::scan(
+#'   base::system.file(
+#'    "extdata/data/input",
+#'    "background_L.txt",
+#'    package = "ViSEAGO"
+#'   ),
+#'   quiet=TRUE,
+#'   what=""
 #'  )
 #'
 #'  ###################
 #'  # load Differentialy Expressed (DE) gene identifiants from files
-#'  L_pregnantvslactateDE<-base::scan(
-#'   base::system.file("extdata/data/input","L_pregnantvslactateDE.txt",package = "ViSEAGO"),
-#'   quiet=TRUE,what=""
+#'  pregnantvslactateDE<-base::scan(
+#'   base::system.file(
+#'    "extdata/data/input",
+#'    "pregnantvslactateDE.txt",
+#'    package = "ViSEAGO"
+#'  ),
+#'   quiet=TRUE,
+#'   what=""
 #'  )
-#'
+#' \dontrun{
 #' ###################
 #' # create topGOdata for BP for each list of DE genes
 #' BP_L_pregnantvslactate<-ViSEAGO::create_topGOdata(
-#'  geneSel=L_pregnantvslactateDE,
-#'  allGenes=background_L,
+#'  geneSel=pregnantvslactateDE,
+#'  allGenes=background,
 #'  gene2GO=myGENE2GO,
 #'  ont="BP",
 #'  nodeSize=5
 #' )
+#' }
+#' @name create_topGOdata
+#' @rdname create_topGOdata-methods
 #' @exportMethod create_topGOdata
-setGeneric(name="create_topGOdata",def=function(geneSel,allGenes,geneList=NULL,gene2GO,ont,nodeSize){standardGeneric("create_topGOdata")})
+setGeneric(name="create_topGOdata",def=function(geneSel,allGenes,geneList=NULL,gene2GO,ont,nodeSize){
+  standardGeneric("create_topGOdata")
+})
 
-setMethod("create_topGOdata",definition=function(geneSel,allGenes,geneList,gene2GO,ont,nodeSize){
+#' @rdname create_topGOdata-methods
+#' @aliases create_topGOdata
+setMethod("create_topGOdata",
+  methods::signature(
+    gene2GO="gene2GO",
+    ont="character",
+    nodeSize="numeric"
+  ),
+  definition=function(geneSel,allGenes,geneList,gene2GO,ont,nodeSize){
 
   ###################
   # check list
@@ -56,7 +80,9 @@ setMethod("create_topGOdata",definition=function(geneSel,allGenes,geneList,gene2
 
     ###################
     # check object class
-    if(!methods::is(gene2GO,"gene2GO"))base::stop("object must be a GENE2GO class obtained using ViSEAGO::annotate()")
+    if(!methods::is(gene2GO,"gene2GO")){
+      base::stop("object must be a gene2GO class obtained using ViSEAGO::annotate()")
+    }
 
     ###################
     # check ontology

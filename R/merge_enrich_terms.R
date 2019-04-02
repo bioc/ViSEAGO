@@ -68,7 +68,7 @@
 #'   quiet=TRUE,
 #'   what=""
 #'  )
-#'
+#' \dontrun{
 #' ###################
 #' # create topGOdata for BP for each list of DE genes
 #' BP_L_pregnantvslactate<-ViSEAGO::create_topGOdata(
@@ -124,10 +124,16 @@
 #'   L_virginvspregnant=base::c("BP_L_virginvspregnant","elim_BP_L_virginvspregnant")
 #'  )
 #' )
+#' }
+#' @exportMethod merge_enrich_terms
+#' @name merge_enrich_terms
+#' @rdname merge_enrich_terms-methods
 #' @exportMethod merge_enrich_terms
 setGeneric(name="merge_enrich_terms", def=function(Input){standardGeneric("merge_enrich_terms")})
 
-setMethod("merge_enrich_terms",definition=function(Input){
+#' @rdname merge_enrich_terms-methods
+#' @aliases merge_enrich_terms
+setMethod("merge_enrich_terms",signature="list",definition=function(Input){
 
   ###################
   # check ontology
@@ -135,54 +141,58 @@ setMethod("merge_enrich_terms",definition=function(Input){
 
     ###################
     # same ontology ?
-    check.onto=base::unique(base::c(base::vapply(base::seq_along(Input),function(x){
+    check.onto=base::unique(
+      base::unlist(
+        base::lapply(base::seq_along(Input),function(x){
 
-      ###################
-      # extract  quering objects names
-      x=Input[[x]]
+          ###################
+          # extract  quering objects names
+          x=Input[[x]]
 
-      ###################
-      # check existance
-      values<-ls(envir = .GlobalEnv)
+          ###################
+          # check existance
+          values<-base::ls(envir=.GlobalEnv)
 
-      ###################
-      # check existance
-      available<-x%in%values
+          ###################
+          # check existance
+          available<-x%in%values
 
-      ###################
-      # check existance
-      if(!base::all(available)){
-        base::stop(base::paste("objects not found:",paste(x[!available],collapse=", "),sep="\n"))
-      }
-
-      ###################
-      # get objects
-      x=base::mget(x,envir=.GlobalEnv)
-
-      ###################
-      # objects type
-      obj.type=base::vapply(x,class,"")
-
-      ###################
-      # extract ontoloy type
-      base::vapply(base::seq_along(x),function(y){
+          ###################
+          # check existance
+          if(!base::all(available)){
+           base::stop(base::paste("objects not found:",paste(x[!available],collapse=", "),sep="\n"))
+          }
 
         ###################
-        # extract ontology slot
-        if(obj.type[y]=="topGOdata"){
+        # get objects
+        x=base::mget(x,envir=.GlobalEnv)
+
+        ###################
+        # objects type
+        obj.type=base::vapply(x,class,"")
+
+        ###################
+        # extract ontoloy type
+        base::vapply(base::seq_along(x),function(y){
 
           ###################
-          # for topGOdata
-          methods::slot(x[[y]],"ontology")
+          # extract ontology slot
+          if(obj.type[y]=="topGOdata"){
 
-        }else{
+            ###################
+            # for topGOdata
+            methods::slot(x[[y]],"ontology")
 
-          ###################
-          # for topGOresult
-          base::sub("^.+\nOntology: ","",methods::slot(x[[y]],"description"))
-        }
-      },"")
-    },"")))
+          }else{
+
+            ###################
+            # for topGOresult
+            base::sub("^.+\nOntology: ","",methods::slot(x[[y]],"description"))
+          }
+        },"")
+      })
+      )
+    )
 
     ###################
     # check ontology
@@ -411,15 +421,21 @@ setMethod("merge_enrich_terms",definition=function(Input){
 
     ###################
     # check if same gene background
-    same_genes_background=base::all(
-      base::vapply(2:length(allgenes),function(x){
-        base::identical(allgenes[[1]],allgenes[[x]])
-      },TRUE)
-    )
+    if(base::length(Input)>1){
+      same_genes_background=base::all(
+        base::vapply(2:length(allgenes),function(x){
+          base::identical(allgenes[[1]],allgenes[[x]])
+        },TRUE)
+      )
+    }else{
+      same_genes_background=TRUE
+    }
 
   ###################
   # stop if no enrich GO terms
-  if(base::length(GOs)==0){base::stop("No enrich GO terms available in at least one condition")}
+  if(base::length(GOs)==0){
+    base::stop("No enrich GO terms available in at least one condition")
+  }
 
   ###################
   # initialyse input
