@@ -16,7 +16,7 @@ available organisms databases packages.
 \details{
 This function gives genome wide annotation for available organisms databases packages from
 \href{http://bioconductor.org/packages/release/BiocViews.html#___OrgDb}{Bioconductor OrgDb}.
-It uses \code{\link[AnnotationForge]{loadAnnDbPkgIndex}} from \pkg{AnnotationForge} package.
+It uses \code{loadAnnDbPkgIndex} from \pkg{AnnotationForge} package.
 }
 \examples{
 ###################

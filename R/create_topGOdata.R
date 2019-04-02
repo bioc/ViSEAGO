@@ -17,7 +17,7 @@
 #' The complete GO annotation is required (\code{gene2GO} argument) and also
 #' the list of genes of interest (\code{geneSel} argument) against the corresponding background (\code{allGenes} argument)
 #' separately, or grouped together in a \code{factor} (\code{geneList} argument).
-#' @return a  \code{\link[topGO]{topGOdata-class}} object required by \code{\link[topGO]{runTest}}.
+#' @return a  \code{\link[topGO]{topGOdata-class}} object required by \code{runTest} from \pkg{topGO} package.
 #' @references
 #' Alexa A, Rahnenfuhrer J, Lengauer T. Improved scoring of functional groups from gene expression data by
 #' decorrelating GO graph structure. Bioinformatics 2006; 22:1600-1607.

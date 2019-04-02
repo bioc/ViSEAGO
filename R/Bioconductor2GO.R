@@ -9,7 +9,7 @@
 #' @details
 #' This function gives genome wide annotation for available organisms databases packages from
 #' \href{http://bioconductor.org/packages/release/BiocViews.html#___OrgDb}{Bioconductor OrgDb}.
-#' It uses \code{\link[AnnotationForge]{loadAnnDbPkgIndex}} from \pkg{AnnotationForge} package.
+#' It uses \code{loadAnnDbPkgIndex} from \pkg{AnnotationForge} package.
 #' @references
 #' Carlson M and Pages H (2017). AnnotationForge: Code for Building Annotation Database Packages. R package version 1.18.0.
 #' @return a  \code{\link{genomic_ressource-class}} object required by \code{\link{annotate}} method.

@@ -28,7 +28,7 @@ and gene identifiants in \code{names}) (default value to NULL).}
 \item{nodeSize}{the minimum number of genes for each GO term.}
 }
 \value{
-a  \code{\link[topGO]{topGOdata-class}} object required by \code{\link[topGO]{runTest}}.
+a  \code{\link[topGO]{topGOdata-class}} object required by \code{runTest} from \pkg{topGO} package.
 }
 \description{
 This method create a \code{\link[topGO]{topGOdata-class}} object required by \pkg{topGO} package in order
