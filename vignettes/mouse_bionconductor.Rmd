@@ -371,7 +371,7 @@ myGOs<-ViSEAGO::build_GO_SS(
 )
 ```
 
-```{r SS_compute}
+```{r SS_compute,eval=FALSE}
 ###################           
 # compute Semantic Similarity (SS)
 myGOs<-ViSEAGO::compute_SS_distances(
@@ -380,10 +380,91 @@ myGOs<-ViSEAGO::compute_SS_distances(
 )
 ```
 
-```{r SS_build_compute_show}
+```{r SS_build_compute_show,eval=FALSE}
 ###################
 # display a summary
 myGOs
+```
+
+```{r SS_build_compute_display,echo=FALSE}
+base::cat(
+"- object class: GO_SS
+- database: Bioconductor
+- stamp/version: 2018-Apr4
+- organism id: org.Mm.eg.db
+- ontology: BP
+- input:
+        PregnantvsLactate: elim
+        VirginvsLactate: elim
+        VirginvsPregnant: elim
+- topGO summary:
+ PregnantvsLactate
+      BP_PregnantvsLactate 
+        description: Bioconductor org.Mm.eg.db 2018-Apr4
+        available_genes: 15804
+        available_genes_significant: 7699
+        feasible_genes: 14402
+        feasible_genes_significant: 7185
+        genes_nodeSize: 5
+        nodes_number: 8189
+        edges_number: 18887
+      elim_BP_PregnantvsLactate 
+        description: Bioconductor org.Mm.eg.db 2018-Apr4 
+        test_name: fisher p<0.01
+        algorithm_name: elim
+        GO_scored: 8189
+        GO_significant: 198
+        feasible_genes: 14402
+        feasible_genes_significant: 7185
+        genes_nodeSize: 5
+        Nontrivial_nodes: 8155 
+ VirginvsLactate
+      BP_VirginvsLactate 
+        description: Bioconductor org.Mm.eg.db 2018-Apr4
+        available_genes: 15804
+        available_genes_significant: 9583
+        feasible_genes: 14402
+        feasible_genes_significant: 8898
+        genes_nodeSize: 5
+        nodes_number: 8189
+        edges_number: 18887
+      elim_BP_VirginvsLactate 
+        description: Bioconductor org.Mm.eg.db 2018-Apr4 
+        test_name: fisher p<0.01
+        algorithm_name: elim
+        GO_scored: 8189
+        GO_significant: 151
+        feasible_genes: 14402
+        feasible_genes_significant: 8898
+        genes_nodeSize: 5
+        Nontrivial_nodes: 8180 
+ VirginvsPregnant
+      BP_VirginvsPregnant 
+        description: Bioconductor org.Mm.eg.db 2018-Apr4
+        available_genes: 15804
+        available_genes_significant: 7302
+        feasible_genes: 14402
+        feasible_genes_significant: 6875
+        genes_nodeSize: 5
+        nodes_number: 8189
+        edges_number: 18887
+      elim_BP_VirginvsPregnant 
+        description: Bioconductor org.Mm.eg.db 2018-Apr4 
+        test_name: fisher p<0.01
+        algorithm_name: elim
+        GO_scored: 8189
+        GO_significant: 232
+        feasible_genes: 14402
+        feasible_genes_significant: 6875
+        genes_nodeSize: 5
+        Nontrivial_nodes: 8143 
+ 
+- enrich GOs data.table: 509 GO terms of 3 conditions.
+        PregnantvsLactate : 198 terms
+        VirginvsLactate : 151 terms
+        VirginvsPregnant : 232 terms
+- terms distances:  Wang"
+)
 ```
 
 # Visualization and interpretation of enriched GO terms
