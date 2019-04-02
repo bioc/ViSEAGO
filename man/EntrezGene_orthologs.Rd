@@ -17,8 +17,10 @@ Internal function used by \code{\link{annotate}} in order to download orthologs_
  stored in the \href{ftp://ftp.ncbi.nih.gov/gene/DATA/gene_orthologs.gz}{gene_group.gz} file.
 }
 \examples{
+\dontrun{
 ###################
 # Organism taxid, Scientific name and common name
 ViSEAGO::EntrezGene_orthologs()
+}
 }
 \keyword{internal}

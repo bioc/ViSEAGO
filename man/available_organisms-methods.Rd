@@ -28,7 +28,7 @@ an interactive \code{datatable}.
 # display Bioconductor table
 Bioconductor<-ViSEAGO::Bioconductor2GO()
 ViSEAGO::available_organisms(Bioconductor)
-
+\dontrun{
 ###################
 # display EntrezGene table
 EntrezGene<-ViSEAGO::EntrezGene2GO()
@@ -43,6 +43,7 @@ ViSEAGO::available_organisms(Ensembl)
 # display Uniprot table
 Uniprot<-ViSEAGO::Uniprot2GO()
 ViSEAGO::available_organisms(Uniprot)
+}
 }
 \references{
 Yihui Xie (2016). DT: A Wrapper of the JavaScript Library 'DataTables'. R package version 0.2. https://CRAN.R-project.org/package=DT

@@ -5,9 +5,11 @@
 #'  stored in the \href{ftp://ftp.ncbi.nih.gov/gene/DATA/gene_orthologs.gz}{gene_group.gz} file.
 #' @return a \code{\link[data.table]{data.table}}.
 #' @examples
+#' \dontrun{
 #' ###################
 #' # Organism taxid, Scientific name and common name
 #' ViSEAGO::EntrezGene_orthologs()
+#' }
 #' @keywords internal
 #' @export
 EntrezGene_orthologs=function(){

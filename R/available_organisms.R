@@ -17,7 +17,7 @@
 #' # display Bioconductor table
 #' Bioconductor<-ViSEAGO::Bioconductor2GO()
 #' ViSEAGO::available_organisms(Bioconductor)
-#'
+#' \dontrun{
 #' ###################
 #' # display EntrezGene table
 #' EntrezGene<-ViSEAGO::EntrezGene2GO()
@@ -32,6 +32,7 @@
 #' # display Uniprot table
 #' Uniprot<-ViSEAGO::Uniprot2GO()
 #' ViSEAGO::available_organisms(Uniprot)
+#' }
 #' @name available_organisms
 #' @rdname available_organisms-methods
 #' @exportMethod available_organisms
