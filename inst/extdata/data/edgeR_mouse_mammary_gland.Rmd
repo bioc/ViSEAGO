@@ -23,7 +23,7 @@ csl: "`r base::system.file('extdata/','bmc-genomics.csl',package='ViSEAGO')`"
 ###################
 # knitr document options
 knitr::opts_chunk$set(eval=TRUE,fig.pos = 'H',
-fig.width=9,message=F,comment=NA,warning=F)
+fig.width=9,message=FALSE,comment=NA,warning=FALSE)
 ```
 
 ```{r LoadData}
