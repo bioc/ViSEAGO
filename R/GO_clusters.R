@@ -67,8 +67,7 @@ setMethod("show",signature="GO_clusters",function(object) {
 
   ###################
   # remove .pvalue in conditions column
-  Data[,conditions:=base::gsub("\\.pvalue","",conditions)]
-
+  Data[,"conditions":=base::gsub("\\.pvalue","",Data$conditions)]
 
   ###################
   # get topGO information
@@ -205,7 +204,7 @@ setMethod("show",signature="GO_clusters",function(object) {
             "enrich_GOs"
           ),
           "data"
-        )[,GO.cluster]
+        )[,"GO.cluster",with=FALSE]
       )
     ),
     "\n                              clusters min size: ",
@@ -217,7 +216,7 @@ setMethod("show",signature="GO_clusters",function(object) {
             "enrich_GOs"
           ),
           "data"
-        )[,GO.cluster]
+        )[,"GO.cluster",with=FALSE]
       ),
       digits=0
     ),
@@ -230,7 +229,7 @@ setMethod("show",signature="GO_clusters",function(object) {
             "enrich_GOs"
           ),
           "data"
-        )[,GO.cluster]
+        )[,"GO.cluster",with=FALSE]
       ),
       digits=0
     ),
@@ -243,7 +242,7 @@ setMethod("show",signature="GO_clusters",function(object) {
             "enrich_GOs"
           ),
           "data"
-        )[,GO.cluster]
+        )[,"GO.cluster",with=FALSE]
       ),
       digits=0
     ),

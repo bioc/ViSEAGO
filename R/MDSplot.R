@@ -6,7 +6,7 @@
 #' @importFrom plotly plot_ly add_markers layout
 #' @family GO_terms GO_clusters semantic_similarity visualization
 #' @param object a \code{\link{GO_SS-class}} or \code{\link{GO_clusters-class}} objects from distances computed with \code{\link{compute_SS_distances}}.
-#' @param show_clusters boolean (default to FALSE)
+#' @param type could be "GOterms" to display GOterms MDSplot, or "GOclusters" to display GOclusters MDSplot.
 #' @param file static image output file name (default to NULL).
 #' @details This method build and display the javascript MDSplot (if \code{file}=NULL) from \code{\link{GO_SS-class}} or \code{\link{GO_clusters-class}}
 #' objects.\cr
@@ -58,7 +58,10 @@
 #'
 #' ###################
 #' # build MDS plot for a GO_clusters-class distance object, highlighting GO terms clusters.
-#' ViSEAGO::MDSplot(Wang_clusters_wardD2)
+#' ViSEAGO::MDSplot(
+#'  Wang_clusters_wardD2,
+#'  "GOterms"
+#' )
 #'
 #' ###################
 #' # compute clusters of GO terms Semantic Similarity distances
@@ -82,20 +85,20 @@
 #' # build MDS plot for a GO_clusters-class distance object, highlighting GO groups clusters.
 #' ViSEAGO::MDSplot(
 #'  Wang_clusters_wardD2,
-#'  show_clusters=TRUE
+#'  "GOclusters"
 #' )
 #' }
 #' @exportMethod MDSplot
 #' @name MDSplot
 #' @rdname MDSplot-methods
 #' @exportMethod MDSplot
-setGeneric(name="MDSplot",def=function(object,show_clusters=FALSE,file=NULL){
+setGeneric(name="MDSplot",def=function(object,type="GOterms",file=NULL){
   standardGeneric("MDSplot")
 })
 
 #' @rdname MDSplot-methods
 #' @aliases MDSplot
-setMethod("MDSplot",signature="ANY",definition=function(object,show_clusters,file) {
+setMethod("MDSplot",signature="ANY",definition=function(object,type,file) {
 
   #################
   # check class
@@ -105,13 +108,17 @@ setMethod("MDSplot",signature="ANY",definition=function(object,show_clusters,fil
 
   #################
   # check class
-  if(methods::is(object,"GO_SS") & show_clusters==T){
+  if(methods::is(object,"GO_SS") & type=="GOclusters"){
     base::stop("show_clusters is only available for GO_clusters class after clusters SS distance calculation with ViSEAGO::compute_SS_distances()")
   }
 
+  ##################
+  # check type argument
+  type=base::match.arg(type,c("GOterms","GOclusters"))
+
   #################
   # for SS_dist from object
-  if(show_clusters==FALSE){
+  if(type=="GOterms"){
 
     #################
     # import SS_dist from object
@@ -125,7 +132,7 @@ setMethod("MDSplot",signature="ANY",definition=function(object,show_clusters,fil
 
     #################
     # measures
-    measures=names(d)
+    measures=base::names(d)
 
     #################
     # MDS
@@ -189,7 +196,7 @@ setMethod("MDSplot",signature="ANY",definition=function(object,show_clusters,fil
               "enrich_GOs"
             ),
             "data"
-          )[,.(GO.cluster,GO.ID,term)],
+          )[,base::c("GO.cluster","GO.ID","term"),with=FALSE],
           by="GO.ID",
           sort=F
           )
@@ -200,7 +207,10 @@ setMethod("MDSplot",signature="ANY",definition=function(object,show_clusters,fil
 
         #################
         # add levels to measures
-        res.mds$GO.cluster<-factor(res.mds$GO.cluster,levels=unique(res.mds$GO.cluster))
+        res.mds$GO.cluster<-factor(
+          res.mds$GO.cluster,
+          levels=base::unique(res.mds$GO.cluster)
+        )
       }
   }else{
 
@@ -211,12 +221,12 @@ setMethod("MDSplot",signature="ANY",definition=function(object,show_clusters,fil
     #################
     # if empty
     if(base::length(d)==0){
-      stop("Please use GO_clusters class object with computed clusters distances using ViSEAGO::compute_SS_distance()")
+      base::stop("Please use GO_clusters class object with computed clusters distances using ViSEAGO::compute_SS_distance()")
     }
 
     #################
     # measures
-    measures=names(d)
+    measures=base::names(d)
 
     #################
     # MDS
@@ -250,15 +260,24 @@ setMethod("MDSplot",signature="ANY",definition=function(object,show_clusters,fil
 
     #################
     # custom text
-    res.mds[,`:=`(text=GO.cluster,GO.cluster=base::gsub("_.+$","",GO.cluster))]
+    res.mds[,`:=`(
+      text=res.mds$GO.cluster,
+      GO.cluster=base::gsub("_.+$","",res.mds$GO.cluster)
+    )]
 
     #################
     # add levels to measures
-    res.mds$measure<-base::factor(res.mds$measure,levels=base::unique(res.mds$measure))
+    res.mds$measure<-base::factor(
+      res.mds$measure,
+      levels=base::unique(res.mds$measure)
+    )
 
     #################
     # add levels to GO.cluster
-    res.mds$GO.cluster<-base::factor(res.mds$GO.cluster,levels=base::unique(res.mds$GO.cluster))
+    res.mds$GO.cluster<-base::factor(
+      res.mds$GO.cluster,
+      levels=base::unique(res.mds$GO.cluster)
+    )
 
     #################
     # add GO.ID for GO
@@ -291,7 +310,7 @@ setMethod("MDSplot",signature="ANY",definition=function(object,show_clusters,fil
 
       ################
       # add trace to plot by measure
-      for(x in base::seq_len(length(measures))){
+      for(x in base::seq_len(base::length(measures))){
 
         ################
         # default visualization
@@ -301,12 +320,12 @@ setMethod("MDSplot",signature="ANY",definition=function(object,show_clusters,fil
         # create trace
         p<-plotly::add_markers(
           p,
-          data=res.mds[measure==measures[x]],
+          data=res.mds[measures[x],on="measure"],
           x=~Dim.1,
           y=~Dim.2,
          name=measures[x],
          text = ~paste('GO.ID:',GO.ID,'<br>GO.name:',term),
-         showlegend=F,
+         showlegend=FALSE,
           marker =base::list(
             size =20,
             opacity = 0.4,
@@ -346,11 +365,11 @@ setMethod("MDSplot",signature="ANY",definition=function(object,show_clusters,fil
             x = 0.1,
             y = 1.1,
 
-            buttons = base::lapply(base::seq_len(length(measures)),function(x){
+            buttons = base::lapply(base::seq_len(base::length(measures)),function(x){
 
               #################
               # init visibility to all FASLE
-              values=base::rep(FALSE,length(measures))
+              values=base::rep(FALSE,base::length(measures))
 
               #################
               # turn to true for each measures
@@ -385,19 +404,19 @@ setMethod("MDSplot",signature="ANY",definition=function(object,show_clusters,fil
           "enrich_GOs"
         ),
         "data"
-      )[,.(GO.cluster)]
+      )[,"GO.cluster",with=FALSE]
 
       ###################
       # count the number of terms by clusters
-      count<-count[,.(nb=.N),by=GO.cluster]
+      count<-count[,base::list("nb"=.N),by="GO.cluster"]
 
       ###################
       # add count to res.mds
-      res.mds=merge(res.mds,count,by="GO.cluster",sort=F)
+      res.mds=merge(res.mds,count,by="GO.cluster",sort=FALSE)
 
       ###################
       # for terms
-      if(show_clusters==F){
+      if(type=="GOterms"){
 
         ################
         # create trace
@@ -415,7 +434,7 @@ setMethod("MDSplot",signature="ANY",definition=function(object,show_clusters,fil
             "<br>GO.name:",
             term
           ),
-          showlegend=T,
+          showlegend=TRUE,
           colors=colors,
           marker =base::list(
             size =20,
@@ -444,9 +463,16 @@ setMethod("MDSplot",signature="ANY",definition=function(object,show_clusters,fil
 
         ###################
         # add count to text
-        res.mds[,`:=`(
-        text=paste(base::sub("<br>.+$","",text),"<br>GO.count:",
-        nb,base::sub("^.+<br>GO.ID","<br>GO.ID",text)))]
+        res.mds[,
+          `:=`(
+            text=paste(
+              base::sub("<br>.+$","",text),
+              "<br>GO.count:",
+              res.mds$nb,
+              base::sub("^.+<br>GO.ID","<br>GO.ID",text)
+            )
+          )
+        ]
 
         ################
         # add trace to plot by measure
@@ -454,18 +480,18 @@ setMethod("MDSplot",signature="ANY",definition=function(object,show_clusters,fil
 
           ################
           # default visualization
-          if(x==1){visible=T}else{visible=F}
+          if(x==1){visible=TRUE}else{visible=FALSE}
 
           ################
           # create trace
           p<-plotly::add_markers(
             p,
-            data=res.mds[measure==measures[x]],
+            data=res.mds[measures[x],on="measure"],
             x=~Dim.1,
             y=~Dim.2,
             name=measures[x],
             text = ~text,
-            showlegend=F,
+            showlegend=FALSE,
             sizes=base::c(20,50),
             size=~nb,
             marker =base::list(
@@ -508,7 +534,7 @@ setMethod("MDSplot",signature="ANY",definition=function(object,show_clusters,fil
               x = 0.1,
               y = 1.1,
 
-              buttons = base::lapply(base::seq_len(length(measures)),function(x){
+              buttons = base::lapply(base::seq_len(base::length(measures)),function(x){
 
                 #################
                 # init visibility to all FASLE

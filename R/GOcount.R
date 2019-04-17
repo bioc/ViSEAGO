@@ -80,7 +80,7 @@ setMethod("GOcount",signature="ANY",definition=function(object,file){
 
     ###################
     # count significant (or not) pvalues by condition
-    Data<-data[,pvalues,with=F]
+    Data<-data[,pvalues,with=FALSE]
 
     ###################
     # count
@@ -121,9 +121,9 @@ setMethod("GOcount",signature="ANY",definition=function(object,file){
     ###################
     # assign class values
     Data[,`:=`(
-      pvalue=base::factor(pvalue,levels = c("enriched GO terms","not enriched GO terms")),
-      condition=base::factor(condition,levels =base::rev(base::unique(condition))),
-      count=base::as.numeric(count)
+      pvalue=base::factor(Data$pvalue,levels = c("enriched GO terms","not enriched GO terms")),
+      condition=base::factor(Data$condition,levels =base::rev(base::unique(Data$condition))),
+      count=base::as.numeric(Data$count)
     )]
 
     ###################
@@ -135,7 +135,6 @@ setMethod("GOcount",signature="ANY",definition=function(object,file){
       x = ~count,
       color=~pvalue,
       colors=c("#FED8B1","#87ceeb")
-   #   opacity=0.8
     )
 
     p<-plotly::layout(p,

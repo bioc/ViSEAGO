@@ -60,7 +60,7 @@ setMethod("show",signature="GO_SS",function(object){
 
   ###################
   # remove .pvalue in conditions column
-  Data[,conditions:=base::gsub("\\.pvalue","",conditions)]
+  Data[,"conditions":=base::gsub("\\.pvalue","",Data$conditions)]
 
   ###################
   # get topGO information

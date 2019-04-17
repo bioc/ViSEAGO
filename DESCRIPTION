@@ -1,5 +1,5 @@
 Package: ViSEAGO
-Version: 0.99.15
+Version: 0.99.16
 Title: ViSEAGO: Easier data mining of biological functions organized into clusters using Gene Ontology and semantic similarity
 Author: Aurelien Brionne [aut, cre],
         Amelie Juanchich [aut],
@@ -42,7 +42,7 @@ Suggests: htmltools,
           BiocManager
 Description: The main objective of ViSEAGO workflow is to carry out a data mining of biological functions and establish links between genes involved in the study. We developed ViSEAGO in R to facilitate functional Gene Ontology (GO) analysis of complex experimental design with multiple comparisons of interest. It allows to study large-scale datasets together and visualize GO profiles to capture biological knowledge. The acronym stands for three major concepts of the analysis: Visualization, Semantic similarity and Enrichment Analysis of Gene Ontology. It provides access to the last current GO annotations, which are retrieved from one of NCBI EntrezGene, Ensembl or Uniprot databases for available species. ViSEAGO extends classical functional GO analysis to focus on functional coherence by aggregating closely related biological themes while studying multiple datasets at once. It provides both a synthetic and detailed view using interactive functionalities respecting the GO graph structure and ensuring functional coherence supplied by semantic similarity. ViSEAGO has been successfully applied on several datasets from different species with a variety of biological questions. Results can be easily shared between bioinformaticians and biologists, enhancing reporting capabilities while maintaining reproducibility.
 VignetteBuilder: knitr
-License: GPL-3 + file LICENSE
+License: GPL-3
 Repository: forgemia.inra.fr,
             bioconductor.org
 URL: https://forgemia.inra.fr/UMR-BOA/ViSEAGO,
@@ -65,6 +65,7 @@ Collate:
     'MDSplot.R'
     'Uniprot2GO.R'
     'Upset.R'
+    'ViSEAGO.R'
     'annotate.R'
     'available_organisms.R'
     'gene2GO.R'

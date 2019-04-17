@@ -12,7 +12,7 @@ output:
   BiocStyle::html_document:
     highlight: tango
 vignette: >
-  %\VignetteIndexEntry{1: overview}
+  %\VignetteIndexEntry{1: ViSEAGO}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: "`r base::system.file('extdata/','bibliography.bib',package='ViSEAGO')`"
@@ -27,7 +27,7 @@ library(ViSEAGO)
 ###################
 # knitr document options
 knitr::opts_chunk$set(
-  eval=FALSE,fig.path='./data/output/',echo=TRUE,fig.pos = 'H',
+  eval=FALSE,echo=TRUE,fig.pos = 'H',
   fig.width=8,message=FALSE,comment=NA,warning=FALSE
 )
 ```
@@ -60,31 +60,17 @@ remotes::install_gitlab(
 )
 ```
 
-You can also optionally create directories to store gene lists in the input folder, and export the results in the output folder.
-
-```{r ViSEAGO_directories}
-###################
-# create data directories (input, cache,output)
-base::dir.create(
-  "./data/input",
-  recursive=TRUE,
-  showWarnings=FALSE
-)
-base::dir.create(
-  "./data/output",
-  showWarnings=FALSE
-)
-```
+<u>NB:</u> This vignette is not runnable and provide a pseudo-code to illustrate ViSEAGO package capabilities.
 
 # Genes of interest
 
-Firstly, you need to provide the gene *background* (= expressed genes) and *selection* in the created `./data/input/` subfolder, before reading the files.
+Firstly, you need to provide the gene *background* (= expressed genes) and *selection* files.
 
 ```{r geneList_input}
 ###################
 # load genes background
 background<-base::scan(
-  "./data/input/background.txt",
+  "background.txt",
   quiet=TRUE,
   what=""
 )
@@ -92,7 +78,7 @@ background<-base::scan(
 ###################
 # load gene selection
 selection<-base::scan(
-  "./data/input/selection.txt",
+  "selection.txt",
   quiet=TRUE,
   what=""
 )
@@ -249,7 +235,7 @@ ViSEAGO::show_table(BP_sResults)
 # print the merged table in a file
 ViSEAGO::show_table(
   BP_sResults,
-  "./data/output/BP_sResults.xls"
+  "BP_sResults.xls"
 )
 ```
 
@@ -268,7 +254,7 @@ ViSEAGO::GOcount(BP_sResults)
 # display interactions
 ViSEAGO::Upset(
   BP_sResults,
-  file="./data/output/OLexport.xls"
+  file="OLexport.xls"
 )
 ```
 
@@ -307,7 +293,7 @@ ViSEAGO::MDSplot(myGOs)
 # print MDSplot
 ViSEAGO::MDSplot(
   myGOs,
-  file="./data/output/mdsplot1.png"
+  file="mdsplot1.png"
 )
 ```
 
@@ -359,7 +345,7 @@ ViSEAGO::show_heatmap(
 ViSEAGO::show_heatmap(
   Wang_clusters_wardD2,
   "GOterms",
-  "./data/output/cluster_heatmap_Wang_wardD2.png"
+  "cluster_heatmap_Wang_wardD2.png"
 )
 ```
 
@@ -374,7 +360,7 @@ ViSEAGO::show_table(Wang_clusters_wardD2)
 # Print the clusters-heatmap table
 ViSEAGO::show_table(
   Wang_clusters_wardD2,
-  "./data/output/cluster_heatmap_Wang_wardD2.xls"
+  "cluster_heatmap_Wang_wardD2.xls"
 )
 ```
 
@@ -385,13 +371,17 @@ We also display a Multi Dimensional Scale (MDS) plot with the overlay of GO term
 ```{r SS_Wang-ward.D2_mdsplot,eval=FALSE}
 ###################           
 # display colored MDSplot
-ViSEAGO::MDSplot(Wang_clusters_wardD2)
+ViSEAGO::MDSplot(
+  Wang_clusters_wardD2,
+  "GOterms"
+)
 
 ###################           
 # print colored MDSplot
 ViSEAGO::MDSplot(
   Wang_clusters_wardD2,
-  file="./data/output/mdsplot2.png"
+  "GOterms",
+  file="mdsplot2.png"
 )
 ```
 
@@ -411,7 +401,7 @@ A colored Multi Dimensional Scale (MDS) plot with `ViSEAGO::MDSplot` method prov
 # calculate semantic similarites between clusters of GO terms
 Wang_clusters_wardD2<-ViSEAGO::compute_SS_distances(
   Wang_clusters_wardD2,
-  distance="BMA"
+  distance=c("max", "avg","rcmax", "BMA")
 )
 ```
 
@@ -420,15 +410,15 @@ Wang_clusters_wardD2<-ViSEAGO::compute_SS_distances(
 # build and highlight in an interactive MDSplot grouped clusters for one distance object
 ViSEAGO::MDSplot(
   Wang_clusters_wardD2,
-  show_clusters=TRUE
+ "GOclusters"
 )
 
 ###################           
 # build and highlight in MDSplot grouped clusters for one distance object
 ViSEAGO::MDSplot(
   Wang_clusters_wardD2,
-  show_clusters=TRUE,
-  file="./data/output/mdsplot2.png"
+  "GOclusters",
+  file="mdsplot3.png"
 )
 ```
 
@@ -463,7 +453,7 @@ ViSEAGO::show_heatmap(
 ViSEAGO::show_heatmap(
   Wang_clusters_wardD2,
   "GOclusters",
-  "./data/output/Wang_clusters_wardD2_heatmap_groups.png"
+  "Wang_clusters_wardD2_heatmap_groups.png"
 )
 ```
 

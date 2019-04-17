@@ -164,7 +164,11 @@ setMethod("annotate",
 
         ###################
         # extract Organisms informations
-        taxon=ViSEAGO::taxonomy(base::unique(base::c(gene_group$tax_id, gene_group$Other_tax_id)))
+        taxon=ViSEAGO::taxonomy(
+          base::unique(
+            base::c(gene_group$tax_id, gene_group$Other_tax_id)
+          )
+        )
 
         ###################
         # select the target species and ortholog
@@ -172,7 +176,7 @@ setMethod("annotate",
 
           ###################
           # ordering by Scientific name
-          data.table::setorder(taxon,ScientificName)
+          data.table::setorderv(taxon,"ScientificName")
 
           ###################
           # stop scrip execution
@@ -187,7 +191,7 @@ setMethod("annotate",
           # silencing stop
           opt <- base::options(show.error.messages=FALSE)
           base::on.exit(base::options(opt))
-          stop()
+          base::stop()
 
         }else{
 
@@ -196,16 +200,26 @@ setMethod("annotate",
           id=base::match.arg(id,taxon$taxid)
 
           ####################
-          # select the target species and ortholog
-          gene_group<-gene_group[relationship=="Ortholog" & (tax_id==id | Other_tax_id==id)]
+          # select orthologs relationship
+          gene_group<-gene_group["Ortholog",on="relationship"]
+
+          ####################
+          # select target species in tax_id columns
+          gene_group<-base::lapply(base::c("tax_id","Other_tax_id"),function(x){
+            gene_group[id,on=x]
+           })
+
+          ####################
+          # convert to data.table
+          gene_group<-data.table::rbindlist(gene_group)
 
           ###################
           # select the target species and ortholog from the left part of the table
-          group1<-gene_group[tax_id==id,.(GeneID,Other_GeneID)]
+          group1<-gene_group[id,base::c("GeneID","Other_GeneID"),with=FALSE,on="tax_id"]
 
           ###################
           # select the target species and ortholog from the right part of the table
-          group2<-gene_group[Other_tax_id==id,.(Other_GeneID,GeneID)]
+          group2<-gene_group[id,base::c("Other_GeneID","GeneID"),with=FALSE,on="Other_tax_id"]
 
           ###################
           # renames(group2)
@@ -217,15 +231,20 @@ setMethod("annotate",
 
           ###################
           # Extract otholog species annotation from data slot
-          ortho<-methods::slot(object,"data")[evidence%in%c("EXP","IDA","IPI","IMP","IGI", "IEP")]
+          ortho<-methods::slot(object,"data")[base::c("EXP","IDA","IPI","IMP","IGI", "IEP"),on="evidence"]
 
           ###################
           # merge experimental GO anotation from orthologs
-          ortho<-merge(gene_group,ortho,by.x="Other_GeneID",by.y="gene_id")
+          ortho<-merge(
+            gene_group,
+            ortho,
+            by.x="Other_GeneID",
+            by.y="gene_id"
+          )
 
           ###################
           # remove ortholog GeneID
-          ortho[,Other_GeneID:=NULL]
+          ortho[,"Other_GeneID":=NULL]
 
           ###################
           # rename GeneID to gene_id
@@ -233,11 +252,11 @@ setMethod("annotate",
 
           ###################
           # assign target species id to taxid and replac exprerimental evidence by IEA (computationnal)
-          ortho[,`:=`(taxid=base::as.numeric(id),evidence="IEA")]
+          ortho[,`:=`(taxid=id,evidence="IEA")]
 
           ###################
           # Extract species annotation from data slot
-          annot<-methods::slot(object,"data")[taxid==base::as.numeric(id)]
+          annot<-methods::slot(object,"data")[id,on="taxid"]
 
           ###################
           # add orthologs annotation to species annotation
@@ -248,14 +267,14 @@ setMethod("annotate",
 
         ###################
         # Extract species annotation from data slot
-        annot<-methods::slot(object,"data")[taxid==base::as.numeric(id)]
+        annot<-methods::slot(object,"data")[id,on="taxid"]
       }
 
       ###################
       # Extract species annotation from data slot
-      annot[category=="Function",category:="MF"]
-      annot[category=="Process",category:="BP"]
-      annot[category=="Component",category:="CC"]
+      annot["Function","category":="MF",on="category"]
+      annot["Process","category":="BP",on="category"]
+      annot["Component","category":="CC",on="category"]
 
       ###################
       # GO database stamp
@@ -263,7 +282,7 @@ setMethod("annotate",
     }
 
     ###################
-    # BioConductor
+    # Bioconductor
     if(methods::slot(object,"db")=="Bioconductor"){
 
       ###################
@@ -279,12 +298,15 @@ setMethod("annotate",
 
         ###################
         # bioclite source
-        BiocManager::install(id)
+        base::stop(
+          base::paste(
+            'Please install database package from Bioconductor using BiocManager::install("',
+            id,
+            '")'
+            ,sep=""
+          )
+        )
       }
-
-      ###################
-      # load GO annotations
-      base::require(id,character.only=TRUE)
 
       ###################
       # load GO annotations
@@ -306,18 +328,21 @@ setMethod("annotate",
 
       ###################
       # connect to ensembl specified dataset
-      myspecies<-biomaRt::useDataset(id,methods::slot(object,"mart")[[1]])
+      myspecies<-biomaRt::useDataset(
+        id,
+        methods::slot(object,"mart")[[1]]
+      )
 
       ###################
       # with go name according biomart version
       go_filter<- data.table::data.table(biomaRt::listFilters(myspecies))
 
       ###################
-      # load Ensembl genes, with GO annotations
+      # load Ensembl genes with GO annotations
       annot<-data.table::data.table(
         biomaRt::getBM(
           attributes =c("ensembl_gene_id","go_id","go_linkage_type","namespace_1003"),
-          filters=go_filter[base::grep("with GO ID",ignore.case = T,go_filter$description),name],
+          filters=go_filter[base::grep("with GO ID",ignore.case =TRUE,go_filter$description),"name",with=FALSE],
           value=TRUE,
           mart =myspecies
         )
@@ -329,9 +354,9 @@ setMethod("annotate",
 
       ###################
       # Extract species annotation from data slot
-      annot[category=="molecular_function",category:="MF"]
-      annot[category=="biological_process",category:="BP"]
-      annot[category=="cellular_component",category:="CC"]
+      annot["molecular_function","category":="MF",on="category"]
+      annot["biological_process","category":="BP",on="category"]
+      annot["cellular_component","category":="CC",on="category"]
 
       ###################
       # GO database stamp
@@ -343,23 +368,37 @@ setMethod("annotate",
     if(methods::slot(object,"db")=="Uniprot-GOA"){
 
       ###################
+      # temp file
+      temp<-base::paste(
+        base::tempfile(),
+        "gz",
+        sep="."
+      )
+
+      ###################
       # load the file
-      utils::download.file(base::paste('ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/',
-      base::toupper(id),'/goa_',id,'.gaf.gz',sep=""),destfile = "annot.gz",quiet=TRUE)
+      utils::download.file(
+        base::paste(
+          'ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/',
+          base::toupper(id),
+          '/goa_',
+          id,
+          '.gaf.gz'
+          ,sep=""
+        ),
+        destfile =temp,
+        quiet=TRUE
+      )
 
       ###################
       # unzip
-      R.utils::gunzip("annot.gz")
-
-      ###################
-      # remove the zipped file
-      base::unlink("annot.gz")
+      R.utils::gunzip(temp)
 
       #################
       # read file
       annot<-base::unique(
         data.table::fread(
-          "annot",
+          base::sub("\\.gz","",temp),
           skip=12,
           select=base::c(2,5,7,9),
           col.names=base::c("gene_id","GOID","evidence","category")
@@ -368,9 +407,9 @@ setMethod("annotate",
 
       ###################
       # Extract species annotation from data slot
-      annot[category=="F",category:="MF"]
-      annot[category=="P",category:="BP"]
-      annot[category=="C",category:="CC"]
+      annot["F","category":="MF",on="category"]
+      annot["P","category":="BP",on="category"]
+      annot["C","category":="CC",on="category"]
 
       ###################
       # GO database stamp
@@ -382,35 +421,32 @@ setMethod("annotate",
   ###################
 
     ###################
-    # convert to list
-    Data<-base::lapply(c("MF","BP","CC"),function(x){
+    # split annot to chuncks
+    Data<-split(
+      annot[,base::c("GOID","evidence","category","gene_id"),with=FALSE],
+      by=base::c("category","gene_id"),
+      flatten=FALSE,
+      keep.by=FALSE
+    )
 
-      ###################
-      # for a category
-      Data<-annot[category==x]
-
-      ###################
-      # for each
-      Dat<-base::lapply(base::unique(Data$gene_id),function(y){
-
-        ###################
-        # extract GOID by gene
-        values<-Data[gene_id==y,GOID]
+    ###################
+    # convert chunks elements fot topGO compatbility
+    Data<-base::lapply(Data,function(x){
+      base::lapply(x,function(y){
 
         ###################
-        # add GO evidence
-        base::names(values)<-Data[gene_id==y,evidence]
+        # extract GOID
+        values<-y$GOID
 
         ###################
-        # return values
-        values
-      })
-      names(Dat)<-base::unique(Data$gene_id)
+        # add evidence
+        base::names(values)<-y$evidence
 
-      ###################
-      # return values
-      Dat
+        ###################
+        # return
+       return(values)
     })
+  })
 
   ###################
   # create GENE2GO object
@@ -420,8 +456,8 @@ setMethod("annotate",
     db=methods::slot(object,"db"),
     stamp=stamp,
     organism=id,
-    MF=Data[[1]],
-    BP=Data[[2]],
-    CC=Data[[3]]
+    MF=Data$MF,
+    BP=Data$BP,
+    CC=Data$CC
   )
 })

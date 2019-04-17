@@ -31,34 +31,48 @@ EntrezGene2GO=function(){
   ###################
 
     ###################
+    # temp file
+    temp<-base::paste(
+      base::tempfile(),
+      "gz",
+      sep="."
+    )
+
+    ###################
     # import Gene to Gene Ontology from NCBI Gene database
     utils::download.file(
       "ftp://ftp.ncbi.nih.gov/gene/DATA/gene2go.gz",
       quiet=TRUE,
-      destfile = "gene2go.gz"
+      destfile =temp
     )
 
     ##################
     #  uncompress
-    R.utils::gunzip("gene2go.gz")
+    R.utils::gunzip(temp)
 
     ##################
     # read the file (linux and windows)
     gene2go=data.table::fread(
-      "gene2go",
+      base::sub("\\.gz","",temp),
       verbose=FALSE,
       showProgress=FALSE
     )
 
     ###################
-    # unlink gz file
-    base::unlink("gene2go.gz")
-    base::unlink("gene2go")
+    # select columns and rename
+    gene2go<-base::unique(
+      gene2go[,base::c(base::seq_len(4),8),with=FALSE]
+    )
+    base::colnames(gene2go)<-base::c("taxid","gene_id","GOID","evidence","category")
 
     ###################
-    # select columns and rename
-    gene2go<-base::unique(gene2go[,c(base::seq_len(4),8),with=FALSE])
-    base::colnames(gene2go)<-base::c("taxid","gene_id","GOID","evidence","category")
+    # convert columns in character
+    gene2go[,
+      `:=`(
+        taxid=base::as.character(gene2go$taxid),
+        gene_id=base::as.character(gene2go$gene_id)
+      )
+    ]
 
   ###################
   # taxonomy

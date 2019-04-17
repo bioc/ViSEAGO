@@ -13,6 +13,12 @@ to complete
 ## Installation
 
 ```r
+###################
+# load ViSEAGO package from Bioconductor
+BiocManager::install("ViSEAGO")
+
+###################
+# load ViSEAGO package from gitlab
 remotes::install_gitlab(
   "umr-boa/viseago",
   host = "forgemia.inra.fr",

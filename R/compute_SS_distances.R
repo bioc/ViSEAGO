@@ -136,19 +136,27 @@ setMethod("compute_SS_distances",
         "enrich_GOs"
       ),
       "data"
-    )[,.(GO.ID,term,GO.cluster)]
+    )[,base::c("GO.ID","term","GO.cluster"),with=FALSE]
 
     ###################
     # cluster names
-    clusters<-GOclusters[,.(GO.ID,GO.cluster)]
+    clusters<-GOclusters[,base::c("GO.ID","GO.cluster"),with=FALSE]
 
     ###################
     # convert clusters in factor
-    clusters[,GO.cluster:=base::factor(GO.cluster,levels = base::unique(GO.cluster))]
+    clusters[,"GO.cluster":=base::factor(
+      clusters$GO.cluster,
+      levels = base::unique(clusters$GO.cluster)
+    )]
 
     ###################
     # get ancestors
-    onto=base::switch(methods::slot(object,"ont"),MF=GO.db::GOMFANCESTOR,BP=GO.db::GOBPANCESTOR,CC=GO.db::GOCCANCESTOR)
+    onto=base::switch(
+      methods::slot(object,"ont"),
+      MF=GO.db::GOMFANCESTOR,
+      BP=GO.db::GOBPANCESTOR,
+      CC=GO.db::GOCCANCESTOR
+    )
 
     ###################
     # convert in list
@@ -175,7 +183,7 @@ setMethod("compute_SS_distances",
     ###################
     # merge onto with GOclusters
     onto=merge(
-      clusters[,.(GO.ID,GO.cluster)],
+      clusters[,base::c("GO.ID","GO.cluster"),with=FALSE],
       onto,
       by.x="GO.ID",
       by.y="ind",
@@ -185,15 +193,15 @@ setMethod("compute_SS_distances",
 
     ###################
     # remove GO.ID
-    onto=onto[,GO.ID:=NULL]
+    onto=onto[,"GO.ID":=NULL]
 
     ###################
     # count the term occurence by cluster
-    onto=onto[,.N,by=list(GO.cluster,values)]
+    onto=onto[,.N,by=c("GO.cluster","values")]
 
     ###################
     # select the maxima term occurence by cluster
-    onto=onto[onto[, .I[N== max(N)], by=GO.cluster]$V1]
+    onto=onto[onto[, .I[N==base::max(N)], by="GO.cluster"]$V1]
 
     ###################
     # add IC to onto
@@ -201,11 +209,17 @@ setMethod("compute_SS_distances",
 
     ###################
     # select the first maxima term IC by cluster
-    onto=onto[onto[, .I[which.max(IC)], by=GO.cluster]$V1]
+    onto=onto[onto[, .I[base::which.max(IC)], by="GO.cluster"]$V1]
 
     ###################
     # extract GO terms
-    GO<-data.table::data.table(AnnotationDbi::select(GO.db::GO.db, keys=onto$values,column ="TERM"))
+    GO<-data.table::data.table(
+      AnnotationDbi::select(
+        GO.db::GO.db,
+        keys=onto$values,
+        column ="TERM"
+      )
+    )
 
     ###################
     #  add sizes column to GOclusters

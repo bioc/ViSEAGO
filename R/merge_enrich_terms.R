@@ -533,7 +533,7 @@ setMethod("merge_enrich_terms",signature="list",definition=function(Input){
 
         ##################
         # if found symbols
-        if(nrow(annot[!is.na(ENTREZID)])>0){
+        if(nrow(annot[!is.na(annot$ENTREZID)])>0){
 
           # ###################
           # load GeneID and symbols
@@ -649,7 +649,7 @@ setMethod("merge_enrich_terms",signature="list",definition=function(Input){
 
         ##################
         # if found symbols
-        if(nrow(annot[!is.na(Id)])>0){
+        if(nrow(annot[!is.na(annot$Id)])>0){
 
           ###################
           # load GeneID and symbols
@@ -687,7 +687,7 @@ setMethod("merge_enrich_terms",signature="list",definition=function(Input){
 
         ##################
         # if found symbols
-        if(base::nrow(annot[external_gene_name!=""])>0){
+        if(base::nrow(annot[!"",on="external_gene_name"])>0){
 
           ###################
           # load GeneID and symbols
@@ -707,13 +707,13 @@ setMethod("merge_enrich_terms",signature="list",definition=function(Input){
 
       ###################
       # reorder columns
-      genes<-genes[,.(GO.ID,Significant_genes,Significant_genes_symbol)]
+      genes<-genes[,base::c("GO.ID","Significant_genes","Significant_genes_symbol"),with=FALSE]
 
       ##################
       # collapse results
       genes<-genes[,
         base::lapply(.SD,function(x){base::paste(x,collapse=";")}),
-        .SDcols=2:3,by=GO.ID]
+        .SDcols=2:3,by="GO.ID"]
 
       ##################
       # replace all blank cells by NA
@@ -751,7 +751,7 @@ setMethod("merge_enrich_terms",signature="list",definition=function(Input){
 
         ###################
         # remove GO.ID
-        pvalue[,GO.ID:=NULL]
+        pvalue[,"GO.ID":=NULL]
       }
 
       ###################
@@ -790,15 +790,16 @@ setMethod("merge_enrich_terms",signature="list",definition=function(Input){
 
     ##################
     # merge all
-    Results<-base::Reduce(function(...) merge(..., by ="GO.ID", sort=F,all = T),Results)
+    Results<-base::Reduce(function(...) merge(..., by ="GO.ID", sort=FALSE,all=TRUE),Results)
 
     ##################
     # remove NA in GO.Id column
-    Results<-Results[!base::is.na(GO.ID)]
+    Results<-Results[!base::is.na(Results$GO.ID)]
 
     ##################
     # Remove gene ID and symbol if GO term not significant
-    Results[pvalue>=0.01,
+    Results[
+      Results$pvalue>=0.01,
       `:=`(
         Significant_genes=NA,
         Significant_genes_symbol=NA
@@ -840,7 +841,7 @@ setMethod("merge_enrich_terms",signature="list",definition=function(Input){
 
     ###################
     # merge all results
-    allResults=base::Reduce(function(...) merge(..., by ="GO.ID", sort=F,all = T), allResults)
+    allResults=base::Reduce(function(...) merge(..., by ="GO.ID", sort=FALSE,all = TRUE), allResults)
 
   }else{
 
@@ -862,7 +863,7 @@ setMethod("merge_enrich_terms",signature="list",definition=function(Input){
 
   ##################
   # add GO term description and definition to sResults
-  allResults<-data.table::data.table(GO,allResults[,GO.ID:=NULL])
+  allResults<-data.table::data.table(GO,allResults[,"GO.ID":=NULL])
 
   ##################
   # rename the fisrt 3 columns

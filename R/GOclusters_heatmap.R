@@ -115,7 +115,7 @@ setMethod("GOclusters_heatmap",
     object="GO_clusters",
     tree="list"
   ),
-  definition=function(object,tree=base::list(distance,aggreg.method,rotate)){
+  definition=function(object,tree){
 
   #################
   # if empty
@@ -174,27 +174,40 @@ setMethod("GOclusters_heatmap",
       "enrich_GOs"
       ),
     "data"
-  )[,.(GO.cluster,GO.ID)]
+  )[,base::c("GO.cluster","GO.ID"),with=FALSE]
 
   ###################
   # count terms by clusters
-  mat<-mat[,.(count=.N),by=GO.cluster]
+  mat<-mat[,base::list("count"=.N),by="GO.cluster"]
 
   ###################
   # count terms by clusters
-  mat<-base::as.matrix(mat[,.(count)])
+  mat<-base::as.matrix(mat[,"count",with=FALSE])
 
   ###################
   # colors table
-  colors=data.table::data.table(gp=base::seq_len(base::nrow(mat)),color=colors)
+  colors=data.table::data.table(
+    gp=base::seq_len(base::nrow(mat)),
+    color=colors
+  )
 
   ###################
   # merge cluster term assignation and corresponding color
-  colors<-merge(data.table::data.table(gp=colors$gp[ord]),colors,by="gp",all.x=T,sort=F)
+  colors<-merge(
+    data.table::data.table(gp=colors$gp[ord]),
+    colors,
+    by="gp",
+    all.x=TRUE,
+    sort=FALSE
+  )
 
   ###################
   # color branches according clusters
-  dend<-dendextend::branches_attr_by_clusters(dend,base::seq_len(base::nrow(mat)), values =colors$color)
+  dend<-dendextend::branches_attr_by_clusters(
+    dend,
+    base::seq_len(base::nrow(mat)),
+    values =colors$color
+  )
 
   ###################
   # assign text color
@@ -236,7 +249,7 @@ setMethod("GOclusters_heatmap",
 
     ###################
     # the ordered matrix according dendrograms for columns
-    Colv=F,
+    Colv=FALSE,
 
     ###################
     # the color palette

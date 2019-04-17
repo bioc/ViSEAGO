@@ -43,7 +43,9 @@ taxonomy=function(...){
 
         ###################
         # convert in data.table
-        data.table::data.table(base::t(capture))
+        data.table::data.table(
+          base::t(capture)
+        )
 
       }else{
 
@@ -63,7 +65,11 @@ taxonomy=function(...){
 
     ###################
     # replace "" or \t values by NA
-    Data[CommonName%in%c("","\t"),CommonName:=NA]
+    Data[
+      base::c("","\t"),
+      "CommonName":="NA",
+      on="CommonName"
+    ]
 
     ###################
     # return query

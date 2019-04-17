@@ -6,14 +6,14 @@
 \alias{MDSplot,ANY-method}
 \title{Multi Dimensional Scale (MDS) plot}
 \usage{
-MDSplot(object, show_clusters = FALSE, file = NULL)
+MDSplot(object, type = "GOterms", file = NULL)
 
-\S4method{MDSplot}{ANY}(object, show_clusters = FALSE, file = NULL)
+\S4method{MDSplot}{ANY}(object, type = "GOterms", file = NULL)
 }
 \arguments{
 \item{object}{a \code{\link{GO_SS-class}} or \code{\link{GO_clusters-class}} objects from distances computed with \code{\link{compute_SS_distances}}.}
 
-\item{show_clusters}{boolean (default to FALSE)}
+\item{type}{could be "GOterms" to display GOterms MDSplot, or "GOclusters" to display GOclusters MDSplot.}
 
 \item{file}{static image output file name (default to NULL).}
 }
@@ -73,7 +73,10 @@ Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 
 ###################
 # build MDS plot for a GO_clusters-class distance object, highlighting GO terms clusters.
-ViSEAGO::MDSplot(Wang_clusters_wardD2)
+ViSEAGO::MDSplot(
+ Wang_clusters_wardD2,
+ "GOterms"
+)
 
 ###################
 # compute clusters of GO terms Semantic Similarity distances
@@ -97,7 +100,7 @@ Wang_clusters_wardD2<-ViSEAGO::GOclusters_heatmap(
 # build MDS plot for a GO_clusters-class distance object, highlighting GO groups clusters.
 ViSEAGO::MDSplot(
  Wang_clusters_wardD2,
- show_clusters=TRUE
+ "GOclusters"
 )
 }
 }

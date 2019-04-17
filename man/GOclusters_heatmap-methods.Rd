@@ -10,7 +10,8 @@ GOclusters_heatmap(object, tree = base::list(distance = "BMA",
   aggreg.method = "ward.D2", rotate = NULL))
 
 \S4method{GOclusters_heatmap}{GO_clusters,list}(object,
-  tree = base::list(distance, aggreg.method, rotate))
+  tree = base::list(distance = "BMA", aggreg.method = "ward.D2", rotate =
+  NULL))
 }
 \arguments{
 \item{object}{a  \code{\link{GO_clusters-class}} object from \code{\link{compute_SS_distances}}.}

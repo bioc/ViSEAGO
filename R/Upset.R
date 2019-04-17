@@ -70,7 +70,7 @@ setMethod("Upset",signature="ANY",definition=function(object,file){
   ##################
   # build binary matrix for Upset graph
   Data<-data.table::data.table(
-    GO.ID=Data[,GO.ID],
+    GO.ID=Data[,"GO.ID",with=FALSE],
     Data[,base::lapply(.SD,function(x){
       val=x<0.01;x[val]<-1;x[!val]<-0;x}),
       .SDcols=2:base::ncol(Data)]

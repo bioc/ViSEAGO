@@ -519,6 +519,12 @@ setMethod("GOterms_heatmap",
   ###################
 
     ###################
+    # visible binding for global variable
+    # Bioconductor submission "checking R code possible problems" step
+    col.ord<-NULL
+    row.ord<-NULL
+
+    ###################
     # create row and column dendrograms
     for(i in c("row_tree","col_tree")){
 
@@ -540,7 +546,16 @@ setMethod("GOterms_heatmap",
 
         ###################
         # create ordering vector
-        base::assign(base::paste(base::substring(i,1,3),"ord",sep="."),stats::order.dendrogram(base::get(dd)))
+        base::assign(
+          base::paste(
+            base::substring(i,1,3),
+            "ord",
+            sep="."
+          ),
+          stats::order.dendrogram(
+            base::get(dd)
+          )
+        )
 
      }else{
 
@@ -787,12 +802,12 @@ setMethod("GOterms_heatmap",
 
     ###################
     # If gene background not the same
-    if(methods::slot(methods::slot(myGOs,"enrich_GOs"),"same_genes_background")==F){
+    if(methods::slot(methods::slot(myGOs,"enrich_GOs"),"same_genes_background")==FALSE){
 
       ###################
       # show warning
       base::warning(
-        call. =F,
+        call. =FALSE,
         "Not equal genes background in all conditions:\n--> pvalues converted to significant (1) or not (0) by condition in the cluster-heatmap"
       )
 
@@ -829,7 +844,7 @@ setMethod("GOterms_heatmap",
 
       ###################
       # the ordered matrix according dendrograms for columns
-      Colv=if(!is.null(col.dist)){dd.col}else{F},
+      Colv=if(!is.null(col.dist)){dd.col}else{FALSE},
 
       ###################
       # the IC information

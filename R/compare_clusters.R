@@ -186,7 +186,7 @@ setMethod("compare_clusters",signature ="list",definition=function(clusters) {
             "enrich_GOs"
           ),
           "data"
-        )[,.(GO.ID,GO.cluster)]
+        )[,base::c("GO.ID","GO.cluster"),with=FALSE]
       )
 
       ###################

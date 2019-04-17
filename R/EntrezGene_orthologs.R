@@ -15,26 +15,43 @@
 EntrezGene_orthologs=function(){
 
   ###################
+  # temp file
+  temp<-base::paste(
+    base::tempfile(),
+    "gz",
+    sep="."
+  )
+
+  ###################
   # import gene_group from NCBI
-  utils::download.file("ftp://ftp.ncbi.nih.gov/gene/DATA/gene_orthologs.gz",quiet=TRUE,
-  destfile = "gene_orthologs.gz")
+  utils::download.file(
+    "ftp://ftp.ncbi.nih.gov/gene/DATA/gene_orthologs.gz",
+    quiet=TRUE,
+    destfile =temp
+  )
 
   ##################
   #  uncompress
-  R.utils::gunzip("gene_orthologs.gz")
+  R.utils::gunzip(temp)
 
   ##################
   # read the file
-  gene_orthologs=data.table::fread("gene_orthologs",verbose=FALSE,showProgress=FALSE)
-
-  ###################
-  # unlink gz file
-  base::unlink("gene_orthologs.gz")
-  base::unlink("gene_orthologs")
+  gene_orthologs=data.table::fread(
+    base::sub("\\.gz","",temp),
+    verbose=FALSE,
+    showProgress=FALSE
+  )
 
   ###################
   # remove # in header
   base::names(gene_orthologs)<-base::gsub("#","",base::names(gene_orthologs))
+
+  ###################
+  # convert to character
+  gene_orthologs<-gene_orthologs[,
+    base::lapply(.SD,base::as.character),
+    .SDcols=base::names(gene_orthologs)
+  ]
 
   ###################
   # return the table

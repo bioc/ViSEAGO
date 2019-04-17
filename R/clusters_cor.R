@@ -193,11 +193,11 @@ setMethod("clusters_cor",
           "enrich_GOs"
         ),
         "data"
-      )[,.(GO.ID,GO.cluster)]
+      )[,base::c("GO.ID","GO.cluster"),with=FALSE]
 
       ###################
       # ordering by GO.ID
-      data.table::setorder(object,GO.ID)
+      data.table::setorderv(object,"GO.ID")
 
       ###################
       # return the object
