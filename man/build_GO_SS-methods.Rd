@@ -32,15 +32,15 @@ and compute the Information content (IC) using the internal code of \code{\link[
 ###################
 # initialyse object for compute GO Semantic Similarity
 myGOs<-ViSEAGO::build_GO_SS(
- gene2GO=myGENE2GO,
- enrich_GO_terms=BP_sResults
+    myGENE2GO,
+    BP_sResults
 )
 }
 ###################
 # load data example
 utils::data(
- myGOs,
- package="ViSEAGO"
+    myGOs,
+    package="ViSEAGO"
 )
 }
 \references{

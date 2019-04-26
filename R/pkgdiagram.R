@@ -35,103 +35,100 @@
 #' @export
 pkgdiagram<-function(x=c("white","white","white","white","white")){
 
-  ###################
-  # print the diagram
-  DiagrammeR::grViz(diagram=base::paste("
+    # print the diagram
+    grViz(
+        diagram=base::paste("
+            # init the graph
+            digraph ViSEAGO_map {
 
-    ###################
-    # init the graph
-    digraph ViSEAGO_map {
+                # a 'graph' statement
+                graph [layout = dot,overlap = false, fontsize = 10, splines= true, shape =oval,fixedsize = true,width = 2.5,fontname = Helvetica]
 
-    ###################
-    # a 'graph' statement
-    graph [layout = dot,overlap = false, fontsize = 10, splines= true, shape =oval,fixedsize = true,width = 2.5,fontname = Helvetica]
+                subgraph cluster0 {
+                    label='List(s) of genes'
+                    fontsize = 25
+                    fontcolor = MistyRose2
+                    labelloc=t
+                    color=",x[1],"
+                    node [fillcolor=MistyRose2,style=filled]
+                    'Genes of interest \n and background'
+                }
 
-    subgraph cluster0 {
-      label='List(s) of genes'
-      fontsize = 25
-      fontcolor = MistyRose2
-      labelloc=t
-      color=",x[1],"
-      node [fillcolor=MistyRose2,style=filled]
-      'Genes of interest \n and background'
-    }
+                node [fillcolor=orange,style=filled]
+                subgraph cluster1 {
+                    label='Genomic ressources'
+                    fontsize = 25
+                    fontcolor = orange
+                    labelloc=t
+                    color=",x[2],"
+                    Bioconductor2GO
+                    EntrezGene2GO
+                    Ensembl2GO
+                    Uniprot2GO
+                    available_organisms
+                    annotate
+                }
 
-    node [fillcolor=orange,style=filled]
-    subgraph cluster1 {
-      label='Genomic ressources'
-      fontsize = 25
-      fontcolor = orange
-      labelloc=t
-      color=",x[2],"
-      Bioconductor2GO
-      EntrezGene2GO
-      Ensembl2GO
-      Uniprot2GO
-      available_organisms
-      annotate
-    }
+                node [fillcolor=lightblue1,style=filled]
+                subgraph cluster2 {
+                    label='Enrichment tests'
+                    fontsize = 25
+                    fontcolor =lightblue1
+                    labelloc=t
+                    color=",x[3],"
+                    create_topGOdata
+                    RunTest
+                    merge_enrich_terms
+                }
 
-    node [fillcolor=lightblue1,style=filled]
-    subgraph cluster2 {
-      label='Enrichment tests'
-      fontsize = 25
-      fontcolor =lightblue1
-      labelloc=t
-      color=",x[3],"
-      create_topGOdata
-      RunTest
-      merge_enrich_terms
-    }
+                node [fillcolor=LightCoral,style=filled]
+                subgraph cluster3 {
+                    label='Visualization'
+                    fontsize = 25
+                    fontcolor = LightCoral
+                    labelloc=t
+                    color=",x[5],"
+                    show_table
+                    show_heatmap
+                    GOcount
+                    Upset
+                    MDSplot
+                    GOterms_heatmap
+                    GOclusters_heatmap
+                    compare_clusters
+                }
 
-    node [fillcolor=LightCoral,style=filled]
-    subgraph cluster3 {
-      label='Visualization'
-      fontsize = 25
-      fontcolor = LightCoral
-      labelloc=t
-      color=",x[5],"
-      show_table
-      show_heatmap
-      GOcount
-      Upset
-      MDSplot
-      GOterms_heatmap
-      GOclusters_heatmap
-      compare_clusters
-    }
+                node [fillcolor=LimeGreen,style=filled]
+                subgraph cluster4 {
+                    label='GO Semantic Similarities'
+                    fontsize = 25
+                    fontcolor = LimeGreen
+                    labelloc=t
+                    color=",x[4],"
+                    build_GO_SS
+                    compute_SS_distances
+                }
 
-    node [fillcolor=LimeGreen,style=filled]
-    subgraph cluster4 {
-      label='GO Semantic Similarities'
-      fontsize = 25
-      fontcolor = LimeGreen
-      labelloc=t
-      color=",x[4],"
-      build_GO_SS
-      compute_SS_distances
-    }
-
-    ###################
-    #  'edge' statements
-    'Genes of interest \n and background'-> create_topGOdata
-    Bioconductor2GO->annotate
-    EntrezGene2GO->annotate
-    Ensembl2GO->annotate
-    Uniprot2GO->annotate
-    annotate->create_topGOdata
-    create_topGOdata-> {RunTest merge_enrich_terms}
-    RunTest->merge_enrich_terms
-    merge_enrich_terms->{build_GO_SS show_table GOcount Upset}
-    build_GO_SS->{compute_SS_distances show_table GOcount Upset}
-    compute_SS_distances->{GOcount MDSplot Upset GOterms_heatmap GOclusters_heatmap}
-    GOterms_heatmap->{compute_SS_distances show_table show_heatmap compare_clusters}
-    GOclusters_heatmap->{show_table show_heatmap MDSplot}
-    Bioconductor2GO->available_organisms
-    EntrezGene2GO->available_organisms
-    Ensembl2GO->available_organisms
-    Uniprot2GO->available_organisms
-
-    }",sep="")
-  )
+                # 'edge' statements
+                'Genes of interest \n and background'-> create_topGOdata
+                Bioconductor2GO->annotate
+                EntrezGene2GO->annotate
+                Ensembl2GO->annotate
+                Uniprot2GO->annotate
+                annotate->create_topGOdata
+                create_topGOdata-> {RunTest merge_enrich_terms}
+                RunTest->merge_enrich_terms
+                merge_enrich_terms->{build_GO_SS show_table GOcount Upset}
+                build_GO_SS->{compute_SS_distances show_table GOcount Upset}
+                compute_SS_distances->{GOcount MDSplot Upset GOterms_heatmap GOclusters_heatmap}
+                GOterms_heatmap->{compute_SS_distances show_table show_heatmap compare_clusters}
+                GOclusters_heatmap->{show_table show_heatmap MDSplot}
+                Bioconductor2GO->available_organisms
+                EntrezGene2GO->available_organisms
+                Ensembl2GO->available_organisms
+                Uniprot2GO->available_organisms
+            }",
+            sep=""
+        )
+    )
 }

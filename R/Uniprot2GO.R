@@ -1,7 +1,6 @@
 #' @title Check available organisms databases at Uniprot.
 #' @description Check the \href{http://www.ebi.ac.uk/GOA}{Uniprot-GOA} available organisms.
-#' @importFrom data.table data.table
-#' @importFrom methods new
+#' @importFrom data.table data.table fread
 #' @family genomic_ressource
 #' @details This function downloads the current_release_numbers file (ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/current_release_numbers.txt) from
 #' \href{http://www.ebi.ac.uk/GOA}{Uniprot-GOA} which contains available organisms.
@@ -19,20 +18,19 @@
 #' @export
 Uniprot2GO=function(){
 
-  #################
-  # load current release
-  Data<-data.table::fread(
-    "ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/current_release_numbers.txt",
-    verbose=FALSE,
-    showProgress=FALSE
-  )
+    # load current release
+    Data<-fread(
+        "ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/current_release_numbers.txt",
+        verbose=FALSE,
+        showProgress=FALSE
+    )
 
-  ###################
-  # return data
-  methods::new("genomic_ressource",
-               db="Uniprot-GOA",
-               stamp=as.character(Sys.time()),
-               data=data.table::data.table(),
-               organisms=Data
-  )
+    # return data
+    new(
+        "genomic_ressource",
+        db="Uniprot-GOA",
+        stamp=as.character(Sys.time()),
+        data=data.table(),
+        organisms=Data
+    )
 }

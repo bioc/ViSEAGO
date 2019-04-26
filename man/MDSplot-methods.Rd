@@ -39,8 +39,8 @@ utils::data(
 ###################
 # compute GO terms Semantic Similarity distances
 myGOs<-ViSEAGO::compute_SS_distances(
- myGOs,
- distance="Wang"
+    myGOs,
+    distance="Wang"
 )
 
 ###################
@@ -50,57 +50,57 @@ ViSEAGO::MDSplot(myGOs)
 ##################
 # GOtermsHeatmap with default parameters
 Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
- myGOs,
- showIC=TRUE,
- showGOlabels=TRUE,
- GO.tree=base::list(
-  tree=base::list(
-   distance="Wang",
-   aggreg.method="ward.D2",
-   rotate=NULL
-  ),
-  cut=base::list(
-   dynamic=base::list(
-    pamStage=TRUE,
-    pamRespectsDendro=TRUE,
-    deepSplit=2,
-    minClusterSize =2
-   )
-  )
- ),
- samples.tree=NULL
+    myGOs,
+    showIC=TRUE,
+    showGOlabels=TRUE,
+    GO.tree=list(
+        tree=list(
+            distance="Wang",
+            aggreg.method="ward.D2",
+            rotate=NULL
+        ),
+        cut=list(
+            dynamic=list(
+                pamStage=TRUE,
+                pamRespectsDendro=TRUE,
+                deepSplit=2,
+                minClusterSize =2
+            )
+        )
+    ),
+    samples.tree=NULL
 )
 
 ###################
 # build MDS plot for a GO_clusters-class distance object, highlighting GO terms clusters.
 ViSEAGO::MDSplot(
- Wang_clusters_wardD2,
- "GOterms"
+    Wang_clusters_wardD2,
+    "GOterms"
 )
 
 ###################
 # compute clusters of GO terms Semantic Similarity distances
 Wang_clusters_wardD2<-ViSEAGO::compute_SS_distances(
- Wang_clusters_wardD2,
- distance="BMA"
+    Wang_clusters_wardD2,
+    distance="BMA"
 )
 
 ###################
 # GOclusters heatmap
 Wang_clusters_wardD2<-ViSEAGO::GOclusters_heatmap(
- Wang_clusters_wardD2,
- tree=list(
-  distance="BMA",
-  aggreg.method="ward.D2",
-  rotate=NULL
- )
+    Wang_clusters_wardD2,
+    tree=list(
+        distance="BMA",
+        aggreg.method="ward.D2",
+        rotate=NULL
+    )
 )
 
 ###################
 # build MDS plot for a GO_clusters-class distance object, highlighting GO groups clusters.
 ViSEAGO::MDSplot(
- Wang_clusters_wardD2,
- "GOclusters"
+    Wang_clusters_wardD2,
+    "GOclusters"
 )
 }
 }

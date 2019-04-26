@@ -1,9 +1,8 @@
 #' @title Barplot for the count of GO terms.
 #' @description This method displays in barplot the count of GO terms splitted in two categories (significant or not)
 #' for each result of GO enrichment tests.
-#' @importFrom data.table data.table melt :=
-#' @importFrom methods setGeneric setMethod
-#' @importFrom plotly plot_ly layout add_trace
+#' @importFrom data.table data.table melt := .SD
+#' @importFrom plotly plot_ly layout export
 #' @family GO_terms
 #' @family visualization
 #' @param object an \code{\link{enrich_GO_terms-class}} object from \code{\link{merge_enrich_terms}} method.
@@ -31,137 +30,131 @@
 #' @name GOcount
 #' @rdname GOcount-methods
 #' @exportMethod GOcount
-setGeneric(name="GOcount",def=function(object,file=NULL){standardGeneric("GOcount")})
+setGeneric(
+    name="GOcount",
+    def=function(object,file=NULL){
+        standardGeneric("GOcount")
+    }
+)
 
 #' @rdname GOcount-methods
 #' @aliases GOcount
-setMethod("GOcount",signature="ANY",definition=function(object,file){
+setMethod(
+    "GOcount",
+    signature="ANY",
+    definition=function(object,file){
 
-  #################
-  # check class
-  if(!base::class(object)%in%c("enrich_GO_terms","GO_SS","GO_clusters")){
-    base::stop("object must be enrich_GO_terms, GO_SS, or GO_clusters class objects")
-  }
+        # check class
+        if(!is(object,"enrich_GO_terms") & !is(object,"GO_SS") & !is(object,"GO_clusters")){
+            stop("object must be enrich_GO_terms, GO_SS, or GO_clusters class objects")
+        }
 
-  #################
-  # Extract data
-  if(methods::is(object,"enrich_GO_terms")){
+        # Extract data
+        if(is(object,"enrich_GO_terms")){
 
-    ###################
-    # data
-    data<-methods::slot(
-      object,
-      "data"
-    )
-  }else{
-
-    ###################
-    # data
-    data<-methods::slot(
-      methods::slot(
-        object,
-        "enrich_GOs"
-        ),
-      "data"
-    )
-  }
-
-  ###################
-  # find pvalues columns
-  pvalues<-base::grep("\\.pvalue",base::names(data))
-
-  ###################
-  # check more than one pvalues
-  if(base::length(pvalues)==1){
-
-    base::cat("GOcount is required for multiples comparisons")
-
-  }else{
-
-    ###################
-    # count significant (or not) pvalues by condition
-    Data<-data[,pvalues,with=FALSE]
-
-    ###################
-    # count
-    Data<-data.table::data.table(
-      pvalue=c("not enriched GO terms","enriched GO terms"),
-      Data[,base::lapply(.SD,function(x){
-
-        ###################
-        # count
-        res<-table(x<0.01)
-
-        ###################
-        #
-        if(length(res)==1){
-
-          if(base::names(res)=="TRUE"){base::c(0,res)}else{base::c(res,0)}
+            # data
+            data<-slot(
+                object,
+                "data"
+            )
 
         }else{
 
-          res
+            # data
+            data<-slot(
+                slot(
+                    object,
+                    "enrich_GOs"
+                ),
+                "data"
+            )
         }
-        }),.SDcols=base::seq_len(base::ncol(Data))]
-    )
 
-    ###################
-    # remove pvalue in names
-    base::names(Data)<-base::gsub("\\.pvalue","",base::names(Data))
+        # find pvalues columns
+        pvalues<-grep("\\.pvalue",names(data))
 
-    ###################
-    # melt the table
-    Data<-data.table::melt.data.table(
-      Data,
-      id.vars=base::names(Data)[1],
-      variable.name="condition",
-      value.name="count"
-    )
+        # check more than one pvalues
+        if(length(pvalues)==1){
+            stop("GOcount is required for multiples comparisons")
+        }
 
-    ###################
-    # assign class values
-    Data[,`:=`(
-      pvalue=base::factor(Data$pvalue,levels = c("enriched GO terms","not enriched GO terms")),
-      condition=base::factor(Data$condition,levels =base::rev(base::unique(Data$condition))),
-      count=base::as.numeric(Data$count)
-    )]
+        # count significant (or not) pvalues by condition
+        Data<-data[,pvalues,with=FALSE]
 
-    ###################
-    # barchart
-    p<-plotly::plot_ly(
-      data=Data,
-      type = 'bar',
-      y = ~condition,
-      x = ~count,
-      color=~pvalue,
-      colors=c("#FED8B1","#87ceeb")
-    )
+        # count
+        Data<-data.table(
+        pvalue=c("not enriched GO terms","enriched GO terms"),
+        Data[,
+            lapply(.SD,function(x){
 
-    p<-plotly::layout(p,
-      xaxis =base::list(
-        title = 'GO terms number'
-        ),
-      yaxis =base::list(
-        title =""
-      ),
-      margin =base::list(b =100,l=150),
-      title="number of significant (or not) GO terms by conditions",
-      barmode = 'stack'
-    )
+                # count
+                res<-table(x<0.01)
 
-    #################
-    # return or print
-    if(base::is.null(file)){
+                # count
+                if(length(res)==1){
 
-      #################
-      # return the plot
-      p
+                    if(names(res)=="TRUE"){c(0,res)}else{c(res,0)}
 
-    }else{
+                }else{
 
-      ##################
-      # print heatmap
-      plotly::export(p,file=file)
+                    res
+                }
+            }),.SDcols=seq_len(ncol(Data))]
+        )
+
+        # remove pvalue in names
+        names(Data)<-gsub("\\.pvalue","",names(Data))
+
+        # melt the table
+        Data<-melt.data.table(
+            Data,
+            id.vars=names(Data)[1],
+            variable.name="condition",
+            value.name="count"
+            )
+
+        # assign class values
+        Data[,
+            `:=`(
+                pvalue=factor(Data$pvalue,levels = c("enriched GO terms","not enriched GO terms")),
+                condition=factor(Data$condition,levels =rev(unique(Data$condition))),
+                count=as.numeric(Data$count)
+            )
+        ]
+
+        # barchart
+        p<-plot_ly(
+            data=Data,
+            type = 'bar',
+            y = ~condition,
+            x = ~count,
+            color=~pvalue,
+            colors=c("#FED8B1","#87ceeb")
+        )
+
+        # barchart layout
+        p<-layout(p,
+            xaxis =list(
+                title = 'GO terms number'
+            ),
+            yaxis =list(
+                title =""
+            ),
+             margin =list(b =100,l=150),
+            title="number of significant (or not) GO terms by conditions",
+            barmode = 'stack'
+        )
+
+         # return or print
+        if(is.null(file)){
+
+            # return the plot
+            p
+
+        }else{
+
+            # print heatmap
+            export(p,file=file)
+        }
     }
-  }
-})
+)

@@ -3,6 +3,7 @@
 #' Compute the Information content (IC) on the given ontology, and
 #' create a \code{\link{GO_SS-class}} object required by \code{\link{compute_SS_distances}} method to compute GO semantic similarity
 #' between enriched GO terms or groups of terms.
+#' @importFrom GO.db GO.db GOMFOFFSPRING GOBPOFFSPRING GOCCOFFSPRING
 #' @importFrom topGO inverseList
 #' @importFrom AnnotationDbi select keys as.list
 #' @importFrom methods setGeneric setMethod new is slot
@@ -28,115 +29,108 @@
 #' ###################
 #' # initialyse object for compute GO Semantic Similarity
 #' myGOs<-ViSEAGO::build_GO_SS(
-#'  gene2GO=myGENE2GO,
-#'  enrich_GO_terms=BP_sResults
+#'     myGENE2GO,
+#'     BP_sResults
 #' )
 #' }
 #' ###################
 #' # load data example
 #' utils::data(
-#'  myGOs,
-#'  package="ViSEAGO"
+#'     myGOs,
+#'     package="ViSEAGO"
 #' )
 #' @name build_GO_SS
 #' @rdname build_GO_SS-methods
 #' @exportMethod build_GO_SS
-setGeneric(name="build_GO_SS",def=function(gene2GO,enrich_GO_terms){
-  standardGeneric("build_GO_SS")
+setGeneric(
+    name="build_GO_SS",
+    def=function(gene2GO,enrich_GO_terms){
+        standardGeneric("build_GO_SS")
 })
 
 #' @rdname build_GO_SS-methods
 #' @aliases build_GO_SS
-setMethod("build_GO_SS",
-  methods::signature(
-    gene2GO="gene2GO",
-    enrich_GO_terms="enrich_GO_terms"
-  ),
-  definition=function(gene2GO,enrich_GO_terms){
+setMethod(
+    "build_GO_SS",
+    signature(
+        gene2GO="gene2GO",
+        enrich_GO_terms="enrich_GO_terms"
+    ),
+    definition=function(gene2GO,enrich_GO_terms){
 
-    ###################
-    # check object class
-    ###################
+        ## check object class
 
-    if(!methods::is(gene2GO,"gene2GO")){
-      base::stop("object must be a gene2GO class object from ViSEAGO::annotate()")
-    }
-    if(!methods::is(enrich_GO_terms,"enrich_GO_terms")){
-      base::stop("object must be a enrich_GO_terms class object from ViSEAGO::merge_enrich_terms()")
-    }
+        if(!is(gene2GO,"gene2GO")){
+            stop("object must be a gene2GO class object from ViSEAGO::annotate()")
+        }
+        if(!is(enrich_GO_terms,"enrich_GO_terms")){
+            stop("object must be a enrich_GO_terms class object from ViSEAGO::merge_enrich_terms()")
+        }
 
-  ###################
-  # load data
-  ###################
+        ## load data
 
-    ###################
-    # onto match argument
-    ont<-methods::slot(enrich_GO_terms,"ont")
+        # onto match argument
+        ont<-slot(enrich_GO_terms,"ont")
 
-    ###################
-    # from GO database
-    go<-AnnotationDbi::select(
-      GO.db::GO.db,
-      keys=AnnotationDbi::keys(GO.db::GO.db),
-      columns=c("GOID","ONTOLOGY")
+        # from GO database
+        go<-select(
+            GO.db,
+            keys=keys(GO.db),
+        columns=c("GOID","ONTOLOGY")
     )
 
-    ###################
     # select a given category (MF,BP,CC)
     goids<-go$GOID[go$ONTOLOGY==ont]
 
-    ###################
     # count number of genes by term
-    gocount<-base::lengths(topGO::inverseList(slot(gene2GO,ont)))
-
-  ###################
-  # From GOSemsim compute IC content
-  ###################
-
-    ###################
-    # extract gcount term names
-    goname<-base::names(gocount)
-
-    ###################
-    # ensure goterms not appearing in the specific annotation have 0 frequency
-    go.diff <- base::setdiff(goids, goname)
-    m<- base::double(base::length(go.diff))
-    base::names(m) <- go.diff
-    gocount<- base::as.vector(gocount)
-    base::names(gocount)<- goname
-    gocount<- base::c(gocount, m)
-
-    ###################
-    # select offspings
-    Offsprings <- base::switch(ont,
-      MF = AnnotationDbi::as.list(GO.db::GOMFOFFSPRING),
-      BP = AnnotationDbi::as.list(GO.db::GOBPOFFSPRING),
-      CC = AnnotationDbi::as.list(GO.db::GOCCOFFSPRING)
+    gocount<-lengths(
+        inverseList(
+            slot(gene2GO,ont)
+        )
     )
 
-    ###################
+    ## From GOSemsim compute IC content
+
+    # extract gcount term names
+    goname<-names(gocount)
+
+    # ensure goterms not appearing in the specific annotation have 0 frequency
+    go.diff<-setdiff(goids, goname)
+    m<- double(length(go.diff))
+    names(m)<-go.diff
+    gocount<- as.vector(gocount)
+    names(gocount)<- goname
+    gocount<-c(gocount, m)
+
+    # select offspings
+    Offsprings <- switch(
+        ont,
+        MF =as.list(GOMFOFFSPRING),
+        BP =as.list(GOBPOFFSPRING),
+        CC =as.list(GOCCOFFSPRING)
+    )
+
     # add for each term offsprings their counted values
-    cnt <- gocount[goids] + base::vapply(goids, function(i){
-    base::sum(gocount[Offsprings[[i]]], na.rm=TRUE)},0)
-    base::names(cnt) <- goids
+    cnt <- gocount[goids] + vapply(goids, function(i){
+        sum(gocount[Offsprings[[i]]], na.rm=TRUE)
+    },0)
+    names(cnt)<-goids
 
     ###################
     # the probabilities of occurrence of GO terms in a specific corpus.
-    IC<- -base::log(cnt/base::sum(gocount))
+    IC<- -log(cnt/sum(gocount))
 
-  ###################
-  # return value et S4 object with compatibility with GOSemSim package
-  ###################
+    ## return value et S4 object with compatibility with GOSemSim package
 
-    ###################
     # create object
-    methods::new("GO_SS",
-      db=methods::slot(gene2GO,"db"),
-      stamp =methods::slot(gene2GO,"stamp"),
-      organism=methods::slot(gene2GO,"organism"),
-      ont=ont,
-      topGO=methods::slot(enrich_GO_terms,"topGO"),
-      enrich_GOs=enrich_GO_terms,
-      IC = IC
+    new(
+        "GO_SS",
+        db=slot(gene2GO,"db"),
+        stamp =slot(gene2GO,"stamp"),
+        organism=slot(gene2GO,"organism"),
+        ont=ont,
+        topGO=slot(enrich_GO_terms,"topGO"),
+        enrich_GOs=enrich_GO_terms,
+        IC = IC
     )
 })

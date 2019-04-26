@@ -1,7 +1,6 @@
 #' @title GO_SS class object definition.
 #' @description This class is invoked by \code{\link{build_GO_SS}} method in order to store \code{\link{enrich_GO_terms-class}} object, Information Content (IC),
 #' and GO terms or groups distances objects based on semantic similarity.
-#' @importFrom methods setClass
 #' @importFrom data.table melt.data.table .SD
 #' @family GO_semantic_similarity
 #' @slot db should be "Bioconductor", "EntrezGene", "Ensembl", or "Uniprot" ressource name.
@@ -13,161 +12,132 @@
 #' @slot enrich_GOs \code{\link{merge_enrich_terms}} output object (\code{\link{enrich_GO_terms-class}} object).
 #' @slot terms_dist \code{list} of GO terms or groups distances objects based on semantic similarity.
 #' @include enrich_GO_terms.R
-setClass("GO_SS",
-         slots=c(
-           db="character",
-           stamp ="character",
-           organism="character",
-           ont="character",
-           topGO="list",
-           IC ="numeric",
-           enrich_GOs="enrich_GO_terms",
-           terms_dist="list"
-        )
+setClass(
+    "GO_SS",
+    slots=c(
+        db="character",
+        stamp ="character",
+        organism="character",
+        ont="character",
+        topGO="list",
+        IC ="numeric",
+        enrich_GOs="enrich_GO_terms",
+        terms_dist="list"
+    )
 )
 
-#' @importFrom methods setMethod slot is
-setMethod("show",signature="GO_SS",function(object){
+#' @importFrom data.table .SD melt.data.table
+setMethod(
+    "show",
+    signature="GO_SS",
+    function(object){
 
-  ###################
-  # Extract table
-  Data<-methods::slot(
-    methods::slot(
-      object,
-      "enrich_GOs"
-      ),
-    "data"
-  )
+        # Extract table
+        Data<-slot(slot(object,"enrich_GOs"),"data")
 
-  ###################
-  # Extract pvalues
-  Data<-Data[,base::grep("\\.pvalue",base::names(Data)),with=F]
+        # Extract pvalues
+        Data<-Data[,grep("\\.pvalue",names(Data)),with=FALSE]
 
-  ###################
-  # count significant pvalues by condition
-  Data<-Data[,lapply(.SD,function(x){base::sum(x<0.01)}),
-    .SDcols=base::seq_len(base::ncol(Data))
-  ]
+        # count significant pvalues by condition
+        Data<-Data[,lapply(.SD,function(x){sum(x<0.01)}),.SDcols=seq_len(ncol(Data))]
 
-  ###################
-  # melt the table
-  Data<-data.table::melt.data.table(
-    Data,
-    measure.vars=base::names(Data),
-    variable.name = "conditions",
-    value.name = "significant GO terms number"
-  )
-
-  ###################
-  # remove .pvalue in conditions column
-  Data[,"conditions":=base::gsub("\\.pvalue","",Data$conditions)]
-
-  ###################
-  # get topGO information
-  topGO<-methods::slot(object,"topGO")
-
-  ###################
-  # format topGO information
-  topGO<-base::vapply(base::names(topGO),function(x){
-
-    ###################
-    # topGO subset
-    Data<-topGO[[x]]
-
-    ###################
-    # summery by element
-    elems<-base::paste(base::vapply(base::names(Data),function(y){
-
-      ###################
-      # summery by element
-      base::paste(
-        base::paste("   ",y),
-        "\n       ",
-        base::paste(
-          base::paste(
-            base::names(Data[[y]]),
-            base::sub("\n.+$","",base::unlist(Data[[y]])),
-            sep=": "),
-          collapse="\n        "
+        # melt the table
+        Data<-melt.data.table(
+            Data,
+            measure.vars=names(Data),
+            variable.name = "conditions",
+            value.name = "significant GO terms number"
         )
-      )
-    },""),collapse="\n  ")
 
-    ###################
-    # summery by element
-    base::paste(base::paste(x,elems,sep ="\n  "),"\n ")
-  },"")
+        # remove .pvalue in conditions column
+        Data[,"conditions":=gsub("\\.pvalue","",Data$conditions)]
 
-  ###################
-  # cat some text
-  base::cat("- object class: GO_SS",
-    "\n- database: ",
-    methods::slot(object,"db"),
-    "\n- stamp/version: ",
-    methods::slot(object,"stamp"),
-    "\n- organism id: ",
-    methods::slot(object,"organism"),
-    "\n- ontology: ",
-    methods::slot(object,"ont"),
-    "\n- input:\n        ",
-    paste(
-      paste(
-        base::names(
-          methods::slot(
-            methods::slot(
-              object,
-              "enrich_GOs"
-              ),
-            "input"
-          )
-        ),
-      base::vapply(
-        methods::slot(
-          methods::slot(
-            object,
-            "enrich_GOs"
-          ),
-          "input"
-        ),
-        function(x){base::paste(x,collapse=", ")}
-      ,""),
-      sep=": "
-      ),
-      collapse="\n        "
-    ),
-    "\n- topGO summary:\n ",
-    topGO,
-    "\n- enrich GOs data.table: ",
-    base::nrow(
-      methods::slot(
-        methods::slot(
-          object,
-          "enrich_GOs"
-        ),
-        "data"
-      )
-    ),
-    " GO terms of ",
-    base::nrow(Data),
-    " conditions.",
-    base::paste(
-      "\n       ",
-      Data$conditions,
-      ":",
-      Data$`significant GO terms number`,
-      "terms"
-    ),
-    if(base::length(object@terms_dist)>0){
-      base::paste(
-        "\n- terms distances: ",
-        base::paste(
-          base::names(
-            methods::slot(object,"terms_dist")
-          ),
-          collapse=", "
+        # get topGO information
+        topGO<-slot(object,"topGO")
+
+        # format topGO information
+        topGO<-vapply(names(topGO),function(x){
+
+            # topGO subset
+            Data<-topGO[[x]]
+
+            # summery by element
+            elems<-paste(
+                vapply(names(Data),function(y){
+
+                    # summery by element
+                    paste(
+                        paste("   ",y),
+                        "\n       ",
+                        paste(
+                            paste(
+                                names(Data[[y]]),
+                                sub("\n.+$","",unlist(Data[[y]])),
+                                sep=": "
+                            ),
+                            collapse="\n        "
+                        )
+                    )
+                },""),
+                collapse="\n  "
+            )
+
+            # summery by element
+            paste(paste(x,elems,sep ="\n  "),"\n ")
+        },"")
+
+        # cat some text
+        cat(
+            "- object class: GO_SS",
+            "\n- database: ",
+            slot(object,"db"),
+            "\n- stamp/version: ",
+            slot(object,"stamp"),
+            "\n- organism id: ",
+            slot(object,"organism"),
+            "\n- ontology: ",
+            slot(object,"ont"),
+            "\n- input:\n        ",
+            paste(
+                paste(
+                    names(
+                        slot(slot(object,"enrich_GOs"),"input")
+                    ),
+                    vapply(slot(slot(object,"enrich_GOs"),"input"),function(x){
+                        paste(x,collapse=", ")
+                    },""),
+                    sep=": "
+                ),
+                collapse="\n        "
+            ),
+            "\n- topGO summary:\n ",
+            topGO,
+            "\n- enrich GOs data.table: ",
+            nrow(
+                slot(slot(object,"enrich_GOs"),"data")
+            ),
+            " GO terms of ",
+            nrow(Data),
+            " conditions.",
+            paste(
+                "\n       ",
+                Data$conditions,
+                ":",
+                 Data$`significant GO terms number`,
+                "terms"
+            ),
+            if(length(slot(object,"terms_dist")>0)){
+                paste(
+                    "\n- terms distances: ",
+                    paste(
+                        names(
+                            slot(object,"terms_dist")
+                        ),
+                        collapse=", "
+                    )
+                )
+            },
+            sep=""
         )
-      )
-    },
-    sep=""
-  )
-})
+    }
+)

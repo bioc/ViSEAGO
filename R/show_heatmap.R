@@ -1,7 +1,6 @@
 #' @title Display an interactive or static heatmap.
 #' @description Display a heatmap in interactive or static mode.
-#' @importFrom methods setGeneric setMethod slot is signature
-#' @importFrom plotly export
+#' @importFrom plotly export layout
 #' @importFrom webshot install_phantomjs
 #' @family enrich_GO_terms
 #' @family GO_clusters
@@ -16,16 +15,16 @@
 #' @examples
 #' ###################
 #' # load data example
-#' utils::data(
-#'  myGOs,
-#'  package="ViSEAGO"
+#' data(
+#'     myGOs,
+#'     package="ViSEAGO"
 #' )
 #' \dontrun{
 #' ###################
 #' # compute GO terms Semantic Similarity distances
 #' myGOs<-ViSEAGO::compute_SS_distances(
-#'  myGOs,
-#'  distance="Wang"
+#'     myGOs,
+#'     distance="Wang"
 #' )
 #'
 #' ###################
@@ -35,153 +34,136 @@
 #' ##################
 #' # GOtermsHeatmap with default parameters
 #' Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
-#'  myGOs,
-#'  showIC=TRUE,
-#'  showGOlabels=TRUE,
-#'  GO.tree=base::list(
-#'   tree=base::list(
-#'    distance="Wang",
-#'    aggreg.method="ward.D2",
-#'    rotate=NULL
-#'   ),
-#'   cut=base::list(
-#'    dynamic=base::list(
-#'     pamStage=TRUE,
-#'     pamRespectsDendro=TRUE,
-#'     deepSplit=2,
-#'     minClusterSize =2
-#'    )
-#'   )
-#'  ),
-#'  samples.tree=NULL
+#'     myGOs,
+#'     showIC=TRUE,
+#'     showGOlabels=TRUE,
+#'     GO.tree=list(
+#'         tree=list(
+#'             distance="Wang",
+#'             aggreg.method="ward.D2",
+#'             rotate=NULL
+#'         ),
+#'         cut=list(
+#'             dynamic=list(
+#'                 pamStage=TRUE,
+#'                 pamRespectsDendro=TRUE,
+#'                 deepSplit=2,
+#'                 minClusterSize =2
+#'             )
+#'         )
+#'     ),
+#'     samples.tree=NULL
 #' )
 #'
 #' ##################
 #' # Display GO terms heatmap
 #' ViSEAGO::show_heatmap(
-#'  Wang_clusters_wardD2,
-#'  "GOterms"
+#'     Wang_clusters_wardD2,
+#'     "GOterms"
 #' )
 #'
 #' ##################
 #' # Print GO terms heatmap
 #' ViSEAGO::show_heatmap(
-#'  Wang_clusters_wardD2,
-#'  "GOterms",
-#'  "GOterms_heatmap.png"
+#'     Wang_clusters_wardD2,
+#'     "GOterms",
+#'     "GOterms_heatmap.png"
 #' )
 #'
 #' ###################
 #' # compute clusters of GO terms Semantic Similarity distances
 #' Wang_clusters_wardD2<-ViSEAGO::compute_SS_distances(
-#'  Wang_clusters_wardD2,
-#'  distance="BMA"
+#'     Wang_clusters_wardD2,
+#'     distance="BMA"
 #' )
 #'
 #' ###################
 #' # GOclusters heatmap
 #' Wang_clusters_wardD2<-ViSEAGO::GOclusters_heatmap(
-#'  Wang_clusters_wardD2,
-#'  tree=list(
-#'   distance="BMA",
-#'   aggreg.method="ward.D2",
-#'   rotate=NULL
-#'  )
+#'     Wang_clusters_wardD2,
+#'     tree=list(
+#'         distance="BMA",
+#'         aggreg.method="ward.D2",
+#'         rotate=NULL
+#'     )
 #' )
 #'
 #' ##################
 #' # Display GO clusters heatmap
 #' ViSEAGO::show_heatmap(
-#'  Wang_clusters_wardD2,
-#'  "GOclusters"
+#'     Wang_clusters_wardD2,
+#'     "GOclusters"
 #' )
 #'
 #' ##################
 #' # Print GO clusters heatmap
 #' ViSEAGO::show_heatmap(
-#'  Wang_clusters_wardD2,
-#'  "GOclusters",
-#'  "GOclusters_heatmap.png"
+#'     Wang_clusters_wardD2,
+#'     "GOclusters",
+#'     "GOclusters_heatmap.png"
 #' )
 #' }
 #' @name show_heatmap
 #' @rdname show_heatmap-methods
 #' @exportMethod show_heatmap
-setGeneric(name="show_heatmap",def=function(object,type,file=NULL) {
-  standardGeneric("show_heatmap")
-})
+setGeneric(
+    name="show_heatmap",
+    def=function(object,type,file=NULL) {
+        standardGeneric("show_heatmap")
+    }
+)
 
 #' @rdname show_heatmap-methods
 #' @aliases show_heatmap
-setMethod("show_heatmap",
-  methods::signature(
-    object="GO_clusters",
-    type="character"
-  ),definition=function(object,type,file) {
+setMethod(
+    "show_heatmap",
+    signature(
+        object="GO_clusters",
+        type="character"
+    ),
+    definition=function(object,type,file){
 
-  ##################
-  # check type argument
-  type=base::match.arg(type,c("GOterms","GOclusters"))
+        # check type argument
+        type=match.arg(type,c("GOterms","GOclusters"))
 
-  ##################
-  # heatmap according type
-  heatmap<-base::switch(type,
+        # heatmap according type
+        heatmap<-switch(type,
 
-    ##################
-    # GOTermsHeatmap
-    GOterms=methods::slot(object,"heatmap")$GOterms,
+            # GOTermsHeatmap
+            GOterms=slot(object,"heatmap")$GOterms,
 
-    ##################
-    # GOclusters_heatmap
-    GOclusters=methods::slot(object,"heatmap")$GOclusters
-  )
-
-  ##################
-  # return interactive or static heatmap according file
-  if(base::is.null(file)){
-
-    ##################
-    # display heatmap
-    heatmap
-
-  }else{
-
-    if(type=="GOterms"){
-
-      ##################
-      # number of rows
-      rowlen=base::nrow(
-        methods::slot(
-          methods::slot(
-            object,
-            "enrich_GOs"
-          ),
-          "data"
+            # GOclusters_heatmap
+            GOclusters=slot(object,"heatmap")$GOclusters
         )
-      )
 
-      ##################
-      # adjust minimum size
-      if(rowlen<10){rowlen=10}
+        # return interactive or static heatmap according file
+        if(is.null(file)){
 
-      ##################
-      # compute height
-      rowlen=rowlen^(1.70+1.70*exp(-rowlen/20))
+            # display heatmap
+            heatmap
 
-      ##################
-      # max height limit
-      if(rowlen>10000){rowlen=10000}
+        }else{
 
-      ##################
-      # adjust heatmpa size
-      heatmap<-plotly::layout(
-        heatmap,
-        height=rowlen
-      )
+            if(type=="GOterms"){
+
+                # number of rows
+                rowlen=nrow(slot(slot(object,"enrich_GOs"),"data"))
+
+                # adjust minimum size
+                if(rowlen<10){rowlen=10}
+
+                # compute height
+                rowlen=rowlen^(1.70+1.70*exp(-rowlen/20))
+
+                # max height limit
+                if(rowlen>10000){rowlen=10000}
+
+                # adjust heatmpa size
+                heatmap<-layout(heatmap,height=rowlen)
+            }
+
+            # print heatmap
+            export(heatmap,file=file)
+        }
     }
-
-    ##################
-    # print heatmap
-    plotly::export(heatmap,file=file)
-  }
-})
+)

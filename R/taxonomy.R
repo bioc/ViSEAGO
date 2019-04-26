@@ -1,6 +1,6 @@
 #' @title Display Organism Scientific and common name from taxid.
 #' @description  Display Organism Scientific and common name from taxid.
-#' @importFrom data.table data.table
+#' @importFrom data.table data.table rbindlist
 #' @family genomic_ressource
 #' @details This internal function use \href{https://www.ncbi.nlm.nih.gov/books/NBK25500/}{E-utilities} summary to display in
 #'  \code{\link[data.table]{data.table}} Organism Scientific name and common name, form a \code{\link[base]{vector}} of taxid.
@@ -13,132 +13,92 @@
 #' @export
 taxonomy=function(...){
 
-  ###################
-  # taxonomy ids
-  taxid=base::unique(...)
+    # taxonomy ids
+    taxid=unique(...)
 
-  ###################
-  # internal function for pattern  extraction
-  pattern.extract<-function(query,m){
+    # internal function for pattern  extraction
+    pattern.extract<-function(query,m){
 
-    ###################
-    # for each query line
-    Data=base::lapply(base::seq_along(query),function(i){
+        # for each query line
+        Data=lapply(seq_along(query),function(i){
 
-      ###################
-      # if not empty m match
-      if(base::length(stats::na.omit(m[[i]][1]))>0){
+            # if not empty m match
+            if(length(stats::na.omit(m[[i]][1]))>0){
 
-        ###################
-        # extract capture.start argument
-        capture=base::attr(m[[i]],"capture.start")
+                # extract capture.start argument
+                capture=attr(m[[i]],"capture.start")
 
-        ###################
-        # extract corresponding values in query
-        capture=base::substring(
-          query[i],
-          capture,
-          capture+base::attr(m[[i]],"capture.length")-1
-        )
+                # extract corresponding values in query
+                capture=substring(
+                    query[i],
+                    capture,
+                    capture+attr(m[[i]],"capture.length")-1
+                )
 
-        ###################
-        # convert in data.table
-        data.table::data.table(
-          base::t(capture)
-        )
+                # convert in data.table
+                data.table(t(capture))
 
-      }else{
+            }else{
 
-        ###################
-        # else NA
-        NA
-      }
-    })
+                # else NA
+                NA
+            }
+        })
 
-    ###################
-    # rbind.data.table
-    Data<-data.table::rbindlist(Data)
+        # rbind.data.table
+        Data<-rbindlist(Data)
 
-    ###################
-    # add header
-    base::colnames(Data)<-base::attr(m[[1]],"capture.name")
+        # add header
+        colnames(Data)<-attr(m[[1]],"capture.name")
 
-    ###################
-    # replace "" or \t values by NA
-    Data[
-      base::c("","\t"),
-      "CommonName":="NA",
-      on="CommonName"
-    ]
+        # replace "" or \t values by NA
+         Data[c("","\t"),"CommonName":="NA",on="CommonName"]
 
-    ###################
-    # return query
-    base::return(Data)
-  }
+        # return query
+        return(Data)
+    }
 
-  ###################
-  # core address
-  core="https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?version=2.0&db=taxonomy"
+    # core address
+    core="https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?version=2.0&db=taxonomy"
 
-  ###################
-  # create submission query
-  query <-base::paste(
-    core,
-    "&id=",
-    base::paste(
-      taxid,
-      collapse=","
-    ),
-    sep = ""
-  )
-
-  ###################
-  # submit and retrieve
-  query=base::paste(
-    base::scan(
-      query,
-      what ="",
-      sep="\n",
-      quiet = TRUE
-      ),
-    collapse=""
-  )
-
-  ###################
-  # parse results
-  query<-base::substring(
-    query,
-    base::unlist(
-      base::gregexpr(
-        "<DocumentSummary ",
-        query
-        )
-      ),
-      base::unlist(
-        base::gregexpr(
-          "</DocumentSummary>",
-          query
-          )
-        )
+    # create submission query
+    query <-paste(
+        core,
+        "&id=",
+        paste(taxid,collapse=","),
+        sep = ""
     )
 
-  ###################
-  # extraction pattern
-  pattern=c("<DocumentSummary uid=\"(?<taxid>[[:digit:]]*)\"",
-  ".*<ScientificName>(?<ScientificName>.*)</ScientificName>",
-  "\t<CommonName>(?<CommonName>.*)</CommonName>.*")
+  # submit and retrieve
+    query=paste(
+        scan(
+            query,
+            what ="",
+            sep="\n",
+            quiet = TRUE
+        ),
+        collapse=""
+    )
 
-  ###################
-  # find pattern
-  m=base::gregexpr(
-    base::paste(
-      pattern,
-      collapse=""
-    ),
-    query,perl=TRUE
-  )
+    # parse results
+    query<-substring(
+        query,
+        unlist(gregexpr("<DocumentSummary ",query)),
+        unlist(gregexpr("</DocumentSummary>",query))
+    )
 
-  ###################
-  # extract  results in data.frame and return
-  pattern.extract(query,m)
+    # extraction pattern
+    pattern=c("<DocumentSummary uid=\"(?<taxid>[[:digit:]]*)\"",
+    ".*<ScientificName>(?<ScientificName>.*)</ScientificName>",
+    "\t<CommonName>(?<CommonName>.*)</CommonName>.*")
+
+    # find pattern
+    m=gregexpr(
+        paste(pattern,collapse=""),
+        query,
+        perl=TRUE
+    )
+
+    # extract  results in data.frame and return
+    pattern.extract(query,m)
 }

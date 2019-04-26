@@ -24,22 +24,19 @@ Display an interactive table with available organisms from a genomic ressource d
 an interactive \code{datatable}.
 }
 \examples{
-###################
 # display Bioconductor table
 Bioconductor<-ViSEAGO::Bioconductor2GO()
 ViSEAGO::available_organisms(Bioconductor)
 \dontrun{
-###################
+
 # display EntrezGene table
 EntrezGene<-ViSEAGO::EntrezGene2GO()
 ViSEAGO::available_organisms(EntrezGene)
 
-###################
 # display Ensembl table
 Ensembl<-ViSEAGO::Ensembl2GO()
 ViSEAGO::available_organisms(Ensembl)
 
-###################
 # display Uniprot table
 Uniprot<-ViSEAGO::Uniprot2GO()
 ViSEAGO::available_organisms(Uniprot)

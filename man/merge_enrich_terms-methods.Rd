@@ -31,103 +31,104 @@ At the last, this method builds a merged data.table of enriched GO terms (p<0.01
 at least once and provides all mentionned columns.
 }
 \examples{
- ###################
- # load genes identifiants (GeneID,ENS...) universe/background (Expressed genes)
- background_L<-base::scan(
-  base::system.file(
-  "extdata/data/input",
-  "background_L.txt",
-  package = "ViSEAGO"
-  ),
-  quiet=TRUE,
-  what=""
- )
+###################
+# load genes identifiants (GeneID,ENS...) universe/background (Expressed genes)
+background_L<-scan(
+    system.file(
+        "extdata/data/input",
+        "background_L.txt",
+        package = "ViSEAGO"
+    ),
+    quiet=TRUE,
+    what=""
+)
 
- ###################
- # load Differentialy Expressed (DE) gene identifiants from files
- L_pregnantvslactateDE<-base::scan(
-  base::system.file(
-   "extdata/data/input",
-   "L_pregnantvslactateDE.txt",
-    package = "ViSEAGO"
-  ),
-  quiet=TRUE,
-  what=""
- )
+###################
+# load Differentialy Expressed (DE) gene identifiants from files
+L_pregnantvslactateDE<-scan(
+    system.file(
+        "extdata/data/input",
+        "L_pregnantvslactateDE.txt",
+        package = "ViSEAGO"
+    ),
+    quiet=TRUE,
+    what=""
+)
 
- L_virginvslactateDE<-base::scan(
-  base::system.file(
-   "extdata/data/input",
-   "L_virginvslactateDE.txt",
-   package = "ViSEAGO"
- ),
-  quiet=TRUE,what=""
- )
+L_virginvslactateDE<-scan(
+    system.file(
+        "extdata/data/input",
+        "L_virginvslactateDE.txt",
+        package = "ViSEAGO"
+    ),
+    quiet=TRUE,
+    what=""
+)
 
- L_virginvspregnantDE<-base::scan(
-  base::system.file(
-  "extdata/data/input",
-  "L_virginvspregnantDE.txt",
-   package = "ViSEAGO"
-  ),
-  quiet=TRUE,
-  what=""
- )
+L_virginvspregnantDE<-scan(
+    system.file(
+        "extdata/data/input",
+        "L_virginvspregnantDE.txt",
+        package="ViSEAGO"
+    ),
+    quiet=TRUE,
+    what=""
+)
 \dontrun{
 ###################
 # create topGOdata for BP for each list of DE genes
 BP_L_pregnantvslactate<-ViSEAGO::create_topGOdata(
- geneSel=L_pregnantvslactateDE,
- allGenes=background_L,
- gene2GO=myGENE2GO,
- ont="BP",
- nodeSize=5
+    geneSel=L_pregnantvslactateDE,
+    allGenes=background_L,
+    gene2GO=myGENE2GO,
+    ont="BP",
+    nodeSize=5
 )
 
 BP_L_virginvslactate<-ViSEAGO::create_topGOdata(
- geneSel=L_virginvslactateDE,
- allGenes=background_L,
- gene2GO=myGENE2GO,
- ont="BP",
- nodeSize=5
+    geneSel=L_virginvslactateDE,
+    allGenes=background_L,
+    gene2GO=myGENE2GO,
+    ont="BP",
+    nodeSize=5
 )
 
 BP_L_virginvspregnant<-ViSEAGO::create_topGOdata(
- geneSel=L_virginvspregnantDE,
- allGenes=background_L,
- gene2GO=myGENE2GO,
- ont="BP",
- nodeSize=5
+    geneSel=L_virginvspregnantDE,
+    allGenes=background_L,
+    gene2GO=myGENE2GO,
+    ont="BP",
+    nodeSize=5
 )
 
 ###################
 # perform TopGO tests
 elim_BP_L_pregnantvslactate<-topGO::runTest(
- BP_L_pregnantvslactate,
- algorithm ="elim",
- statistic = "fisher"
+    BP_L_pregnantvslactate,
+    algorithm ="elim",
+    statistic = "fisher"
 )
 
 elim_BP_L_virginvslactate<-topGO::runTest(
- BP_L_virginvslactate,
- algorithm ="elim",
- statistic = "fisher"
+    BP_L_virginvslactate,
+    algorithm ="elim",
+    statistic = "fisher"
 )
 
 elim_BP_L_virginvspregnant<-topGO::runTest(
- BP_L_virginvspregnant,
- algorithm ="elim",
- statistic = "fisher"
+    BP_L_virginvspregnant,
+    algorithm ="elim",
+    statistic = "fisher"
 )
 
 ###################
 # merge topGO results
 BP_sResults<-ViSEAGO::merge_enrich_terms(
- Input=base::list(
-  L_pregnantvslactate=base::c("BP_L_pregnantvslactate","elim_BP_L_pregnantvslactate"),
-  L_virginvslactate=base::c("BP_L_virginvslactate","elim_BP_L_virginvslactate"),
-  L_virginvspregnant=base::c("BP_L_virginvspregnant","elim_BP_L_virginvspregnant")
- )
+    Input=list(
+        L_pregnantvslactate=c("BP_L_pregnantvslactate","elim_BP_L_pregnantvslactate"),
+        L_virginvslactate=c("BP_L_virginvslactate","elim_BP_L_virginvslactate"),
+        L_virginvspregnant=c("BP_L_virginvspregnant","elim_BP_L_virginvspregnant")
+    )
 )
 }
 }

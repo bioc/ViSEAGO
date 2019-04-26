@@ -51,71 +51,60 @@ This approch is highly similar to the strategy developed by Uniprot-GOA consorti
 }
 \examples{
 \dontrun{
-###################
-# load Mus musculus (mouse) GO annotations
-###################
+## load Mus musculus (mouse) GO annotations
 
- ###################
- # from Bioconductor
- Bioconductor<-ViSEAGO::Bioconductor2GO()
- myGENE2GO<-ViSEAGO::annotate(
-  id="org.Mm.eg.db",
-  object=Bioconductor
- )
+# from Bioconductor
+Bioconductor<-ViSEAGO::Bioconductor2GO()
+myGENE2GO<-ViSEAGO::annotate(
+    id="org.Mm.eg.db",
+    object=Bioconductor
+)
 
- ###################
- # from EntrezGene
- EntrezGene<-ViSEAGO::EntrezGene2GO()
- myGENE2GO<-ViSEAGO::annotate(
-  id="10090",
-  object=EntrezGene
- )
+# from EntrezGene
+EntrezGene<-ViSEAGO::EntrezGene2GO()
+myGENE2GO<-ViSEAGO::annotate(
+    id="10090",
+    object=EntrezGene
+)
 
- ###################
- # from EntrezGene
- Ensembl<-ViSEAGO::Ensembl2GO()
- myGENE2GO<-ViSEAGO::annotate(
-  id="mmusculus_gene_ensembl",
-  object=Ensembl
-  )
+# from EntrezGene
+Ensembl<-ViSEAGO::Ensembl2GO()
+myGENE2GO<-ViSEAGO::annotate(
+    id="mmusculus_gene_ensembl",
+    object=Ensembl
+)
 
- ###################
- # from Uniprot
- Uniprot<-ViSEAGO::Uniprot2GO()
- myGENE2GO<-ViSEAGO::annotate(
-  id="mouse",
-  object=Uniprot
- )
+# from Uniprot
+Uniprot<-ViSEAGO::Uniprot2GO()
+myGENE2GO<-ViSEAGO::annotate(
+    id="mouse",
+    object=Uniprot
+)
 
-###################
-# specific options for EntrezGene database
-###################
+## specific options for EntrezGene database
 
- ##################
-  # Chicken GO annotations without adding orthologs
- EntrezGene<-ViSEAGO::EntrezGene2GO()
- myGENE2GO<-ViSEAGO::annotate(
-  id="9031",
-  object=EntrezGene
- )
+# Chicken GO annotations without adding orthologs
+EntrezGene<-ViSEAGO::EntrezGene2GO()
+myGENE2GO<-ViSEAGO::annotate(
+    id="9031",
+    object=EntrezGene
+)
 
- ##################
- # Chicken GO annotation with the add of orthologs GO annotations
- EntrezGene<-ViSEAGO::EntrezGene2GO()
- myGENE2GO<-ViSEAGO::annotate(
-  id="9031",
-  object=EntrezGene,
-  ortholog=TRUE
- )
+# Chicken GO annotation with the add of orthologs GO annotations
+EntrezGene<-ViSEAGO::EntrezGene2GO()
+myGENE2GO<-ViSEAGO::annotate(
+    id="9031",
+    object=EntrezGene,
+    ortholog=TRUE
+)
 
- ##################
- # display organisms supported by NCBI EntrezGene orthologs pipeline
- EntrezGene<-ViSEAGO::EntrezGene2GO()
- ViSEAGO::annotate(
-  id=NULL,
-  object=EntrezGene,
-  ortholog=TRUE
- )
+# display organisms supported by NCBI EntrezGene orthologs pipeline
+EntrezGene<-ViSEAGO::EntrezGene2GO()
+ViSEAGO::annotate(
+    id=NULL,
+    object=EntrezGene,
+    ortholog=TRUE
+)
 }
 }
 \references{

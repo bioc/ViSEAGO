@@ -1,8 +1,6 @@
 #' @title Create topGOdata object for enrichment test with topGO package.
 #' @description This method create a \code{\link[topGO]{topGOdata-class}} object required by \pkg{topGO} package in order
 #' to perform GO enrichment test.
-#' @importFrom methods setGeneric setMethod new slot is signature
-#' @import topGO
 #' @importFrom topGO annFUN.gene2GO
 #' @family GO_terms
 #' @param geneSel genes of interest.
@@ -25,8 +23,8 @@
 #' @examples
 #'  ###################
 #'  # load genes identifiants (GeneID,ENS...) background (Expressed genes)
-#'  background<-base::scan(
-#'   base::system.file(
+#'  background<-scan(
+#'   system.file(
 #'    "extdata/data/input",
 #'    "background_L.txt",
 #'    package = "ViSEAGO"
@@ -37,8 +35,8 @@
 #'
 #'  ###################
 #'  # load Differentialy Expressed (DE) gene identifiants from files
-#'  pregnantvslactateDE<-base::scan(
-#'   base::system.file(
+#'  pregnantvslactateDE<-scan(
+#'   system.file(
 #'    "extdata/data/input",
 #'    "pregnantvslactateDE.txt",
 #'    package = "ViSEAGO"
@@ -60,119 +58,97 @@
 #' @name create_topGOdata
 #' @rdname create_topGOdata-methods
 #' @exportMethod create_topGOdata
-setGeneric(name="create_topGOdata",def=function(geneSel,allGenes,geneList=NULL,gene2GO,ont,nodeSize){
-  standardGeneric("create_topGOdata")
-})
+setGeneric(
+    name="create_topGOdata",
+    def=function(geneSel,allGenes,geneList=NULL,gene2GO,ont,nodeSize){
+        standardGeneric("create_topGOdata")
+    }
+)
 
 #' @rdname create_topGOdata-methods
 #' @aliases create_topGOdata
-setMethod("create_topGOdata",
-  methods::signature(
-    gene2GO="gene2GO",
-    ont="character",
-    nodeSize="numeric"
-  ),
-  definition=function(geneSel,allGenes,geneList,gene2GO,ont,nodeSize){
+setMethod(
+    "create_topGOdata",
+    signature(
+        gene2GO="gene2GO",
+        ont="character",
+        nodeSize="numeric"
+    ),
+    definition=function(geneSel,allGenes,geneList,gene2GO,ont,nodeSize){
 
-  ###################
-  # check list
-  ###################
+        ## check list
 
-    ###################
-    # check object class
-    if(!methods::is(gene2GO,"gene2GO")){
-      base::stop("object must be a gene2GO class obtained using ViSEAGO::annotate()")
+
+        # check object class
+        if(!is(gene2GO,"gene2GO")){
+            stop("object must be a gene2GO class obtained using ViSEAGO::annotate()")
+        }
+
+        # check ontology
+        ont=match.arg(ont,c("MF","BP","CC"))
+
+        ## build allGenes factor
+
+        if(is.null(geneList)){
+
+            # check duplicate in allGenes
+            if(length(allGenes)!=length(unique(allGenes))){
+
+                # warning message
+                message("allGenes contain genes redondancy.\nduplicate elements were removed.")
+
+                # remove duplicate
+                allGenes=unique(allGenes)
+            }
+
+            # check duplicate in geneSel
+            if(length(geneSel)!=length(unique(geneSel))){
+
+                # warning message
+                message("geneSel contain genes redondancy.\nduplicate elements were removed.")
+
+                # remove duplicate
+                geneSel=unique(geneSel)
+            }
+
+            # create geneList object
+            AllGenes<-rep(0,length(allGenes))
+
+            # assign genes_ref names to geneList
+            attr(AllGenes,"names")<-allGenes
+
+            # assign value 1 for DE genes in geneList
+            AllGenes[attr(AllGenes,"names")%in%geneSel]<-1
+
+            # convert geneList in factor (used by topGO)
+            AllGenes<-factor(AllGenes)
+
+        }else{
+
+            # check duplicate in geneSel
+            if(length(names(geneList))!=length(unique(names(geneList)))){
+
+                # warning message
+                stop("geneList contain genes redondancy.")
+            }
+
+            # rename geneList
+            AllGenes<-geneList
+        }
+
+        # create GOdata
+        new(
+            "topGOdata",
+            description=paste(
+                slot(gene2GO,"db"),
+                slot(gene2GO,"organism"),
+                slot(gene2GO,"stamp")
+            ),
+            ontology =ont,
+            allGenes = AllGenes,
+            annot = annFUN.gene2GO,
+            nodeSize =nodeSize,
+            gene2GO =slot(gene2GO,ont)
+        )
     }
-
-    ###################
-    # check ontology
-    ont=base::match.arg(ont,c("MF","BP","CC"))
-
-  ###################
-  # build allGenes factor
-  ###################
-
-    if(base::is.null(geneList)){
-
-      ###################
-      # check duplicate in allGenes
-      if(base::length(allGenes)!=base::length(base::unique(allGenes))){
-
-        ###################
-        # warning message
-        base::warning("allGenes contain genes redondancy.\nduplicate elements were removed.")
-
-        ###################
-        # remove duplicate
-        allGenes=base::unique(allGenes)
-      }
-
-      ###################
-      # check duplicate in geneSel
-      if(base::length(geneSel)!=base::length(base::unique(geneSel))){
-
-        ###################
-        # warning message
-        base::warning("geneSel contain genes redondancy.\nduplicate elements were removed.")
-
-        ###################
-        # remove duplicate
-        geneSel=base::unique(geneSel)
-      }
-
-      ###################
-      # create geneList object
-      AllGenes<-base::rep(0,base::length(allGenes))
-
-      ###################
-      # assign genes_ref names to geneList
-      base::attr(AllGenes,"names")<-allGenes
-
-      ###################
-      # assign value 1 for DE genes in geneList
-      AllGenes[base::attr(AllGenes,"names")%in%geneSel]<-1
-
-      ###################
-      # convert geneList in factor (used by topGO)
-      AllGenes<-base::factor(AllGenes)
-
-    }else{
-
-      ###################
-      # check duplicate in geneSel
-      if(base::length(base::names(geneList))!=base::length(base::unique(base::names(geneList)))){
-
-        ###################
-        # warning message
-        base::stop("geneList contain genes redondancy.")
-      }
-
-      ###################
-      # rename geneList
-      AllGenes<-geneList
-  }
-
-  ###################
-  # topGO
-  ###################
-
-    ###################
-    # load topGO package
-    base::require("topGO")
-
-    ###################
-    # create GOdata
-    methods::new(
-      "topGOdata",
-      description=base::paste(
-        methods::slot(gene2GO,"db"),
-        methods::slot(gene2GO,"organism"),
-        methods::slot(gene2GO,"stamp")
-      ),
-      ontology =ont,
-      allGenes = AllGenes,
-      annot = topGO::annFUN.gene2GO,
-      nodeSize =nodeSize,
-      gene2GO =methods::slot(gene2GO,ont)
-    )
-})
+)

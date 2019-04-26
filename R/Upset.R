@@ -15,9 +15,9 @@
 #' @examples
 #' ##################
 #' # load example object
-#' utils::data(
-#'  myGOs,
-#'  package="ViSEAGO"
+#' data(
+#'     myGOs,
+#'     package="ViSEAGO"
 #' )
 #'
 #' ##################
@@ -32,94 +32,82 @@ setGeneric(name="Upset",def=function(object,file="./upset.xls") {standardGeneric
 #' @aliases Upset
 setMethod("Upset",signature="ANY",definition=function(object,file){
 
-  ###################
-  # check the class
-  if(!base::class(object)%in%c("enrich_GO_terms","GO_SS","GO_clusters")){
-    base::stop("object must be enrich_GO_terms, GO_SS, or GO_clusters class objects")
-  }
+    # check the class
+    if(!is(object,"enrich_GO_terms") & !is(object,"GO_SS") & !is(object,"GO_clusters")){
+        stop("object must be enrich_GO_terms, GO_SS, or GO_clusters class objects")
+    }
 
-  ##################
-  # extract data.table from enrich_GO_terms or GO_clusters class object.
-  if(methods::is(object,"enrich_GO_terms")){
+    # extract data.table from enrich_GO_terms or GO_clusters class object.
+    if(is(object,"enrich_GO_terms")){
 
-    ##################
-    # extract data.table from enrich_GO_terms class object
-    Data<-methods::slot(object,"data")
+        # extract data.table from enrich_GO_terms class object
+        Data<-slot(object,"data")
 
-  }else{
+    }else{
 
-    ##################
-    # extract data.table from GO_clusters class object
-    Data<-methods::slot(
-      methods::slot(
-        object,
-        "enrich_GOs"
-        ),
-      "data"
-    )
-  }
+        # extract data.table from GO_clusters class object
+        Data<-slot(slot(object,"enrich_GOs"),"data")
+    }
 
-  ##################
-  # keep only GOterms and pvalues by condition
-  Data<-Data[,base::grep("GO\\.ID|\\.pvalue",base::names(Data)),with=F]
+    # keep only GOterms and pvalues by condition
+    Data<-Data[,grep("GO\\.ID|\\.pvalue",names(Data)),with=FALSE]
 
-  ##################
-  # remove pvalues in columns names
-  base::names(Data)<-base::gsub("\\.pvalue","",base::names(Data))
+    # remove pvalues in columns names
+    names(Data)<-gsub("\\.pvalue","",names(Data))
 
-  ##################
-  # build binary matrix for Upset graph
-  Data<-data.table::data.table(
-    GO.ID=Data[,"GO.ID",with=FALSE],
-    Data[,base::lapply(.SD,function(x){
-      val=x<0.01;x[val]<-1;x[!val]<-0;x}),
-      .SDcols=2:base::ncol(Data)]
-  )
-
-  ##################
-  # draw upset
-  UpSetR::upset(Data,sets=base::rev(names(Data)[-1]),keep.order = T,text.scale=3)
-
-  ##################
-  # build list vectors of significant GO.ID by conditions
-  setlist<-base::lapply(2:base::ncol(Data),function(x){
-
-    ##################
-    # extract significant GO terms
-    Data$GO.ID[Data[,x,with=F]==1]
-  })
-  base::names(setlist)<-base::names(Data)[-1]
-
-  ##################
-  # use ViSEAGO internal intersetions function
-  OLlist=ViSEAGO::overLapper(setlist)
-
-  ##################
-  # return or print
-  if(base::is.null(file)){
-
-    ##################
-    # return
-    OLlist
-
-  }else{
-
-    ##################
-    # build matrix
-    OLexport <-base::as.matrix(
-      base::unlist(base::vapply(OLlist, base::paste, collapse=";",""))
+    # build binary matrix for Upset graph
+    Data<-data.table(
+        GO.ID=Data[,"GO.ID",with=FALSE],
+        Data[,lapply(.SD,function(x){val=x<0.01;x[val]<-1;x[!val]<-0;x}),.SDcols=2:ncol(Data)]
     )
 
-    ##################
-    # convert in data.table
-    OLexport<-data.table::data.table(
-      combs=base::row.names(OLexport),
-      length=lengths(OLlist),
-      GOterms=OLexport[,1]
+    # draw upset
+    upset(
+        Data
+        ,sets=rev(names(Data)[-1]),
+        keep.order = TRUE,
+        text.scale=3
     )
 
-    ##################
-    # write the file
-    utils::write.table(OLexport, file=file, row.names=F, quote=F, sep="\t")
-  }
-})
+    # build list vectors of significant GO.ID by conditions
+    setlist<-lapply(2:ncol(Data),function(x){
+
+        # extract significant GO terms
+        Data$GO.ID[Data[,x,with=FALSE]==1]
+    })
+    names(setlist)<-names(Data)[-1]
+
+    # use ViSEAGO internal intersetions function
+    OLlist=ViSEAGO::overLapper(setlist)
+
+    # return or print
+    if(is.null(file)){
+
+        # return
+        OLlist
+
+        }else{
+
+            # build matrix
+            OLexport <-as.matrix(
+                unlist(vapply(OLlist, paste, collapse=";",""))
+            )
+
+            # convert in data.table
+                OLexport<-data.table(
+                combs=row.names(OLexport),
+                length=lengths(OLlist),
+                GOterms=OLexport[,1]
+            )
+
+            # write the file
+            write.table(
+                OLexport,
+                file=file,
+                row.names=FALSE,
+                quote=FALSE,
+                sep="\t"
+            )
+        }
+    }
+)

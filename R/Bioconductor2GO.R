@@ -2,7 +2,6 @@
 #' @description Retrieve the Bioconductor \href{http://bioconductor.org/packages/release/BiocViews.html#___OrgDb}{OrgDb}
 #' available organisms databases packages.
 #' @importFrom data.table data.table like
-#' @importFrom methods new
 #' @importFrom AnnotationForge loadAnnDbPkgIndex
 #' @importFrom AnnotationDbi species
 #' @family genomic_ressource
@@ -21,24 +20,18 @@
 #' @export
 Bioconductor2GO=function(){
 
-  ###################
-  # Available databases
-  Orgs.db<-data.table::data.table(AnnotationForge::loadAnnDbPkgIndex())
+    # Available databases
+    Orgs.db<-data.table(loadAnnDbPkgIndex())
 
-  ###################
-  # select organisms lines and only selected columns
-  Orgs.db<-Orgs.db[
-    data.table::like(Orgs.db$Package,"^org"),
-    base::c("Package","Version","species"),
-    with=FALSE
-  ]
+    # select organisms lines and only selected columns
+    Orgs.db<-Orgs.db[like(Orgs.db$Package,"^org"),c("Package","Version","species"),with=FALSE]
 
-  ###################
-  # return data
-  methods::new("genomic_ressource",
-               db="Bioconductor",
-               stamp=base::as.character(base::Sys.time()),
-               data=data.table::data.table(),
-               organisms=Orgs.db
-              )
+    # return data
+    new(
+        "genomic_ressource",
+        db="Bioconductor",
+        stamp=as.character(Sys.time()),
+        data=data.table(),
+        organisms=Orgs.db
+    )
 }

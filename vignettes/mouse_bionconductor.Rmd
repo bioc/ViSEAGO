@@ -15,8 +15,8 @@ vignette: >
   %\VignetteIndexEntry{2: mouse_bionconductor}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-bibliography: "`r base::system.file('extdata/','bibliography.bib',package='ViSEAGO')`"
-csl: "`r base::system.file('extdata/','bmc-genomics.csl',package='ViSEAGO')`"
+bibliography: "`r system.file('extdata/','bibliography.bib',package='ViSEAGO')`"
+csl: "`r system.file('extdata/','bmc-genomics.csl',package='ViSEAGO')`"
 ---
 
 ```{r setup,include=FALSE}
@@ -28,8 +28,8 @@ library(org.Mm.eg.db)
 ###################
 # knitr document options
 knitr::opts_chunk$set(
-  eval=FALSE,echo=TRUE,fig.pos = 'H',
-  fig.width=6,message=FALSE,comment=NA,warning=FALSE
+    eval=FALSE,echo=TRUE,fig.pos = 'H',
+    fig.width=6,message=FALSE,comment=NA,warning=FALSE
 )
 ```
 
@@ -46,57 +46,59 @@ Vignette build convenience (for less build time and package size) need that data
 ```{r vignette_data_used,eval=TRUE}
 ###################
 # load vignette data
-utils::data(
-  myGOs,
-  package="ViSEAGO"
+data(
+    myGOs,
+    package="ViSEAGO"
 )
 ```
 
 # Genes of interest
 
-We load examples files from `r BiocStyle::Biocpkg("ViSEAGO")` package using `base::system.file` from the locally installed package. We read the gene identifiers for the background (= expressed genes) file and the three lists of DE genes of the study. Here, gene identifiers are GeneID from EntrezGene database.
+We load examples files from `r BiocStyle::Biocpkg("ViSEAGO")` package using `system.file` from the locally installed package. We read the gene identifiers for the background (= expressed genes) file and the three lists of DE genes of the study. Here, gene identifiers are GeneID from EntrezGene database.
 
 ```{r geneList_input}
 ###################
 # load genes identifiants (GeneID,ENS...) background (expressed genes) 
-background<-base::scan(
-  base::system.file(
-    "extdata/data/input",
-    "background_L.txt",
-    package = "ViSEAGO"
-  ),
-  quiet=TRUE,
-  what=""
+background<-scan(
+    system.file(
+        "extdata/data/input",
+        "background_L.txt",
+        package = "ViSEAGO"
+    ),
+    quiet=TRUE,
+    what=""
 )
 
 ###################
 # load Differentialy Expressed (DE) gene identifiants from lists
-PregnantvsLactateDE<-base::scan(
-  base::system.file(
-    "extdata/data/input",
-    "pregnantvslactateDE.txt",
-    package = "ViSEAGO"
-  ),
-  quiet=TRUE,
-  what=""
+PregnantvsLactateDE<-scan(
+    system.file(
+        "extdata/data/input",
+        "pregnantvslactateDE.txt",
+        package = "ViSEAGO"
+    ),
+    quiet=TRUE,
+    what=""
 )
-VirginvsLactateDE<-base::scan(
-  base::system.file(
-    "extdata/data/input",
-    "virginvslactateDE.txt",
-    package = "ViSEAGO"
-  ),
-  quiet=TRUE,
-  what=""
+
+VirginvsLactateDE<-scan(
+    system.file(
+        "extdata/data/input",
+        "virginvslactateDE.txt",
+        package = "ViSEAGO"
+    ),
+    quiet=TRUE,
+    what=""
 )
-VirginvsPregnantDE<-base::scan(
-  base::system.file(
-    "extdata/data/input",
-    "virginvspregnantDE.txt",
-    package = "ViSEAGO"
-  ),
-  quiet=TRUE,
-  what=""
+
+VirginvsPregnantDE<-scan(
+    system.file(
+        "extdata/data/input",
+        "virginvspregnantDE.txt",
+        package = "ViSEAGO"
+    ),
+    quiet=TRUE,
+    what=""
 )
 ```
 
@@ -105,7 +107,7 @@ Here, we display the first 6 GeneID from the *L_pregnantvslactateDE* list.
 ```{r geneList_input-head,echo=FALSE}
 ###################
 # show the ten first lines of genes_DE (same as genes_ref)
-utils::head(PregnantvsLactateDE)
+head(PregnantvsLactateDE)
 ```
 
 # GO annotation of genes
@@ -122,8 +124,8 @@ Bioconductor<-ViSEAGO::Bioconductor2GO()
 ###################
 # load GO annotations from Bioconductor
 myGENE2GO<-ViSEAGO::annotate(
-  "org.Mm.eg.db",
-  Bioconductor
+    "org.Mm.eg.db",
+    Bioconductor
 )
 ```
 </br> 
@@ -134,7 +136,7 @@ myGENE2GO
 ```
 </br> 
 ```{r Genomic-ressources_display,echo=FALSE,eval=TRUE}
-base::cat(
+cat(
 "- object class: gene2GO
 - database: Bioconductor
 - stamp/version: 2018-Oct11
@@ -159,27 +161,27 @@ First, we create three `topGOdata` objects, using `ViSEAGO::create_topGOdata` me
 ###################
 # create topGOdata for BP for each list of DE genes
 BP_PregnantvsLactate<-ViSEAGO::create_topGOdata(
-  geneSel=PregnantvsLactateDE,
-  allGenes=background,
-  gene2GO=myGENE2GO, 
-  ont="BP",
-  nodeSize=5
+    geneSel=PregnantvsLactateDE,
+    allGenes=background,
+    gene2GO=myGENE2GO, 
+    ont="BP",
+    nodeSize=5
 )
 
 BP_VirginvsLactate<-ViSEAGO::create_topGOdata(
-  geneSel=VirginvsLactateDE,
-  allGenes=background,
-  gene2GO=myGENE2GO,
-  ont="BP",
-  nodeSize=5
+    geneSel=VirginvsLactateDE,
+    allGenes=background,
+    gene2GO=myGENE2GO,
+    ont="BP",
+    nodeSize=5
 )
 
 BP_VirginvsPregnant<-ViSEAGO::create_topGOdata(
-  geneSel=VirginvsPregnantDE,
-  allGenes=background,
-  gene2GO=myGENE2GO,
-  ont="BP",
-  nodeSize=5
+    geneSel=VirginvsPregnantDE,
+    allGenes=background,
+    gene2GO=myGENE2GO,
+    ont="BP",
+    nodeSize=5
 )
 ```
 
@@ -191,21 +193,21 @@ Now, we perform the GO enrichment tests for BP category with Fisher's exact test
 ###################
 # perform TopGO tests
 elim_BP_PregnantvsLactate<-topGO::runTest(
-  BP_PregnantvsLactate,
-  algorithm ="elim",
-  statistic = "fisher"
+    BP_PregnantvsLactate,
+    algorithm ="elim",
+    statistic = "fisher"
 )
 
 elim_BP_VirginvsLactate<-topGO::runTest(
-  BP_VirginvsLactate,
-  algorithm ="elim",
-  statistic = "fisher"
+    BP_VirginvsLactate,
+    algorithm ="elim",
+    statistic = "fisher"
 )
 
 elim_BP_VirginvsPregnant<-topGO::runTest(
-  BP_VirginvsPregnant,
-  algorithm ="elim",
-  statistic = "fisher"
+    BP_VirginvsPregnant,
+    algorithm ="elim",
+    statistic = "fisher"
 )
 ```
 
@@ -218,20 +220,20 @@ The printed table contains for each enriched GO terms, additional columns includ
 ###################
 # merge topGO results
 BP_sResults<-ViSEAGO::merge_enrich_terms(
-  Input=base::list(
-    PregnantvsLactate=base::c(
-      "BP_PregnantvsLactate",
-      "elim_BP_PregnantvsLactate"
-    ),
-    VirginvsLactate=base::c(
-      "BP_VirginvsLactate",
-      "elim_BP_VirginvsLactate"
-    ),
-    VirginvsPregnant=base::c(
-      "BP_VirginvsPregnant",
-      "elim_BP_VirginvsPregnant"
+    Input=list(
+        PregnantvsLactate=c(
+            "BP_PregnantvsLactate",
+            "elim_BP_PregnantvsLactate"
+        ),
+        VirginvsLactate=c(
+            "BP_VirginvsLactate",
+            "elim_BP_VirginvsLactate"
+        ),
+        VirginvsPregnant=c(
+            "BP_VirginvsPregnant",
+            "elim_BP_VirginvsPregnant"
+        )
     )
-  )
 )
 ```
 </br>
@@ -242,7 +244,7 @@ BP_sResults
 ```
 </br>
 ```{r Enrichment_merge_display,echo=FALSE,eval=TRUE}
-base::cat(
+cat(
 "- object class: gene2GO
 - database: Bioconductor
 - stamp/version: 2018-Apr4
@@ -334,7 +336,7 @@ GO annotations:
 ViSEAGO::show_table(BP_sResults)
 ```
 
-<img src=`r base::system.file("extdata/data/output","bioconductor_table1.png",package="ViSEAGO")` alt="bioconductor_table1" style="width:100%;height:100%;"/>
+<img src=`r system.file("extdata/data/output","bioconductor_table1.png",package="ViSEAGO")` alt="bioconductor_table1" style="width:100%;height:100%;"/>
 
 ## Graphs of GO enrichment tests
 
@@ -346,18 +348,18 @@ Several graphs summarize important features. An interactive barchart showing the
 ViSEAGO::GOcount(BP_sResults)
 ```
 
-<img src=`r base::system.file("extdata/data/output","gocount.png",package="ViSEAGO")` alt="gocount" style="width:100%;height:100%;"/>
+<img src=`r system.file("extdata/data/output","gocount.png",package="ViSEAGO")` alt="gocount" style="width:100%;height:100%;"/>
 
 ```{r Enrichment_merge_interactions}
 ###################           
 # display intersections
 ViSEAGO::Upset(
-  BP_sResults,
-  file="upset.xls"
+    BP_sResults,
+    file="upset.xls"
 )
 ```
 
-<img src=`r base::system.file("extdata/data/output","upset.png",package="ViSEAGO")` alt="upset" style="width:100%;height:100%;"/>
+<img src=`r system.file("extdata/data/output","upset.png",package="ViSEAGO")` alt="upset" style="width:100%;height:100%;"/>
 
 # GO terms Semantic Similarity
 
@@ -367,8 +369,8 @@ GO annotations of genes created at a previous step and enriched GO terms are com
 ###################        
 # create GO_SS-class object
 myGOs<-ViSEAGO::build_GO_SS(
-  gene2GO=myGENE2GO,
-  enrich_GO_terms=BP_sResults
+    gene2GO=myGENE2GO,
+    enrich_GO_terms=BP_sResults
 )
 ```
 </br>
@@ -376,8 +378,8 @@ myGOs<-ViSEAGO::build_GO_SS(
 ###################           
 # compute Semantic Similarity (SS)
 myGOs<-ViSEAGO::compute_SS_distances(
-  myGOs,
-  distance="Wang"
+    myGOs,
+    distance="Wang"
 )
 ```
 </br>
@@ -388,7 +390,7 @@ myGOs
 ```
 </br>
 ```{r SS_build_compute_display,echo=FALSE,eval=TRUE}
-base::cat(
+cat(
 "- object class: GO_SS
 - database: Bioconductor
 - stamp/version: 2018-Apr4
@@ -480,7 +482,7 @@ A Multi Dimensional Scale (MDS) plot with `ViSEAGO::MDSplot` method provides a r
 ViSEAGO::MDSplot(myGOs)
 ```
 
-<img src=`r base::system.file("extdata/data/output","bioconductor_mds1.png",package="ViSEAGO")` alt="mds1" style="width:100%;height:100%;"/>
+<img src=`r system.file("extdata/data/output","bioconductor_mds1.png",package="ViSEAGO")` alt="mds1" style="width:100%;height:100%;"/>
 
 ## Clustering heatmap of GO terms
 
@@ -494,23 +496,24 @@ Enriched GO terms are ranked in a dendrogram and colored depending on their clus
 ##################           
 # Create GOterms heatmap
 Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
-  myGOs,
-  showIC=TRUE,
-  showGOlabels =FALSE,
-  GO.tree=base::list(
-    tree=base::list(
-      distance="Wang",
-      aggreg.method="ward.D2"
+    myGOs,
+    showIC=TRUE,
+    showGOlabels =FALSE,
+    GO.tree=list(
+        tree=list(
+            distance="Wang",
+            aggreg.method="ward.D2"
+        ),
+        cut=list(
+            dynamic=list(
+                pamStage=TRUE,
+                pamRespectsDendro=TRUE,
+                deepSplit=2,
+                minClusterSize =2
+            )
+        )
     ),
-    cut=base::list(
-      dynamic=base::list(
-        pamStage=TRUE,
-        pamRespectsDendro=TRUE,
-        deepSplit=2,
-        minClusterSize =2)
-      )
-    ),
-  samples.tree=NULL
+    samples.tree=NULL
 )
 ```
 </br>
@@ -518,12 +521,12 @@ Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 ###################           
 # display the heatmap
 ViSEAGO::show_heatmap(
-  Wang_clusters_wardD2,
-  "GOterms"
+    Wang_clusters_wardD2,
+    "GOterms"
 )
 ```
 
-<img src=`r base::system.file("extdata/data/output","bioconductor_GOtermsheatmap.png",package="ViSEAGO")` alt="GOtermsheatmap"  style="width:100%;height:100%;"/>
+<img src=`r system.file("extdata/data/output","bioconductor_GOtermsheatmap.png",package="ViSEAGO")` alt="GOtermsheatmap"  style="width:100%;height:100%;"/>
 
 A table of enriched GO terms in at least one of the comparison is displayed in interactive mode, or printed in a file using `ViSEAGO::show_table` method. The columns GO cluster number and IC value are added to the previous table of enriched terms table. 
 The printed table contains for each enriched GO terms, additional columns including the list of significant genes and frequency (ratio between the number of significant genes and number of background genes in a specific GO tag) evaluated by comparison. 
@@ -534,7 +537,7 @@ The printed table contains for each enriched GO terms, additional columns includ
 ViSEAGO::show_table(Wang_clusters_wardD2)
 ```
 
-<img src=`r base::system.file("extdata/data/output","bioconductor_table2.png",package="ViSEAGO")` alt="bioconductor_table2" style="width:100%;height:100%;"/>
+<img src=`r system.file("extdata/data/output","bioconductor_table2.png",package="ViSEAGO")` alt="bioconductor_table2" style="width:100%;height:100%;"/>
 
 <u>NB:</u> For this vignette, this illustration is not interactive.
 
@@ -548,7 +551,7 @@ We also display a colored Multi Dimensional Scale (MDS) plot showing the overlay
 ViSEAGO::MDSplot(Wang_clusters_wardD2)
 ```
 
-<img src=`r base::system.file("extdata/data/output","bioconductor_mds2.png",package="ViSEAGO")` alt="mds2" style="width:100%;height:100%;"/>
+<img src=`r system.file("extdata/data/output","bioconductor_mds2.png",package="ViSEAGO")` alt="mds2" style="width:100%;height:100%;"/>
 
 # Visualization and interpretation of GO clusters
 
@@ -564,8 +567,8 @@ A colored Multi Dimensional Scale (MDS) plot with `ViSEAGO::MDSplot` method prov
 ###################           
 # calculate semantic similarites between clusters of GO terms
 Wang_clusters_wardD2<-ViSEAGO::compute_SS_distances(
-  Wang_clusters_wardD2,
-  distance="BMA"
+    Wang_clusters_wardD2,
+    distance="BMA"
 )
 ```
 </br>
@@ -573,12 +576,12 @@ Wang_clusters_wardD2<-ViSEAGO::compute_SS_distances(
 ###################           
 # MDSplot
 ViSEAGO::MDSplot(
-  Wang_clusters_wardD2,
-  "GOclusters"
+    Wang_clusters_wardD2,
+    "GOclusters"
 )
 ```
 
-<img src=`r base::system.file("extdata/data/output","bioconductor_mds3.png",package="ViSEAGO")` alt="mds3" style="width:100%;height:100%;"/>
+<img src=`r system.file("extdata/data/output","bioconductor_mds3.png",package="ViSEAGO")` alt="mds3" style="width:100%;height:100%;"/>
 
 ## GO clusters semantic similarities heatmap
 
@@ -590,11 +593,11 @@ Clusters of GO terms are ranked in a dendrogram and colored depending on their c
 ###################
 # GOclusters heatmap
 Wang_clusters_wardD2<-ViSEAGO::GOclusters_heatmap(
-  Wang_clusters_wardD2,
-  tree=list(
-    distance="BMA",
-    aggreg.method="ward.D2"
-  )
+    Wang_clusters_wardD2,
+    tree=list(
+        distance="BMA",
+        aggreg.method="ward.D2"
+    )
 )
 ```
 </br>
@@ -602,12 +605,12 @@ Wang_clusters_wardD2<-ViSEAGO::GOclusters_heatmap(
 ###################           
 # display the heatmap
 ViSEAGO::show_heatmap(
-  Wang_clusters_wardD2,
-  "GOclusters"
+    Wang_clusters_wardD2,
+    "GOclusters"
 )
 ```
 
-<img src=`r base::system.file("extdata/data/output","bioconductor_BMA.png",package="ViSEAGO")` alt="BMA" style="width:100%;height:100%;"/>
+<img src=`r system.file("extdata/data/output","bioconductor_BMA.png",package="ViSEAGO")` alt="BMA" style="width:100%;height:100%;"/>
 
 An history of the enrichment functional analysis is reported.
 
@@ -618,7 +621,7 @@ Wang_clusters_wardD2
 ```
 </br>
 ```{r SS_Wang-wardD2_groups_display,echo=FALSE,eval=TRUE}
-base::cat(
+cat(
 "- object class: GO_clusters
 - database: Bioconductor
 - stamp/version: 2018-Apr4
@@ -723,7 +726,7 @@ A functional Gene Ontology (GO) enrichment analysis was performed using `r BiocS
 # Information session{-}
 
 ```{r session,eval=TRUE,echo=FALSE} 
-utils::sessionInfo()
+sessionInfo()
 ```
 
 # References{-}

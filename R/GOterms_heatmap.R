@@ -1,9 +1,6 @@
 #' @title Build a clustering heatmap on GO terms.
 #' @description This method computes a clustering heatmap based on GO terms semantic similarity.
 #' @importFrom data.table data.table
-#' @importFrom graphics text
-#' @importFrom stats as.dist end start
-#' @importFrom methods setGeneric setMethod new slot is signature
 #' @importFrom ggplot2 scale_fill_gradientn
 #' @importFrom plotly layout
 #' @importFrom heatmaply heatmaply
@@ -94,1037 +91,951 @@
 #' ###################
 #' # load data example
 #' utils::data(
-#'  myGOs,
-#'  package="ViSEAGO"
+#'     myGOs,
+#'     package="ViSEAGO"
 #' )
 #' \dontrun{
 #' ###################
 #' # compute GO terms Semantic Similarity distances
 #' myGOs<-ViSEAGO::compute_SS_distances(
-#'  distance="Wang"
+#'    myGOs,
+#'    distance="Wang"
 #' )
 #'
 #' ##################
 #' # GOtermsHeatmap with default parameters
 #' Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
-#'  myGOs,
-#'  showIC=TRUE,
-#'  showGOlabels=TRUE,
-#'  GO.tree=base::list(
-#'   tree=base::list(
-#'    distance="Wang",
-#'    aggreg.method="ward.D2",
-#'    rotate=NULL
-#'   ),
-#'   cut=base::list(
-#'    dynamic=base::list(
-#'     pamStage=TRUE,
-#'     pamRespectsDendro=TRUE,
-#'     deepSplit=2,
-#'     minClusterSize =2
-#'    )
-#'   )
-#'  ),
-#'  samples.tree=NULL
+#'     myGOs,
+#'     showIC=TRUE,
+#'     showGOlabels=TRUE,
+#'     GO.tree=list(
+#'         tree=list(
+#'             distance="Wang",
+#'             aggreg.method="ward.D2",
+#'             rotate=NULL
+#'         ),
+#'         cut=list(
+#'             dynamic=list(
+#'                 pamStage=TRUE,
+#'                 pamRespectsDendro=TRUE,
+#'                 deepSplit=2,
+#'                 minClusterSize =2
+#'             )
+#'         )
+#'     ),
+#'     samples.tree=NULL
 #' )
 #' }
 #' @name GOterms_heatmap
 #' @rdname GOterms_heatmap-methods
 #' @exportMethod GOterms_heatmap
-setGeneric(name="GOterms_heatmap",def=function(
-  myGOs,
-  showIC=TRUE,
-  showGOlabels=TRUE,
-  GO.tree=base::list(
-    tree=base::list(
-      distance="Wang",
-      aggreg.method="ward.D2",
-      rotate=NULL),
-    cut=base::list(
-      dynamic=base::list(
-        pamStage=TRUE,
-        pamRespectsDendro=TRUE
-        ,deepSplit=2,
-        minClusterSize =2
-      )
-    )
-  ),
-  samples.tree=NULL
-){
-  base::standardGeneric("GOterms_heatmap")
-})
+setGeneric(
+    name="GOterms_heatmap",
+    def=function(
+        myGOs,
+        showIC=TRUE,
+        showGOlabels=TRUE,
+        GO.tree=list(
+            tree=list(
+                distance="Wang",
+                aggreg.method="ward.D2",
+                rotate=NULL
+            ),
+            cut=list(
+                dynamic=list(
+                    pamStage=TRUE,
+                    pamRespectsDendro=TRUE,
+                    deepSplit=2,
+                    minClusterSize =2
+                )
+            )
+        ),
+        samples.tree=NULL
+    ){
+        standardGeneric("GOterms_heatmap")
+    }
+)
 
 #' @rdname GOterms_heatmap-methods
 #' @aliases GOterms_heatmap
-setMethod("GOterms_heatmap",
-  methods::signature(
-    myGOs="GO_SS"
-  ),
-  definition=function(myGOs,showIC,showGOlabels,GO.tree,samples.tree){
+setMethod(
+    "GOterms_heatmap",
+    signature(
+        myGOs="GO_SS"
+    ),
+    definition=function(myGOs,showIC,showGOlabels,GO.tree,samples.tree){
 
-  ###################
-  # check entry
-  ###################
-  if(base::length(methods::slot(myGOs,"terms_dist"))==0){
-    base::stop("Please compute Semantic Similarity distance with ViSEAGO::compute_SS_distances()")
-  }
-
-  ###################
-  # creates trees
-  ###################
-
-    ###################
-    # add default params if not available in the tree list
-    Tree.params<-function(...){
-
-      ###################
-      # keep the name
-      name<-base::as.character(...)
-
-      ###################
-      # Tree
-      Tree<-list(base::get(name))[[1]]
-
-      if(!base::is.null(Tree)){
-
-        ###################
-        # extract list names
-        tree<-base::names(Tree$tree)
-
-        ###################
-        # default distance if not available
-        if("distance"%in%tree){
-          distance<-Tree$tree$distance
-        }else{
-          if(name=="GO.tree"){
-            distance="Wang"
-          }else{
-            distance="pearson"
-          }
+        ## check entry
+        if(length(slot(myGOs,"terms_dist"))==0){
+            stop("Please compute Semantic Similarity distance with ViSEAGO::compute_SS_distances()")
         }
 
-        ###################
-        # default distance if not available
-        if("aggreg.method"%in%tree){
-          aggreg.method<-Tree$tree$aggreg.method
-        }else{
-          if(name=="GO.tree"){
-            aggreg.method="ward.D2"
-          }else{
-            aggreg.method="average"
-          }
+        ## creates trees
+
+        # add default params if not available in the tree list
+        Tree.params<-function(...){
+
+            # keep the name
+            name<-as.character(...)
+
+            # Tree
+            Tree<-list(get(name))[[1]]
+
+            if(!is.null(Tree)){
+
+                # extract list names
+                tree<-names(Tree$tree)
+
+                # default distance if not available
+                if("distance"%in%tree){
+                    distance<-Tree$tree$distance
+                }else{
+                    if(name=="GO.tree"){
+                        distance="Wang"
+                    }else{
+                        distance="pearson"
+                    }
+                }
+
+                # default distance if not available
+                if("aggreg.method"%in%tree){
+                    aggreg.method<-Tree$tree$aggreg.method
+
+                }else{
+                    if(name=="GO.tree"){
+                        aggreg.method="ward.D2"
+                    }else{
+                        aggreg.method="average"
+                    }
+                }
+
+                # default order
+                if("rotate"%in%tree){
+                    rotate<-Tree$tree$rotate
+                }else{
+                    rotate=NULL
+                }
+
+                # extract list names
+                if(!is.null(Tree$cut)){
+
+                    # default static cut tree method if not available
+                    tree=names(Tree$cut)
+
+                    # default static cut tree method if not available
+                    if("static"%in%tree){
+                        static<-Tree$cut$static
+                    }else{
+                        static=NULL
+                    }
+
+                    if(is.null(static)){
+
+                        # extract list names
+                        tree<-names(Tree$cut$dynamic)
+
+                        # default aggreg.method if not available
+                        if("pamStage"%in%tree){
+                            pamStage<-Tree$cut$dynamic$pamStage
+                        }else{
+                            pamStage=TRUE
+                        }
+
+                    # default aggreg.method if not available
+                    if("pamRespectsDendro"%in%tree){
+                        pamRespectsDendro<-Tree$cut$dynamic$pamRespectsDendro
+                    }else{
+                        pamRespectsDendro=TRUE
+                    }
+
+                        # default aggreg.method if not available
+                        if("deepSplit"%in%tree){
+                            deepSplit<-Tree$cut$dynamic$deepSplit
+                        }else{
+                            deepSplit=2
+                        }
+
+                        # default aggreg.method if not available
+                        if("minClusterSize"%in%tree){
+                            minClusterSize<-Tree$cut$dynamic$minClusterSize
+                        }else{
+                             minClusterSize =2
+                        }
+
+                        # build dynamic
+                        dynamic=list(
+                            pamStage=pamStage,
+                                pamRespectsDendro=pamRespectsDendro,
+                            deepSplit=deepSplit,
+                            minClusterSize =minClusterSize
+                        )
+                    }else{
+
+                        # build dynamic
+                        dynamic=NULL
+                    }
+
+                    # build cut list
+                    cut=list(
+                        static=static,
+                        dynamic=dynamic
+                    )
+                }else{
+
+                    # build empty cut list
+                    cut=NULL
+                }
+
+                # Tree with default params if nessecary
+                list(
+                    tree=list(
+                        distance=distance,
+                        aggreg.method=aggreg.method,
+                        rotate=rotate
+                    ),
+                    cut=cut
+                )
+            }else{
+                # return empty
+                NULL
+            }
         }
 
-        ###################
-        # default order
-        if("rotate"%in%tree){
-          rotate<-Tree$tree$rotate
-        }else{
-          rotate=NULL
-        }
+        # row.tree with default if NA
+        row.tree<-Tree.params("GO.tree")
 
-        ###################
-        # extract list names
-        if(!base::is.null(Tree$cut)){
+        # col.tree with default if NA
+        col.tree<-Tree.params("samples.tree")
 
-          ###################
-          # default static cut tree method if not available
-          tree=base::names(Tree$cut)
-
-          ###################
-          # default static cut tree method if not available
-          if("static"%in%tree){
-            static<-Tree$cut$static
-          }else{
-            static=NULL
-          }
-
-          if(base::is.null(static)){
-
-            ###################
-            # extract list names
-            tree<-base::names(Tree$cut$dynamic)
-
-            ###################
-            # default aggreg.method if not available
-            if("pamStage"%in%tree){
-              pamStage<-Tree$cut$dynamic$pamStage
-            }else{
-              pamStage=TRUE
-            }
-
-            ###################
-            # default aggreg.method if not available
-            if("pamRespectsDendro"%in%tree){
-              pamRespectsDendro<-Tree$cut$dynamic$pamRespectsDendro
-            }else{
-              pamRespectsDendro=TRUE
-            }
-
-            ###################
-            # default aggreg.method if not available
-            if("deepSplit"%in%tree){
-              deepSplit<-Tree$cut$dynamic$deepSplit
-            }else{
-              deepSplit=2
-            }
-
-            ###################
-            # default aggreg.method if not available
-            if("minClusterSize"%in%tree){
-              minClusterSize<-Tree$cut$dynamic$minClusterSize
-            }else{
-                minClusterSize =2
-            }
-
-            ###################
-            # build dynamic
-            dynamic=base::list(
-              pamStage=pamStage,
-              pamRespectsDendro=pamRespectsDendro,
-              deepSplit=deepSplit,
-              minClusterSize =minClusterSize
+        # check dendrogram entry
+        if(is.null(row.tree$tree$distance)){
+            stop(
+                paste(
+                    "please enter a myGOs object computed SS distance name (",
+                    paste(
+                        names(
+                            slot(myGOs,"terms_dist")
+                        ),
+                        collapse=", "
+                    ),
+                    ") in the GO.tree distance argument",
+                    sep=""
+                )
             )
-          }else{
-
-            ###################
-            # build dynamic
-            dynamic=NULL
-          }
-
-
-          ###################
-          # build cut list
-          cut=base::list(
-            static=static,
-            dynamic=dynamic
-          )
-        }else{
-
-          ###################
-          # build empty cut list
-          cut=NULL
         }
 
-        ###################
-        # Tree with default params if nessecary
-        base::list(
-          tree=base::list(
-            distance=distance,
-            aggreg.method=aggreg.method,
-            rotate=rotate
-          ),
-          cut=cut
+        ## load Data
+
+        # data input
+        sResults<-slot(slot(myGOs,"enrich_GOs"),"data")
+
+        # extract pvalues columns
+        mat<-as.matrix(
+            sResults[,grep("-log10.pvalue",names(sResults)),with=FALSE]
         )
-      }else{
-        NULL
-      }
-    }
 
-    ###################
-    # row.tree with default if NA
-    row.tree<-Tree.params("GO.tree")
+        # remove -log10.pvalue in colnames
+        colnames(mat)<-gsub("\\.-log10.pvalue","",colnames(mat))
 
-    ###################
-    # col.tree with default if NA
-    col.tree<-Tree.params("samples.tree")
+        # duplicate sResults in Data
+        Data<-sResults
 
-    ###################
-    # check dendrogram entry
-    if(base::is.null(row.tree$tree$distance)){
-      base::stop(paste("please enter a myGOs object computed SS distance name (",
-      paste(
-        base::names(
-          methods::slot(
-            myGOs,
-            "terms_dist"
+        # add modfied terms definition
+        row.names(mat)<-paste("<br>GO.ID:",Data$GO.ID,"<br>GO.name:",Data$term)
+
+        # if Inf in -log10pvalue, set 9
+        for(i in  seq_len(ncol(mat))){mat[mat[,i]=="Inf",i]<-9}
+
+        # transpose for GO in rows and samples in columns  in the levelplot
+        x<-t(mat)
+
+        # Add IC in panes
+        if(showIC==TRUE){
+
+            # extract values
+            IC<-round(
+                slot(myGOs,"IC")[sResults$GO.ID],
+                digits=2
             )
-          ),
-        collapse=", "),
-      ") in the GO.tree distance argument",
-      sep="")
-      )
-    }
-
-  ###################
-  # load Data
-  ###################
-
-    ###################
-    # data input
-    sResults<-methods::slot(
-      methods::slot(
-        myGOs,
-        "enrich_GOs"),
-      "data"
-    )
-
-    ###################
-    # extract pvalues columns
-    mat<-base::as.matrix(sResults[,grep("-log10.pvalue",names(sResults)),with=FALSE])
-
-    ###################
-    # remove -log10.pvalue in colnames
-    base::colnames(mat)<-base::gsub("\\.-log10.pvalue","",base::colnames(mat))
-
-    ###################
-    # duplicate sResults in Data
-    Data<-sResults
-
-    ###################
-    #  add modfied terms definition
-    base::row.names(mat)<-base::paste("<br>GO.ID:",Data$GO.ID,"<br>GO.name:",Data$term)
-
-    ###################
-    # if Inf in -log10pvalue, set 9
-    for(i in  base::seq_len(base::ncol(mat))){mat[mat[,i]=="Inf",i]<-9}
-
-    ###################
-    #  remove Data
-    base::rm(Data)
-
-    ###################
-    # transpose for GO in rows and samples in columns  in the levelplot
-    x<-base::t(mat)
-
-    ###################
-    # Add IC in panes
-    if(showIC==TRUE){
-
-      ###################
-      # extract values
-      IC<-base::round(methods::slot(myGOs,"IC")[sResults$GO.ID],digits=2)
-    }
-
-  ###################
-  # distance correlation
-  ###################
-
-    ###################
-    # distance function
-    dist.fun<-function(...){
-
-      ###################
-      # text tree
-      Tree<-base::as.character(...)
-
-      ###################
-      # row or col tree
-      if(base::length(base::grep("col",Tree))==1){col=T}else{col=F}
-
-      ###################
-      # get tree
-      Tree<-base::get(Tree)
-
-      ###################
-      # if tree on column
-      if(!base::is.null(Tree)){
-
-        ###################
-        # column tree with correlation distance
-        if(base::is.character(Tree$tree$distance) || Tree$tree$distance%in%c("abs.pearson","pearson", "kendall","spearman")){
-
-          ###################
-          # if tree on column
-          if(col==T){x<-base::t(x)}
-
-          ###################
-          # for absolute pearson correlation
-          if(Tree$tree$distance=="abs.pearson"){
-
-            ###################
-            # col.tree with absolute pearson correlation
-            stats::as.dist(1-base::abs(stats::cor(x,method="pearson")))
-
-          }else{
-
-            ###################
-            # other correlation distances
-            stats::as.dist(1-stats::cor(x,method=Tree$tree$distance))
-          }
-
-        ###################
-        # column tree without correlation distance
-        }else{
-
-          ###################
-          # if row on column
-          if(col==F){x<-t(x)}
-
-          ###################
-          # calculate distance
-          stats::dist(x,method=Tree$tree$distance)
-        }
-      }
-    }
-
-    ###################
-    # columns distance
-    col.dist<-dist.fun("col.tree")
-
-    ###################
-    # row distance (precalculated distance based on similarity of GO terms)
-    row.dist<-methods::slot(myGOs,"terms_dist")[[row.tree$tree$distance]]
-
-  ###################
-  # aggregation
-  ###################
-
-    ###################
-    # aggregation function
-    aggreg.fun<-function(...){
-
-      ###################
-      # text tree
-      Tree<-base::as.character(...)
-
-      ###################
-      # add calculated distance
-      dist<-base::get(base::paste(base::substring(Tree,1,3),"dist",sep="."))
-
-      ###################
-      # if distance matrix not empty
-      if(!base::is.null(dist)){
-
-        ###################
-        # get tree
-        Tree<-base::get(Tree)
-
-        ###################
-        # perform hclust
-        hc<-stats::hclust(dist, method =Tree$tree$aggreg.method)
-
-        ###################
-        # rotate
-        if(!base::is.null(Tree$tree$rotate)){
-          hc<-dendextend::rotate(hc,Tree$tree$rotate)
         }
 
-        ###################
-        # return roated hc
-        base::return(hc)
-      }
-    }
+        ## distance correlation
 
-    ###################
-    # columns distance
-    col_tree<-aggreg.fun("col.tree")
+        # distance function
+        dist.fun<-function(...){
 
-    ###################
-    # row distance
-    row_tree<-aggreg.fun("row.tree")
+            # text tree
+            Tree<-as.character(...)
 
-  ###################
-  # create dendrogram(s)
-  ###################
+            # row or col tree
+            if(length(grep("col",Tree))==1){col=TRUE}else{col=FALSE}
 
-    ###################
-    # visible binding for global variable
-    # Bioconductor submission "checking R code possible problems" step
-    col.ord<-NULL
-    row.ord<-NULL
+            # get tree
+            Tree<-get(Tree)
 
-    ###################
-    # create row and column dendrograms
-    for(i in c("row_tree","col_tree")){
+            # if tree on column
+            if(!is.null(Tree)){
 
-      ###################
-      # create dendrogram
-      if(!base::is.null(base::get(i))){
+                # column tree with correlation distance
+                if(is.character(Tree$tree$distance) || Tree$tree$distance%in%c("abs.pearson","pearson", "kendall","spearman")){
 
-        ###################
-        # dendrogram name
-        dd<-base::paste("dd",base::substring(i,1,3),sep=".")
+                 # if tree on column
+                    if(col==TRUE){x<-t(x)}
 
-        ###################
-        # dendrogram convert
-        dend<-stats::as.dendrogram(base::get(i))
+                    # for absolute pearson correlation
+                    if(Tree$tree$distance=="abs.pearson"){
 
-        ###################
+                        # col.tree with absolute pearson correlation
+                        as.dist(1-abs(cor(x,method="pearson")))
+
+                    }else{
+
+                        # other correlation distances
+                        as.dist(1-cor(x,method=Tree$tree$distance))
+                    }
+
+                }else{
+
+                    # if row on column
+                    if(col==FALSE){x<-t(x)}
+
+                    # calculate distance
+                    dist(x,method=Tree$tree$distance)
+                }
+            }
+        }
+
+        # columns distance
+        col.dist<-dist.fun("col.tree")
+
+        # row distance (precalculated distance based on similarity of GO terms)
+        row.dist<-slot(myGOs,"terms_dist")[[row.tree$tree$distance]]
+
+        ## aggregation
+
+        # aggregation function
+        aggreg.fun<-function(...){
+
+            # text tree
+            Tree<-as.character(...)
+
+            # add calculated distance
+            dist<-get(
+                paste(
+                    substring(Tree,1,3),
+                    "dist",
+                    sep="."
+                )
+            )
+
+            # if distance matrix not empty
+            if(!is.null(dist)){
+
+                # get tree
+                Tree<-get(Tree)
+
+                # perform hclust
+                hc<-hclust(dist, method =Tree$tree$aggreg.method)
+
+                # rotate
+                if(!is.null(Tree$tree$rotate)){
+                    hc<-dendextend::rotate(hc,Tree$tree$rotate)
+                }
+
+                # return roated hc
+                return(hc)
+            }
+        }
+
+        # columns distance
+        col_tree<-aggreg.fun("col.tree")
+
+        # row distance
+        row_tree<-aggreg.fun("row.tree")
+
+        ## create dendrogram(s)
+
+        # visible binding for global variable
+        # Bioconductor submission "checking R code possible problems" step
+        col.ord<-NULL
+        row.ord<-NULL
+
+        # create row and column dendrograms
+        for(i in c("row_tree","col_tree")){
+
+            # create dendrogram
+            if(!is.null(get(i))){
+
+                # dendrogram name
+                dd<-paste("dd",substring(i,1,3),sep=".")
+
+                # dendrogram convert
+                dend<-as.dendrogram(get(i))
+
+                # create dendrogram
+                assign(dd,dend)
+
+                # create ordering vector
+                assign(
+                    paste(
+                        substring(i,1,3),
+                        "ord",
+                        sep="."
+                    ),
+                    order.dendrogram(
+                        get(dd)
+                    )
+                )
+
+            }else{
+
+                # ordering vector ni null according column and row
+                if(i=="col_tree"){Dat<-seq_len(nrow(x))}else{Dat<-seq_len(ncol(x))}
+
+                # create ordering vector
+                assign(
+                    paste(
+                        substring(i,1,3),
+                        "ord",
+                        sep="."
+                    ),
+                    Dat
+                )
+            }
+        }
+
+        ## cut trees
+
+        # cut tree
+        cut.tree<-function(...){
+
+            # text tree
+            Tree<-as.character(...)
+
+            # text tree
+            if(!is.null(get(Tree))){
+
+                # add calculated distance
+                dendro=get(sub("\\.","_",Tree))
+
+                # add calculated distance
+                dist<-get(
+                    paste(
+                        substring(Tree,1,3),
+                        "dist",
+                        sep="."
+                    )
+                )
+
+                # add order
+                ord<-get(
+                    paste(
+                        substring(Tree,1,3),
+                        "ord",
+                        sep="."
+                    )
+                )
+
+                # get tree
+                Tree<-get(Tree)
+
+                # cut or not
+                if(!is.null(Tree$cut)){
+
+                    # cut dynamic
+                    if(is.null(Tree$cut$static)){
+
+                        # cut dynamic
+                        gp<-cutreeDynamic(
+                            dendro =dendro,
+                            method="hybrid",
+                            verbose=FALSE,
+                            distM =as.matrix(dist),
+                            pamStage=Tree$cut$dynamic$pamStage,
+                            pamRespectsDendro=Tree$cut$dynamic$pamRespectsDendro,
+                            deepSplit=Tree$cut$dynamic$deepSplit,
+                            minClusterSize =Tree$cut$dynamic$minClusterSize
+                        )
+
+                        # groups
+                        clust=unique(gp[ord])
+
+                        # new clusters names table
+                        clust=data.table(
+                            ini=clust,
+                            new=seq_along(clust)
+                        )
+
+                        # convert gp to data.table
+                        gp<-data.table(ini=gp)
+
+                        # merge gp with new clusters names
+                        gp<-merge(
+                            gp,
+                            clust,
+                            by="ini",
+                            all.x=TRUE,
+                            sort=FALSE
+                        )
+
+                        # extract only new clusters names in the initial order
+                        gp<-gp$new
+
+                        # add go names
+                        names(gp)<-attr(dist,"Labels")
+
+                        # return the object
+                        gp
+
+                    }else{
+
+                        # static cut tree by group numbers
+                        if(Tree$cut$static>1){
+
+                            # cut row tree
+                            cutree(dendro, k =Tree$cut$static,h = NULL)[ord]
+
+                        }else{
+
+                            # cut row tree
+                            cutree(dendro,k=NULL,h=Tree$cut$static)[ord]
+                        }
+                    }
+                }else{
+
+                    # text tree
+                    Tree<-as.character(...)
+
+                    # unique group
+                    gp<-rep(1,length(get(sub("tree","ord",Tree))))
+
+                    # give col names attributes
+                    if(Tree=="col.tree"){attr(gp,"names")<-row.names(x)}
+
+                    # give row names attributes
+                    if(Tree=="row.tree"){attr(gp,"names")<-colnames(x)}
+
+                    # return gp
+                    gp
+                }
+
+            }else{
+
+                # unique group
+                gp<-rep(1,length(get(sub("tree","ord",Tree))))
+
+                # give col names attributes
+                if(Tree=="col.tree"){attr(gp,"names")<-row.names(x)}
+
+                # give row names attributes
+                if(Tree=="row.tree"){attr(gp,"names")<-colnames(x)}
+
+                # return gp
+                gp
+            }
+        }
+
+        # cut row tree
+        row.gp<-cut.tree("row.tree")
+
+        # cut column tree
+        col.gp<-cut.tree("col.tree")
+
+        # add cluster to row.names
+        row.names(mat)<-paste("<br>cluster:",row.gp,row.names(mat))
+
+        ## color row dendrogram according clusters
+
+        # color labels of cutting tree
+        palette=c(
+            "darksalmon","cyan","orchid","midnightblue","hotpink",
+            "sienna","aquamarine","royalblue","forestgreen","salmon","maroon",
+            "green","deepskyblue","olivedrab","springgreen","limegreen","magenta",
+            "peru","tan","steelblue","orange","burlywood","skyblue","red",
+            "darkslateblue","plum","goldenrod","cadetblue","indianred","pink",
+            "slateblue","turquoise","darkorchid","cornflowerblue","darkolivegreen",
+            "orangered","powderblue","rosybrown","darkgoldenrod","seagreen",
+            "darkturquoise","thistle","dodgerblue","sandybrown","purple","tomato",
+            "deeppink", "darkmagenta","darkred","darkkhaki","coral","lawngreen",
+             "darkorange","black","chocolate","firebrick","darkseagreen","blue",
+            "navy","darkgreen"
+        )
+
+        # color branches according clusters
+        dd.row<-branches_attr_by_clusters(
+            dd.row,
+            row.gp[row.ord],
+            values = palette
+        )
+
+        # color labels of cutting tree
+        colors=na.omit(
+            unique(
+                unlist(
+                    get_nodes_attr(dd.row,"edgePar")
+                )
+            )
+        )
+
+        # colors table
+        colors=data.table(
+            gp=unique(row.gp[row.ord]),
+            color=colors
+        )
+
+        # merge cluster term assignation and corresponding color
+        colors<-merge(
+            data.table(gp=row.gp[row.ord]),
+            colors,
+            by="gp",
+            all.x=TRUE,
+            sort=FALSE
+        )
+
+        # assign text color
+        dd.row<-set(
+            dd.row,
+            "labels_col",
+            colors$color
+        )
+
         # create dendrogram
-        base::assign(dd,dend)
-
-        ###################
-        # create ordering vector
-        base::assign(
-          base::paste(
-            base::substring(i,1,3),
-            "ord",
-            sep="."
-          ),
-          stats::order.dendrogram(
-            base::get(dd)
-          )
+        dd.row<-set(
+            dd.row,
+            "labels_cex",
+            1
         )
 
-     }else{
+        ## column dendrogram according clusters
 
-        ###################
-        # ordering vector ni null according column and row
-        if(i=="col_tree"){Dat<-base::seq_len(base::nrow(x))}else{Dat<-base::seq_len(base::ncol(x))}
+        if(!is.null(col.dist)){
 
-        ###################
-        # create ordering vector
-        base::assign(base::paste(base::substring(i,1,3),"ord",sep="."),Dat)
-      }
-    }
+            # color branches according clusters
+            dd.col<-branches_attr_by_clusters(
+                dd.col,
+                col.gp[col.ord],
+                values =palette
+            )
 
-  ###################
-  # cut trees
-  ###################
+            # color labels of cutting tree
+            colors=na.omit(
+                unique(
+                    unlist(
+                        get_nodes_attr(dd.col,"edgePar")
+                    )
+                )
+            )
 
-    ###################
-    # cut tree
-    cut.tree<-function(...){
+            # colors table
+            colors=data.table(
+                gp=unique(col.gp[col.ord]),
+                color=colors
+            )
 
-      ###################
-      # text tree
-      Tree<-base::as.character(...)
+            # merge cluster term assignation and corresponding color
+            colors<-merge(
+                data.table(gp=col.gp[col.ord]),
+                colors,
+                by="gp",
+                all.x=TRUE,
+                sort=FALSE
+            )
 
-      ###################
-      # text tree
-      if(!base::is.null(base::get(Tree))){
+            # assign text color
+            dd.col<-set(
+                dd.col,
+                "labels_col",
+                colors$color
+            )
 
-        ###################
-        # add calculated distance
-        dendro=base::get(sub("\\.","_",Tree))
+            # create dendrogram
+            dd.col<-dendextend::set(
+                dd.col,
+                "labels_cex",
+                1
+            )
+        }
 
-        ###################
-        # add calculated distance
-        dist<-base::get(base::paste(base::substring(Tree,1,3),"dist",sep="."))
+        ## draw heatmap
 
-        ###################
-        # add order
-        ord<-base::get(base::paste(base::substring(Tree,1,3),"ord",sep="."))
+        # If gene background not the same
+        if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")==FALSE){
 
-        ###################
-        # get tree
-        Tree<-base::get(Tree)
+            # show warning
+            warning(
+                call. =FALSE,
+                "Not equal genes background in all conditions:\n--> pvalues converted to significant (1) or not (0) by condition in the cluster-heatmap"
+            )
 
-          ###################
-          # cut or not
-          if(!base::is.null(Tree$cut)){
+            # reduce to significant or not (p<0.01, -log10(p)>2)
+            mat<-ifelse(mat < 2, 0, 1)
+        }
 
-            ###################
-            # cut dynamic
-            if(base::is.null(Tree$cut$static)){
+        # draw heatmapply
+        hm<-heatmaply::heatmaply(
 
-              ###################
-              # cut dynamic
-              gp<-dynamicTreeCut::cutreeDynamic(
-                dendro =dendro,
-                method="hybrid",
-                verbose=F,
-                distM =as.matrix(dist),
-                pamStage=Tree$cut$dynamic$pamStage,
-                pamRespectsDendro=Tree$cut$dynamic$pamRespectsDendro,
-                deepSplit=Tree$cut$dynamic$deepSplit,
-                minClusterSize =Tree$cut$dynamic$minClusterSize
-              )
+            # the initial matrix
+            x=mat,
 
-              ###################
-              # groups
-              clust=unique(gp[ord])
+            # row labels
+            labRow=row.names(mat),
 
-              ###################
-              # new clusters names table
-              clust=data.table::data.table(ini=clust,new=base::seq_len(length(clust)))
+            # columns labels
+            labCol=colnames(mat),
 
-              ###################
-              # convert gp to data.table
-              gp<-data.table::data.table(ini=gp)
+            # the row dendrogram
+            Rowv=dd.row,
 
-              ###################
-              # merge gp with new clusters names
-              gp<-merge(gp,clust,by="ini",all.x=T,sort=F)
+            # the ordered matrix according dendrograms for columns
+            Colv=if(!is.null(col.dist)){dd.col}else{FALSE},
 
-              ###################
-              # extract only new clusters names in the initial order
-              gp<-gp$new
+            # the IC information
+            RowSideColors=if(showIC==TRUE){data.table(IC=IC)}else{NULL},
 
-              ###################
-              # add go names
-              names(gp)<-base::attr(dist,"Labels")
+            # the IC information
+            row_side_palette =if(showIC==TRUE){colorRampPalette(c("#FFFFFF","#49006A"))}else{NULL},
 
-              ###################
-              # return the object
-              gp
+            # the color palette
+            scale_fill_gradient_fun=if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")==TRUE){
 
-          }else{
+                # if same gene background
+                    scale_fill_gradient2(
+                    name="-log10pvalue",
+                    low="white",
+                    mid="white",
+                    high ="#99000D",
+                    midpoint = 1.3
+                )
+            }else{
 
-            ###################
-            # static cut tree by group numbers
-            if(Tree$cut$static>1){
+                # if not same gene background
+                scale_fill_gradient2(
+                    name="-log10pvalue",
+                    low="white",
+                    mid="white",
+                    high ="#99000D",
+                    midpoint =0
+                )
+            },
 
-              ###################
-              # cut row tree
-              stats::cutree(dendro, k =Tree$cut$static,h = NULL)[ord]
+            # the width of dendrogramm
+            branches_lwd = 0.4,
+
+            # color bar length
+            colorbar_len=0.05
+        )
+
+        # with column dendrogram and showIC
+        col=vapply(hm$x$data,function(x){length(x$text)},0)
+        col<-which(col==(nrow(mat)*ncol(mat)))
+
+        # for each column
+        text<-hm$x$data[[col]]$text
+
+        # for each column
+        for (i in seq_len(ncol(text))){
+            text[,i]<-gsub("(<br>|^)row: ","",text[,i])
+        }
+
+        # add text
+        hm$x$data[[col]]$text<-text
+
+        # modify row_side_color hover text
+        if(showIC==TRUE){
+
+            # if column dendrogram
+            start=col+2
+
+            # modify row_side_color hover text
+            for(i in start:(start+nrow(mat)-1)){
+
+                # IC color font correction for maxima value rounded to 0 digits
+                if(round(as.numeric(hm$x$data[[i]]$name),digits=0)==round(max(IC),digits=0)){
+
+                    # correct maxima value color purple "#49006A" in rgba
+                    hm$x$data[[i]]$fillcolor<-"rgba(73,0,106,1)"
+                }
+
+                # store the text
+                text<-hm$x$data[[i]]$text
+
+                # extract the corresponding row names value
+                text<-row.names(mat)[as.numeric(gsub("^.+ ","",text))]
+
+                # return values
+                hm$x$data[[i]]$text<-paste(
+                    "value:",
+                    round(IC[gsub("^.+GO.ID: | <br>GO.name.+$","",text)],digits=2),
+                    "<br>column: IC<br>row:",
+                    text
+                )
+            }
+        }
+
+        # custom row text
+        row.text=gsub(
+            "^.+GO.name: ",
+            "",
+            rev(row.names(mat)[row.ord])
+        )
+
+        # cut very long definition
+        row.text[nchar(row.text)>50]<-paste(substring(
+        row.text[nchar(row.text)>50],1,50),"...",sep="")
+
+        # modify layout
+        hm<-layout(
+            hm,
+
+            # add title
+            title=paste(
+                row.tree$tree$distance,
+                "GOterms distance clustering heatmap plot"
+            ),
+
+            # title size
+            font=list(size=14),
+
+            # set margin
+            margin=list(l =300,r=0, b =150,t=50)
+        )
+
+        # modify layout
+        if(!is.null(col.dist)){
+
+            # modify layout
+            hm<-layout(
+                hm,
+
+                # domain
+                yaxis=list(domain=c(0.95,1)),
+
+                # y axis
+                yaxis2=list(
+                    domain=c(0,0.95),
+                    family="Times New Roman",
+                    tickmode="array",
+                    tickvals=seq_len(nrow(mat)),
+                    ticktext=row.text,
+                    tickfont=list(size=10),
+                    showticklabels=showGOlabels
+                )
+            )
+        }else{
+
+            # modify layout
+            hm<-layout(
+                hm,
+
+                 # y axis
+                yaxis=list(
+                    family="Times New Roman",
+                    tickmode="array",
+                    tickvals=if(showGOlabels==TRUE){seq_len(nrow(mat))}else{NULL},
+                    ticktext=row.text,
+                    tickfont=list(size=10),
+                    showticklabels=showGOlabels
+                )
+            )
+        }
+
+        # modify layout
+        if(showIC==TRUE){
+
+            hm<-layout(hm,
+
+                # x axis
+                xaxis=list(
+                    domain=c(0.025,0.50),
+                    family="Times New Roman",
+                    tickfont=list(size=10)
+                ),
+                xaxis2=list(
+                    domain=c(0.50,0.55)
+                ),
+                xaxis3=list(
+                    domain=c(0.55,1)
+                )
+            )
+        }else{
+
+            # modify layout
+            hm<-layout(
+                hm,
+
+                # x axis
+                xaxis=list(
+                    domain=c(0.025,0.55),
+                    family="Times New Roman",
+                    tickfont=list(size=10)
+                ),
+                xaxis2=list(
+                    domain=c(0.55,1)
+                )
+            )
+        }
+
+        # hm to list
+        hm<-list(hm)
+
+        # give names to hm list
+        names(hm)<-"GOterms"
+
+        # create an empty column dendrogram if needed
+        if(!"dd.col"%in%ls()){dd.col=NULL}
+
+        ## export results
+
+        # bind data
+        sResults<-data.table(
+            GO.cluster=row.gp,
+            IC=IC,
+            sResults
+        )
+
+        # ordering results
+        sResults<- sResults[row.ord]
+
+        # replace data by sResults in myGOs
+        slot(slot(myGOs,"enrich_GOs"),"data")<-sResults
+
+        # remove not used elements in row.tree
+        if(!is.null(row.tree$cut$static)){
+
+            # keep only static parameters
+            row.tree$cut$dynamic<-NULL
+
+            # remove not used elements in row.tree
+            if(row.tree$cut$static<=1){
+
+                # add h to static
+                names(row.tree$cut)<-paste(names(row.tree$cut),"(h)")
 
             }else{
 
-              ###################
-              # cut row tree
-              stats::cutree(dendro,k=NULL,h=Tree$cut$static)[ord]
+                # add k to static
+                names(row.tree$cut)<-paste(names(row.tree$cut),"(k)")
             }
-          }
-        }else{
-
-          ###################
-          # text tree
-          Tree<-base::as.character(...)
-
-          ###################
-          # unique group
-          gp<-base::rep(1,base::length(base::get(base::sub("tree","ord",Tree))))
-
-          ###################
-          # give col names attributes
-          if(Tree=="col.tree"){base::attr(gp,"names")<-base::row.names(x)}
-
-          ###################
-          # give row names attributes
-          if(Tree=="row.tree"){base::attr(gp,"names")<-base::colnames(x)}
-
-          ###################
-          # return gp
-          gp
         }
 
-      }else{
-
-        ###################
-        # unique group
-        gp<-base::rep(1,length(base::get(base::sub("tree","ord",Tree))))
-
-        ###################
-        # give col names attributes
-        if(Tree=="col.tree"){base::attr(gp,"names")<-base::row.names(x)}
-
-        ###################
-        # give row names attributes
-        if(Tree=="row.tree"){base::attr(gp,"names")<-base::colnames(x)}
-
-        ###################
-        # return gp
-        gp
-      }
-    }
-
-    ###################
-    # cut row tree
-    row.gp<-cut.tree("row.tree")
-
-    ###################
-    # cut column tree
-    col.gp<-cut.tree("col.tree")
-
-    ###################
-    # add cluster to row.names
-    base::row.names(mat)<-base::paste("<br>cluster:",row.gp,base::row.names(mat))
-
-  ###################
-  # color row dendrogram according clusters
-  ###################
-
-    ###################
-    # color labels of cutting tree
-    palette=base::c("darksalmon","cyan","orchid","midnightblue","hotpink",
-      "sienna","aquamarine","royalblue","forestgreen","salmon","maroon",
-      "green","deepskyblue","olivedrab","springgreen","limegreen","magenta",
-      "peru","tan","steelblue","orange","burlywood","skyblue","red",
-      "darkslateblue","plum","goldenrod","cadetblue","indianred","pink",
-      "slateblue","turquoise","darkorchid","cornflowerblue","darkolivegreen",
-      "orangered","powderblue","rosybrown","darkgoldenrod","seagreen",
-      "darkturquoise","thistle","dodgerblue","sandybrown","purple","tomato",
-      "deeppink", "darkmagenta","darkred","darkkhaki","coral","lawngreen",
-      "darkorange","black","chocolate","firebrick","darkseagreen","blue",
-      "navy","darkgreen"
-    )
-
-    ###################
-    # color branches according clusters
-    dd.row<-dendextend::branches_attr_by_clusters(dd.row,row.gp[row.ord], values =  palette)
-
-    ###################
-    # color labels of cutting tree
-    colors=stats::na.omit(base::unique(base::unlist(dendextend:: get_nodes_attr(dd.row,"edgePar"))))
-
-    ###################
-    # colors table
-    colors=data.table::data.table(gp=base::unique(row.gp[row.ord]),color=colors)
-
-    ###################
-    # merge cluster term assignation and corresponding color
-    colors<-merge(data.table::data.table(gp=row.gp[row.ord]),colors,by="gp",all.x=T,sort=F)
-
-    ###################
-    # assign text color
-    dd.row<-dendextend::set(dd.row,"labels_col",colors$color)
-
-    ###################
-    # create dendrogram
-    dd.row<-dendextend::set(dd.row,"labels_cex",1)
-
-  ###################
-  # column dendrogram according clusters
-  ###################
-
-    if(!is.null(col.dist)){
-
-      ###################
-      # color branches according clusters
-      dd.col<-dendextend::branches_attr_by_clusters(dd.col,col.gp[col.ord], values =palette)
-
-      ###################
-      # color labels of cutting tree
-      colors=stats::na.omit(base::unique(base::unlist(dendextend:: get_nodes_attr(dd.col,"edgePar"))))
-
-      ###################
-      # colors table
-      colors=data.table::data.table(gp=base::unique(col.gp[col.ord]),color=colors)
-
-      ###################
-      # merge cluster term assignation and corresponding color
-      colors<-merge(data.table::data.table(gp=col.gp[col.ord]),colors,by="gp",all.x=T,sort=F)
-
-      ###################
-      # assign text color
-      dd.col<-dendextend::set(dd.col,"labels_col",colors$color)
-
-      ###################
-      # create dendrogram
-      dd.col<-dendextend::set(dd.col,"labels_cex",1)
-    }
-
-  ###################
-  # draw heatmap
-  ###################
-
-    ###################
-    # If gene background not the same
-    if(methods::slot(methods::slot(myGOs,"enrich_GOs"),"same_genes_background")==FALSE){
-
-      ###################
-      # show warning
-      base::warning(
-        call. =FALSE,
-        "Not equal genes background in all conditions:\n--> pvalues converted to significant (1) or not (0) by condition in the cluster-heatmap"
-      )
-
-      ###################
-      # reduce to significant or not (p<0.01, -log10(p)>2)
-      mat<-base::apply(mat,base::c(1,2),function(x){
-        if(base::is.na(x)){
-          NA
-        }else{
-          if(x<2){0}else{1}
-        }
-      })
-    }
-
-    ###################
-    # draw heatmapply
-    hm<-heatmaply::heatmaply(
-
-      ###################
-      # the initial matrix
-      x=mat,
-
-      ###################
-      # row labels
-      labRow=base::row.names(mat),
-
-      ###################
-      # columns labels
-      labCol=base::colnames(mat),
-
-      ###################
-      # the row dendrogram
-      Rowv=dd.row,
-
-      ###################
-      # the ordered matrix according dendrograms for columns
-      Colv=if(!is.null(col.dist)){dd.col}else{FALSE},
-
-      ###################
-      # the IC information
-      RowSideColors=if(showIC==TRUE){data.table::data.table(IC=IC)}else{NULL},
-
-      ###################
-      # the IC information
-      row_side_palette =if(showIC==TRUE){grDevices::colorRampPalette(c("#FFFFFF","#49006A"))}else{NULL},
-
-      ###################
-      # the color palette
-      scale_fill_gradient_fun=if(methods::slot(methods::slot(myGOs,"enrich_GOs"),"same_genes_background")==T){
-
-        ###################
-        # if same gene background
-        ggplot2::scale_fill_gradient2(
-          name="-log10pvalue",
-          low="white",
-          mid="white",
-          high ="#99000D",
-          midpoint = 1.3
+        # return heatmap
+        new(
+            "GO_clusters",
+            db=slot(myGOs,"db"),
+            stamp =slot(myGOs,"stamp"),
+            organism=slot(myGOs,"organism"),
+            ont=slot(myGOs,"ont"),
+            topGO=slot(myGOs,"topGO"),
+            IC=slot(myGOs,"IC"),
+            enrich_GOs=slot(myGOs,"enrich_GOs"),
+            terms_dist=slot(myGOs,"terms_dist")[row.tree$tree$distance],
+            hcl_params=list(
+                GO.tree=row.tree,
+                sample.tree=col.tree
+            ),
+            dendrograms=list(samples=dd.col,GO=dd.row),
+            samples.gp=col.gp,
+            heatmap=hm
         )
-      }else{
-
-        ###################
-        # if not same gene background
-        ggplot2::scale_fill_gradient2(
-          name="-log10pvalue",
-          low="white",
-          mid="white",
-          high ="#99000D",
-          midpoint =0
-        )
-      },
-
-      ###################
-      # the width of dendrogramm
-      branches_lwd = 0.4,
-
-      ###################
-      # color bar length
-      colorbar_len=0.05
-    )
-
-    ###################
-    # with column dendrogram and showIC
-    col=base::vapply(hm$x$data,function(x){base::length(x$text)},0)
-    col<-base::which(col==(base::nrow(mat)*base::ncol(mat)))
-
-    ###################
-    # for each column
-    text<-hm$x$data[[col]]$text
-
-    ###################
-    # for each column
-    for (i in base::seq_len(base::ncol(text))){
-      text[,i]<-base::gsub("(<br>|^)row: ","",text[,i])
     }
-
-    ###################
-    # return
-    hm$x$data[[col]]$text<-text
-
-    ###################
-    # modify row_side_color hover text
-    if(showIC==TRUE){
-
-      ###################
-      # if column dendrogram
-      start=col+2
-
-      ###################
-      # modify row_side_color hover text
-      for(i in start:(start+base::nrow(mat)-1)){
-
-        ###################
-        # IC color font correction for maxima value rounded to 0 digits
-        if(base::round(base::as.numeric(hm$x$data[[i]]$name),digits=0)==base::round(base::max(IC),digits=0)){
-
-          ###################
-          # correct maxima value color purple "#49006A" in rgba
-          hm$x$data[[i]]$fillcolor<-"rgba(73,0,106,1)"
-        }
-
-        ###################
-        # store the text
-        text<-hm$x$data[[i]]$text
-
-        ###################
-        # extract the corresponding row names value
-        text<-base::row.names(mat)[
-        base::as.numeric(base::gsub("^.+ ","",text))]
-
-        ###################
-        # return values
-        hm$x$data[[i]]$text<-paste(
-        "value:",base::round(IC[base::gsub("^.+GO.ID: | <br>GO.name.+$","",text)],digits=2),
-        "<br>column: IC<br>row:",text)
-      }
-    }
-
-    ###################
-    # custom row text
-    row.text=base::gsub("^.+GO.name: ","",
-    base::rev(base::row.names(mat)[row.ord]))
-
-    ###################
-    # cut very long definition
-    row.text[nchar(row.text)>50]<-base::paste(base::substring(
-    row.text[nchar(row.text)>50],1,50),"...",sep="")
-
-    ###################
-    # modify layout
-    hm<-plotly::layout(
-      hm,
-
-      #################
-      # add title
-      title=paste(row.tree$tree$distance,"GOterms distance clustering heatmap plot"),
-
-      #################
-      # title size
-      font=base::list(size=14),
-
-      #################
-      # set margin
-      margin =base::list(l =300,r=0, b =150,t=50)
-    )
-
-    ###################
-    # modify layout
-    if(!is.null(col.dist)){
-
-      ###################
-      # modify layout
-      hm<-plotly::layout(
-        hm,
-
-        #################
-        # domain
-        yaxis=base::list(domain=base::c(0.95,1)),
-
-        #################
-        # y axis
-        yaxis2=base::list(
-          domain=base::c(0,0.95),
-          family="Times New Roman",
-          tickmode="array",
-          tickvals=base::seq_len(base::nrow(mat)),
-          ticktext=row.text,
-          tickfont=base::list(size=10),
-          showticklabels=showGOlabels
-        )
-      )
-    }else{
-
-      ###################
-      # modify layout
-      hm<-plotly::layout(
-        hm,
-
-        #################
-        # y axis
-        yaxis=base::list(
-          family="Times New Roman",
-          tickmode="array",
-          tickvals=if(showGOlabels==TRUE){base::seq_len(base::nrow(mat))}else{NULL},
-          ticktext=row.text,
-          tickfont=base::list(size=10),
-          showticklabels=showGOlabels
-        )
-      )
-    }
-
-    ###################
-    # modify layout
-    if(showIC==TRUE){
-
-      hm<-plotly::layout(hm,
-
-        #################
-        # x axis
-        xaxis=base::list(
-          domain=c(0.025,0.50),
-          family="Times New Roman",
-          tickfont=base::list(size=10)
-        ),
-        xaxis2=base::list(
-          domain=c(0.50,0.55)
-        ),
-        xaxis3=base::list(
-          domain=c(0.55,1)
-        )
-      )
-    }else{
-
-      hm<-plotly::layout(hm,
-
-        #################
-        # x axis
-        xaxis=base::list(
-          domain=c(0.025,0.55),
-          family="Times New Roman",
-          tickfont=base::list(size=10)
-        ),
-        xaxis2=base::list(
-          domain=c(0.55,1)
-        )
-      )
-    }
-
-    ###################
-    #  hm to list
-    hm<-base::list(hm)
-
-    ###################
-    # give names to hm list
-    base::names(hm)<-"GOterms"
-
-    ###################
-    # create an empty column dendrogram if needed
-    if(!"dd.col"%in%base::ls()) dd.col=NULL
-
-  ###################
-  # export results
-  ###################
-
-    ###################
-    # bind data
-    sResults<-data.table::data.table(GO.cluster=row.gp,IC=IC,sResults)
-
-    ###################
-    # ordering results
-    sResults<- sResults[row.ord]
-
-    ###################
-    # replace data by sResults in myGOs
-    methods::slot(methods::slot(myGOs,"enrich_GOs"),"data")<-sResults
-
-    ###################
-    # remove not used elements in row.tree
-    if(!is.null(row.tree$cut$static)){
-
-      ###################
-      # keep only static parameters
-      row.tree$cut$dynamic<-NULL
-
-      ###################
-      # remove not used elements in row.tree
-      if(row.tree$cut$static<=1){
-
-        ###################
-        # add h to static
-        base::names(row.tree$cut)<-base::paste(names(row.tree$cut),"(h)")
-
-      }else{
-
-        ###################
-        # add k to static
-        base::names(row.tree$cut)<-base::paste(names(row.tree$cut),"(k)")
-      }
-    }
-
-    ###################
-    # return heatmap
-    methods::new("GO_clusters",
-      db=methods::slot(myGOs,"db"),
-      stamp =methods::slot(myGOs,"stamp"),
-      organism=methods::slot(myGOs,"organism"),
-      ont=methods::slot(myGOs,"ont"),
-      topGO=methods::slot(myGOs,"topGO"),
-      IC=methods::slot(myGOs,"IC"),
-      enrich_GOs=methods::slot(myGOs,"enrich_GOs"),
-      terms_dist=methods::slot(myGOs,"terms_dist")[row.tree$tree$distance],
-      hcl_params=base::list(
-        GO.tree=row.tree,
-        sample.tree=col.tree
-      ),
-      dendrograms=base::list(samples=dd.col,GO=dd.row),
-      samples.gp=col.gp,
-      heatmap=hm
-    )
-})
+)

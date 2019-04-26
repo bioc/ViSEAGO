@@ -6,7 +6,7 @@
 \title{genomic_ressource class object definition.}
 \description{
 This class stores the annotations and associated metadata obtained by \code{\link{Bioconductor2GO}},
-\code{\link{EntrezGene2GO}}, \code{\link{Ensembl2GO}}, or \code{\link{Uniprot2GO}} methods.
+\code{\link{EntrezGene2GO}}, \code{\link{Ensembl2GO}}, or \code{\link{Uniprot2GO}} .
 }
 \section{Slots}{
 

@@ -1,7 +1,6 @@
 #' @title Display available organisms from a specified database.
 #' @description Display an interactive table with available organisms from a genomic ressource database (Bioconductor, EntrezGene, Ensembl, Uniprot).
 #' @importFrom DT datatable
-#' @importFrom methods setMethod
 #' @family genomic_ressource
 #' @family visualization
 #' @param object a  \code{\link{genomic_ressource-class}} object created by \code{\link{Bioconductor2GO}}, \code{\link{EntrezGene2GO}},
@@ -13,22 +12,19 @@
 #'  Yihui Xie (2016). DT: A Wrapper of the JavaScript Library 'DataTables'. R package version 0.2. https://CRAN.R-project.org/package=DT
 #' @include genomic_ressource.R
 #' @examples
-#' ###################
 #' # display Bioconductor table
 #' Bioconductor<-ViSEAGO::Bioconductor2GO()
 #' ViSEAGO::available_organisms(Bioconductor)
 #' \dontrun{
-#' ###################
+#'
 #' # display EntrezGene table
 #' EntrezGene<-ViSEAGO::EntrezGene2GO()
 #' ViSEAGO::available_organisms(EntrezGene)
 #'
-#' ###################
 #' # display Ensembl table
 #' Ensembl<-ViSEAGO::Ensembl2GO()
 #' ViSEAGO::available_organisms(Ensembl)
 #'
-#' ###################
 #' # display Uniprot table
 #' Uniprot<-ViSEAGO::Uniprot2GO()
 #' ViSEAGO::available_organisms(Uniprot)
@@ -36,47 +32,47 @@
 #' @name available_organisms
 #' @rdname available_organisms-methods
 #' @exportMethod available_organisms
-setGeneric(name="available_organisms",def=function(object){
-  standardGeneric("available_organisms")
+setGeneric(
+    name="available_organisms",
+    def=function(object){
+        standardGeneric("available_organisms")
 })
 
 #' @rdname available_organisms-methods
 #' @aliases available_organisms
-setMethod("available_organisms",signature="genomic_ressource",definition=function(object) {
+setMethod(
+    "available_organisms",
+    signature="genomic_ressource",
+    definition=function(object){
 
-  ##################
-  # create a datatable
-  DT::datatable(methods::slot(object,"organisms"),
+        # create a datatable
+        datatable(
 
-    ###################
-    # table width
-    width=650,
+            # table
+            slot(object,"organisms"),
 
-    ###################
-    # filter column
-    filter ='top',
+            # table width
+            width=650,
 
-    ###################
-    # extensions to use
-    extensions =c('Scroller'),
+            # filter column
+            filter ='top',
 
-    ###################
-    # DT options to use
-    options = base::list(
+            # extensions to use
+            extensions =c('Scroller'),
 
-      ###################
-      # the dom
-      dom='ltipr',
+            # DT options to use
+            options=list(
 
-      ###################
-      # page length
-      pageLength =5,
+                # the dom
+                dom='ltipr',
 
-      ###################
-      # y scroller
-      deferRender = TRUE,
-      scrollY = 200,
-      scroller = TRUE
-    )
-  )
+                # page length
+                pageLength =5,
+
+                # y scroller
+                deferRender = TRUE,
+                scrollY = 200,
+                scroller = TRUE
+            )
+        )
 })

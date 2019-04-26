@@ -1,7 +1,7 @@
 #' @title Display an interactive or static table.
 #' @description This method is used to display or print the table for \code{\link{enrich_GO_terms-class}} or \code{\link{GO_clusters-class}} objects.
-#' @importFrom methods setGeneric setMethod slot is
 #' @importFrom DT datatable
+#' @importFrom data.table fwrite
 #' @importFrom htmlwidgets JS
 #' @family enrich_GO_terms
 #' @family GO_clusters
@@ -17,9 +17,9 @@
 #' @examples
 #' ###################
 #' # load example object
-#' utils::data(
-#'  myGOs,
-#'  package="ViSEAGO"
+#' data(
+#'     myGOs,
+#'     package="ViSEAGO"
 #' )
 #'
 #' ###################
@@ -29,39 +29,39 @@
 #' ###################
 #' # print merge_enrich_terms output
 #' ViSEAGO::show_table(
-#'  myGOs,
-#'  "myGOs.txt"
+#'     myGOs,
+#'     "myGOs.txt"
 #' )
 #'
 #' \dontrun{
 #' ###################
 #' # compute GO terms Semantic Similarity distances
 #' myGOs<-ViSEAGO::compute_SS_distances(
-#'  distance="Wang"
+#'     distance="Wang"
 #' )
 #'
 #' ##################
 #' # GOtermsHeatmap with default parameters
 #' Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
-#'  myGOs,
-#'  showIC=TRUE,
-#'  showGOlabels=TRUE,
-#'  GO.tree=base::list(
-#'   tree=base::list(
-#'    distance="Wang",
-#'    aggreg.method="ward.D2",
-#'    rotate=NULL
-#'   ),
-#'   cut=base::list(
-#'    dynamic=base::list(
-#'     pamStage=TRUE,
-#'     pamRespectsDendro=TRUE,
-#'     deepSplit=2,
-#'     minClusterSize =2
-#'    )
-#'   )
-#'  ),
-#'  samples.tree=NULL
+#'     myGOs,
+#'     showIC=TRUE,
+#'     showGOlabels=TRUE,
+#'     GO.tree=list(
+#'         tree=list(
+#'             distance="Wang",
+#'             aggreg.method="ward.D2",
+#'             rotate=NULL
+#'         ),
+#'         cut=list(
+#'             dynamic=list(
+#'                 pamStage=TRUE,
+#'                 pamRespectsDendro=TRUE,
+#'                 deepSplit=2,
+#'                 minClusterSize =2
+#'             )
+#'         )
+#'     ),
+#'     samples.tree=NULL
 #' )
 #' ###################
 #' # display table of GO_clusters-class object
@@ -70,146 +70,122 @@
 #' ###################
 #' # print table of GO_clusters-class object
 #' ViSEAGO::show_table(
-#'  Wang_clusters_wardD2,
-#'  "Wang_clusters_wardD2.txt"
+#'     Wang_clusters_wardD2,
+#'     "Wang_clusters_wardD2.txt"
 #' )
 #' }
 #' @name show_table
 #' @rdname show_table-methods
 #' @exportMethod show_table
-setGeneric(name="show_table",def=function(object,file=NULL) {standardGeneric("show_table")})
+setGeneric(
+    name="show_table",
+    def=function(object,file=NULL) {
+        standardGeneric("show_table")
+    }
+)
 
 #' @rdname show_table-methods
 #' @aliases show_table
-setMethod("show_table",signature="ANY",definition=function(object,file){
+setMethod(
+    "show_table",
+    signature="ANY",
+    definition=function(object,file){
 
-  #################
-  # check class
-  if(!base::class(object)%in%c("enrich_GO_terms","GO_SS","GO_clusters")){
-    base::stop("object must be enrich_GO_terms, GO_SS, or GO_clusters class objects")
-  }
+        # check class
+        if(!is(object,"enrich_GO_terms") & !is(object,"GO_SS") & !is(object,"GO_clusters")){
+            stop("object must be enrich_GO_terms, GO_SS, or GO_clusters class objects")
+        }
 
-  #################
-  # Extract data
-  if(methods::is(object,"enrich_GO_terms")){
+        # Extract data
+        if(is(object,"enrich_GO_terms")){
 
-    ###################
-    # data
-    data<-methods::slot(
-      object,
-      "data"
-    )
-  }else{
+            # data
+            data<-slot(object,"data")
 
-    ###################
-    # data
-    data<-methods::slot(
-      methods::slot(
-        object,
-        "enrich_GOs"
-      ),
-      "data"
-    )
-  }
+        }else{
 
-  ###################
-  # if interactive mode
-  if(base::is.null(file)){
+            # data
+            data<-slot(slot(object,"enrich_GOs"),"data")
+        }
 
-    ###################
-    # remove genes columns for interactive mode
-    data<-data[,-grep("genes",base::names(data)),with=F]
+        # if interactive mode
+        if(is.null(file)){
 
-    ###################
-    # add link to amigo Gene Ontology
-    #data[,`:=`(GO.ID=base::paste('<a href="http://amigo.geneontology.org/amigo/term/',GO.ID,'">',GO.ID,'</a>',sep=""))]
-    data$GO.ID<-base::paste('<a href="http://amigo.geneontology.org/amigo/term/',data$GO.ID,'">',data$GO.ID,'</a>',sep="")
+            # remove genes columns for interactive mode
+             data<-data[,-grep("genes",names(data)),with=FALSE]
 
-    ###################
-    # remove . in header
-    names(data)<-gsub("\\."," ",names(data))
+            # add link to amigo Gene Ontology
+            data$GO.ID<-paste('<a href="http://amigo.geneontology.org/amigo/term/',data$GO.ID,'">',data$GO.ID,'</a>',sep="")
 
-    ###################
-    # convert NA IN characters
-    data[base::is.na(data)]<-"NA"
+            # remove . in header
+            names(data)<-gsub("\\."," ",names(data))
 
-    ###################
-    # create a datatable
-    DT::datatable(data,
+            # convert NA in characters
+            data[is.na(data)]<-"NA"
 
-      ###################
-      # escape the first column
-      width=650,
+            # create a datatable
+            datatable(data,
 
-      ###################
-      # escape the first column
-      escape=1,
+                # escape the first column
+                width=650,
 
-      ###################
-      # filter column
-      filter ='top',
+                # escape the first column
+                escape=1,
 
-      ###################
-      # extensions to use
-      extensions =c('Buttons','FixedColumns','Scroller'),
+                # filter column
+                filter ='top',
 
-      ###################
-      # DT options to use
-      options = list(
+                # extensions to use
+                extensions =c('Buttons','FixedColumns','Scroller'),
 
-        ###################
-        # DT options to use
-        columnDefs = base::list(
-          base::list(
+                # DT options to use
+                options = list(
 
-            ###################
-            # targets columns
-            targets=if(methods::is(object,"enrich_GO_terms")){
-              base::c(2:3,base::grep("genes",base::names(data)))
-            }else{
-              base::c(4:5,base::grep("genes",base::names(data)))
-            },
+                    # DT options to use
+                    columnDefs = list(
+                        list(
 
-            ###################
-            # show the fist characters
-            render =htmlwidgets::JS(
-              "function(data, type, row, meta) {",
-              "return type === 'display' && data.length > 50 ?",
-              "'<span title=\"' + data + '\">' + data.substr(0, 50) + '...</span>' : data;",
-              "}"
+                            # targets columns
+                            targets=if(is(object,"enrich_GO_terms")){
+                                c(2:3,grep("genes",names(data)))
+                            }else{
+                                c(4:5,grep("genes",names(data)))
+                            },
+
+                            # show the fist characters
+                            render=JS(
+                                "function(data, type, row, meta) {",
+                                "return type === 'display' && data.length > 50 ?",
+                                "'<span title=\"' + data + '\">' + data.substr(0, 50) + '...</span>' : data;",
+                                "}"
+                            )
+                        )
+                    ),
+
+                    # the dom
+                    dom='Bfltipr',
+
+                    # regex with highlight
+                    search = list(regex=TRUE,caseInsensitive=FALSE),
+                    searchHighlight = TRUE,
+
+                    # x axis scroller
+                    scrollX = TRUE,
+                    fixedColumns =list(leftColumns = 1),
+
+                    # y scroller
+                    deferRender = TRUE,
+                    scrollY = 400,
+                    scroller = TRUE,
+
+                    # button download
+                    buttons=I('colvis')
+                )
             )
-          )
-        ),
+        }else{
 
-        ###################
-        # the dom
-        dom='Bfltipr',
-
-        ###################
-        # regex with highlight
-        search = base::list(regex = TRUE, caseInsensitive = FALSE),
-        searchHighlight = TRUE,
-
-        ###################
-        # x axis scroller
-        scrollX = TRUE,
-        fixedColumns =list(leftColumns = 1),
-
-        ###################
-        # y scroller
-        deferRender = TRUE,
-        scrollY = 400,
-        scroller = TRUE,
-
-        ###################
-        # button download
-        buttons=base::I('colvis')
-      )
-    )
-  }else{
-
-    ###################
-    # write the table
-    data.table::fwrite(data,file=file,na="NA",sep="\t")
-  }
-})
+            # write the table
+            fwrite(data,file=file,na="NA",sep="\t")
+        }
+    }
+)

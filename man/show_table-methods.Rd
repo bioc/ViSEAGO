@@ -29,9 +29,9 @@ The table could be printed by setting file argument.
 \examples{
 ###################
 # load example object
-utils::data(
- myGOs,
- package="ViSEAGO"
+data(
+    myGOs,
+    package="ViSEAGO"
 )
 
 ###################
@@ -41,39 +41,39 @@ ViSEAGO::show_table(myGOs)
 ###################
 # print merge_enrich_terms output
 ViSEAGO::show_table(
- myGOs,
- "myGOs.txt"
+    myGOs,
+    "myGOs.txt"
 )
 
 \dontrun{
 ###################
 # compute GO terms Semantic Similarity distances
 myGOs<-ViSEAGO::compute_SS_distances(
- distance="Wang"
+    distance="Wang"
 )
 
 ##################
 # GOtermsHeatmap with default parameters
 Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
- myGOs,
- showIC=TRUE,
- showGOlabels=TRUE,
- GO.tree=base::list(
-  tree=base::list(
-   distance="Wang",
-   aggreg.method="ward.D2",
-   rotate=NULL
-  ),
-  cut=base::list(
-   dynamic=base::list(
-    pamStage=TRUE,
-    pamRespectsDendro=TRUE,
-    deepSplit=2,
-    minClusterSize =2
-   )
-  )
- ),
- samples.tree=NULL
+    myGOs,
+    showIC=TRUE,
+    showGOlabels=TRUE,
+    GO.tree=list(
+        tree=list(
+            distance="Wang",
+            aggreg.method="ward.D2",
+            rotate=NULL
+        ),
+        cut=list(
+            dynamic=list(
+                pamStage=TRUE,
+                pamRespectsDendro=TRUE,
+                deepSplit=2,
+                minClusterSize =2
+            )
+        )
+    ),
+    samples.tree=NULL
 )
 ###################
 # display table of GO_clusters-class object
@@ -82,8 +82,8 @@ ViSEAGO::show_table(Wang_clusters_wardD2)
 ###################
 # print table of GO_clusters-class object
 ViSEAGO::show_table(
- Wang_clusters_wardD2,
- "Wang_clusters_wardD2.txt"
+    Wang_clusters_wardD2,
+    "Wang_clusters_wardD2.txt"
 )
 }
 }

@@ -1,11 +1,10 @@
 #' @title Build a clustering heatmap on GO groups.
 #' @description This method computes a clustering heatmap based on GO groups semantic similarity.
 #' @importFrom data.table data.table .N
-#' @importFrom methods setGeneric setMethod signature
 #' @importFrom ggplot2 scale_fill_gradient
 #' @importFrom plotly layout
 #' @importFrom heatmaply heatmaply
-#' @importFrom dendextend branches_attr_by_clusters set get_leaves_attr
+#' @importFrom dendextend branches_attr_by_clusters set get_leaves_attr rotate
 #' @importFrom RColorBrewer brewer.pal
 #' @family GO_clusters
 #' @family semantic_similiarity
@@ -44,57 +43,57 @@
 #' ###################
 #' # load data example
 #' utils::data(
-#'  myGOs,
-#'  package="ViSEAGO"
+#'     myGOs,
+#'     package="ViSEAGO"
 #' )
 #' \dontrun{
 #' ###################
 #' # compute GO terms Semantic Similarity distances
 #' myGOs<-ViSEAGO::compute_SS_distances(
-#'  myGOs,
-#'  distance="Wang"
+#'     myGOs,
+#'     distance="Wang"
 #' )
 #'
 #' ##################
 #' # GOtermsHeatmap with default parameters
 #' Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
-#'  myGOs,
-#'  showIC=TRUE,
-#'  showGOlabels=TRUE,
-#'  GO.tree=base::list(
-#'   tree=base::list(
-#'    distance="Wang",
-#'    aggreg.method="ward.D2",
-#'    rotate=NULL
-#'   ),
-#'   cut=base::list(
-#'    dynamic=base::list(
-#'     pamStage=TRUE,
-#'     pamRespectsDendro=TRUE,
-#'     deepSplit=2,
-#'     minClusterSize =2
-#'    )
-#'   )
-#'  ),
-#'  samples.tree=NULL
+#'     myGOs,
+#'     showIC=TRUE,
+#'     showGOlabels=TRUE,
+#'     GO.tree=list(
+#'         tree=list(
+#'             distance="Wang",
+#'             aggreg.method="ward.D2",
+#'             rotate=NULL
+#'         ),
+#'         cut=list(
+#'             dynamic=list(
+#'                 pamStage=TRUE,
+#'                 pamRespectsDendro=TRUE,
+#'                 deepSplit=2,
+#'                 minClusterSize =2
+#'             )
+#'         )
+#'     ),
+#'     samples.tree=NULL
 #' )
 #'
 #' ###################
 #' # compute clusters of GO terms Semantic Similarity distances
 #' Wang_clusters_wardD2<-ViSEAGO::compute_SS_distances(
-#'  Wang_clusters_wardD2,
-#'  distance="BMA"
+#'     Wang_clusters_wardD2,
+#'     distance="BMA"
 #' )
 #'
 #' ###################
 #' # GOclusters heatmap
 #' Wang_clusters_wardD2<-ViSEAGO::GOclusters_heatmap(
-#'  Wang_clusters_wardD2,
-#'  tree=list(
-#'   distance="BMA",
-#'   aggreg.method="ward.D2",
-#'   rotate=NULL
-#'  )
+#'     Wang_clusters_wardD2,
+#'     tree=list(
+#'         distance="BMA",
+#'         aggreg.method="ward.D2",
+#'         rotate=NULL
+#'     )
 #' )
 #' }
 #' @exportMethod GOclusters_heatmap
@@ -102,241 +101,200 @@
 #' @rdname GOclusters_heatmap-methods
 #' @exportMethod GOclusters_heatmap
 setGeneric(
-  name="GOclusters_heatmap",
-  def=function(object,tree=base::list(distance="BMA",aggreg.method="ward.D2",rotate=NULL)){
-    base::standardGeneric("GOclusters_heatmap")
-  }
+    name="GOclusters_heatmap",
+    def=function(object,tree=list(distance="BMA",aggreg.method="ward.D2",rotate=NULL)){
+        standardGeneric("GOclusters_heatmap")
+    }
 )
 
 #' @rdname GOclusters_heatmap-methods
 #' @aliases GOclusters_heatmap
-setMethod("GOclusters_heatmap",
-  methods::signature(
-    object="GO_clusters",
-    tree="list"
-  ),
-  definition=function(object,tree){
-
-  #################
-  # if empty
-  if(is.null(methods::slot(object,"clusters_dist"))){
-    stop("Please use GO_clusters class object with computed clusters distances using ViSEAGO::compute_SS_distance()")
-  }
-
-  #################
-  # if empty
-  if(!tree$distance%in%base::names(methods::slot(object,"clusters_dist"))){
-    stop(paste("Please use GO_clusters class object with",tree$distance,"computed clusters distances using ViSEAGO::compute_SS_distance()"))
-  }
-
-  ###################
-  # add calculated distance
-  dist<-methods::slot(object,"clusters_dist")[[tree$distance]]
-
-  ###################
-  # perform hclust
-  Tree<-stats::hclust(
-    dist,
-    method =tree$aggreg.method
-  )
-
-  ###################
-  # create dendrogram
-  dend<-stats::as.dendrogram(Tree)
-
-  ###################
-  # rotate
-  if(!base::is.null(tree$rotate)){
-    dend<-dendextend::rotate(
-      dend,
-      tree$rotate
-    )
-  }
-
-  ###################
-  # create dendrogram
-  ord<-stats::order.dendrogram(dend)
-
-  ###################
-  # color labels of cutting tree
-  colors= base::unique(
-    dendextend::get_leaves_attr(
-      methods::slot(object,"dendrograms")$GO,
-      "edgePar"
-    )
-  )
-
-  ###################
-  # extract GO terms and clusters
-  mat<-methods::slot(
-    methods::slot(
-      object,
-      "enrich_GOs"
-      ),
-    "data"
-  )[,base::c("GO.cluster","GO.ID"),with=FALSE]
-
-  ###################
-  # count terms by clusters
-  mat<-mat[,base::list("count"=.N),by="GO.cluster"]
-
-  ###################
-  # count terms by clusters
-  mat<-base::as.matrix(mat[,"count",with=FALSE])
-
-  ###################
-  # colors table
-  colors=data.table::data.table(
-    gp=base::seq_len(base::nrow(mat)),
-    color=colors
-  )
-
-  ###################
-  # merge cluster term assignation and corresponding color
-  colors<-merge(
-    data.table::data.table(gp=colors$gp[ord]),
-    colors,
-    by="gp",
-    all.x=TRUE,
-    sort=FALSE
-  )
-
-  ###################
-  # color branches according clusters
-  dend<-dendextend::branches_attr_by_clusters(
-    dend,
-    base::seq_len(base::nrow(mat)),
-    values =colors$color
-  )
-
-  ###################
-  # assign text color
-  dend<-dendextend::set(dend,"labels_col",colors$color)
-
-  ###################
-  # create dendrogram
-  dend<-dendextend::set(dend,"labels_cex",0.3)
-
-  ###################
-  # extract GO terms and clusters
-  base::row.names(mat)<-base::attr(dist,"Labels")
-
-  ###################
-  # custom row names
-  base::row.names(mat)<-base::paste("<br>cluster:", base::row.names(mat))
-  base::row.names(mat)<-base::gsub("_GO:","<br>GO.ID: GO:",base::row.names(mat))
-  base::row.names(mat)<-base::gsub("_","<br>GO.name: ", base::row.names(mat))
-
-  ###################
-  # draw heatmapply
-  hm<-heatmaply::heatmaply(
-
-    ###################
-    # the initial matrix
-    x=mat,
-
-    ###################
-    # row label
-    labRow=base::row.names(mat),
-
-    ###################
-    # row label
-    labCol=base::colnames(mat),
-
-    ###################
-    # the row dendrogram
-    Rowv=dend,
-
-    ###################
-    # the ordered matrix according dendrograms for columns
-    Colv=FALSE,
-
-    ###################
-    # the color palette
-    scale_fill_gradient_fun=ggplot2::scale_fill_gradient(
-      name="GO terms count",
-      low="#FCFBFD",
-      high="#3F007D"
+setMethod(
+    "GOclusters_heatmap",
+    signature(
+        object="GO_clusters",
+        tree="list"
     ),
+    definition=function(object,tree){
 
-    ###################
-    # the width of dendrogramm
-    branches_lwd = 0.4,
+        # if empty
+        if(is.null(slot(object,"clusters_dist"))){
+            stop("Please use GO_clusters class object with computed clusters distances using ViSEAGO::compute_SS_distance()")
+        }
 
-    ###################
-    # color bar length
-    colorbar_len=0.05
-  )
+        # if empty
+        if(!tree$distance%in%names(slot(object,"clusters_dist"))){
+            stop(paste("Please use GO_clusters class object with",tree$distance,"computed clusters distances using ViSEAGO::compute_SS_distance()"))
+        }
 
-  ###################
-  # remove row tag
-  hm$x$data[[1]]$text<-base::gsub("<br>row: ","",hm$x$data[[1]]$text)
+        # add calculated distance
+        dist<-slot(object,"clusters_dist")[[tree$distance]]
 
-  ###################
-  # custom row text
-  row.text=base::gsub("^.+GO.name: ","",base::rev(base::row.names(mat)[ord]))
+        # perform hclust
+        Tree<-hclust(
+            dist,
+            method =tree$aggreg.method
+          )
 
-  ###################
-  # cut very long definition
-  row.text[nchar(row.text)>50]<-base::paste(base::substring(
-  row.text[nchar(row.text)>50],1,50),"...",sep="")
+        # create dendrogram
+        dend<-as.dendrogram(Tree)
 
-  ###################
-  # add cluster number in brackets
-  row.text=base::paste(row.text," (cl",
-  base::gsub("^<br>cluster: |<br>GO.ID.+$","",
-  base::rev(base::row.names(mat)[ord])),")",sep="")
+        # rotate
+        if(!is.null(tree$rotate)){
+            dend<-rotate(
+                dend,
+                tree$rotate
+            )
+        }
 
-  hm<-plotly::layout(hm,
+        # create dendrogram
+        ord<-order.dendrogram(dend)
 
-    #################
-    # add title
-    title=paste(tree$distance,"GOclusters distance heatmap"),
+        # color labels of cutting tree
+        colors= unique(
+            get_leaves_attr(
+                slot(object,"dendrograms")$GO,
+            "edgePar"
+            )
+        )
 
-    #################
-    # x axis
-    xaxis=base::list(
-      domain=c(0,0.2),
-      family="Times New Roman",
-      tickfont=base::list(size=10)
-    ),
-    xaxis2=base::list(
-      domain=c(0.2,0.8)
-    ),
+        # extract GO terms and clusters
+        mat<-slot(slot(object,"enrich_GOs"),"data")[,c("GO.cluster","GO.ID"),with=FALSE]
 
-    #################
-    # title size
-    font=base::list(size=14),
+        # count terms by clusters
+        mat<-mat[,list("count"=.N),by="GO.cluster"]
 
-    #################
-    # y axis
-    yaxis=base::list(
-      family="Times New Roman",
-      tickmode="array",
-      tickvals=base::seq_len(base::nrow(mat)),
-      ticktext=row.text,
-      tickfont=base::list(size=10)
-    ),
-    margin = list(l =300,r=0, b =150,t=50)
-  )
+        # count terms by clusters
+        mat<-as.matrix(mat[,"count",with=FALSE])
 
-  ###################
-  #  hm to list
-  hm<-base::list(hm)
+        # colors table
+        colors=data.table(
+            gp=seq_len(nrow(mat)),
+            color=colors
+        )
 
-  ###################
-  # give names to hm list
-  base::names(hm)<-"GOclusters"
+        # merge cluster term assignation and corresponding color
+        colors<-merge(
+            data.table( gp=colors$gp[ord]),
+            colors,
+            by="gp",
+            all.x=TRUE,
+            sort=FALSE
+        )
 
-  ###################
-  # give names to hm list
-  methods::slot(object,"heatmap")<-c(methods::slot(object,"heatmap"),hm)
+        # color branches according clusters
+        dend<-branches_attr_by_clusters(
+             dend,
+            seq_len(nrow(mat)),
+            values =colors$color
+        )
 
-  ###################
-  # add hcl params
-  methods::slot(object,"hcl_params")<-base::c(methods::slot(object,"hcl_params"),GO.clusters=base::list(tree))
+        # assign text color
+        dend<-set(dend,"labels_col",colors$color)
 
-  ###################
-  # return the object
-  base::return(object)
-})
+        # create dendrogram
+        dend<-set(dend,"labels_cex",0.3)
+
+        # extract GO terms and clusters
+        row.names(mat)<-attr(dist,"Labels")
+
+        # custom row names
+        row.names(mat)<-paste("<br>cluster:", row.names(mat))
+        row.names(mat)<-gsub("_GO:","<br>GO.ID: GO:",row.names(mat))
+        row.names(mat)<-gsub("_","<br>GO.name: ", row.names(mat))
+
+        # draw heatmapply
+        hm<-heatmaply(
+
+            # the initial matrix
+            x=mat,
+
+            # row label
+            labRow=row.names(mat),
+
+            # row label
+            labCol=colnames(mat),
+
+            # the row dendrogram
+            Rowv=dend,
+
+            # the ordered matrix according dendrograms for columns
+            Colv=FALSE,
+
+            # the color palette
+            scale_fill_gradient_fun=scale_fill_gradient(
+                name="GO terms count",
+                low="#FCFBFD",
+                high="#3F007D"
+            ),
+
+            # the width of dendrogramm
+            branches_lwd = 0.4,
+
+            # color bar length
+            colorbar_len=0.05
+        )
+
+        # remove row tag
+        hm$x$data[[1]]$text<-gsub("<br>row: ","",hm$x$data[[1]]$text)
+
+        # custom row text
+        row.text=gsub("^.+GO.name: ","",rev(row.names(mat)[ord]))
+
+        # cut very long definition
+        row.text[nchar(row.text)>50]<-paste(substring(
+        row.text[nchar(row.text)>50],1,50),"...",sep="")
+
+        # add cluster number in brackets
+        row.text=paste(row.text," (cl",
+        gsub("^<br>cluster: |<br>GO.ID.+$","",
+        rev(row.names(mat)[ord])),")",sep="")
+
+        # heatmap layout
+        hm<-layout(
+            hm,
+
+            # add title
+            title=paste(tree$distance,"GOclusters distance heatmap"),
+
+            # x axis
+            xaxis=list(
+                domain=c(0,0.2),
+                family="Times New Roman",
+                tickfont=list(size=10)
+            ),
+            xaxis2=list(
+                domain=c(0.2,0.8)
+            ),
+
+            # title size
+            font=list(size=14),
+
+            # y axis
+            yaxis=list(
+                family="Times New Roman",
+                tickmode="array",
+                tickvals=seq_len(nrow(mat)),
+                ticktext=row.text,
+                tickfont=list(size=10)
+            ),
+            margin = list(l =300,r=0, b =150,t=50)
+        )
+
+        # hm to list
+        hm<-list(hm)
+
+        # give names to hm list
+        names(hm)<-"GOclusters"
+
+        # give names to hm list
+        slot(object,"heatmap")<-c(slot(object,"heatmap"),hm)
+
+        # add hcl params
+        slot(object,"hcl_params")<-c(slot(object,"hcl_params"),GO.clusters=list(tree))
+
+        # return the object
+        return(object)
+    }
+)
+

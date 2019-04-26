@@ -28,9 +28,9 @@ or \code{\link{GO_clusters-class}} objects. The intersections are shown in an up
 \examples{
 ##################
 # load example object
-utils::data(
- myGOs,
- package="ViSEAGO"
+data(
+    myGOs,
+    package="ViSEAGO"
 )
 
 ##################

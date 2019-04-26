@@ -44,8 +44,8 @@ separately, or grouped together in a \code{factor} (\code{geneList} argument).
 \examples{
  ###################
  # load genes identifiants (GeneID,ENS...) background (Expressed genes)
- background<-base::scan(
-  base::system.file(
+ background<-scan(
+  system.file(
    "extdata/data/input",
    "background_L.txt",
    package = "ViSEAGO"
@@ -56,8 +56,8 @@ separately, or grouped together in a \code{factor} (\code{geneList} argument).
 
  ###################
  # load Differentialy Expressed (DE) gene identifiants from files
- pregnantvslactateDE<-base::scan(
-  base::system.file(
+ pregnantvslactateDE<-scan(
+  system.file(
    "extdata/data/input",
    "pregnantvslactateDE.txt",
    package = "ViSEAGO"

@@ -1,6 +1,7 @@
 #' @title Download EntrezGene orthologs groups.
 #' @description  Download EntrezGene orthologs groups.
-#' @importFrom data.table data.table
+#' @importFrom data.table data.table fread .SD
+#' @importFrom R.utils gunzip
 #' @details Internal function used by \code{\link{annotate}} in order to download orthologs_groups from NCBI Annotation pipeline
 #'  stored in the \href{ftp://ftp.ncbi.nih.gov/gene/DATA/gene_orthologs.gz}{gene_group.gz} file.
 #' @return a \code{\link[data.table]{data.table}}.
@@ -14,46 +15,36 @@
 #' @export
 EntrezGene_orthologs=function(){
 
-  ###################
-  # temp file
-  temp<-base::paste(
-    base::tempfile(),
-    "gz",
-    sep="."
-  )
+    # temp file
+    temp<-paste(
+        tempfile(),
+        "gz",
+        sep="."
+    )
 
-  ###################
-  # import gene_group from NCBI
-  utils::download.file(
-    "ftp://ftp.ncbi.nih.gov/gene/DATA/gene_orthologs.gz",
-    quiet=TRUE,
-    destfile =temp
-  )
+    # import gene_group from NCBI
+    download.file(
+        "ftp://ftp.ncbi.nih.gov/gene/DATA/gene_orthologs.gz",
+        quiet=TRUE,
+        destfile =temp
+    )
 
-  ##################
-  #  uncompress
-  R.utils::gunzip(temp)
+    # uncompress
+    gunzip(temp)
 
-  ##################
-  # read the file
-  gene_orthologs=data.table::fread(
-    base::sub("\\.gz","",temp),
-    verbose=FALSE,
-    showProgress=FALSE
-  )
+    # read the file
+    gene_orthologs=fread(
+        sub("\\.gz","",temp),
+        verbose=FALSE,
+        showProgress=FALSE
+    )
 
-  ###################
-  # remove # in header
-  base::names(gene_orthologs)<-base::gsub("#","",base::names(gene_orthologs))
+    # remove # in header
+    names(gene_orthologs)<-gsub("#","",names(gene_orthologs))
 
-  ###################
-  # convert to character
-  gene_orthologs<-gene_orthologs[,
-    base::lapply(.SD,base::as.character),
-    .SDcols=base::names(gene_orthologs)
-  ]
+    # convert to character
+    gene_orthologs<-gene_orthologs[,lapply(.SD,as.character),.SDcols=names(gene_orthologs)]
 
-  ###################
-  # return the table
-  base::return(gene_orthologs)
+    # return the table
+    return(gene_orthologs)
 }

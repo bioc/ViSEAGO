@@ -35,48 +35,48 @@ Semantic Similarity computations are based on \code{\link[GOSemSim]{mgoSim}} met
 \examples{
 ###################
 # load data example
-utils::data(
- myGOs,
- package="ViSEAGO"
+data(
+    myGOs,
+    package="ViSEAGO"
 )
 
 \dontrun{
 ###################
 # compute GO terms Semantic Similarity distances
 myGOs<-ViSEAGO::compute_SS_distances(
- myGOs,
- distance=c("Resnik","Lin","Rel","Jiang","Wang")
+    myGOs,
+    distance=c("Resnik","Lin","Rel","Jiang","Wang")
 )
 
 ##################
 # GOtermsHeatmap with default parameters
 Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
- myGOs,
- showIC=TRUE,
- showGOlabels=TRUE,
- GO.tree=base::list(
-  tree=base::list(
-   distance="Wang",
-   aggreg.method="ward.D2",
-   rotate=NULL
-  ),
-  cut=base::list(
-   dynamic=base::list(
-    pamStage=TRUE,
-    pamRespectsDendro=TRUE,
-    deepSplit=2,
-    minClusterSize =2
-   )
-  )
- ),
- samples.tree=NULL
+    myGOs,
+    showIC=TRUE,
+    showGOlabels=TRUE,
+    GO.tree=list(
+        tree=list(
+            distance="Wang",
+            aggreg.method="ward.D2",
+            rotate=NULL
+        ),
+        cut=list(
+            dynamic=list(
+                pamStage=TRUE,
+                pamRespectsDendro=TRUE,
+                deepSplit=2,
+                minClusterSize=2
+            )
+        )
+    ),
+    samples.tree=NULL
 )
 
 ###################
 # compute clusters of GO terms Semantic Similarity distances
 Wang_clusters_wardD2<-ViSEAGO::compute_SS_distances(
- Wang_clusters_wardD2,
- distance=c("max","avg","rcmax","BMA")
+    Wang_clusters_wardD2,
+    distance=c("max","avg","rcmax","BMA")
 )
 }
 }

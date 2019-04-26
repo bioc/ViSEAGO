@@ -1,9 +1,7 @@
 #' @title Store available organisms GO annotations at EntrezGene.
 #' @description  Store the available species and current GO annotations from the
 #' \href{https://ftp.ncbi.nih.gov/gene/DATA/gene2go.gz}{gene2go.gz} file avalable at NCBI \href{https://ftp.ncbi.nih.gov/gene/DATA}{EntrezGene ftp}.
-#' @importFrom data.table data.table fread rbindlist
-#' @importFrom methods new
-#' @importFrom R.utils gunzip
+#' @importFrom data.table data.table fread rbindlist :=
 #' @family genomic_ressource
 #' @details This function downloads the \href{https://ftp.ncbi.nih.gov/gene/DATA/gene2go.gz}{gene2go.gz} file from
 #' \href{https://ftp.ncbi.nih.gov/gene/DATA}{EntrezGene ftp} which contains available organisms (taxid) with the corresponding GO annotations.
@@ -26,72 +24,58 @@
 #' @export
 EntrezGene2GO=function(){
 
-  ###################
-  # download file
-  ###################
+    ## download file
 
-    ###################
     # temp file
-    temp<-base::paste(
-      base::tempfile(),
+    temp<-paste(
+      tempfile(),
       "gz",
       sep="."
     )
 
-    ###################
     # import Gene to Gene Ontology from NCBI Gene database
-    utils::download.file(
+    download.file(
       "ftp://ftp.ncbi.nih.gov/gene/DATA/gene2go.gz",
       quiet=TRUE,
       destfile =temp
     )
 
-    ##################
-    #  uncompress
-    R.utils::gunzip(temp)
+    # uncompress
+    gunzip(temp)
 
-    ##################
     # read the file (linux and windows)
-    gene2go=data.table::fread(
-      base::sub("\\.gz","",temp),
+    gene2go=fread(
+      sub("\\.gz","",temp),
       verbose=FALSE,
       showProgress=FALSE
     )
 
-    ###################
     # select columns and rename
-    gene2go<-base::unique(
-      gene2go[,base::c(base::seq_len(4),8),with=FALSE]
+    gene2go<-unique(
+      gene2go[,c(seq_len(4),8),with=FALSE]
     )
-    base::colnames(gene2go)<-base::c("taxid","gene_id","GOID","evidence","category")
+    colnames(gene2go)<-c("taxid","gene_id","GOID","evidence","category")
 
-    ###################
     # convert columns in character
     gene2go[,
       `:=`(
-        taxid=base::as.character(gene2go$taxid),
-        gene_id=base::as.character(gene2go$gene_id)
+        taxid=as.character(gene2go$taxid),
+        gene_id=as.character(gene2go$gene_id)
       )
     ]
 
-  ###################
-  # taxonomy
-  ###################
+    ## taxonomy
 
-    ###################
     # extract taxonomique informations
-    taxon<-ViSEAGO::taxonomy(gene2go$taxid)
-
-  ###################
-  # create the class object
-  ###################
+    taxon<-taxonomy(gene2go$taxid)
 
     ###################
-    # return data in ENTREZclass
-    methods::new("genomic_ressource",
-                db="EntrezGene",
-                stamp=as.character(Sys.time()),
-                data=gene2go,
-                organisms=taxon
-               )
+    # return data genomic_ressource class object
+    new(
+        "genomic_ressource",
+        db="EntrezGene",
+        stamp=as.character(Sys.time()),
+        data=gene2go,
+        organisms=taxon
+    )
 }

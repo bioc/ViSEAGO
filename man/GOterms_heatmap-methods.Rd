@@ -7,16 +7,16 @@
 \title{Build a clustering heatmap on GO terms.}
 \usage{
 GOterms_heatmap(myGOs, showIC = TRUE, showGOlabels = TRUE,
-  GO.tree = base::list(tree = base::list(distance = "Wang", aggreg.method
-  = "ward.D2", rotate = NULL), cut = base::list(dynamic =
-  base::list(pamStage = TRUE, pamRespectsDendro = TRUE, deepSplit = 2,
-  minClusterSize = 2))), samples.tree = NULL)
+  GO.tree = list(tree = list(distance = "Wang", aggreg.method =
+  "ward.D2", rotate = NULL), cut = list(dynamic = list(pamStage = TRUE,
+  pamRespectsDendro = TRUE, deepSplit = 2, minClusterSize = 2))),
+  samples.tree = NULL)
 
 \S4method{GOterms_heatmap}{GO_SS}(myGOs, showIC = TRUE,
-  showGOlabels = TRUE, GO.tree = base::list(tree = base::list(distance
-  = "Wang", aggreg.method = "ward.D2", rotate = NULL), cut =
-  base::list(dynamic = base::list(pamStage = TRUE, pamRespectsDendro =
-  TRUE, deepSplit = 2, minClusterSize = 2))), samples.tree = NULL)
+  showGOlabels = TRUE, GO.tree = list(tree = list(distance = "Wang",
+  aggreg.method = "ward.D2", rotate = NULL), cut = list(dynamic =
+  list(pamStage = TRUE, pamRespectsDendro = TRUE, deepSplit = 2,
+  minClusterSize = 2))), samples.tree = NULL)
 }
 \arguments{
 \item{myGOs}{a \code{\link{GO_SS-class}} object from \code{\link{compute_SS_distances}}.}
@@ -90,38 +90,39 @@ The dendrogram produced could be cutted in static or dynamic mode.\cr
 ###################
 # load data example
 utils::data(
- myGOs,
- package="ViSEAGO"
+    myGOs,
+    package="ViSEAGO"
 )
 \dontrun{
 ###################
 # compute GO terms Semantic Similarity distances
 myGOs<-ViSEAGO::compute_SS_distances(
- distance="Wang"
+   myGOs,
+   distance="Wang"
 )
 
 ##################
 # GOtermsHeatmap with default parameters
 Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
- myGOs,
- showIC=TRUE,
- showGOlabels=TRUE,
- GO.tree=base::list(
-  tree=base::list(
-   distance="Wang",
-   aggreg.method="ward.D2",
-   rotate=NULL
-  ),
-  cut=base::list(
-   dynamic=base::list(
-    pamStage=TRUE,
-    pamRespectsDendro=TRUE,
-    deepSplit=2,
-    minClusterSize =2
-   )
-  )
- ),
- samples.tree=NULL
+    myGOs,
+    showIC=TRUE,
+    showGOlabels=TRUE,
+    GO.tree=list(
+        tree=list(
+            distance="Wang",
+            aggreg.method="ward.D2",
+            rotate=NULL
+        ),
+        cut=list(
+            dynamic=list(
+                pamStage=TRUE,
+                pamRespectsDendro=TRUE,
+                deepSplit=2,
+                minClusterSize =2
+            )
+        )
+    ),
+    samples.tree=NULL
 )
 }
 }

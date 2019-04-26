@@ -1,6 +1,5 @@
 #' @title Check available organisms datasets at Ensembl.
 #' @description  List Ensembl referenced organisms datasets from the current (NULL) or archive (number in \code{character}) annotation version.
-#' @importFrom methods new
 #' @importFrom biomaRt useEnsembl listEnsembl
 #' @importFrom data.table data.table
 #' @param biomart the biomart name (eg. "ensembl", the default) available with \pkg{biomaRt} package \code{\link[biomaRt]{listEnsembl}}.
@@ -49,25 +48,26 @@
 #' @export
 Ensembl2GO=function(biomart="ensembl",host="www.ensembl.org",version=NULL){
 
-  ###################
-  # check the ensembl genes releases
-  Ensembl<-biomaRt::listEnsembl(host=host,version=version)
+    ###################
+    # check the ensembl genes releases
+    Ensembl<-listEnsembl(host=host,version=version)
 
-  ###################
-  # check the ensembl host versus mart name
-  base::match.arg(biomart,Ensembl$biomart)
+    ###################
+    # check the ensembl host versus mart name
+    base::match.arg(biomart,Ensembl$biomart)
 
-  ###################
-  # connect to Ensembl
-  mart<-biomaRt::useEnsembl(biomart,host=host,version=version)
+    ###################
+    # connect to Ensembl
+    mart<-useEnsembl(biomart,host=host,version=version)
 
-  ###################
-  # return data in ENTREZclass
-  methods::new("genomic_ressource",
-               db="Ensembl",
-               stamp=base::paste(host,Ensembl$version[Ensembl$biomart==biomart]),
-               data=data.table::data.table(),
-               mart=base::list(mart),
-               organisms=data.table::data.table(biomaRt::listDatasets(mart))
-  )
+    ###################
+    # return data in genomic_ressource class
+    new(
+        "genomic_ressource",
+        db="Ensembl",
+        stamp=base::paste(host,Ensembl$version[Ensembl$biomart==biomart]),
+        data=data.table(),
+        mart=list(mart),
+        organisms=data.table(listDatasets(mart))
+    )
 }
