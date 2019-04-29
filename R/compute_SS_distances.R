@@ -1,6 +1,6 @@
 #' @title Compute distance between GO terms or GO clusters based on semantic similarity.
 #' @description This method computes distance between GO terms or GO clusters based on semantic similarity.
-#' @importFrom GO.db GOMFANCESTOR GOBPANCESTOR GOCCANCESTOR
+#' @importFrom GO.db GO.db GOMFANCESTOR GOBPANCESTOR GOCCANCESTOR
 #' @importFrom GOSemSim mgoSim
 #' @importFrom AnnotationDbi select
 #' @importFrom data.table data.table .I .N
@@ -134,9 +134,9 @@ setMethod(
             # get ancestors
             onto=switch(
                 slot(object,"ont"),
-                MF=GO.db::GOMFANCESTOR,
-                BP=GO.db::GOBPANCESTOR,
-                CC=GO.db::GOCCANCESTOR
+                MF=GOMFANCESTOR,
+                BP=GOBPANCESTOR,
+                CC=GOCCANCESTOR
             )
 
             # convert in list
@@ -185,7 +185,7 @@ setMethod(
             # extract GO terms
             GO<-data.table(
                 select(
-                    GO.db::GO.db,
+                    GO.db,
                     keys=onto$values,
                     column ="TERM"
                     )

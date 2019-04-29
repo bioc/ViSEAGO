@@ -1,6 +1,6 @@
 #' @title Store available organisms GO annotations at EntrezGene.
 #' @description  Store the available species and current GO annotations from the
-#' \href{https://ftp.ncbi.nih.gov/gene/DATA/gene2go.gz}{gene2go.gz} file avalable at NCBI \href{https://ftp.ncbi.nih.gov/gene/DATA}{EntrezGene ftp}.
+#' \href{https://ftp.ncbi.nih.gov/gene/DATA/gene2go.gz}{gene2go.gz} nfile avalable at NCBI \href{https://ftp.ncbi.nih.gov/gene/DATA}{EntrezGene ftp}.
 #' @importFrom data.table data.table fread rbindlist :=
 #' @family genomic_ressource
 #' @details This function downloads the \href{https://ftp.ncbi.nih.gov/gene/DATA/gene2go.gz}{gene2go.gz} file from

@@ -17,7 +17,8 @@ setClass(
         mart="list"
     )
 )
-#' show method
+
+#' @aliases genomic_ressource
 setMethod(
     "show",
     signature="genomic_ressource",

@@ -1,7 +1,7 @@
 #' @title Create topGOdata object for enrichment test with topGO package.
 #' @description This method create a \code{\link[topGO]{topGOdata-class}} object required by \pkg{topGO} package in order
 #' to perform GO enrichment test.
-#' @importFrom topGO annFUN.gene2GO
+#' @import topGO
 #' @family GO_terms
 #' @param geneSel genes of interest.
 #' @param allGenes customized background genes.
@@ -135,6 +135,9 @@ setMethod(
             # rename geneList
             AllGenes<-geneList
         }
+
+        # load topGO
+        requireNamespace(topGO)
 
         # create GOdata
         new(

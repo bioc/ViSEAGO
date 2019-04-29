@@ -1,6 +1,6 @@
 #' @title Check available organisms datasets at Ensembl.
 #' @description  List Ensembl referenced organisms datasets from the current (NULL) or archive (number in \code{character}) annotation version.
-#' @importFrom biomaRt useEnsembl listEnsembl
+#' @importFrom biomaRt useEnsembl listEnsembl listDatasets
 #' @importFrom data.table data.table
 #' @param biomart the biomart name (eg. "ensembl", the default) available with \pkg{biomaRt} package \code{\link[biomaRt]{listEnsembl}}.
 #' @param host the Ensembl host adress for \href{http://www.ensembl.org/index.html}{vertebrate} ("www.ensembl.org", the default value),

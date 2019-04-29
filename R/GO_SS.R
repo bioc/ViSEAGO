@@ -1,7 +1,6 @@
 #' @title GO_SS class object definition.
 #' @description This class is invoked by \code{\link{build_GO_SS}} method in order to store \code{\link{enrich_GO_terms-class}} object, Information Content (IC),
 #' and GO terms or groups distances objects based on semantic similarity.
-#' @importFrom data.table melt.data.table .SD
 #' @family GO_semantic_similarity
 #' @slot db should be "Bioconductor", "EntrezGene", "Ensembl", or "Uniprot" ressource name.
 #' @slot stamp date of stamp or annotation version if available in \code{character}.
@@ -26,7 +25,8 @@ setClass(
     )
 )
 
-#' @importFrom data.table .SD melt.data.table
+#' @aliases GO_SS
+#' @importFrom data.table melt.data.table .SD
 setMethod(
     "show",
     signature="GO_SS",
@@ -126,7 +126,7 @@ setMethod(
                  Data$`significant GO terms number`,
                 "terms"
             ),
-            if(length(slot(object,"terms_dist")>0)){
+            if(length(slot(object,"terms_dist"))>0){
                 paste(
                     "\n- terms distances: ",
                     paste(

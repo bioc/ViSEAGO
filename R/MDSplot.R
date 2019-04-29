@@ -106,7 +106,7 @@ setMethod(
     definition=function(object,type,file){
 
         # check class
-        if(!is(object,"GO_SS") & !is(object,"GO_clusers")){
+        if(!is(object,"GO_SS") & !is(object,"GO_clusters")){
             stop("object must come from ViSEAGO::compute_SS_distances() or ViSEAGO::GOterms_heatmap()")
         }
 

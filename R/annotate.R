@@ -294,6 +294,9 @@ setMethod(
                 )
             }
 
+            # load db package
+            require(id,character.only =TRUE)
+
             # load GO annotations
             annot<-data.table(
                 select(
@@ -332,11 +335,11 @@ setMethod(
             annot<-data.table(
                 getBM(
                     attributes =c("ensembl_gene_id","go_id","go_linkage_type","namespace_1003"),
-                    filters=go_filter[
+                    filters=unlist(go_filter[
                         grep("with GO ID",ignore.case =TRUE,go_filter$description),
                         "name",
                         with=FALSE
-                    ],
+                    ]),
                   value=TRUE,
                   mart =myspecies
                 )

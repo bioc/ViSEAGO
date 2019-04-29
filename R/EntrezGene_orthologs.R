@@ -1,7 +1,6 @@
 #' @title Download EntrezGene orthologs groups.
 #' @description  Download EntrezGene orthologs groups.
 #' @importFrom data.table data.table fread .SD
-#' @importFrom R.utils gunzip
 #' @details Internal function used by \code{\link{annotate}} in order to download orthologs_groups from NCBI Annotation pipeline
 #'  stored in the \href{ftp://ftp.ncbi.nih.gov/gene/DATA/gene_orthologs.gz}{gene_group.gz} file.
 #' @return a \code{\link[data.table]{data.table}}.

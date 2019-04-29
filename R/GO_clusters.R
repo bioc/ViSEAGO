@@ -34,11 +34,12 @@ setClass(
     )
 )
 
-#' @importFrom data.table melt.data.table
+#' @aliases GO_clusters
+#' @importFrom data.table .SD melt.data.table :=
 setMethod(
     "show",
     signature="GO_clusters",
-    function(object) {
+    function(object){
 
         # Extract table
         Data<-slot(
@@ -56,7 +57,7 @@ setMethod(
         Data<-Data[,lapply(.SD,function(x){sum(x<0.01,na.rm = T)}),.SDcols=seq_len(ncol(Data))]
 
         # melt the table
-        Data<-data.table::melt.data.table(
+        Data<-melt.data.table(
             Data,
             measure.vars=names(Data),
             variable.name = "conditions",
@@ -169,21 +170,24 @@ setMethod(
                 "\n                              clusters min size: ",
                 round(
                     min(
-                        slot(slot(object,"enrich_GOs"),"data")[,"GO.cluster",with=FALSE]
+                        slot(slot(object,"enrich_GOs"),"data")[,"GO.cluster",with=FALSE],
+                        na.rm=TRUE
                     ),
                     digits=0
                 ),
                 "\n                              clusters mean size: ",
                 round(
                     mean(
-                        slot(slot(object,"enrich_GOs"),"data")[,"GO.cluster",with=FALSE]
+                        slot(slot(object,"enrich_GOs"),"data")[,"GO.cluster",with=FALSE],
+                        na.rm=TRUE
                     ),
                     digits=0
                 ),
                 "\n                              clusters max size: ",
                 round(
                     max(
-                        slot(slot(object,"enrich_GOs"),"data")[,"GO.cluster",with=FALSE]
+                        slot(slot(object,"enrich_GOs"),"data")[,"GO.cluster",with=FALSE],
+                        na.rm=TRUE
                     ),
                     digits=0
                 ),

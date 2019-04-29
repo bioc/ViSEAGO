@@ -6,7 +6,6 @@
 #' @importFrom GO.db GO.db GOMFOFFSPRING GOBPOFFSPRING GOCCOFFSPRING
 #' @importFrom topGO inverseList
 #' @importFrom AnnotationDbi select keys as.list
-#' @importFrom methods setGeneric setMethod new is slot
 #' @family GO_semantic_similarity
 #' @param gene2GO a \code{\link{gene2GO-class}} object from \code{\link{annotate}} method.
 #' @param enrich_GO_terms a \code{\link{enrich_GO_terms-class}} from \code{\link{merge_enrich_terms}} method.

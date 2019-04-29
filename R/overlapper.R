@@ -34,9 +34,10 @@ overLapper<-function(setlist){
 
     # vennSets function
     vennSets <- function(setmatrix=setmatrix, allcombl=allcombl, index=1) {
-        mycol <-colnames(setmatrix) %in% allcombl[[index]]
-        cond1 <-rowSums2(setmatrix[, rep(mycol, 2)]) == 2 * length(mycol1)
-        cond2 <-rowSums2(setmatrix[, rep(!mycol, 2)]) == 0
+        mycol1 <-which(colnames(setmatrix) %in% allcombl[[index]])
+        mycol2 <-which(!colnames(setmatrix) %in% allcombl[[index]])
+        cond1 <-rowSums(setmatrix[, rep(mycol1, 2)]) == 2 * length(mycol1)
+        cond2 <-rowSums(setmatrix[, rep(mycol2, 2)]) == 0
         return(setunion[cond1 & cond2])
     }
 

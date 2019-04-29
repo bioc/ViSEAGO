@@ -19,7 +19,8 @@ setClass(
     )
 )
 
-#' show method
+
+#' @aliases gene2GO
 setMethod(
     "show",
     signature="gene2GO",

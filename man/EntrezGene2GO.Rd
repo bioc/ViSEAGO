@@ -11,7 +11,7 @@ a  \code{\link{genomic_ressource-class}} object required by \code{\link{annotate
 }
 \description{
 Store the available species and current GO annotations from the
-\href{https://ftp.ncbi.nih.gov/gene/DATA/gene2go.gz}{gene2go.gz} file avalable at NCBI \href{https://ftp.ncbi.nih.gov/gene/DATA}{EntrezGene ftp}.
+\href{https://ftp.ncbi.nih.gov/gene/DATA/gene2go.gz}{gene2go.gz} nfile avalable at NCBI \href{https://ftp.ncbi.nih.gov/gene/DATA}{EntrezGene ftp}.
 }
 \details{
 This function downloads the \href{https://ftp.ncbi.nih.gov/gene/DATA/gene2go.gz}{gene2go.gz} file from

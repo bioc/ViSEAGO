@@ -23,7 +23,6 @@ csl: "`r system.file('extdata/','bmc-genomics.csl',package='ViSEAGO')`"
 ###################
 # load ViSEAGO and mouse db package
 library(ViSEAGO)
-library(org.Mm.eg.db)
 
 ###################
 # knitr document options

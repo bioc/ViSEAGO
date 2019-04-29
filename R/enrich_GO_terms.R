@@ -19,6 +19,7 @@ setClass(
     )
 )
 
+#' @aliases enrich_GO_terms
 #' @importFrom data.table .SD melt.data.table :=
 setMethod(
     "show",

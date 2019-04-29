@@ -1,10 +1,10 @@
 #' @title Build a clustering heatmap on GO terms.
 #' @description This method computes a clustering heatmap based on GO terms semantic similarity.
 #' @importFrom data.table data.table
-#' @importFrom ggplot2 scale_fill_gradientn
+#' @importFrom ggplot2 scale_fill_gradient2
 #' @importFrom plotly layout
 #' @importFrom heatmaply heatmaply
-#' @importFrom dendextend branches_attr_by_clusters  get_nodes_attr set
+#' @importFrom dendextend branches_attr_by_clusters get_nodes_attr set
 #' @importFrom dynamicTreeCut cutreeDynamic
 #' @importFrom RColorBrewer brewer.pal
 #' @importFrom scales rescale

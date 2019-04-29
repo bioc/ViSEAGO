@@ -15,8 +15,8 @@ vignette: >
   %\VignetteIndexEntry{edgeR_mouse_mammary_gland}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-bibliography: "`r base::system.file('extdata/','bibliography.bib',package='ViSEAGO')`"
-csl: "`r base::system.file('extdata/','bmc-genomics.csl',package='ViSEAGO')`"
+bibliography: "`r system.file('extdata/','bibliography.bib',package='ViSEAGO')`"
+csl: "`r system.file('extdata/','bmc-genomics.csl',package='ViSEAGO')`"
 ---
 
 ```{r setup,include=FALSE,cache=F}
@@ -31,6 +31,7 @@ fig.width=9,message=FALSE,comment=NA,warning=FALSE)
 # library
 library(edgeR)
 library(limma)
+library(graphics)
 
 ###################
 # Get Raw Count data
@@ -38,15 +39,15 @@ library(limma)
 
   ###################
   # temp file
-  temp<-base::paste(
-    base::tempfile(),
+  temp<-paste(
+    tempfile(),
     "gz",
     sep="."
   )
 
   ###################
   # load the file
-  utils::download.file(
+  download.file(
     "ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE60nnn/GSE60450/suppl/GSE60450_Lactation-GenewiseCounts.txt.gz",
     destfile =temp,
     quiet=TRUE
@@ -54,24 +55,24 @@ library(limma)
 
   ###################
   # unzip
-  R.utils::gunzip(temp)
+  gunzip(temp)
 
   ###################
   # load raw data
-  rawdata<-data.table::fread(base::sub("\\.gz","",temp))
+  rawdata<-data.table::fread(sub("\\.gz","",temp))
 
   ###################
   # genecount
-  geneCount <-base::as.matrix(rawdata[,-c(1,2),with=FALSE])
+  geneCount <-as.matrix(rawdata[,-c(1,2),with=FALSE])
 
   ###################
   # add rownames
-  base::rownames(geneCount)<-rawdata$EntrezGeneID
+  rownames(geneCount)<-rawdata$EntrezGeneID
 
   ###################
   # design and factors
   targets<-data.table::data.table(
-    File=base::c(
+    File=c(
       "GSM1480297_MCL1-DG_BC2CTUACXX_ACTTGA_L002_R1.txt",
       "GSM1480298_MCL1-DH_BC2CTUACXX_CAGATC_L002_R1.txt",
       "GSM1480299_MCL1-DI_BC2CTUACXX_ACAGTG_L002_R1.txt",
@@ -85,7 +86,7 @@ library(limma)
       "GSM1480295_MCL1-LE_BC2CTUACXX_TAGCTT_L001_R1.txt",
       "GSM1480296_MCL1-LF_BC2CTUACXX_CTTGTA_L001_R1.txt"
     ),
-    Sample=base::c(
+    Sample=c(
       "GSM1480297",
       "GSM1480298",
       "GSM1480299",
@@ -99,28 +100,28 @@ library(limma)
       "GSM1480295",
       "GSM1480296"
     ),
-    CellType=base::rep(base::c("Basal","Luminal"),each=6),
-    Status=base::rep(base::rep(base::c("virgin","pregnant","lactate"),2),each=2)
+    CellType=rep(c("Basal","Luminal"),each=6),
+    Status=rep(rep(c("virgin","pregnant","lactate"),2),each=2)
   )
 ```
 </br>
 ```{r CountAnnot}
 ###################
 # design and factors
-group <- base::factor(
-  base::paste0(
+group <- factor(
+  paste0(
     targets$CellType, ".", targets$Status)
 )
 
 ###################
 # create DGElist
-y <-edgeR::DGEList(geneCount, group=group)
+y <-DGEList(geneCount, group=group)
 ```
 </br>
 ```{r FiltNorm}
 ###################
 # minima count filtering
-keep <- rowSums(edgeR::cpm(y) > 0.5) >= 2
+keep <- rowSums(cpm(y) > 0.5) >= 2
 
 ###################
 # filter y
@@ -128,18 +129,18 @@ y <- y[keep, , keep.lib.sizes=FALSE]
 
 ###################
 # Normalization
-y <-edgeR::calcNormFactors(y)
+y <-calcNormFactors(y)
 ```
 </br>
 ```{r MDSplot}
 ###################
 # graphic parameters
-colors<-base::rep(base::c("blue", "darkgreen", "red"),2)
-points<-base::c(0,1,2,15,16,17)
+colors<-rep(c("blue", "darkgreen", "red"),2)
+points<-c(0,1,2,15,16,17)
 
 ###################
 # MDSplot
-limma::plotMDS(
+plotMDS(
   y,
   col=colors[group],
   pch=points[group]
@@ -147,9 +148,9 @@ limma::plotMDS(
 
 ###################
 # add MDSplot legend
-graphics::legend(
+legend(
   "topleft",
-  legend=base::levels(group),
+  legend=levels(group),
   pch=points,
   col=colors,
   ncol=2
@@ -163,7 +164,7 @@ design <-stats::model.matrix(~ 0 + group)
 
 ###################
 # renames
-base::colnames(design) <- base::levels(group)
+colnames(design) <- levels(group)
 ```
 </br>
 ```{r Dispersion}
@@ -174,21 +175,21 @@ y$common.dispersion
 
 ###################
 # Plot Biological Coefficient of Variation
-edgeR::plotBCV(y)
+plotBCV(y)
 
 ###################
 # Genewise Negative Binomial Generalized Linear Models with Quasi-likelihood Tests
-fit <-edgeR::glmQLFit(y, design, robust=TRUE)
+fit <-glmQLFit(y, design, robust=TRUE)
 
 ###################
 # Plot the quasi-likelihood dispersion
-edgeR::plotQLDisp(fit)
+plotQLDisp(fit)
 ```
 </br>
 ```{r Differential}
 ###################
 # Construct Matrix of Custom Contrasts
-con<-limma::makeContrasts(
+con<-makeContrasts(
   L.PvsL = Luminal.pregnant - Luminal.lactate,
   L.VvsL = Luminal.virgin - Luminal.lactate,
   L.VvsP = Luminal.virgin - Luminal.pregnant,
@@ -197,7 +198,7 @@ con<-limma::makeContrasts(
 
 ###################
 # Genewise Negative Binomial Generalized Linear Models with Quasi-likelihood Tests
-qlf2<-edgeR::glmQLFTest(fit, contrast=con)
+qlf2<-glmQLFTest(fit, contrast=con)
 
 ###################
 # Construct Matrix of Custom Contrasts
@@ -206,57 +207,57 @@ con.L.pregnantvslactate <- makeContrasts(
   levels=design
 )
 
-con.L.virginvslactate <-limma::makeContrasts(
+con.L.virginvslactate <-makeContrasts(
   L.VvsL = Luminal.virgin - Luminal.lactate,
   levels=design
 )
 
-con.L.virginvspregnant <-limma::makeContrasts(
+con.L.virginvspregnant <-makeContrasts(
   L.VvsP = Luminal.virgin - Luminal.pregnant,
   levels=design
 )
 
 ###################
 # Genewise Negative Binomial Generalized Linear Models with Quasi-likelihood Tests
-res<-base::lapply(base::ls(pattern="con."),function(x){
+res<-lapply(ls(pattern="con."),function(x){
   
   ###################
   # Genewise Negative Binomial Generalized Linear Models with Quasi-likelihood Tests
-  qlf<-edgeR::glmQLFTest(
+  qlf<-glmQLFTest(
     fit,
-    contrast=base::get(x)
+    contrast=get(x)
   )
   
   ###################
   # Table of the Top Differentially Expressed Genes/Tags
-   edgeR::topTags(
+   topTags(
      qlf,
      n=nrow(y$counts),
      adjust.method="BH",
      sort.by="none"
     )$table
 })
-base::names(res)<-base::gsub("^con\\.","",base::ls(pattern="con."))
+names(res)<-gsub("^con\\.","",ls(pattern="con."))
 
 ###################
 # exporting results of the differential analysis
-base::write(
-  base::rownames(res$L.pregnantvslactate),
+write(
+  rownames(res$L.pregnantvslactate),
   file="background_L.txt"
 )
 
-base::write(
-  base::rownames(res$L.pregnantvslactate)[res$L.pregnantvslactate$FDR<0.05],
+write(
+  rownames(res$L.pregnantvslactate)[res$L.pregnantvslactate$FDR<0.05],
   file="pregnantvslactateDE.txt"
 )
 
-base::write(
-  base::rownames(res$L.virginvslactate)[res$L.virginvslactate$FDR<0.05],
+write(
+  rownames(res$L.virginvslactate)[res$L.virginvslactate$FDR<0.05],
   file="virginvslactateDE.txt"
 )
 
-base::write(
-  base::rownames(res$L.virginvspregnant)[res$L.virginvspregnant$FDR<0.05],
+write(
+  rownames(res$L.virginvspregnant)[res$L.virginvspregnant$FDR<0.05],
   file="virginvspregnantDE.txt"
 )
 ```
