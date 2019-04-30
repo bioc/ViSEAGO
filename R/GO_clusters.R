@@ -178,7 +178,7 @@ setMethod(
                 "\n                              clusters mean size: ",
                 round(
                     mean(
-                        slot(slot(object,"enrich_GOs"),"data")[,"GO.cluster",with=FALSE],
+                        unlist(slot(slot(object,"enrich_GOs"),"data")[,"GO.cluster",with=FALSE]),
                         na.rm=TRUE
                     ),
                     digits=0
