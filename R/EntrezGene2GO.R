@@ -2,6 +2,7 @@
 #' @description  Store the available species and current GO annotations from the
 #' \href{https://ftp.ncbi.nih.gov/gene/DATA/gene2go.gz}{gene2go.gz} nfile avalable at NCBI \href{https://ftp.ncbi.nih.gov/gene/DATA}{EntrezGene ftp}.
 #' @importFrom data.table data.table fread rbindlist :=
+#' @importFrom R.utils gunzip
 #' @family genomic_ressource
 #' @details This function downloads the \href{https://ftp.ncbi.nih.gov/gene/DATA/gene2go.gz}{gene2go.gz} file from
 #' \href{https://ftp.ncbi.nih.gov/gene/DATA}{EntrezGene ftp} which contains available organisms (taxid) with the corresponding GO annotations.
