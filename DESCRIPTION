@@ -1,5 +1,5 @@
 Package: ViSEAGO
-Version: 0.99.26
+Version: 0.99.27
 Title: ViSEAGO: Easier data mining of biological functions organized into clusters using Gene Ontology and semantic similarity
 Author: Aurelien Brionne [aut, cre],
         Amelie Juanchich [aut],
@@ -16,6 +16,7 @@ Imports: data.table,
          GOSemSim,
          ggplot2,
          GO.db,
+         grDevices
          heatmaply,
 	 htmlwidgets,
          igraph,
@@ -25,6 +26,7 @@ Imports: data.table,
          RColorBrewer,
          R.utils,
          scales,
+         stats,
          UpSetR,
          webshot
 Depends: R (>= 3.6)
