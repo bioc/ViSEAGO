@@ -571,7 +571,7 @@ setMethod(
                     names(res)=attr(m1[[1]],"capture.name")
 
                     # return
-                    res
+                    return(res)
                 }
 
                 # get esummary from NCBI

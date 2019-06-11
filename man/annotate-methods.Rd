@@ -81,6 +81,13 @@ myGENE2GO<-ViSEAGO::annotate(
     object=Uniprot
 )
 
+## from Custom GO annotation file
+Custom<-ViSEAGO::Custom2GO(system.file("extdata/customfile.txt",package = "ViSEAGO"))
+myGENE2GO<-ViSEAGO::annotate(
+    id="myspecies1",
+    object=Custom
+)
+
 ## specific options for EntrezGene database
 
 # Chicken GO annotations without adding orthologs
@@ -124,8 +131,8 @@ Matt Dowle and Arun Srinivasan (2017). data.table: Extension of data.frame. R pa
 }
 \seealso{
 Other genomic_ressource: \code{\link{Bioconductor2GO}},
-  \code{\link{Ensembl2GO}}, \code{\link{EntrezGene2GO}},
-  \code{\link{Uniprot2GO}},
+  \code{\link{Custom2GO}}, \code{\link{Ensembl2GO}},
+  \code{\link{EntrezGene2GO}}, \code{\link{Uniprot2GO}},
   \code{\link{available_organisms}},
   \code{\link{genomic_ressource-class}},
   \code{\link{taxonomy}}

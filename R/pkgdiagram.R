@@ -37,7 +37,7 @@ pkgdiagram<-function(x=c("white","white","white","white","white")){
 
     # print the diagram
     grViz(
-        diagram=base::paste("
+        diagram=paste("
             # init the graph
             digraph ViSEAGO_map {
 
@@ -65,6 +65,7 @@ pkgdiagram<-function(x=c("white","white","white","white","white")){
                     EntrezGene2GO
                     Ensembl2GO
                     Uniprot2GO
+                    Custom2GO
                     available_organisms
                     annotate
                 }
@@ -115,6 +116,7 @@ pkgdiagram<-function(x=c("white","white","white","white","white")){
                 EntrezGene2GO->annotate
                 Ensembl2GO->annotate
                 Uniprot2GO->annotate
+                Custom2GO->annotate
                 annotate->create_topGOdata
                 create_topGOdata-> {RunTest merge_enrich_terms}
                 RunTest->merge_enrich_terms
@@ -127,6 +129,7 @@ pkgdiagram<-function(x=c("white","white","white","white","white")){
                 EntrezGene2GO->available_organisms
                 Ensembl2GO->available_organisms
                 Uniprot2GO->available_organisms
+                Custom2GO->available_organisms
             }",
             sep=""
         )

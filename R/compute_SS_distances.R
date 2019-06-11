@@ -4,6 +4,7 @@
 #' @importFrom GOSemSim mgoSim
 #' @importFrom AnnotationDbi select
 #' @importFrom data.table data.table .I .N
+#' @importFrom utils stack unstack
 #' @family  GO_semantic_similarity
 #' @param object a \code{\link{GO_SS-class}}, or  \code{\link{GO_clusters-class}} objects created by \code{\link{build_GO_SS}}
 #'  or \code{\link{GOterms_heatmap}} methods, respectively.
@@ -187,8 +188,8 @@ setMethod(
                 select(
                     GO.db,
                     keys=onto$values,
-                    column ="TERM"
-                    )
+                    column="TERM"
+                )
             )
 
             # add sizes column to GOclusters

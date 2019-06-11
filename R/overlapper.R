@@ -2,6 +2,7 @@
 #' @description  build all sets combinations intersections
 #' @family enrich_GO_terms
 #' @family visualization
+#' @importFrom utils combn
 #' @details This internal function use build all sets combinations intersections needed for \code{\link{upset}}.
 #' @return a \code{\link[base]{list}}.
 #' @examples

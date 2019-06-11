@@ -3,6 +3,7 @@
 #' @importFrom data.table data.table rbindlist setorder := .N
 #' @importFrom dendextend get_leaves_attr
 #' @importFrom plotly plot_ly add_markers layout export
+#' @importFrom stats cmdscale
 #' @family GO_terms GO_clusters semantic_similarity visualization
 #' @param object a \code{\link{GO_SS-class}} or \code{\link{GO_clusters-class}} objects from distances computed with \code{\link{compute_SS_distances}}.
 #' @param type could be "GOterms" to display GOterms MDSplot, or "GOclusters" to display GOclusters MDSplot.
@@ -226,7 +227,7 @@ setMethod(
             res.mds=rbindlist(res.mds)
 
             # custom text
-            res.mds[,`:=`(text=res.mds$GO.cluster,GO.cluster=gsub("_.+$","",res.mds$GO.cluster))]
+            res.mds[,`:=`("text"=res.mds$GO.cluster,GO.cluster=gsub("_.+$","",res.mds$GO.cluster))]
 
             # add levels to measures
             res.mds$measure<-factor(
@@ -241,13 +242,13 @@ setMethod(
             )
 
             # add GO.ID for GO
-            res.mds[,text:=paste("GO.cluster:",text)]
+            res.mds[,"text":=paste("GO.cluster:",text)]
 
             # add GO.ID for GO
-            res.mds[,text:=gsub("_GO","<br>GO.ID: GO",text)]
+            res.mds[,"text":=gsub("_GO","<br>GO.ID: GO",text)]
 
             # add GO.name for term definition
-            res.mds[,text:=gsub("_"," <br>GO.name: ",text)]
+            res.mds[,"text":=gsub("_"," <br>GO.name: ",text)]
         }
 
         ## plot
@@ -390,7 +391,7 @@ setMethod(
             }else{
 
                 # add count to text
-                res.mds[,`:=`(text=paste(sub("<br>.+$","",text),"<br>GO.count:",res.mds$nb,sub("^.+<br>GO.ID","<br>GO.ID",text)))]
+                res.mds[,"text":=paste(sub("<br>.+$","",text),"<br>GO.count:",res.mds$nb,sub("^.+<br>GO.ID","<br>GO.ID",text))]
 
                 # add trace to plot by measure
                 for(x in seq_along(measures)){

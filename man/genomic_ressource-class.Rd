@@ -24,8 +24,9 @@ This class stores the annotations and associated metadata obtained by \code{\lin
 
 \seealso{
 Other genomic_ressource: \code{\link{Bioconductor2GO}},
-  \code{\link{Ensembl2GO}}, \code{\link{EntrezGene2GO}},
-  \code{\link{Uniprot2GO}}, \code{\link{annotate}},
+  \code{\link{Custom2GO}}, \code{\link{Ensembl2GO}},
+  \code{\link{EntrezGene2GO}}, \code{\link{Uniprot2GO}},
+  \code{\link{annotate}},
   \code{\link{available_organisms}}, \code{\link{taxonomy}}
 }
 \concept{genomic_ressource}

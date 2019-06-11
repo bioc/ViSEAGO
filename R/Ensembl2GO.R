@@ -54,7 +54,7 @@ Ensembl2GO=function(biomart="ensembl",host="www.ensembl.org",version=NULL){
 
     ###################
     # check the ensembl host versus mart name
-    base::match.arg(biomart,Ensembl$biomart)
+    match.arg(biomart,Ensembl$biomart)
 
     ###################
     # connect to Ensembl
@@ -65,7 +65,7 @@ Ensembl2GO=function(biomart="ensembl",host="www.ensembl.org",version=NULL){
     new(
         "genomic_ressource",
         db="Ensembl",
-        stamp=base::paste(host,Ensembl$version[Ensembl$biomart==biomart]),
+        stamp=paste(host,Ensembl$version[Ensembl$biomart==biomart]),
         data=data.table(),
         mart=list(mart),
         organisms=data.table(listDatasets(mart))

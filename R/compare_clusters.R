@@ -2,6 +2,7 @@
 #' @description Build an interactive heatmap of the common GO terms frequency between several partitions.
 #' @importFrom data.table data.table
 #' @importFrom plotly plot_ly add_heatmap layout
+#' @importFrom utils stack unstack tail
 #' @family GO_clusters
 #' @param clusters  a \code{list} of named \code{\link{GO_clusters-class}} objects,
 #' from \code{\link{GOterms_heatmap}} or \code{\link{GOclusters_heatmap}} methods.

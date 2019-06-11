@@ -4,6 +4,7 @@
 #' @importFrom data.table data.table like
 #' @importFrom AnnotationForge loadAnnDbPkgIndex
 #' @importFrom AnnotationDbi species
+#' @importFrom methods new
 #' @family genomic_ressource
 #' @details
 #' This function gives genome wide annotation for available organisms databases packages from

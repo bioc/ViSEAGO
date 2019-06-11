@@ -62,8 +62,8 @@ Matt Dowle and Arun Srinivasan (2017). data.table: Extension of data.frame. R pa
 }
 \seealso{
 Other genomic_ressource: \code{\link{Bioconductor2GO}},
-  \code{\link{EntrezGene2GO}}, \code{\link{Uniprot2GO}},
-  \code{\link{annotate}},
+  \code{\link{Custom2GO}}, \code{\link{EntrezGene2GO}},
+  \code{\link{Uniprot2GO}}, \code{\link{annotate}},
   \code{\link{available_organisms}},
   \code{\link{genomic_ressource-class}},
   \code{\link{taxonomy}}

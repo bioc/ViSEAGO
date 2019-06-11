@@ -35,8 +35,8 @@ Maglott, D, Ostell, J, Pruitt, KD, Tatusova, T (2011). Entrez Gene: gene-centere
 }
 \seealso{
 Other genomic_ressource: \code{\link{Bioconductor2GO}},
-  \code{\link{Ensembl2GO}}, \code{\link{Uniprot2GO}},
-  \code{\link{annotate}},
+  \code{\link{Custom2GO}}, \code{\link{Ensembl2GO}},
+  \code{\link{Uniprot2GO}}, \code{\link{annotate}},
   \code{\link{available_organisms}},
   \code{\link{genomic_ressource-class}},
   \code{\link{taxonomy}}

@@ -3,6 +3,7 @@
 #' for each result of GO enrichment tests.
 #' @importFrom data.table data.table melt := .SD
 #' @importFrom plotly plot_ly layout export
+#' @importFrom methods is slot
 #' @family GO_terms
 #' @family visualization
 #' @param object an \code{\link{enrich_GO_terms-class}} object from \code{\link{merge_enrich_terms}} method.

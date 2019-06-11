@@ -5,6 +5,7 @@
 #' @importFrom AnnotationDbi select keys
 #' @importFrom biomaRt listFilters useDataset getBM
 #' @importFrom data.table data.table := fread setorderv rbindlist
+#' @importFrom utils installed.packages
 #' @family genomic_ressource
 #' @family GO_terms
 #' @param id identifiant corresponding to the organism of interest.
@@ -79,6 +80,13 @@
 #'     object=Uniprot
 #' )
 #'
+#' ## from Custom GO annotation file
+#' Custom<-ViSEAGO::Custom2GO(system.file("extdata/customfile.txt",package = "ViSEAGO"))
+#' myGENE2GO<-ViSEAGO::annotate(
+#'     id="myspecies1",
+#'     object=Custom
+#' )
+#'
 #' ## specific options for EntrezGene database
 #'
 #' # Chicken GO annotations without adding orthologs
@@ -127,7 +135,7 @@ setMethod(
         ## check object
         if(!is(object,"genomic_ressource")){
             stop(
-                "object must be a genomic_ressource class from ViSEAGO::Bioconductor2GO(), ViSEAGO::EntrezGene2GO(), or ViSEAGO::Ensembl2GO()"
+                "object must be a genomic_ressource class from ViSEAGO::Bioconductor2GO(), ViSEAGO::EntrezGene2GO(), ViSEAGO::Ensembl2GO() or ViSEAGO::Custom2GO()"
             )
         }
 
@@ -238,7 +246,7 @@ setMethod(
                 # rename GeneID to gene_id
                 names(ortho)[1]<-"gene_id"
 
-                # assign target species id to taxid and replac exprerimental evidence by IEA (computationnal)
+                # assign target species id to taxid and replace exprerimental evidence by IEA (computationnal)
                 ortho[,`:=`(taxid=id,evidence="IEA")]
 
                 # Extract species annotation from data slot
@@ -382,7 +390,7 @@ setMethod(
             )
 
             # unzip
-            R.gunzip(temp)
+            gunzip(temp)
 
             # read file
             annot<-unique(
@@ -400,6 +408,16 @@ setMethod(
             annot["C","category":="CC",on="category"]
 
             # GO database stamp
+            stamp=slot(object,"stamp")
+        }
+
+        # Custom
+        if(slot(object,"db")=="Custom"){
+
+            # Extract species annotation from data slot
+            annot<-slot(object,"data")[id,on="taxid"]
+
+            # add stamp
             stamp=slot(object,"stamp")
         }
 
@@ -429,8 +447,18 @@ setMethod(
             })
         })
 
-        ## create GENE2GO object
+        # ordering category  and add empty list if not available
+        Data<-lapply(c("MF","BP","CC"),function(x){
 
+            if(!is.null(Data[[x]])){
+                Data[[x]]
+            }else{
+                list()
+            }
+        })
+        names(Data)<-c("MF","BP","CC")
+
+        ## create GENE2GO object
         new(
             "gene2GO",
             db=slot(object,"db"),

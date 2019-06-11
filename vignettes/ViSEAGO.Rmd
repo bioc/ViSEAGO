@@ -115,6 +115,10 @@ Ensembl<-ViSEAGO::Ensembl2GO()
 ###################
 # connect to Uniprot-GOA
 Uniprot<-ViSEAGO::Uniprot2GO()
+
+###################
+# connect to Custom file
+Custom<-ViSEAGO::Custom2GO(system.file("extdata/customfile.txt",package = "ViSEAGO"))
 ```
 
 In order to know if your target species is supported by the database, we can display the available organisms in an interactive table using `ViSEAGO::available_organisms` method. The **organism  key identifiant** is always displayed in the **first column** of the table.
@@ -135,6 +139,10 @@ ViSEAGO::available_organisms(Ensembl)
 ###################
 # Display table of available organisms with Uniprot
 ViSEAGO::available_organisms(Uniprot)
+
+###################
+# Display table of available organisms with Custom
+ViSEAGO::available_organisms(Custom)
 ```
 
 At this step, we need to provide the **organism  key identifiant** based on the genomic ressource used (Bioconductor, EntrezGene, Ensembl, or Uniprot), in order to extract and store the species GO annotations using `ViSEAGO::annotate()` method.
@@ -175,6 +183,13 @@ myGENE2GO<-ViSEAGO::annotate(
 myGENE2GO<-ViSEAGO::annotate(
     "Uniprot_id",
     Uniprot
+)
+
+###################
+# load GO annotations from Custom
+myGENE2GO<-ViSEAGO::annotate(
+    "Custom_id",
+    Custom
 )
 ```
 

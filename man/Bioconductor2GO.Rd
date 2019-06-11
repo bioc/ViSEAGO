@@ -27,9 +27,9 @@ Bioconductor<-ViSEAGO::Bioconductor2GO()
 Carlson M and Pages H (2017). AnnotationForge: Code for Building Annotation Database Packages. R package version 1.18.0.
 }
 \seealso{
-Other genomic_ressource: \code{\link{Ensembl2GO}},
-  \code{\link{EntrezGene2GO}}, \code{\link{Uniprot2GO}},
-  \code{\link{annotate}},
+Other genomic_ressource: \code{\link{Custom2GO}},
+  \code{\link{Ensembl2GO}}, \code{\link{EntrezGene2GO}},
+  \code{\link{Uniprot2GO}}, \code{\link{annotate}},
   \code{\link{available_organisms}},
   \code{\link{genomic_ressource-class}},
   \code{\link{taxonomy}}

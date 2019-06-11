@@ -8,6 +8,9 @@
 #' @importFrom dynamicTreeCut cutreeDynamic
 #' @importFrom RColorBrewer brewer.pal
 #' @importFrom scales rescale
+#' @importFrom methods slot slot<-
+#' @importFrom stats as.dist cor dist cutree na.omit
+#' @importFrom grDevices colorRampPalette
 #' @family GO_terms
 #' @family semantic_similiarity
 #' @family visualization

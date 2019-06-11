@@ -2,6 +2,8 @@
 #' @description This method computes a clustering heatmap based on GO groups semantic similarity.
 #' @importFrom data.table data.table .N
 #' @importFrom ggplot2 scale_fill_gradient
+#' @importFrom methods slot slot<-
+#' @importFrom stats hclust as.dendrogram order.dendrogram
 #' @importFrom plotly layout
 #' @importFrom heatmaply heatmaply
 #' @importFrom dendextend branches_attr_by_clusters set get_leaves_attr rotate

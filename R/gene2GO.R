@@ -19,7 +19,6 @@ setClass(
     )
 )
 
-
 #' @aliases gene2GO
 setMethod(
     "show",

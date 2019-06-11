@@ -29,8 +29,8 @@ The GOA database: gene Ontology annotation updates for 2015. Nucleic Acids Res.,
 }
 \seealso{
 Other genomic_ressource: \code{\link{Bioconductor2GO}},
-  \code{\link{Ensembl2GO}}, \code{\link{EntrezGene2GO}},
-  \code{\link{annotate}},
+  \code{\link{Custom2GO}}, \code{\link{Ensembl2GO}},
+  \code{\link{EntrezGene2GO}}, \code{\link{annotate}},
   \code{\link{available_organisms}},
   \code{\link{genomic_ressource-class}},
   \code{\link{taxonomy}}

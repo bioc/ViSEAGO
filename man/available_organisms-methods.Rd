@@ -47,8 +47,9 @@ Yihui Xie (2016). DT: A Wrapper of the JavaScript Library 'DataTables'. R packag
 }
 \seealso{
 Other genomic_ressource: \code{\link{Bioconductor2GO}},
-  \code{\link{Ensembl2GO}}, \code{\link{EntrezGene2GO}},
-  \code{\link{Uniprot2GO}}, \code{\link{annotate}},
+  \code{\link{Custom2GO}}, \code{\link{Ensembl2GO}},
+  \code{\link{EntrezGene2GO}}, \code{\link{Uniprot2GO}},
+  \code{\link{annotate}},
   \code{\link{genomic_ressource-class}},
   \code{\link{taxonomy}}
 
