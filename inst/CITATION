@@ -3,9 +3,9 @@ citHeader("Please cite 'reference' for using ViSEAGO")
 citEntry(entry  ="ARTICLE",
          title  = "ViSEAGO: a Bioconductor package for clustering biological functions using Gene Ontology and semantic similarity",
          author = personList(
-             as.person("Brionne Aurelien"),
-             as.person("Juanchich Amelie"),
-             as.person("Hennequet-Antier Christelle")
+             as.person("Aurelien Brionne"),
+             as.person("Amelie Juanchich"),
+             as.person("Christelle Hennequet-Antier")
              ),
          journal = "BMC BioData Mining",
          year    = "2019",
