@@ -991,7 +991,7 @@ setMethod(
 
         # bind data
         sResults<-data.table(
-            GO.cluster=row.gp,
+            GO.cluster=as.character(row.gp),
             IC=IC,
             sResults
         )
