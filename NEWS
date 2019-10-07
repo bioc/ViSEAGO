@@ -2,6 +2,10 @@ CHANGES IN VERSION 0.99.30
 ------------------------
  o ViSEAGO citation update
 
-CHANGES IN VERSION 0.99.31
+CHANGES IN VERSION 0.99.32
 ------------------------
  o GOterms_heatmap GO.clusters column convert to character in order to prevent data.table merge error.
+
+CHANGES IN VERSION 0.99.33
+------------------------
+ o merge_enrich_terms exemple update.
