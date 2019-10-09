@@ -14,3 +14,7 @@ CHANGES IN VERSION 0.99.34
 ------------------------
  o README update (download from Bioconductor and forgeMIA gitlab)
  o add require("topGO") in create_topGOdata method
+
+CHANGES IN VERSION 0.99.35
+------------------------
+ o README update

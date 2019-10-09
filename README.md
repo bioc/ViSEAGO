@@ -21,7 +21,7 @@ remotes::install_gitlab(
 
 ## install package from gitLab alternative
     # clone package (from prompt)
-    git clone https://forgemia.inra.fr/aurelien.brionne/GenomeFeatures.git
+    git clone https://forgemia.inra.fr/umr-boa/viseago.git
 
     # build package (from R console) 
     devtools::build("ViSEAGO")
