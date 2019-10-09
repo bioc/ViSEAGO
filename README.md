@@ -9,8 +9,25 @@ The main objective of ViSEAGO package is to carry out a data mining of biologica
 ## Installation
 
 ```r
-# load ViSEAGO package from Bioconductor
+# install package from Bioconductor
 BiocManager::install("ViSEAGO")
+
+## install package from gitLab
+remotes::install_gitlab(
+    "aurelien.brionne/ViSEAGO",
+    host = "forgemia.inra.fr",
+    build_opts = c("--no-resave-data", "--no-manual")
+)
+
+## install package from gitLab alternative
+    # clone package (from prompt)
+    git clone https://forgemia.inra.fr/aurelien.brionne/GenomeFeatures.git
+
+    # build package (from R console) 
+    devtools::build("ViSEAGO")
+
+    # install package (from R console)
+    install.packages("ViSEAGO_0.99.34.tar.gz", repos = NULL, type = "source")
 ```
 
 ## Citation

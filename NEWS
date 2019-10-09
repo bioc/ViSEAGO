@@ -9,3 +9,8 @@ CHANGES IN VERSION 0.99.32
 CHANGES IN VERSION 0.99.33
 ------------------------
  o merge_enrich_terms exemple update.
+
+CHANGES IN VERSION 0.99.34
+------------------------
+ o README update (download from Bioconductor and forgeMIA gitlab)
+ o add require("topGO") in create_topGOdata method

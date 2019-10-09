@@ -137,7 +137,7 @@ setMethod(
         }
 
         # load topGO
-        requireNamespace("topGO")
+        require("topGO")
 
         # create GOdata
         new(
