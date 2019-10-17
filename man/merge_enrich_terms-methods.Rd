@@ -45,30 +45,30 @@ background_L<-scan(
 
 ###################
 # load Differentialy Expressed (DE) gene identifiants from files
-L_pregnantvslactateDE<-scan(
+PregnantvslactateDE<-scan(
     system.file(
         "extdata/data/input",
-        "L_pregnantvslactateDE.txt",
+        "pregnantvslactateDE.txt",
         package = "ViSEAGO"
     ),
     quiet=TRUE,
     what=""
 )
 
-L_virginvslactateDE<-scan(
+VirginvslactateDE<-scan(
     system.file(
         "extdata/data/input",
-        "L_virginvslactateDE.txt",
+        "virginvslactateDE.txt",
         package = "ViSEAGO"
     ),
     quiet=TRUE,
     what=""
 )
 
-L_virginvspregnantDE<-scan(
+VirginvspregnantDE<-scan(
     system.file(
         "extdata/data/input",
-        "L_virginvspregnantDE.txt",
+        "virginvspregnantDE.txt",
         package="ViSEAGO"
     ),
     quiet=TRUE,
@@ -77,24 +77,24 @@ L_virginvspregnantDE<-scan(
 \dontrun{
 ###################
 # create topGOdata for BP for each list of DE genes
-BP_L_pregnantvslactate<-ViSEAGO::create_topGOdata(
-    geneSel=L_pregnantvslactateDE,
+BP_Pregnantvslactate<-ViSEAGO::create_topGOdata(
+    geneSel=PregnantvslactateDE,
     allGenes=background_L,
     gene2GO=myGENE2GO,
     ont="BP",
     nodeSize=5
 )
 
-BP_L_virginvslactate<-ViSEAGO::create_topGOdata(
-    geneSel=L_virginvslactateDE,
+BP_Virginvslactate<-ViSEAGO::create_topGOdata(
+    geneSel=VirginvslactateDE,
     allGenes=background_L,
     gene2GO=myGENE2GO,
     ont="BP",
     nodeSize=5
 )
 
-BP_L_virginvspregnant<-ViSEAGO::create_topGOdata(
-    geneSel=L_virginvspregnantDE,
+BP_Virginvspregnant<-ViSEAGO::create_topGOdata(
+    geneSel=VirginvspregnantDE,
     allGenes=background_L,
     gene2GO=myGENE2GO,
     ont="BP",
@@ -103,19 +103,19 @@ BP_L_virginvspregnant<-ViSEAGO::create_topGOdata(
 
 ###################
 # perform TopGO tests
-elim_BP_L_pregnantvslactate<-topGO::runTest(
+elim_BP_Pregnantvslactate<-topGO::runTest(
     BP_L_pregnantvslactate,
     algorithm ="elim",
     statistic = "fisher"
 )
 
-elim_BP_L_virginvslactate<-topGO::runTest(
+elim_BP_Virginvslactate<-topGO::runTest(
     BP_L_virginvslactate,
     algorithm ="elim",
     statistic = "fisher"
 )
 
-elim_BP_L_virginvspregnant<-topGO::runTest(
+elim_BP_Virginvspregnant<-topGO::runTest(
     BP_L_virginvspregnant,
     algorithm ="elim",
     statistic = "fisher"
@@ -125,9 +125,9 @@ elim_BP_L_virginvspregnant<-topGO::runTest(
 # merge topGO results
 BP_sResults<-ViSEAGO::merge_enrich_terms(
     Input=list(
-        L_pregnantvslactate=c("BP_L_pregnantvslactate","elim_BP_L_pregnantvslactate"),
-        L_virginvslactate=c("BP_L_virginvslactate","elim_BP_L_virginvslactate"),
-        L_virginvspregnant=c("BP_L_virginvspregnant","elim_BP_L_virginvspregnant")
+        Pregnantvslactate=c("BP_Pregnantvslactate","elim_BP_Pregnantvslactate"),
+        Virginvslactate=c("BP_Virginvslactate","elim_BP_Virginvslactate"),
+        Virginvspregnant=c("BP_Virginvspregnant","elim_BP_Virginvspregnant")
     )
 )
 }

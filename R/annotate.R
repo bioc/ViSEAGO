@@ -107,7 +107,7 @@
 #' # display organisms supported by NCBI EntrezGene orthologs pipeline
 #' EntrezGene<-ViSEAGO::EntrezGene2GO()
 #' ViSEAGO::annotate(
-#'     id=NULL,
+#'     id="NULL",
 #'     object=EntrezGene,
 #'     ortholog=TRUE
 #' )
@@ -165,7 +165,7 @@ setMethod(
             )
 
             # select the target species and ortholog
-            if(is.null(id)){
+            if(id=="NULL"){
 
                 # ordering by Scientific name
                 setorderv(

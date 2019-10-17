@@ -108,7 +108,7 @@ myGENE2GO<-ViSEAGO::annotate(
 # display organisms supported by NCBI EntrezGene orthologs pipeline
 EntrezGene<-ViSEAGO::EntrezGene2GO()
 ViSEAGO::annotate(
-    id=NULL,
+    id="NULL",
     object=EntrezGene,
     ortholog=TRUE
 )

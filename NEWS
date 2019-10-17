@@ -18,3 +18,7 @@ CHANGES IN VERSION 0.99.34
 CHANGES IN VERSION 0.99.35
 ------------------------
  o README update
+
+CHANGES IN VERSION 0.99.36
+------------------------
+ o annotate id argument signature with "NULL"
