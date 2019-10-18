@@ -3,16 +3,19 @@
 \docType{methods}
 \name{merge_enrich_terms}
 \alias{merge_enrich_terms}
-\alias{merge_enrich_terms,list-method}
+\alias{merge_enrich_terms,list,environment-method}
 \title{Merge enriched GO terms.}
 \usage{
-merge_enrich_terms(Input)
+merge_enrich_terms(Input, envir = .GlobalEnv)
 
-\S4method{merge_enrich_terms}{list}(Input)
+\S4method{merge_enrich_terms}{list,environment}(Input,
+  envir = .GlobalEnv)
 }
 \arguments{
 \item{Input}{a list containing named elements. Each element must contain the name of \code{\link[topGO]{topGOdata-class}}
 object created by \code{\link{create_topGOdata}} method and the associated  \code{\link[topGO]{topGOresult-class}} object(s).}
+
+\item{envir}{objects environment (default to .GlobalEnv).}
 }
 \value{
 an \code{\link{enrich_GO_terms-class}} object.

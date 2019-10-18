@@ -9,6 +9,7 @@
 #' @family GO_terms
 #' @param Input a list containing named elements. Each element must contain the name of \code{\link[topGO]{topGOdata-class}}
 #' object created by \code{\link{create_topGOdata}} method and the associated  \code{\link[topGO]{topGOresult-class}} object(s).
+#' @param envir objects environment (default to .GlobalEnv).
 #' @details This method extracts for each result of GO enrichment test (\code{\link[topGO]{topGOresult-class}} object) and
 #' corresponding GO annotations (\code{\link[topGO]{topGOdata-class}} object):
 #' informations about GO term (identifiant, name, and description),
@@ -131,7 +132,10 @@
 #' @exportMethod merge_enrich_terms
 setGeneric(
     name="merge_enrich_terms",
-    def=function(Input){
+    def=function(
+        Input,
+        envir=.GlobalEnv
+    ){
         standardGeneric("merge_enrich_terms")
     }
 )
@@ -139,9 +143,12 @@ setGeneric(
 #' @rdname merge_enrich_terms-methods
 #' @aliases merge_enrich_terms
 setMethod(
-    "merge_enrich_terms"
-    ,signature="list",
-    definition=function(Input){
+    "merge_enrich_terms",
+    signature(
+        Input="list",
+        envir="environment"
+    ),
+    definition=function(Input,envir){
 
         ## check ontology
 
@@ -154,7 +161,7 @@ setMethod(
                     x=Input[[x]]
 
                     # check existance
-                    values<-ls(envir=.GlobalEnv)
+                    values<-ls(envir=envir)
 
                     # check if available
                     available<-x%in%values
@@ -165,7 +172,7 @@ setMethod(
                     }
 
                     # get objects
-                    x=mget(x,envir=.GlobalEnv)
+                    x=mget(x,envir=envir)
 
                     # objects type
                     obj.type=vapply(x,class,"")
@@ -208,7 +215,7 @@ setMethod(
             x_names=x
 
             # get objects
-             x=mget(x,envir=.GlobalEnv)
+             x=mget(x,envir=envir)
 
             # objects type
             obj.type=vapply(x,class,"")
@@ -296,7 +303,7 @@ setMethod(
         GOs<-lapply(seq_along(Input),function(x){
 
             # objects type
-            Data=mget(Input[[x]],envir=.GlobalEnv)
+            Data=mget(Input[[x]],envir=envir)
 
             ## checking step
 
@@ -347,7 +354,7 @@ setMethod(
         allgenes<-lapply(seq_along(Input),function(x){
 
             # objects type
-            Data=mget(Input[[x]],envir=.GlobalEnv)
+            Data=mget(Input[[x]],envir=envir)
 
             # objects type
             obj.type=vapply(Data,class,"")
@@ -383,7 +390,7 @@ setMethod(
             ## extract Data
 
             # objects type
-            Data=mget(Input[[x]],envir=.GlobalEnv)
+            Data=mget(Input[[x]],envir=envir)
 
             # objects type
             obj.type=vapply(Data,class,"")

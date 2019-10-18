@@ -22,3 +22,7 @@ CHANGES IN VERSION 0.99.35
 CHANGES IN VERSION 0.99.36
 ------------------------
  o annotate id argument signature with "NULL"
+
+CHANGES IN VERSION 0.99.37
+------------------------
+ o add environment option for merge_enrich_terms
