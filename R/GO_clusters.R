@@ -164,13 +164,13 @@ setMethod(
                 "\n                              number of clusters: ",
                 length(
                     unique(
-                        slot(slot(object,"enrich_GOs"),"data")[,"GO.cluster",with=FALSE]
+                        unlist(slot(slot(object,"enrich_GOs"),"data")[,"GO.cluster",with=FALSE])
                     )
                 ),
                 "\n                              clusters min size: ",
                 round(
                     min(
-                        slot(slot(object,"enrich_GOs"),"data")[,"GO.cluster",with=FALSE],
+                        table(slot(slot(object,"enrich_GOs"),"data")[,"GO.cluster",with=FALSE]),
                         na.rm=TRUE
                     ),
                     digits=0
@@ -178,7 +178,7 @@ setMethod(
                 "\n                              clusters mean size: ",
                 round(
                     mean(
-                        unlist(slot(slot(object,"enrich_GOs"),"data")[,"GO.cluster",with=FALSE]),
+                        table(slot(slot(object,"enrich_GOs"),"data")[,"GO.cluster",with=FALSE]),
                         na.rm=TRUE
                     ),
                     digits=0
@@ -186,7 +186,7 @@ setMethod(
                 "\n                              clusters max size: ",
                 round(
                     max(
-                        slot(slot(object,"enrich_GOs"),"data")[,"GO.cluster",with=FALSE],
+                        table(slot(slot(object,"enrich_GOs"),"data")[,"GO.cluster",with=FALSE]),
                         na.rm=TRUE
                     ),
                     digits=0

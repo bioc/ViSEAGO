@@ -26,3 +26,7 @@ CHANGES IN VERSION 0.99.36
 CHANGES IN VERSION 0.99.37
 ------------------------
  o add environment option for merge_enrich_terms
+
+CHANGES IN VERSION 0.99.38
+------------------------
+ o show method for GO_cluster print bug correction
