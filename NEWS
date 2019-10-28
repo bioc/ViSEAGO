@@ -42,3 +42,7 @@ CHANGES IN VERSION 0.99.40
 CHANGES IN VERSION 0.99.41
 ------------------------
  o keep require("topGO") in create_topGOdata method
+
+CHANGES IN VERSION 0.99.42
+------------------------
+ o remove environment signature in merge_enrich_terms

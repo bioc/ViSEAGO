@@ -145,8 +145,7 @@ setGeneric(
 setMethod(
     "merge_enrich_terms",
     signature(
-        Input="list",
-        envir="environment"
+        Input="list"
     ),
     definition=function(Input,envir){
 
