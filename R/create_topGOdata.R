@@ -137,7 +137,7 @@ setMethod(
         }
 
         # load topGO
-        if(!isNamespaceLoaded('topGO')){attachNamespace("topGO")}
+        require("topGO")
 
         # create GOdata
         new(

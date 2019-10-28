@@ -38,3 +38,7 @@ CHANGES IN VERSION 0.99.39
 CHANGES IN VERSION 0.99.40
 ------------------------
  o add attachNamespace("topGO") instead require("topGO") in create_topGOdata method for prevent build check warnings
+
+CHANGES IN VERSION 0.99.41
+------------------------
+ o keep require("topGO") in create_topGOdata method
