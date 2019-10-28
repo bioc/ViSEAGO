@@ -369,7 +369,7 @@ setMethod(
         if(length(Input)>1){
             same_genes_background=all(
                 vapply(2:length(allgenes),function(x){
-                    identical(allgenes[[1]],allgenes[[x]])
+                    identical(sort(allgenes[[1]]),sort(allgenes[[x]]))
                 },TRUE)
             )
         }else{

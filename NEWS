@@ -30,3 +30,7 @@ CHANGES IN VERSION 0.99.37
 CHANGES IN VERSION 0.99.38
 ------------------------
  o show method for GO_cluster print bug correction
+
+CHANGES IN VERSION 0.99.39
+------------------------
+ o check gene background in merge_enrich_terms upgrade 
