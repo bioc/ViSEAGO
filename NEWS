@@ -33,4 +33,8 @@ CHANGES IN VERSION 0.99.38
 
 CHANGES IN VERSION 0.99.39
 ------------------------
- o check gene background in merge_enrich_terms upgrade 
+ o check gene background in merge_enrich_terms upgrade
+
+CHANGES IN VERSION 0.99.40
+------------------------
+ o add attachNamespace("topGO") instead require("topGO") in create_topGOdata method for prevent build check warnings
