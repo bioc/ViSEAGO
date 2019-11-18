@@ -16,16 +16,16 @@ a  \code{\link{genomic_ressource-class}} object required by \code{\link{annotate
 Store the available species and current GO annotations from a custom table file
 }
 \details{
-This function load a custom GO annotation database table with columns:
+This function load a custom GO annotation database table that must contain columns:
 \describe{
      \item{taxid}{custom taxonomic identifiants}
      \item{gene_id}{custom gene identifiants}
+     \item{gene_symbol}{custom gene symbols}
      \item{GOID}{Known GO identifiants (see \code{select(GO.db,columns=columns(GO.db),keys=keys(GO.db))}}
      \item{evidence}{Known GO \href{http://geneontology.org/page/guide-go-evidence-codes}{evidence codes}}
 }
 }
 \examples{
-###################
 # Download custom GO annotations
 Custom<-ViSEAGO::Custom2GO(
     system.file(
@@ -38,11 +38,14 @@ Custom<-ViSEAGO::Custom2GO(
 Matt Dowle and Arun Srinivasan (2017). data.table: Extension of `data.frame`. R package version 1.10.4. https://CRAN.R-project.org/package=data.table.
 }
 \seealso{
-Other genomic_ressource: \code{\link{Bioconductor2GO}},
-  \code{\link{Ensembl2GO}}, \code{\link{EntrezGene2GO}},
-  \code{\link{Uniprot2GO}}, \code{\link{annotate}},
-  \code{\link{available_organisms}},
-  \code{\link{genomic_ressource-class}},
-  \code{\link{taxonomy}}
+Other genomic_ressource: 
+\code{\link{Bioconductor2GO}()},
+\code{\link{Ensembl2GO}()},
+\code{\link{EntrezGene2GO}()},
+\code{\link{Uniprot2GO}()},
+\code{\link{annotate}()},
+\code{\link{available_organisms}()},
+\code{\link{genomic_ressource-class}},
+\code{\link{taxonomy}()}
 }
 \concept{genomic_ressource}

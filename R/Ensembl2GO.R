@@ -24,7 +24,6 @@
 #' Matt Dowle and Arun Srinivasan (2017). data.table: Extension of data.frame. R package version 1.10.4. https://CRAN.R-project.org/package=data.table.
 #' @include genomic_ressource.R
 #' @examples
-#' ###################
 #' # host address to use for Ensembl vertebrate/Plants/Protists/Metazoa/Fungi
 #' # host="www.ensembl.org" # vertebrate
 #' # host="plants.ensembl.org"
@@ -33,12 +32,10 @@
 #' # host="fungi.ensembl.org"
 #' # biomart is not available for bacteria
 #'
-#' ###################
 #' # check the Ensembl available biomart (if not known)
 #' # for Animals (host="www.ensembl.org", the default)
 #'  biomaRt::listEnsembl()
 #'
-#' ###################
 #' # List Ensembl available organisms
 #' Ensembl<-ViSEAGO::Ensembl2GO(
 #'  biomart="ensembl",
@@ -48,19 +45,15 @@
 #' @export
 Ensembl2GO=function(biomart="ensembl",host="www.ensembl.org",version=NULL){
 
-    ###################
     # check the ensembl genes releases
     Ensembl<-listEnsembl(host=host,version=version)
 
-    ###################
     # check the ensembl host versus mart name
     match.arg(biomart,Ensembl$biomart)
 
-    ###################
     # connect to Ensembl
     mart<-useEnsembl(biomart,host=host,version=version)
 
-    ###################
     # return data in genomic_ressource class
     new(
         "genomic_ressource",

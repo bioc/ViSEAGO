@@ -19,7 +19,6 @@
 #' @include genomic_ressource.R
 #' @examples
 #' \dontrun{
-#' ###################
 #' # Download EntrezGene available organisms GO annotations
 #' EntrezGene<-ViSEAGO::EntrezGene2GO()
 #' }
@@ -71,7 +70,6 @@ EntrezGene2GO=function(){
     # extract taxonomique informations
     taxon<-taxonomy(gene2go$taxid)
 
-    ###################
     # return data genomic_ressource class object
     new(
         "genomic_ressource",

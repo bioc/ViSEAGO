@@ -13,25 +13,21 @@
 #' A static png image could be printed by setting \code{file} argument.
 #' @return display or print heatmap.
 #' @examples
-#' ###################
 #' # load data example
 #' data(
 #'     myGOs,
 #'     package="ViSEAGO"
 #' )
 #' \dontrun{
-#' ###################
 #' # compute GO terms Semantic Similarity distances
 #' myGOs<-ViSEAGO::compute_SS_distances(
 #'     myGOs,
 #'     distance="Wang"
 #' )
 #'
-#' ###################
 #' # build MDS plot for a GO_SS-class distance object
 #' ViSEAGO::MDSplot(myGOs)
 #'
-#' ##################
 #' # GOtermsHeatmap with default parameters
 #' Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 #'     myGOs,
@@ -55,14 +51,12 @@
 #'     samples.tree=NULL
 #' )
 #'
-#' ##################
 #' # Display GO terms heatmap
 #' ViSEAGO::show_heatmap(
 #'     Wang_clusters_wardD2,
 #'     "GOterms"
 #' )
 #'
-#' ##################
 #' # Print GO terms heatmap
 #' ViSEAGO::show_heatmap(
 #'     Wang_clusters_wardD2,
@@ -70,14 +64,12 @@
 #'     "GOterms_heatmap.png"
 #' )
 #'
-#' ###################
 #' # compute clusters of GO terms Semantic Similarity distances
 #' Wang_clusters_wardD2<-ViSEAGO::compute_SS_distances(
 #'     Wang_clusters_wardD2,
 #'     distance="BMA"
 #' )
 #'
-#' ###################
 #' # GOclusters heatmap
 #' Wang_clusters_wardD2<-ViSEAGO::GOclusters_heatmap(
 #'     Wang_clusters_wardD2,
@@ -88,14 +80,12 @@
 #'     )
 #' )
 #'
-#' ##################
 #' # Display GO clusters heatmap
 #' ViSEAGO::show_heatmap(
 #'     Wang_clusters_wardD2,
 #'     "GOclusters"
 #' )
 #'
-#' ##################
 #' # Print GO clusters heatmap
 #' ViSEAGO::show_heatmap(
 #'     Wang_clusters_wardD2,

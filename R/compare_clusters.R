@@ -15,7 +15,6 @@
 #'  plotly: Create Interactive Web Graphics via 'plotly.js'. R package version 4.6.0. https://CRAN.R-project.org/package=plotly
 #' @include GO_clusters.R
 #' @examples
-#' ###################
 #' # load example object
 #' data(
 #'     myGOs,
@@ -23,14 +22,12 @@
 #' )
 #'
 #' \dontrun{
-#' ###################
 #' # compute Semantic Similarity (SS)
 #' myGOs<-ViSEAGO::compute_SS_distances(
 #'     myGOs,
 #'     distance=c("Resnik","Lin","Rel","Jiang","Wang")
 #' )
 #'
-#' ##################
 #' # Resnik distance GO terms heatmap
 #' Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 #'     myGOs,
@@ -51,7 +48,6 @@
 #'     samples.tree=NULL
 #' )
 #'
-#' ##################
 #' # Lin distance GO terms heatmap
 #' Lin_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 #'     myGOs,
@@ -72,7 +68,6 @@
 #'     samples.tree=NULL
 #' )
 #'
-#' ##################
 #' # Resnik distance GO terms heatmap
 #' Rel_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 #'     myGOs,
@@ -93,7 +88,6 @@
 #'     samples.tree=NULL
 #' )
 #'
-#' ##################
 #' # Resnik distance GO terms heatmap
 #' Jiang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 #'     myGOs,
@@ -113,7 +107,7 @@
 #'     ),
 #'     samples.tree=NULL
 #' )
-#' ##################
+#'
 #' # Resnik distance GO terms heatmap
 #' Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 #'     myGOs,
@@ -135,7 +129,6 @@
 #' )
 #' }
 #'
-#' ###################
 #' # clusters to compare
 #' clusters<-list(
 #'     Resnik="Resnik_clusters_wardD2",
@@ -146,7 +139,6 @@
 #' )
 #'
 #' \dontrun{
-#' ###################
 #' # clusters content comparisons
 #' clusters_comp<-ViSEAGO::compare_clusters(clusters)
 #' }

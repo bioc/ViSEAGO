@@ -1,14 +1,15 @@
-taxid	gene_id	GOID	evidence
-myspecies1	geneA	GO:0000001	IEA
-myspecies1	geneA	GO:0000002	IEA
-myspecies1	geneA	GO:0000003	IEA
-myspecies1	geneA	GO:0000006	IEA
-myspecies1	geneB	GO:0000006	IEA
-myspecies1	geneA	GO:0000007	IEA
-myspecies1	geneA	GO:0000009	IEA
-myspecies2	geneB	GO:0000006	IEA
-myspecies2	geneB	GO:0000007	IEA
-myspecies2	geneB	GO:0000010	IEA
-myspecies2	geneB	GO:0000011	IEA
-myspecies2	geneB	GO:0000012	IEA
-myspecies2	geneC	GO:0000014	IEA
+taxid	gene_id	gene_symbol	GOID	evidence
+myspecies1	idA	geneA	GO:0000001	IEA
+myspecies1	idA	geneA	GO:0000002	IEA
+myspecies1	idA	geneA	GO:0000003	IEA
+myspecies1	idA	geneA	GO:0000006	IEA
+myspecies1	idA	geneB	GO:0000006	IEA
+myspecies1	idA	geneA	GO:0000007	IEA
+myspecies1	idA	geneA	GO:0000009	IEA
+myspecies2	idB	geneB	GO:0000006	IEA
+myspecies2	idB	geneB	GO:0000007	IEA
+myspecies2	idB	geneB	GO:0000010	IEA
+myspecies2	idB	geneB	GO:0000011	IEA
+myspecies2	idB	geneB	GO:0000012	IEA
+myspecies2	idC	geneC	GO:0000014	IEA
+

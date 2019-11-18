@@ -19,28 +19,22 @@ This function build the ViSEAGO package diagram available displayed in the vigne
 This function use \pkg{DiagrammeR} package \code{\link[DiagrammeR]{grViz}} to display the ViSEAGO methods diagram with colored or not subgraphs rectangles.
 }
 \examples{
-###################
 # print diagram without focus
 ViSEAGO::pkgdiagram(x=c("white","white","white","white","white"))
 
-###################
 # print diagram with focus one the gene list
 ViSEAGO::pkgdiagram(x=c("black","white","white","white","white"))
 
-###################
 # print diagram with a focus on the annotation step
 ViSEAGO::pkgdiagram(x=c("white","black","white","white","white"))
 
-###################
 # print diagram with a focus on the enrichment step
 ViSEAGO::pkgdiagram(x=c("white","white","black","white","white"))
 
-###################
 # print diagram with a focus on the Semantic Similarity step
 ViSEAGO::pkgdiagram(x=c("white","white","white","black","white"))
 
-###################
- # print diagram with focus on the visualization step
+# print diagram with focus on the visualization step
 ViSEAGO::pkgdiagram(x=c("white","white","white","white","black"))
 }
 \references{

@@ -17,20 +17,25 @@ This internal function use build all sets combinations intersections needed for 
 }
 \examples{
 \dontrun{
-###################
 # build all intersections combinations
 ViSEAGO::overLapper(setlist)
 }
 }
 \seealso{
-Other enrich_GO_terms: \code{\link{Upset}},
-  \code{\link{enrich_GO_terms-class}},
-  \code{\link{show_heatmap}}, \code{\link{show_table}}
+Other enrich_GO_terms: 
+\code{\link{Upset}()},
+\code{\link{enrich_GO_terms-class}},
+\code{\link{show_heatmap}()},
+\code{\link{show_table}()}
 
-Other visualization: \code{\link{GOclusters_heatmap}},
-  \code{\link{GOcount}}, \code{\link{GOterms_heatmap}},
-  \code{\link{Upset}}, \code{\link{available_organisms}},
-  \code{\link{show_heatmap}}, \code{\link{show_table}}
+Other visualization: 
+\code{\link{GOclusters_heatmap}()},
+\code{\link{GOcount}()},
+\code{\link{GOterms_heatmap}()},
+\code{\link{Upset}()},
+\code{\link{available_organisms}()},
+\code{\link{show_heatmap}()},
+\code{\link{show_table}()}
 }
 \concept{enrich_GO_terms}
 \concept{visualization}

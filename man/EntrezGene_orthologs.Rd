@@ -18,7 +18,6 @@ Internal function used by \code{\link{annotate}} in order to download orthologs_
 }
 \examples{
 \dontrun{
-###################
 # Organism taxid, Scientific name and common name
 ViSEAGO::EntrezGene_orthologs()
 }

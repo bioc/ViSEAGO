@@ -17,17 +17,19 @@ This internal function use \href{https://www.ncbi.nlm.nih.gov/books/NBK25500/}{E
  \code{\link[data.table]{data.table}} Organism Scientific name and common name, form a \code{\link[base]{vector}} of taxid.
 }
 \examples{
-###################
 # Organism Scientific and common name from taxid
 Data<-ViSEAGO::taxonomy("9031")
 }
 \seealso{
-Other genomic_ressource: \code{\link{Bioconductor2GO}},
-  \code{\link{Custom2GO}}, \code{\link{Ensembl2GO}},
-  \code{\link{EntrezGene2GO}}, \code{\link{Uniprot2GO}},
-  \code{\link{annotate}},
-  \code{\link{available_organisms}},
-  \code{\link{genomic_ressource-class}}
+Other genomic_ressource: 
+\code{\link{Bioconductor2GO}()},
+\code{\link{Custom2GO}()},
+\code{\link{Ensembl2GO}()},
+\code{\link{EntrezGene2GO}()},
+\code{\link{Uniprot2GO}()},
+\code{\link{annotate}()},
+\code{\link{available_organisms}()},
+\code{\link{genomic_ressource-class}}
 }
 \concept{genomic_ressource}
 \keyword{internal}

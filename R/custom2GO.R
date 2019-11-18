@@ -3,10 +3,11 @@
 #' @importFrom data.table data.table fread rbindlist :=
 #' @family genomic_ressource
 #' @param file custom GO annotation file
-#' @details This function load a custom GO annotation database table with columns:
+#' @details This function load a custom GO annotation database table that must contain columns:
 #' \describe{
 #'      \item{taxid}{custom taxonomic identifiants}
 #'      \item{gene_id}{custom gene identifiants}
+#'      \item{gene_symbol}{custom gene symbols}
 #'      \item{GOID}{Known GO identifiants (see \code{select(GO.db,columns=columns(GO.db),keys=keys(GO.db))}}
 #'      \item{evidence}{Known GO \href{http://geneontology.org/page/guide-go-evidence-codes}{evidence codes}}
 #' }
@@ -15,7 +16,6 @@
 #' Matt Dowle and Arun Srinivasan (2017). data.table: Extension of `data.frame`. R package version 1.10.4. https://CRAN.R-project.org/package=data.table.
 #' @include genomic_ressource.R
 #' @examples
-#' ###################
 #' # Download custom GO annotations
 #' Custom<-ViSEAGO::Custom2GO(
 #'     system.file(
@@ -30,8 +30,8 @@ Custom2GO=function(file){
     gene2go<-fread(file)
 
     # check columns name
-    if(!all(names(gene2go)%in%c("taxid","gene_id","GOID","evidence"))){
-        stop('custom annotation file columns names required: "taxid","gene_id","GOID","evidence"')
+    if(!all(c("taxid","gene_id","gene_symbol","GOID","evidence")%in%names(gene2go))){
+        stop('custom annotation file columns names required: "taxid","gene_id","gene_symbol","GOID","evidence"')
     }
 
     # convert columns in character
@@ -61,7 +61,7 @@ Custom2GO=function(file){
     new(
         "genomic_ressource",
         db="Custom",
-        stamp=as.character(Sys.time()),
+        stamp=file,
         data=gene2go,
         organisms=data.table(taxid=unique(gene2go$taxid))
     )

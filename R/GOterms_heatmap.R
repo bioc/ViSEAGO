@@ -17,6 +17,7 @@
 #' @param myGOs a \code{\link{GO_SS-class}} object from \code{\link{compute_SS_distances}}.
 #' @param showIC \code{logical} (default to TRUE) to display the GO terms Information Content (IC) side bar.
 #' @param showGOlabels \code{logical} (default to TRUE) to display the GO terms ticks on y axis.
+#' @param heatmap_colors pvalues color range with white to Sangria collors by default (c("#ffffff","#99000D")).
 #' @param GO.tree a named \code{list} of parameters to build and cut the GO terms \code{dendrogram}.
 #'  \describe{
 #'      \item{tree (a named \code{list} with:)}{
@@ -91,21 +92,18 @@
 #' H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2009.
 #' @include GO_clusters.R
 #' @examples
-#' ###################
 #' # load data example
 #' utils::data(
 #'     myGOs,
 #'     package="ViSEAGO"
 #' )
 #' \dontrun{
-#' ###################
 #' # compute GO terms Semantic Similarity distances
 #' myGOs<-ViSEAGO::compute_SS_distances(
 #'    myGOs,
 #'    distance="Wang"
 #' )
 #'
-#' ##################
 #' # GOtermsHeatmap with default parameters
 #' Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 #'     myGOs,
@@ -138,6 +136,7 @@ setGeneric(
         myGOs,
         showIC=TRUE,
         showGOlabels=TRUE,
+        heatmap_colors=c("#ffffff","#99000D"),
         GO.tree=list(
             tree=list(
                 distance="Wang",
@@ -166,7 +165,7 @@ setMethod(
     signature(
         myGOs="GO_SS"
     ),
-    definition=function(myGOs,showIC,showGOlabels,GO.tree,samples.tree){
+    definition=function(myGOs,showIC,showGOlabels,heatmap_colors,GO.tree,samples.tree){
 
         ## check entry
         if(length(slot(myGOs,"terms_dist"))==0){
@@ -351,6 +350,14 @@ setMethod(
 
         # transpose for GO in rows and samples in columns  in the levelplot
         x<-t(mat)
+
+        # extract genes frequency columns
+        genes_frequency<-as.matrix(
+            sResults[,grep("genes_frequency",names(sResults)),with=FALSE]
+        )
+
+        # add row_names
+        row.names(genes_frequency)<-sResults[,GO.ID]
 
         # Add IC in panes
         if(showIC==TRUE){
@@ -804,9 +811,9 @@ setMethod(
                 # if same gene background
                     scale_fill_gradient2(
                     name="-log10pvalue",
-                    low="white",
-                    mid="white",
-                    high ="#99000D",
+                    low= heatmap_colors[1],
+                    mid= heatmap_colors[1],
+                    high =heatmap_colors[2],
                     midpoint = 1.3
                 )
             }else{
@@ -814,9 +821,9 @@ setMethod(
                 # if not same gene background
                 scale_fill_gradient2(
                     name="-log10pvalue",
-                    low="white",
-                    mid="white",
-                    high ="#99000D",
+                    low=heatmap_colors[1],
+                    mid=heatmap_colors[1],
+                    high =heatmap_colors[2],
                     midpoint =0
                 )
             },
@@ -835,9 +842,14 @@ setMethod(
         # for each column
         text<-hm$x$data[[col]]$text
 
+        # ordering gene_frequency table according text
+        genes_frequency<-genes_frequency[rev(row.ord),col.ord]
+        
         # for each column
         for (i in seq_len(ncol(text))){
             text[,i]<-gsub("(<br>|^)row: ","",text[,i])
+            text[,i]<-gsub("<br>value:","<br>-log10 pvalue:",text[,i])
+            text[,i]<-paste(text[,i],"<br>gene frequency: ",genes_frequency[,i],sep="")
         }
 
         # add text
@@ -900,7 +912,7 @@ setMethod(
             font=list(size=14),
 
             # set margin
-            margin=list(l =300,r=0, b =150,t=50)
+            margin=list(l=300,r=0,b=150,t=50)
         )
 
         # modify layout

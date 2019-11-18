@@ -24,9 +24,11 @@ This class is invoked by \code{\link{annotate}} method in order to store GO anno
 }}
 
 \seealso{
-Other GO_terms: \code{\link{GOcount}},
-  \code{\link{GOterms_heatmap}}, \code{\link{annotate}},
-  \code{\link{create_topGOdata}},
-  \code{\link{merge_enrich_terms}}
+Other GO_terms: 
+\code{\link{GOcount}()},
+\code{\link{GOterms_heatmap}()},
+\code{\link{annotate}()},
+\code{\link{create_topGOdata}()},
+\code{\link{merge_enrich_terms}()}
 }
 \concept{GO_terms}

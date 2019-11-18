@@ -26,7 +26,6 @@
 #' Herve Pages, Marc Carlson, Seth Falcon and Nianhua Li (2017). AnnotationDbi: Annotation Database Interface. R package version 1.38.0.
 #' @include enrich_GO_terms.R
 #' @examples
-#' ###################
 #' # load genes identifiants (GeneID,ENS...) universe/background (Expressed genes)
 #' background_L<-scan(
 #'     system.file(
@@ -38,7 +37,6 @@
 #'     what=""
 #' )
 #'
-#' ###################
 #' # load Differentialy Expressed (DE) gene identifiants from files
 #' PregnantvslactateDE<-scan(
 #'     system.file(
@@ -70,7 +68,6 @@
 #'     what=""
 #' )
 #' \dontrun{
-#' ###################
 #' # create topGOdata for BP for each list of DE genes
 #' BP_Pregnantvslactate<-ViSEAGO::create_topGOdata(
 #'     geneSel=PregnantvslactateDE,
@@ -96,7 +93,6 @@
 #'     nodeSize=5
 #' )
 #'
-#' ###################
 #' # perform TopGO tests
 #' elim_BP_Pregnantvslactate<-topGO::runTest(
 #'     BP_L_pregnantvslactate,
@@ -116,7 +112,6 @@
 #'     statistic = "fisher"
 #' )
 #'
-#' ###################
 #' # merge topGO results
 #' BP_sResults<-ViSEAGO::merge_enrich_terms(
 #'     Input=list(
@@ -526,7 +521,7 @@ setMethod(
                     Data<-na.omit(unique(unique(...)))
 
                     # batch size
-                    wpos=pos(Data,by=500)
+                    wpos=pos(Data,by=400)
 
                     # core address
                     core="https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?version=2.0&db="
@@ -644,6 +639,25 @@ setMethod(
                     # add empty name columns
                     genes[,Name:=NA]
                 }
+            }
+
+            # if db  match to Custom
+            if(db[1]=="Custom"){
+
+                # load GeneID and symbols
+                annot<-fread(
+                    db[3],
+                    select=c("gene_id","gene_symbol")
+                )
+
+                # mereg gene_symbol
+                genes<-merge(
+                    genes,
+                    annot,
+                    by.x="Significant_genes",
+                    by.y="gene_id",
+                    all.x=TRUE
+                )
             }
 
             # load GeneID and symbols

@@ -6,7 +6,6 @@
 #'  \code{\link[data.table]{data.table}} Organism Scientific name and common name, form a \code{\link[base]{vector}} of taxid.
 #' @return a \code{\link[data.table]{data.table}}.
 #' @examples
-#' ###################
 #' # Organism Scientific and common name from taxid
 #' Data<-ViSEAGO::taxonomy("9031")
 #' @keywords internal

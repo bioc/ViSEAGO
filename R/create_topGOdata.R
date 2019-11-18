@@ -21,7 +21,6 @@
 #' decorrelating GO graph structure. Bioinformatics 2006; 22:1600-1607.
 #' @include gene2GO.R
 #' @examples
-#'  ###################
 #'  # load genes identifiants (GeneID,ENS...) background (Expressed genes)
 #'  background<-scan(
 #'   system.file(
@@ -33,7 +32,6 @@
 #'   what=""
 #'  )
 #'
-#'  ###################
 #'  # load Differentialy Expressed (DE) gene identifiants from files
 #'  pregnantvslactateDE<-scan(
 #'   system.file(
@@ -44,8 +42,8 @@
 #'   quiet=TRUE,
 #'   what=""
 #'  )
+#'
 #' \dontrun{
-#' ###################
 #' # create topGOdata for BP for each list of DE genes
 #' BP_L_pregnantvslactate<-ViSEAGO::create_topGOdata(
 #'  geneSel=pregnantvslactateDE,

@@ -17,14 +17,12 @@
 #' plotly: Create InteractiveWeb Graphics via 'plotly.js'. R package version 4.6.0. https://CRAN.R-project.org/package=plotly.
 #' @include enrich_GO_terms.R
 #' @examples
-#' ###################
 #' # load object
 #' utils::data(
 #'  myGOs,
 #'  package="ViSEAGO"
 #' )
 #'
-#' ###################
 #' # barplot for the count of GO terms
 #' ViSEAGO::GOcount( myGOs)
 #' @exportMethod GOcount

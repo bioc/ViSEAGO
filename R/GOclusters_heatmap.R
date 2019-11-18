@@ -42,21 +42,18 @@
 #' @return a \code{\link{GO_clusters-class}} object.
 #' @include GO_clusters.R
 #' @examples
-#' ###################
 #' # load data example
 #' utils::data(
 #'     myGOs,
 #'     package="ViSEAGO"
 #' )
 #' \dontrun{
-#' ###################
 #' # compute GO terms Semantic Similarity distances
 #' myGOs<-ViSEAGO::compute_SS_distances(
 #'     myGOs,
 #'     distance="Wang"
 #' )
 #'
-#' ##################
 #' # GOtermsHeatmap with default parameters
 #' Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 #'     myGOs,
@@ -80,14 +77,12 @@
 #'     samples.tree=NULL
 #' )
 #'
-#' ###################
 #' # compute clusters of GO terms Semantic Similarity distances
 #' Wang_clusters_wardD2<-ViSEAGO::compute_SS_distances(
 #'     Wang_clusters_wardD2,
 #'     distance="BMA"
 #' )
 #'
-#' ###################
 #' # GOclusters heatmap
 #' Wang_clusters_wardD2<-ViSEAGO::GOclusters_heatmap(
 #'     Wang_clusters_wardD2,

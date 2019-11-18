@@ -38,9 +38,11 @@ This class is invoked by \code{\link{GOterms_heatmap}} and  \code{\link{GOcluste
 }}
 
 \seealso{
-Other GO_clusters: \code{\link{GOclusters_heatmap}},
-  \code{\link{clusters_cor}},
-  \code{\link{compare_clusters}},
-  \code{\link{show_heatmap}}, \code{\link{show_table}}
+Other GO_clusters: 
+\code{\link{GOclusters_heatmap}()},
+\code{\link{clusters_cor}()},
+\code{\link{compare_clusters}()},
+\code{\link{show_heatmap}()},
+\code{\link{show_table}()}
 }
 \concept{GO_clusters}

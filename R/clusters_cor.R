@@ -11,7 +11,6 @@
 #' Csardi G, Nepusz T: The igraph software package for complex network research, InterJournal, Complex Systems 1695. 2006. http://igraph.org.
 #' @include GO_clusters.R
 #' @examples
-#' ###################
 #' # load example object
 #' data(
 #'     myGOs,
@@ -19,14 +18,12 @@
 #' )
 #'
 #' \dontrun{
-#' ###################
 #' # compute Semantic Similarity (SS)
 #' myGOs<-ViSEAGO::compute_SS_distances(
 #'     myGOs,
 #'     distance=c("Resnik","Lin","Rel","Jiang","Wang")
 #' )
 #'
-#' ##################
 #' # Resnik distance GO terms heatmap
 #' Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 #'     myGOs,
@@ -47,7 +44,6 @@
 #'     samples.tree=NULL
 #' )
 #'
-#' ##################
 #' # Lin distance GO terms heatmap
 #' Lin_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 #'     myGOs,
@@ -68,7 +64,6 @@
 #'     samples.tree=NULL
 #' )
 #'
-#' ##################
 #' # Resnik distance GO terms heatmap
 #' Rel_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 #'     myGOs,
@@ -89,7 +84,6 @@
 #'     samples.tree=NULL
 #' )
 #'
-#' ##################
 #' # Resnik distance GO terms heatmap
 #' Jiang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 #'     myGOs,
@@ -110,7 +104,6 @@
 #'     samples.tree=NULL
 #' )
 #'
-#' ##################
 #' # Resnik distance GO terms heatmap
 #' Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 #'     myGOs,
@@ -131,7 +124,6 @@
 #'     samples.tree=NULL
 #' )
 #' }
-#' ###################
 #' # clusters to compare
 #' clusters<-list(
 #'     Resnik="Resnik_clusters_wardD2",
@@ -142,7 +134,6 @@
 #' )
 #'
 #' \dontrun{
-#' ###################
 #' # global dendrogram clustering correlation
 #' clust_cor<-ViSEAGO::clusters_cor(
 #'     clusters,

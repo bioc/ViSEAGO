@@ -20,11 +20,9 @@ csl: "`r system.file('extdata','bmc-genomics.csl',package='ViSEAGO')`"
 ---
 
 ```{r setup,include=FALSE}
-###################
 # load
 library(ViSEAGO)
 
-###################
 # knitr document options
 knitr::opts_chunk$set(
     eval=FALSE,fig.path='./data/output/',echo=TRUE,fig.pos = 'H',
@@ -42,7 +40,6 @@ In this vignette we explain how to explore the effect of the GO semantic similar
 Vignette build convenience (for less build time and size) need that data were pre-calculated (provided by the package), and that illustrations were not interactive.
 
 ```{r vignette_data_used}
-###################
 # load vignette data
 data(
     myGOs,
@@ -57,7 +54,6 @@ The GO annotations of genes created and enriched GO terms are combined using `Vi
 Then, a hierarchical clustering method using `ViSEAGO::GOterms_heatmap` is performed based on each SS distance between the enriched GO terms using the `ward.D2` aggregation criteria.  Clusters of enriched GO terms are obtained by cutting branches off the dendrogram. Here, we choose a dynamic branch cutting method based on the shape of clusters using `r BiocStyle::CRANpkg("dynamicTreeCut")` [@pmid18024473; @dynamicTreeCut].
 
 ```{r SS_build,eval=FALSE}
-###################           
 # compute Semantic Similarity (SS)
 myGOs<-ViSEAGO::compute_SS_distances(
     myGOs,
@@ -68,7 +64,6 @@ myGOs<-ViSEAGO::compute_SS_distances(
 1. Resnik distance
 
 ```{r SS_terms_Resnik-wardD2}
-##################           
 # GO terms heatmap
 Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
     myGOs,
@@ -93,7 +88,6 @@ Resnik_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 2. Lin distance
 
 ```{r SS_Lin-wardD2}
-##################           
 # GO terms heatmap
 Lin_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
     myGOs,
@@ -118,7 +112,6 @@ Lin_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 3. Rel distance
 
 ```{r SS_ Rel-wardD2}
-##################           
 # GO terms heatmap
 Rel_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
     myGOs,
@@ -143,7 +136,6 @@ Rel_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 4. Jiang distance
 
 ```{r SS_Jiang-wardD2}
-##################           
 # GO terms heatmap
 Jiang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
     myGOs,
@@ -168,7 +160,6 @@ Jiang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 5. Wang distance
 
 ```{r SS_Wang-wardD2}
-##################           
 # GO terms heatmap
 Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
     myGOs,
@@ -199,7 +190,6 @@ The `r BiocStyle::CRANpkg("dendextend")` package  @dendextend,  offers a set of 
 The correlation matrix can be visualized with the nice `corrplot::corrplot` function from `r BiocStyle::CRANpkg("corrplot")` package @corrplot.
 
 ```{r parameters_dend_correlation}
-###################
 # build the list of trees
 dend<- dendextend::dendlist(
     "Resnik"=slot(Resnik_clusters_wardD2,"dendrograms")$GO,
@@ -209,13 +199,11 @@ dend<- dendextend::dendlist(
     "Wang"=slot(Wang_clusters_wardD2,"dendrograms")$GO
 )
 
-###################
 # build the trees matrix correlation
 dend_cor<-dendextend::cor.dendlist(dend)
 ```
 
 ```{r parameters_dend_correlation_print}
-###################
 # corrplot
 corrplot::corrplot(
     dend_cor,
@@ -236,25 +224,21 @@ We can also compare the dendrograms build with, for example, the *Resnik* and th
 The quality of the alignment of the two trees can be calculated with `dendextend::entanglement` (0: good to 1:bad).
 
 ```{r parameters_dend_comparison,fig.cap="dendrograms comparison"}
-###################
 # dendrogram list
 dl<-dendextend::dendlist(
     slot(Resnik_clusters_wardD2,"dendrograms")$GO,
     slot(Wang_clusters_wardD2,"dendrograms")$GO
 )
 
-###################
 # untangle the trees (efficient but very highly time consuming)
 tangle<-dendextend::untangle(
     dl,
     "step2side"
 )
 
-###################
 # display the entanglement
 dendextend::entanglement(tangle) # 0.08362968
 
-###################
 # display the tanglegram
 dendextend::tanglegram(
     tangle,
@@ -278,7 +262,6 @@ Another possibility concerns the comparison of the dendrograms clusters.
 We can also explore the GO terms assignation between clusters according the used parameters with `ViSEAGO::clusters_cor` and plot the results with `corrplot::corrplot` using `r BiocStyle::CRANpkg("corrplot")` package.
 
 ```{r parameters_clusters_correlation}
-###################
 # clusters to compare
 clusters=list(
     Resnik="Resnik_clusters_wardD2",
@@ -288,7 +271,6 @@ clusters=list(
     Wang="Wang_clusters_wardD2"
 )
 
-###################
 # global dendrogram partition correlation
 clust_cor<-ViSEAGO::clusters_cor(
     clusters,
@@ -297,7 +279,6 @@ clust_cor<-ViSEAGO::clusters_cor(
 ```
 
 ```{r parameters_clusters_correlation_print}
-###################
 # global dendrogram partition correlation
 corrplot::corrplot(
     clust_cor,
@@ -317,7 +298,6 @@ As expected, same as in the global trees comparison, we can easily tells us that
 We can also explore *in details* the GO terms assignation between clusters according the used parameters with `ViSEAGO::compare_clusters`.
 
 ```{r parameters_clusters_comparison,fig.height=8}
-###################
 # clusters content comparisons
 ViSEAGO::compare_clusters(clusters)
 ```

@@ -4,8 +4,7 @@
 \alias{Ensembl2GO}
 \title{Check available organisms datasets at Ensembl.}
 \usage{
-Ensembl2GO(biomart = "ensembl", host = "www.ensembl.org",
-  version = NULL)
+Ensembl2GO(biomart = "ensembl", host = "www.ensembl.org", version = NULL)
 }
 \arguments{
 \item{biomart}{the biomart name (eg. "ensembl", the default) available with \pkg{biomaRt} package \code{\link[biomaRt]{listEnsembl}}.}
@@ -28,7 +27,6 @@ This function gives referenced organisms genomes at \href{http://ensemblgenomes.
 It uses the \code{\link[biomaRt]{useEnsembl}} and  \code{\link[biomaRt]{listDatasets}} from \pkg{biomaRt} package.
 }
 \examples{
-###################
 # host address to use for Ensembl vertebrate/Plants/Protists/Metazoa/Fungi
 # host="www.ensembl.org" # vertebrate
 # host="plants.ensembl.org"
@@ -37,12 +35,10 @@ It uses the \code{\link[biomaRt]{useEnsembl}} and  \code{\link[biomaRt]{listData
 # host="fungi.ensembl.org"
 # biomart is not available for bacteria
 
-###################
 # check the Ensembl available biomart (if not known)
 # for Animals (host="www.ensembl.org", the default)
  biomaRt::listEnsembl()
 
-###################
 # List Ensembl available organisms
 Ensembl<-ViSEAGO::Ensembl2GO(
  biomart="ensembl",
@@ -61,11 +57,14 @@ BioMart and Bioconductor: a powerful link between biological databases and micro
 Matt Dowle and Arun Srinivasan (2017). data.table: Extension of data.frame. R package version 1.10.4. https://CRAN.R-project.org/package=data.table.
 }
 \seealso{
-Other genomic_ressource: \code{\link{Bioconductor2GO}},
-  \code{\link{Custom2GO}}, \code{\link{EntrezGene2GO}},
-  \code{\link{Uniprot2GO}}, \code{\link{annotate}},
-  \code{\link{available_organisms}},
-  \code{\link{genomic_ressource-class}},
-  \code{\link{taxonomy}}
+Other genomic_ressource: 
+\code{\link{Bioconductor2GO}()},
+\code{\link{Custom2GO}()},
+\code{\link{EntrezGene2GO}()},
+\code{\link{Uniprot2GO}()},
+\code{\link{annotate}()},
+\code{\link{available_organisms}()},
+\code{\link{genomic_ressource-class}},
+\code{\link{taxonomy}()}
 }
 \concept{genomic_ressource}

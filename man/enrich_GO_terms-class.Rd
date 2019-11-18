@@ -24,8 +24,10 @@ object(s) to combinate (see examples in \code{\link{merge_enrich_terms}}).}
 }}
 
 \seealso{
-Other enrich_GO_terms: \code{\link{Upset}},
-  \code{\link{overLapper}}, \code{\link{show_heatmap}},
-  \code{\link{show_table}}
+Other enrich_GO_terms: 
+\code{\link{Upset}()},
+\code{\link{overLapper}()},
+\code{\link{show_heatmap}()},
+\code{\link{show_table}()}
 }
 \concept{enrich_GO_terms}

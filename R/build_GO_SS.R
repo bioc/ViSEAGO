@@ -25,14 +25,12 @@
 #' @include GO_SS.R
 #' @examples
 #' \dontrun{
-#' ###################
 #' # initialyse object for compute GO Semantic Similarity
 #' myGOs<-ViSEAGO::build_GO_SS(
 #'     myGENE2GO,
 #'     BP_sResults
 #' )
 #' }
-#' ###################
 #' # load data example
 #' utils::data(
 #'     myGOs,
@@ -115,7 +113,6 @@ setMethod(
     },0)
     names(cnt)<-goids
 
-    ###################
     # the probabilities of occurrence of GO terms in a specific corpus.
     IC<- -log(cnt/sum(gocount))
 

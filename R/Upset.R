@@ -12,14 +12,12 @@
 #' @return print table and upset.
 #' @include enrich_GO_terms.R GO_clusters.R
 #' @examples
-#' ##################
 #' # load example object
 #' data(
 #'     myGOs,
 #'     package="ViSEAGO"
 #' )
 #'
-#' ##################
 #' # print upset
 #' ViSEAGO::Upset(myGOs)
 #' @name Upset

@@ -20,11 +20,9 @@ csl: "`r system.file('extdata/','bmc-genomics.csl',package='ViSEAGO')`"
 ---
 
 ```{r setup,include=FALSE}
-###################
 # load ViSEAGO and mouse db package
 library(ViSEAGO)
 
-###################
 # knitr document options
 knitr::opts_chunk$set(
     eval=FALSE,echo=TRUE,fig.pos = 'H',
@@ -43,7 +41,6 @@ As described in edgeR user guide, we tested for significant differential express
 Vignette build convenience (for less build time and package size) need that data were pre-calculated (provided by the package), and that illustrations were not interactive.
 
 ```{r vignette_data_used,eval=TRUE}
-###################
 # load vignette data
 data(
     myGOs,
@@ -56,7 +53,6 @@ data(
 We load examples files from `r BiocStyle::Biocpkg("ViSEAGO")` package using `system.file` from the locally installed package. We read the gene identifiers for the background (= expressed genes) file and the three lists of DE genes of the study. Here, gene identifiers are GeneID from EntrezGene database.
 
 ```{r geneList_input}
-###################
 # load genes identifiants (GeneID,ENS...) background (expressed genes) 
 background<-scan(
     system.file(
@@ -68,7 +64,6 @@ background<-scan(
     what=""
 )
 
-###################
 # load Differentialy Expressed (DE) gene identifiants from lists
 PregnantvsLactateDE<-scan(
     system.file(
@@ -104,7 +99,6 @@ VirginvsPregnantDE<-scan(
 Here, we display the first 6 GeneID from the *L_pregnantvslactateDE* list.
 
 ```{r geneList_input-head,echo=FALSE}
-###################
 # show the ten first lines of genes_DE (same as genes_ref)
 head(PregnantvsLactateDE)
 ```
@@ -116,11 +110,9 @@ In this study, we build a `myGENE2GO` object using the Bioconductor `r BiocStyle
 <u>NB</u>: Don't forget to check if the last current annotation database version is installed in your R session! See `ViSEAGO::available_organisms(Bioconductor)`.
 
 ```{r Genomic-ressources}
-###################
 # connect to Bioconductor
 Bioconductor<-ViSEAGO::Bioconductor2GO()
 
-###################
 # load GO annotations from Bioconductor
 myGENE2GO<-ViSEAGO::annotate(
     "org.Mm.eg.db",
@@ -129,7 +121,6 @@ myGENE2GO<-ViSEAGO::annotate(
 ```
 </br> 
 ```{r Genomic-ressources_show}
-###################
 # display summary
 myGENE2GO
 ```
@@ -157,7 +148,6 @@ We perform a functional Gene Ontology (GO) enrichment analysis from differential
 First, we create three `topGOdata` objects, using `ViSEAGO::create_topGOdata` method, corresponding to the three DE genes lists for the comparison virgin versus pregnant, pregnant versus lactate, and virgin versus lactate. The gene background corresponding to expressed genes in luminal cells of the mammary gland and GO annotations are also provided.
 
 ```{r Enrichment_data}
-###################
 # create topGOdata for BP for each list of DE genes
 BP_PregnantvsLactate<-ViSEAGO::create_topGOdata(
     geneSel=PregnantvsLactateDE,
@@ -189,7 +179,6 @@ Now, we perform the GO enrichment tests for BP category with Fisher's exact test
 <u>NB</u>: p-values of enriched GO terms are not adjusted and considered significant if below 0.01.
 
 ```{r Enrichment_data_tests}
-###################
 # perform TopGO tests
 elim_BP_PregnantvsLactate<-topGO::runTest(
     BP_PregnantvsLactate,
@@ -216,7 +205,6 @@ We combine the results of the three enrichment tests into an object using `ViSEA
 The printed table contains for each enriched GO terms, additional columns including the list of significant genes and frequency (ratio between the number of significant genes and number of background genes in a specific GO tag) evaluated by comparison. 
 
 ```{r Enrichment_merge}
-###################
 # merge topGO results
 BP_sResults<-ViSEAGO::merge_enrich_terms(
     Input=list(
@@ -237,7 +225,6 @@ BP_sResults<-ViSEAGO::merge_enrich_terms(
 ```
 </br>
 ```{r Enrichment_merge_show}
-###################
 # display a summary
 BP_sResults
 ```
@@ -330,7 +317,6 @@ GO annotations:
 ```
 </br>
 ```{r Enrichment_merge_table}
-###################
 # show table in interactive mode
 ViSEAGO::show_table(BP_sResults)
 ```
@@ -342,7 +328,6 @@ ViSEAGO::show_table(BP_sResults)
 Several graphs summarize important features. An interactive barchart showing the number of GO terms enriched or not in each comparison, using `ViSEAGO::GOcount` method. Intersections of lists of enriched GO terms between comparisons are displayed in an Upset plot using `ViSEAGO::Upset` method.
 
 ```{r Enrichment_merge_count}
-###################           
 # barchart of significant (or not) GO terms by comparison
 ViSEAGO::GOcount(BP_sResults)
 ```
@@ -350,7 +335,6 @@ ViSEAGO::GOcount(BP_sResults)
 <img src=`r system.file("extdata/data/output","gocount.png",package="ViSEAGO")` alt="gocount" style="width:100%;height:100%;"/>
 
 ```{r Enrichment_merge_interactions}
-###################           
 # display intersections
 ViSEAGO::Upset(
     BP_sResults,
@@ -365,7 +349,6 @@ ViSEAGO::Upset(
 GO annotations of genes created at a previous step and enriched GO terms are combined using `ViSEAGO::build_GO_SS` method. The Semantic Similarity (SS) between enriched GO terms are calculated using `ViSEAGO::compute_SS_distances` method which is a wrapper of functions implemented in the `r BiocStyle::Biocpkg("GOSemSim")` package @pmid20179076. Here, we choose *Wang* method based on the topology of GO graph structure. The built object `myGOs` contains all informations of enriched GO terms and the SS distances between them.
 
 ```{r SS_build}
-###################        
 # create GO_SS-class object
 myGOs<-ViSEAGO::build_GO_SS(
     gene2GO=myGENE2GO,
@@ -374,7 +357,6 @@ myGOs<-ViSEAGO::build_GO_SS(
 ```
 </br>
 ```{r SS_compute}
-###################           
 # compute Semantic Similarity (SS)
 myGOs<-ViSEAGO::compute_SS_distances(
     myGOs,
@@ -383,7 +365,6 @@ myGOs<-ViSEAGO::compute_SS_distances(
 ```
 </br>
 ```{r SS_build_compute_show}
-###################
 # display a summary
 myGOs
 ```
@@ -476,7 +457,6 @@ cat(
 A Multi Dimensional Scale (MDS) plot with `ViSEAGO::MDSplot` method provides a representation of distances among a set of enriched GO terms on the two first dimensions. Some patterns could appear at this time and could be investigated in the interactive mode. The plot could also be printed in a png file.
 
 ```{r SS_terms_mdsplot}
-###################           
 # MDSplot
 ViSEAGO::MDSplot(myGOs)
 ```
@@ -492,7 +472,6 @@ Clusters of enriched GO terms are obtained by cutting branches off the dendrogra
 Enriched GO terms are ranked in a dendrogram and colored depending on their cluster assignation. Additional illustrations are displayed: the GO description of terms (trimmed if more than 50 characters), a heatmap of -log10(pvalue) of enrichment test for each comparison, and optionally the Information Content (IC). The IC of a GO term is computed by the negative log probability of the term occurring in the GO annotations database of the studied species. A rarely used term contains a greater amount of IC. The illustration is displayed with `ViSEAGO::show_heatmap` method.
 
 ```{r SS_Wang-wardD2}
-##################           
 # Create GOterms heatmap
 Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
     myGOs,
@@ -517,7 +496,6 @@ Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 ```
 </br>
 ```{r SS_Wang-wardD2_heatmap_display} 
-###################           
 # display the heatmap
 ViSEAGO::show_heatmap(
     Wang_clusters_wardD2,
@@ -531,7 +509,6 @@ A table of enriched GO terms in at least one of the comparison is displayed in i
 The printed table contains for each enriched GO terms, additional columns including the list of significant genes and frequency (ratio between the number of significant genes and number of background genes in a specific GO tag) evaluated by comparison. 
 
 ```{r SS_Wang-ward.D2_table}
-###################
 # display table
 ViSEAGO::show_table(Wang_clusters_wardD2)
 ```
@@ -545,7 +522,6 @@ ViSEAGO::show_table(Wang_clusters_wardD2)
 We also display a colored Multi Dimensional Scale (MDS) plot showing the overlay of GO terms clusters from `Wang_clusters_wardD2` object with `ViSEAGO::MDSplot` method. It is a way to check the coherence of GO terms clusters on the MDS plot.
 
 ```{r SS_Wang-ward.D2_mdsplot}
-###################           
 # colored MDSplot
 ViSEAGO::MDSplot(Wang_clusters_wardD2)
 ```
@@ -563,7 +539,6 @@ A Semantic Similarity (SS) between clusters of GO terms, previously defined, is 
 A colored Multi Dimensional Scale (MDS) plot with `ViSEAGO::MDSplot` method provides a representation of distances between the clusters of GO terms. Each circle represents a cluster of GO terms and its size depends on the number of GO terms that it contains. Clusters of GO terms that are close should share a functional coherence.
 
 ```{r SS_Wang-wardD2_groups} 
-###################           
 # calculate semantic similarites between clusters of GO terms
 Wang_clusters_wardD2<-ViSEAGO::compute_SS_distances(
     Wang_clusters_wardD2,
@@ -572,7 +547,6 @@ Wang_clusters_wardD2<-ViSEAGO::compute_SS_distances(
 ```
 </br>
 ```{r SS_Wang-ward.D2_groups_mdsplot}
-###################           
 # MDSplot
 ViSEAGO::MDSplot(
     Wang_clusters_wardD2,
@@ -588,8 +562,7 @@ A new hierarchical clustering using `ViSEAGO::GOclusters_heatmap` is performed b
 
 Clusters of GO terms are ranked in a dendrogram and colored depending on their cluster assignation. Additional illustrations are displayed: the definition of the cluster of GO terms corresponds to the first common GO term ancestor followed by the cluster label in brackets, and the heatmap of GO terms count in the corresponding cluster. The illustration is displayed with `ViSEAGO::show_heatmap` method.
 
-```{r SS_Wang-wardD2_groups_heatmap} 
-###################
+```{r SS_Wang-wardD2_groups_heatmap}
 # GOclusters heatmap
 Wang_clusters_wardD2<-ViSEAGO::GOclusters_heatmap(
     Wang_clusters_wardD2,
@@ -600,8 +573,7 @@ Wang_clusters_wardD2<-ViSEAGO::GOclusters_heatmap(
 )
 ```
 </br>
-```{r SS_Wang-ward.D2_groups_heatmap_display} 
-###################           
+```{r SS_Wang-ward.D2_groups_heatmap_display}
 # display the heatmap
 ViSEAGO::show_heatmap(
     Wang_clusters_wardD2,
@@ -614,7 +586,6 @@ ViSEAGO::show_heatmap(
 An history of the enrichment functional analysis is reported.
 
 ```{r SS_Wang-wardD2_groups_show}
-###################
 # display a summary
 Wang_clusters_wardD2
 ```

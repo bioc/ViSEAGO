@@ -8,28 +8,22 @@
 #' R package version 0.9.0. https://CRAN.R-project.org/package=DiagrammeR.
 #' @return an html diagram
 #' @examples
-#' ###################
 #' # print diagram without focus
 #' ViSEAGO::pkgdiagram(x=c("white","white","white","white","white"))
 #'
-#' ###################
 #' # print diagram with focus one the gene list
 #' ViSEAGO::pkgdiagram(x=c("black","white","white","white","white"))
 #'
-#' ###################
 #' # print diagram with a focus on the annotation step
 #' ViSEAGO::pkgdiagram(x=c("white","black","white","white","white"))
 #'
-#' ###################
 #' # print diagram with a focus on the enrichment step
 #' ViSEAGO::pkgdiagram(x=c("white","white","black","white","white"))
 #'
-#' ###################
 #' # print diagram with a focus on the Semantic Similarity step
 #' ViSEAGO::pkgdiagram(x=c("white","white","white","black","white"))
 #'
-#' ###################
-#'  # print diagram with focus on the visualization step
+#' # print diagram with focus on the visualization step
 #' ViSEAGO::pkgdiagram(x=c("white","white","white","white","black"))
 #' @keywords internal
 #' @export

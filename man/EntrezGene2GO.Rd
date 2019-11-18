@@ -19,7 +19,6 @@ This function downloads the \href{https://ftp.ncbi.nih.gov/gene/DATA/gene2go.gz}
 }
 \examples{
 \dontrun{
-###################
 # Download EntrezGene available organisms GO annotations
 EntrezGene<-ViSEAGO::EntrezGene2GO()
 }
@@ -34,11 +33,14 @@ Eric Sayers (2013). Entrez Programming Utilities Help.
 Maglott, D, Ostell, J, Pruitt, KD, Tatusova, T (2011). Entrez Gene: gene-centered information at NCBI. Nucleic Acids Res., 39, Database issue:D52-7.
 }
 \seealso{
-Other genomic_ressource: \code{\link{Bioconductor2GO}},
-  \code{\link{Custom2GO}}, \code{\link{Ensembl2GO}},
-  \code{\link{Uniprot2GO}}, \code{\link{annotate}},
-  \code{\link{available_organisms}},
-  \code{\link{genomic_ressource-class}},
-  \code{\link{taxonomy}}
+Other genomic_ressource: 
+\code{\link{Bioconductor2GO}()},
+\code{\link{Custom2GO}()},
+\code{\link{Ensembl2GO}()},
+\code{\link{Uniprot2GO}()},
+\code{\link{annotate}()},
+\code{\link{available_organisms}()},
+\code{\link{genomic_ressource-class}},
+\code{\link{taxonomy}()}
 }
 \concept{genomic_ressource}

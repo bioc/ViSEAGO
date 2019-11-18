@@ -15,18 +15,15 @@
 #' @references
 #' Yihui Xie (2016). DT: A Wrapper of the JavaScript Library 'DataTables'. R package version 0.2. https://CRAN.R-project.org/package=DT
 #' @examples
-#' ###################
 #' # load example object
 #' data(
 #'     myGOs,
 #'     package="ViSEAGO"
 #' )
 #'
-#' ###################
 #' # display merge_enrich_terms output
 #' ViSEAGO::show_table(myGOs)
 #'
-#' ###################
 #' # print merge_enrich_terms output
 #' ViSEAGO::show_table(
 #'     myGOs,
@@ -34,13 +31,11 @@
 #' )
 #'
 #' \dontrun{
-#' ###################
 #' # compute GO terms Semantic Similarity distances
 #' myGOs<-ViSEAGO::compute_SS_distances(
 #'     distance="Wang"
 #' )
 #'
-#' ##################
 #' # GOtermsHeatmap with default parameters
 #' Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 #'     myGOs,
@@ -63,11 +58,10 @@
 #'     ),
 #'     samples.tree=NULL
 #' )
-#' ###################
+#'
 #' # display table of GO_clusters-class object
 #' ViSEAGO::show_table(Wang_clusters_wardD2)
 #'
-#' ###################
 #' # print table of GO_clusters-class object
 #' ViSEAGO::show_table(
 #'     Wang_clusters_wardD2,

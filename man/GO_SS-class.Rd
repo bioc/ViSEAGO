@@ -29,7 +29,8 @@ and GO terms or groups distances objects based on semantic similarity.
 }}
 
 \seealso{
-Other GO_semantic_similarity: \code{\link{build_GO_SS}},
-  \code{\link{compute_SS_distances}}
+Other GO_semantic_similarity: 
+\code{\link{build_GO_SS}()},
+\code{\link{compute_SS_distances}()}
 }
 \concept{GO_semantic_similarity}

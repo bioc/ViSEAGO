@@ -20,11 +20,9 @@ csl: "`r system.file('extdata/','bmc-genomics.csl',package='ViSEAGO')`"
 ---
 
 ```{r setup,include=FALSE}
-###################
 # koad ViSEAGO
 library(ViSEAGO)
 
-###################
 # knitr document options
 knitr::opts_chunk$set(
   eval=FALSE,echo=TRUE,fig.pos = 'H',
@@ -47,11 +45,9 @@ ViSEAGO is like a workflow with input lists of genes and associated genomic reso
 Firtsly, install the `r BiocStyle::Biocpkg("ViSEAGO")` R package from [Bioconductor](https://www.bioconductor.org/), or [ForgeMIA](https://forgemia.inra.fr/umr-boa/viseago) gitlab.
 
 ```{r ViSEAGO_install}
-###################
 # load ViSEAGO package from Bioconductor
 BiocManager::install("ViSEAGO")
 
-###################
 # load ViSEAGO package from gitLab
 remotes::install_gitlab(
     "umr-boa/viseago",
@@ -67,7 +63,6 @@ remotes::install_gitlab(
 Firstly, you need to provide the gene *background* (= expressed genes) and *selection* files.
 
 ```{r geneList_input}
-###################
 # load genes background
 background<-scan(
     "background.txt",
@@ -75,7 +70,6 @@ background<-scan(
     what=""
 )
 
-###################
 # load gene selection
 selection<-scan(
     "selection.txt",
@@ -100,23 +94,18 @@ This method is available using the `ViSEAGO::annotate(id,EntrezGene,ortholog = T
 The easy access to GO annotations for all the availables species from these databases are provided by:
 
 ```{r databases}
-###################
 # connect to Bioconductor
 Bioconductor<-ViSEAGO::Bioconductor2GO()
 
-###################
 # connect to EntrezGene
 EntrezGene<-ViSEAGO::EntrezGene2GO()
 
-###################
 # connect to Ensembl
 Ensembl<-ViSEAGO::Ensembl2GO()
 
-###################
 # connect to Uniprot-GOA
 Uniprot<-ViSEAGO::Uniprot2GO()
 
-###################
 # connect to Custom file
 Custom<-ViSEAGO::Custom2GO(system.file("extdata/customfile.txt",package = "ViSEAGO"))
 ```
@@ -124,23 +113,18 @@ Custom<-ViSEAGO::Custom2GO(system.file("extdata/customfile.txt",package = "ViSEA
 In order to know if your target species is supported by the database, we can display the available organisms in an interactive table using `ViSEAGO::available_organisms` method. The **organism  key identifiant** is always displayed in the **first column** of the table.
 
 ```{r organisms}
-###################
 # Display table of available organisms with Bioconductor
 ViSEAGO::available_organisms(Bioconductor)
 
-###################
 # Display table of available organisms with EntrezGene
 ViSEAGO::available_organisms(EntrezGene)
 
-###################
 # Display table of available organisms with Ensembl
 ViSEAGO::available_organisms(Ensembl)
 
-###################
 # Display table of available organisms with Uniprot
 ViSEAGO::available_organisms(Uniprot)
 
-###################
 # Display table of available organisms with Custom
 ViSEAGO::available_organisms(Custom)
 ```
@@ -148,21 +132,18 @@ ViSEAGO::available_organisms(Custom)
 At this step, we need to provide the **organism  key identifiant** based on the genomic ressource used (Bioconductor, EntrezGene, Ensembl, or Uniprot), in order to extract and store the species GO annotations using `ViSEAGO::annotate()` method.
 
 ```{r annotate}
-###################
 # load GO annotations from Bioconductor
 myGENE2GO<-ViSEAGO::annotate(
     "bioconductor_id",
     Bioconductor
 )
 
-###################
 # load GO annotations from EntrezGene
 myGENE2GO<-ViSEAGO::annotate(
     "EntrezGene_id",
     EntrezGene
 )
 
-###################
 # load GO annotations from EntrezGene
 # with the add of GO annotations from orthologs genes (see above)
 myGENE2GO<-ViSEAGO::annotate(
@@ -171,21 +152,18 @@ myGENE2GO<-ViSEAGO::annotate(
     ortholog = TRUE
 )
 
-###################
 # load GO annotations from Ensembl
 myGENE2GO<-ViSEAGO::annotate(
     "Ensembl_id",
     Ensembl
 )
 
-###################
 # load GO annotations from Uniprot
 myGENE2GO<-ViSEAGO::annotate(
     "Uniprot_id",
     Uniprot
 )
 
-###################
 # load GO annotations from Custom
 myGENE2GO<-ViSEAGO::annotate(
     "Custom_id",
@@ -202,7 +180,6 @@ The GO terms enrichment tests are performed with the `r BiocStyle::Biocpkg("topG
 First, we create a `topGOdata` object, using `ViSEAGO::create_topGOdata` method, with inputs as: genes selection, genes background, GO terms category used (*MF*, *BP*, or *CC*), and minimum of annotated genes by GO terms (nodeSize).
 
 ```{r Enrichment_data}
-###################
 # create topGOdata for BP
 BP<-ViSEAGO::create_topGOdata(
     geneSel=selection,
@@ -216,7 +193,6 @@ BP<-ViSEAGO::create_topGOdata(
 Now, we perform the GO enrichment tests for *BP* category with Fisher's exact test with one of the four available algorithms (*classic*, *elim*, *weight*, and *weight01*) using `topGO::runTest` method.  
 
 ```{r Enrichment_data_tests}
-###################
 # perform TopGO test using clasic algorithm
 classic<-topGO::runTest(
     BP,
@@ -232,7 +208,6 @@ classic<-topGO::runTest(
 We combine results of enrichment tests into an object using `ViSEAGO::merge_enrich_terms` method. A table of enriched GO terms in at least one comparison is displayed in interactive mode, or printed in a file using `ViSEAGO::show_table` method. The printed table contains for each enriched GO terms, additional columns including the list of significant genes and frequency (ratio of number of significant genes to number of background genes) evaluated by comparison. 
   
 ```{r Enrichment_merge}
-###################
 # merge results
 BP_sResults<-ViSEAGO::merge_enrich_terms(
     Input=list(
@@ -242,11 +217,9 @@ BP_sResults<-ViSEAGO::merge_enrich_terms(
 ```
 
 ```{r Enrichment_merge_display}
-###################
 # display the merged table
 ViSEAGO::show_table(BP_sResults)
 
-###################
 # print the merged table in a file
 ViSEAGO::show_table(
     BP_sResults,
@@ -259,13 +232,11 @@ ViSEAGO::show_table(
 Several graphs summarize important features. An interactive barchart showing the number of GO terms enriched or not in each comparison, using `ViSEAGO::GOcount` method. Intersections of lists of enriched GO terms between comparisons are displayed in an Upset plot using `ViSEAGO::Upset` method.
 
 ```{r Enrichment_merge_count}
-###################           
 # count significant (or not) pvalues by condition
 ViSEAGO::GOcount(BP_sResults)
 ```
 
 ```{r Enrichment_merge_interactions,fig.height=4}
-###################           
 # display interactions
 ViSEAGO::Upset(
     BP_sResults,
@@ -278,14 +249,12 @@ ViSEAGO::Upset(
 GO annotations of genes created at a previous step and enriched GO terms are combined using `ViSEAGO::build_GO_SS` method. The Semantic Similarity (SS) between enriched GO terms are calculated using `ViSEAGO::compute_SS_distances` method which is a wrapper of functions implemented in the `r BiocStyle::Biocpkg("GOSemSim")` package @pmid20179076. Among the SS algorithms between GO terms, 4 of them use information content (IC) of a GO term which is computed by the negative log probability of the term occurring in GO corpus. A rarely used term contains a greater amount of information. These IC-based mehods are *Resnik*, *Lin*, *Rel*, and *Jiang*. A Graph-based method, using the topology of GO graph structure to compute semantic similarity is also available with the *Wang* method. The built object `myGOs` contains all informations of enriched GO terms and computed SS distances between them.
 
 ```{r SS_build}
-###################        
 # initialyse 
 myGOs<-ViSEAGO::build_GO_SS(
     gene2GO=myGENE2GO,
     enrich_GO_terms=BP_sResults
 )
 
-###################           
 # compute all available Semantic Similarity (SS) measures
 myGOs<-ViSEAGO::compute_SS_distances(
     myGOs,
@@ -300,11 +269,9 @@ myGOs<-ViSEAGO::compute_SS_distances(
 A Multi Dimensional Scale (MDS) plot with `ViSEAGO::MDSplot` method provides a representation of distances among a set of enriched GO terms on the two first dimensions. Some patterns could appear at this time and could be investigated in an interactive mode. The plot could be also printed in a png file.
 
 ```{r SS_terms_mdsplot,eval=FALSE}
-###################           
 # display MDSplot
 ViSEAGO::MDSplot(myGOs)
 
-###################           
 # print MDSplot
 ViSEAGO::MDSplot(
     myGOs,
@@ -324,7 +291,6 @@ In step 2, all previously unassigned objects are tested for sufficient proximity
 Enriched GO terms are ranked in a dendrogram as a result of a hierarchical clustering and colored depending on their cluster assignation. Additional illustrations are displayed: the GO description of GO terms (trimmed if more than 50 characters), a heatmap of -log10(pvalue) of enrichment test for each comparison, and optionally the Information Content (IC). The illustration is displayed with `ViSEAGO::show_heatmap` method.
 
 ```{r SS_Wang-wardD2}
-##################           
 # GOterms heatmap with the default parameters
 Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
     myGOs,
@@ -349,14 +315,12 @@ Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
 ```
 
 ```{r SS_Wang-wardD2_clusters-heatmap} 
-###################           
 # Display the clusters-heatmap
 ViSEAGO::show_heatmap(
     Wang_clusters_wardD2,
     "GOterms"
 )
-   
-###################    
+
 # print the clusters-heatmap
 ViSEAGO::show_heatmap(
     Wang_clusters_wardD2,
@@ -368,11 +332,9 @@ ViSEAGO::show_heatmap(
 A table of enriched GO terms in at least one of the comparison is displayed in interactive mode, or printed in a file using `ViSEAGO::show_table` method. The columns GO cluster number and IC value are added to the previous table of enriched terms table. The printed table contains for each enriched GO terms, additional columns including the list of significant genes and frequency (ratio between the number of significant genes and number of background genes in a specific GO tag) evaluated by comparison.
 
 ```{r SS_Wang-ward.D2_clusters-heatmap_table}
-###################           
 # Display the clusters-heatmap table
 ViSEAGO::show_table(Wang_clusters_wardD2)
 
-###################           
 # Print the clusters-heatmap table
 ViSEAGO::show_table(
     Wang_clusters_wardD2,
@@ -385,14 +347,12 @@ ViSEAGO::show_table(
 We also display a Multi Dimensional Scale (MDS) plot with the overlay of GO terms clusters from `Wang_clusters_wardD2` object with `ViSEAGO::MDSplot` method. It is a way to check the coherence of GO terms clusters on the MDS plot.
 
 ```{r SS_Wang-ward.D2_mdsplot,eval=FALSE}
-###################           
 # display colored MDSplot
 ViSEAGO::MDSplot(
     Wang_clusters_wardD2,
     "GOterms"
 )
 
-###################           
 # print colored MDSplot
 ViSEAGO::MDSplot(
     Wang_clusters_wardD2,
@@ -413,7 +373,6 @@ The availables SS algorithms between GO terms clusters, implemented in the `r Bi
 A colored Multi Dimensional Scale (MDS) plot with `ViSEAGO::MDSplot` method provides a representation of distances between the clusters of GO terms. Each circle represents a cluster of GO terms and its size depends on the number of GO terms that it contains. Clusters of GO terms that are close should share a functional coherence.
 
 ```{r SS_Wang-wardD2_groups} 
-###################           
 # calculate semantic similarites between clusters of GO terms
 Wang_clusters_wardD2<-ViSEAGO::compute_SS_distances(
     Wang_clusters_wardD2,
@@ -422,14 +381,12 @@ Wang_clusters_wardD2<-ViSEAGO::compute_SS_distances(
 ```
 
 ```{r SS_Wang-ward.D2_groups_mdsplot}
-###################           
 # build and highlight in an interactive MDSplot grouped clusters for one distance object
 ViSEAGO::MDSplot(
     Wang_clusters_wardD2,
     "GOclusters"
 )
 
-###################           
 # build and highlight in MDSplot grouped clusters for one distance object
 ViSEAGO::MDSplot(
     Wang_clusters_wardD2,
@@ -445,7 +402,6 @@ A new hierarchical clustering using `ViSEAGO::GOclusters_heatmap` is performed b
 Clusters of GO terms are ranked in a dendrogram and branches are colored depending on the cluster assignation. Additional illustrations are displayed: definition of the cluster of GO terms corresponds to the first common GO term ancestor followed by the cluster label in brackets, and heatmap of GO terms count from the corresponding cluster. The illustration is displayed with `ViSEAGO::show_heatmap` method.
 
 ```{r SS_Wang-wardD2_groups_heatmap} 
-###################
 # GOclusters heatmap
 Wang_clusters_wardD2<-ViSEAGO::GOclusters_heatmap(
     Wang_clusters_wardD2,
@@ -457,14 +413,12 @@ Wang_clusters_wardD2<-ViSEAGO::GOclusters_heatmap(
 ```
 
 ```{r SS_Wang-ward.D2_groups_heatmap_display} 
-###################           
 # sisplay the GOClusters heatmap
 ViSEAGO::show_heatmap(
     Wang_clusters_wardD2,
     "GOclusters"
 )
 
-###################           
 # print the GOClusters heatmap in a file
 ViSEAGO::show_heatmap(
     Wang_clusters_wardD2,

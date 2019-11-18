@@ -46,3 +46,15 @@ CHANGES IN VERSION 0.99.41
 CHANGES IN VERSION 0.99.42
 ------------------------
  o remove environment signature in merge_enrich_terms
+
+CHANGES IN VERSION 1.0.0
+------------------------
+ o master branch of Bioconductor
+
+CHANGES IN VERSION 1.1
+------------------------
+ o add gene_symbol field for Custom2GO
+ o patch for Custom gene_symbols on merge_enrich_terms
+ o set esummary to 400 terms (instead of 500) by querying on merge_enrich_terms
+ o add gene frequency hover text on GOterms_heatmap
+ o add custom heatmap colors on GOterms_heatmap

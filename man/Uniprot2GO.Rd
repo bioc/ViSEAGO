@@ -17,7 +17,6 @@ This function downloads the current_release_numbers file (ftp://ftp.ebi.ac.uk/pu
 \href{http://www.ebi.ac.uk/GOA}{Uniprot-GOA} which contains available organisms.
 }
 \examples{
-###################
 # List Uniprot-GOA available organisms
 Uniprot<-ViSEAGO::Uniprot2GO()
 }
@@ -28,11 +27,14 @@ Huntley, RP, Sawford, T, Mutowo-Meullenet, P, Shypitsyna, A, Bonilla, C, Martin,
 The GOA database: gene Ontology annotation updates for 2015. Nucleic Acids Res., 43, Database issue:D1057-63.
 }
 \seealso{
-Other genomic_ressource: \code{\link{Bioconductor2GO}},
-  \code{\link{Custom2GO}}, \code{\link{Ensembl2GO}},
-  \code{\link{EntrezGene2GO}}, \code{\link{annotate}},
-  \code{\link{available_organisms}},
-  \code{\link{genomic_ressource-class}},
-  \code{\link{taxonomy}}
+Other genomic_ressource: 
+\code{\link{Bioconductor2GO}()},
+\code{\link{Custom2GO}()},
+\code{\link{Ensembl2GO}()},
+\code{\link{EntrezGene2GO}()},
+\code{\link{annotate}()},
+\code{\link{available_organisms}()},
+\code{\link{genomic_ressource-class}},
+\code{\link{taxonomy}()}
 }
 \concept{genomic_ressource}

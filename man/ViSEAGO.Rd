@@ -3,7 +3,6 @@
 \docType{package}
 \name{ViSEAGO}
 \alias{ViSEAGO}
-\alias{ViSEAGO-package}
 \title{ViSEAGO package}
 \description{
 Easier data mining of biological functions organized into clusters using Gene Ontology and semantic.

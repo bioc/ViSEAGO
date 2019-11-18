@@ -7,7 +7,6 @@
 #' @return a \code{\link[data.table]{data.table}}.
 #' @examples
 #' \dontrun{
-#' ###################
 #' # Organism taxid, Scientific name and common name
 #' ViSEAGO::EntrezGene_orthologs()
 #' }
