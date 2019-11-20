@@ -843,13 +843,13 @@ setMethod(
         text<-hm$x$data[[col]]$text
 
         # ordering gene_frequency table according text
-        genes_frequency<-genes_frequency[rev(row.ord),col.ord]
-        
+        genes_frequency<-data.table(genes_frequency[rev(row.ord),col.ord])
+
         # for each column
         for (i in seq_len(ncol(text))){
             text[,i]<-gsub("(<br>|^)row: ","",text[,i])
             text[,i]<-gsub("<br>value:","<br>-log10 pvalue:",text[,i])
-            text[,i]<-paste(text[,i],"<br>gene frequency: ",genes_frequency[,i],sep="")
+            text[,i]<-paste(text[,i],"<br>gene frequency: ",genes_frequency[,i,with=FALSE],sep="")
         }
 
         # add text
