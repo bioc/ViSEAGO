@@ -849,7 +849,7 @@ setMethod(
         for (i in seq_len(ncol(text))){
             text[,i]<-gsub("(<br>|^)row: ","",text[,i])
             text[,i]<-gsub("<br>value:","<br>-log10 pvalue:",text[,i])
-            text[,i]<-paste(text[,i],"<br>gene frequency: ",genes_frequency[,i,with=FALSE],sep="")
+            text[,i]<-paste(text[,i],"<br>gene frequency: ",unlist(genes_frequency[,i,with=FALSE]),sep="")
         }
 
         # add text
