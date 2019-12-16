@@ -58,3 +58,9 @@ CHANGES IN VERSION 1.1
  o set esummary to 400 terms (instead of 500) by querying on merge_enrich_terms
  o add gene frequency hover text on GOterms_heatmap
  o add custom heatmap colors on GOterms_heatmap
+ o showIC print patch on GOterms_heatmap
+ o GO count update
+
+
+
+

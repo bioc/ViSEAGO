@@ -82,23 +82,26 @@ setMethod(
 
         # count
         Data<-data.table(
-        pvalue=c("not enriched GO terms","enriched GO terms"),
-        Data[,
-            lapply(.SD,function(x){
-
-                # count
-                res<-table(x<0.01)
-
-                # count
-                if(length(res)==1){
-
-                    if(names(res)=="TRUE"){c(0,res)}else{c(res,0)}
-
-                }else{
-
-                    res
-                }
-            }),.SDcols=seq_len(ncol(Data))]
+            pvalue=c("not enriched GO terms","enriched GO terms"),
+            
+                
+                essai<-Data[,
+                    lapply(.SD,function(x){
+    
+                        # count
+                        res<-table(x<0.01)
+    
+                        # count
+                        if(length(res)==1){
+                            
+                            if(names(res)=="TRUE"){c(0,res)}else{c(res,0)}
+                            
+                        }else{
+                            as.vector(res)
+                        } 
+                    }),
+                    .SDcols=seq_len(ncol(Data))
+                ]
         )
 
         # remove pvalue in names

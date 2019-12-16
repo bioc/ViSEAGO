@@ -359,15 +359,11 @@ setMethod(
         # add row_names
         row.names(genes_frequency)<-sResults[,GO.ID]
 
-        # Add IC in panes
-        if(showIC==TRUE){
-
-            # extract values
-            IC<-round(
-                slot(myGOs,"IC")[sResults$GO.ID],
-                digits=2
-            )
-        }
+        # IC
+        IC<-round(
+            slot(myGOs,"IC")[sResults$GO.ID],
+            digits=2
+        )
 
         ## distance correlation
 
