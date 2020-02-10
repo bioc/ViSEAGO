@@ -60,6 +60,7 @@ CHANGES IN VERSION 1.1
  o add custom heatmap colors on GOterms_heatmap
  o showIC print patch on GOterms_heatmap
  o GO count update
+ o Uniprot2GO connection method update
 
 
 

@@ -17,9 +17,20 @@
 #' @export
 Uniprot2GO=function(){
 
+    # temp file
+    temp<-tempfile()
+    
+    # import Gene to Gene Ontology from NCBI Gene database
+    download.file(
+        "ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/current_release_numbers.txt",
+        quiet=TRUE,
+        method="wget",
+        destfile =temp
+    )
+
     # load current release
     Data<-fread(
-        "ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/current_release_numbers.txt",
+        temp,
         verbose=FALSE,
         showProgress=FALSE
     )
