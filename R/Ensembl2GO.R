@@ -32,6 +32,7 @@
 #' # host="fungi.ensembl.org"
 #' # biomart is not available for bacteria
 #'
+#' \dontrun{
 #' # check the Ensembl available biomart (if not known)
 #' # for Animals (host="www.ensembl.org", the default)
 #'  biomaRt::listEnsembl()
@@ -42,6 +43,7 @@
 #'  host="www.ensembl.org",
 #'  version=NULL
 #' )
+#' }
 #' @export
 Ensembl2GO=function(biomart="ensembl",host="www.ensembl.org",version=NULL){
 

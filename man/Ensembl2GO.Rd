@@ -35,6 +35,7 @@ It uses the \code{\link[biomaRt]{useEnsembl}} and  \code{\link[biomaRt]{listData
 # host="fungi.ensembl.org"
 # biomart is not available for bacteria
 
+\dontrun{
 # check the Ensembl available biomart (if not known)
 # for Animals (host="www.ensembl.org", the default)
  biomaRt::listEnsembl()
@@ -45,6 +46,7 @@ Ensembl<-ViSEAGO::Ensembl2GO(
  host="www.ensembl.org",
  version=NULL
 )
+}
 }
 \references{
 Durinck S, Spellman P, Birney E and Huber W (2009).
