@@ -314,6 +314,9 @@ setMethod(
                 )
             )
 
+            # keep targets columns
+            annot<-annot[,.(ENTREZID,GO,EVIDENCE,ONTOLOGY)]
+
             # rename columns
             names(annot)<-c("gene_id","GOID","evidence","category")
 

@@ -27,7 +27,7 @@ remotes::install_gitlab(
     devtools::build("ViSEAGO")
 
     # install package (from R console)
-    install.packages("ViSEAGO_1.1.5.tar.gz", repos = NULL, type = "source")
+    install.packages("ViSEAGO_1.1.6.tar.gz", repos = NULL, type = "source")
 ```
 
 ## Citation
