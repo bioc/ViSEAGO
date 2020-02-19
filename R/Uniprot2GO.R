@@ -12,25 +12,16 @@
 #' @return a  \code{\link{genomic_ressource-class}} object required by \code{\link{annotate}}.
 #' @include genomic_ressource.R
 #' @examples
+#' \dontrun{
 #' # List Uniprot-GOA available organisms
 #' Uniprot<-ViSEAGO::Uniprot2GO()
+#' }
 #' @export
 Uniprot2GO=function(){
 
-    # temp file
-    temp<-tempfile()
-    
-    # import Gene to Gene Ontology from NCBI Gene database
-    download.file(
-        "ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/current_release_numbers.txt",
-        quiet=TRUE,
-        method="wget",
-        destfile =temp
-    )
-
     # load current release
     Data<-fread(
-        temp,
+        "ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/current_release_numbers.txt",
         verbose=FALSE,
         showProgress=FALSE
     )
