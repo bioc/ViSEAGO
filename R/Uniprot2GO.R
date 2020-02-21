@@ -19,9 +19,20 @@
 #' @export
 Uniprot2GO=function(){
 
+    # temp file
+    tmp<-tempfile()
+    
+    # temp file
+    download.file(
+        "ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/current_release_numbers.txt",
+        quiet = TRUE,
+        method=if(.Platform$OS.type=="unix"){"wget"}else{"auto"},
+        destfile=tmp
+    )
+
     # load current release
     Data<-fread(
-        "ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/current_release_numbers.txt",
+        tmp,
         verbose=FALSE,
         showProgress=FALSE
     )
