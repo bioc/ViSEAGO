@@ -63,3 +63,5 @@ CHANGES IN VERSION 1.1
  o Uniprot2GO connection method update
  o prevent bioconductor errors when check examples
  o annotate upgrade
+ o merge_enrich_terms upgrade for custom
+

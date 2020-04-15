@@ -645,12 +645,14 @@ setMethod(
             if(db[1]=="Custom"){
 
                 # load GeneID and symbols
-                annot<-fread(
-                    db[3],
-                    select=c("gene_id","gene_symbol")
+                annot<-unique(
+                    fread(
+                        db[3],
+                        select=c("gene_id","gene_symbol")
+                    )
                 )
 
-                # mereg gene_symbol
+                # merge gene_symbol
                 genes<-merge(
                     genes,
                     annot,
