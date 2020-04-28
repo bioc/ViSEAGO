@@ -64,4 +64,5 @@ CHANGES IN VERSION 1.1
  o prevent bioconductor errors when check examples
  o annotate upgrade
  o merge_enrich_terms upgrade for custom
+ o print graph with orca
 

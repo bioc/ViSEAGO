@@ -41,7 +41,7 @@ myGOs<-ViSEAGO::compute_SS_distances(
 )
 
 # build MDS plot for a GO_SS-class distance object
-ViSEAGO::MDSplot(myGOs)
+ViSEAGO::MDSplot(myGOs,"GOterms")
 
 # GOtermsHeatmap with default parameters
 Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(

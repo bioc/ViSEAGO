@@ -4,7 +4,9 @@
 \name{myGOs}
 \alias{myGOs}
 \title{myGOs dataset}
-\format{An object of class \code{\link{GO_SS-class}}.}
+\format{
+An object of class \code{\link{GO_SS-class}}.
+}
 \usage{
 data(myGOs,package="ViSEAGO")
 }

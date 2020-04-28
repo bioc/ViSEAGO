@@ -1,5 +1,5 @@
 Package: ViSEAGO
-Version: 1.1.9
+Version: 1.1.10
 Title: ViSEAGO: a Bioconductor package for clustering biological functions using Gene Ontology and semantic similarity
 Author: Aurelien Brionne [aut, cre],
         Amelie Juanchich [aut],
@@ -22,6 +22,7 @@ Imports: data.table,
          igraph,
          methods,
          plotly,
+         processx,
          topGO,
          RColorBrewer,
          R.utils,
@@ -50,7 +51,7 @@ URL: https://www.bioconductor.org/packages/release/bioc/html/ViSEAGO.html,
      https://forgemia.inra.fr/UMR-BOA/ViSEAGO
 BugReports: https://forgemia.inra.fr/UMR-BOA/ViSEAGO/issues
 biocViews: Software, Annotation, GO, GeneSetEnrichment,  MultipleComparison, Clustering, Visualization
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
 Collate: 
     'genomic_ressource.R'
     'Bioconductor2GO.R'

@@ -44,7 +44,7 @@ Custom2GO=function(file){
 
     # check GOID validity
     if(!all(gene2go$GOID%in%keys(GO.db))){
-        stop('GOID must be a valid identifiant. see GO.db,columns=columns(GO.db),keys=keys(GO.db)')
+        stop('GOID must be a valid identifiant. see select(GO.db,columns=columns(GO.db),keys=keys(GO.db)')
     }
 
     # extract Go category

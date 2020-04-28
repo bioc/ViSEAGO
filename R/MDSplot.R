@@ -27,7 +27,7 @@
 #' )
 #'
 #' # build MDS plot for a GO_SS-class distance object
-#' ViSEAGO::MDSplot(myGOs)
+#' ViSEAGO::MDSplot(myGOs,"GOterms")
 #'
 #' # GOtermsHeatmap with default parameters
 #' Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
@@ -412,47 +412,37 @@ setMethod(
                 )
             }
 
-        #################
         # add custom layout with dropdown menu
         p<-plotly::layout(p,
 
-          #################
           # add title
           title="MultiDimensional Scaling plot",
 
-          #################
           # increase font size
           font=list(size=14),
 
-          #################
           # add axis legends
           xaxis=list(title="Dimension 1"),
           yaxis=list(title="Dimension 2"),
 
-          #################
           # add scrolling menu for availables measures
           updatemenus = list(
 
-            #################
             # measure dropdown menu
             list(
 
-              #################
               # button position
               x = 0.1,
               y = 1.1,
 
               buttons = lapply(seq_along(measures),function(x){
 
-                #################
                 # init visibility to all FASLE
                 values=rep(FALSE,length(measures))
 
-                #################
                 # turn to true for each measures
                 values[x]<-TRUE
 
-                #################
                 # output button
                 list(method ="restyle",
                 args = list("visible",as.list(values)),
@@ -473,7 +463,7 @@ setMethod(
         }else{
 
             # print heatmap
-            export(p,file=file)
+            orca(p,file)
         }
     }
 )
