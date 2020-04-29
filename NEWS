@@ -51,7 +51,7 @@ CHANGES IN VERSION 1.0.0
 ------------------------
  o master branch of Bioconductor
 
-CHANGES IN VERSION 1.1
+CHANGES IN VERSION 1.2
 ------------------------
  o add gene_symbol field for Custom2GO
  o patch for Custom gene_symbols on merge_enrich_terms
@@ -64,5 +64,8 @@ CHANGES IN VERSION 1.1
  o prevent bioconductor errors when check examples
  o annotate upgrade
  o merge_enrich_terms upgrade for custom
+
+CHANGES IN VERSION 1.3
+------------------------
  o print graph with orca
 
