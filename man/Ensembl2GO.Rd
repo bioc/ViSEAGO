@@ -4,10 +4,10 @@
 \alias{Ensembl2GO}
 \title{Check available organisms datasets at Ensembl.}
 \usage{
-Ensembl2GO(biomart = "ensembl", host = "www.ensembl.org", version = NULL)
+Ensembl2GO(biomart = "genes", host = "www.ensembl.org", version = NULL)
 }
 \arguments{
-\item{biomart}{the biomart name (eg. "ensembl", the default) available with \pkg{biomaRt} package \code{\link[biomaRt]{listEnsembl}}.}
+\item{biomart}{the biomart name (eg. "genes", the default) available with \pkg{biomaRt} package \code{\link[biomaRt]{listEnsembl}}.}
 
 \item{host}{the Ensembl host adress for \href{http://www.ensembl.org/index.html}{vertebrate} ("www.ensembl.org", the default value),
 \href{http://www.plants.ensembl.org/index.html}{plants} ("plants.ensembl.org"),
@@ -38,11 +38,11 @@ It uses the \code{\link[biomaRt]{useEnsembl}} and  \code{\link[biomaRt]{listData
 \dontrun{
 # check the Ensembl available biomart (if not known)
 # for Animals (host="www.ensembl.org", the default)
- biomaRt::listEnsembl()
+biomaRt::listEnsembl()
 
 # List Ensembl available organisms
 Ensembl<-ViSEAGO::Ensembl2GO(
- biomart="ensembl",
+ biomart="genes",
  host="www.ensembl.org",
  version=NULL
 )
