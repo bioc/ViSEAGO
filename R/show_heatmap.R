@@ -8,9 +8,12 @@
 #' @param object a \code{\link{GO_clusters-class}} object from \code{\link{GOterms_heatmap}} or \code{\link{GOclusters_heatmap}}.
 #' @param type could be "GOterms" to display GOterms clustering heatmap, or "GOclusters" to display GOclusters heatmap.
 #' @param file static image output file name (default to NULL).
+#' @param plotly_update update plotly html dependencies (default to FALSE).
 #' @details
 #' This method displays an interactive heatmap (if \code{file}=NULL) from \code{\link{GO_clusters-class}} object for "GOterms" or "GOclusters" type.\cr
-#' A static png image could be printed by setting \code{file} argument.
+#' A static png image could be printed by setting \code{file} argument.\cr
+#' Interactive heatmap cannot be displayed between two R versions.
+#' Then interactive view (build with previous R version) can be updated to new R version using \code{plotly_update} argument setting to TRUE.
 #' @return display or print heatmap.
 #' @examples
 #' # load data example
@@ -98,7 +101,7 @@
 #' @exportMethod show_heatmap
 setGeneric(
     name="show_heatmap",
-    def=function(object,type,file=NULL) {
+    def=function(object,type,file=NULL,plotly_update=FALSE) {
         standardGeneric("show_heatmap")
     }
 )
@@ -111,7 +114,7 @@ setMethod(
         object="GO_clusters",
         type="character"
     ),
-    definition=function(object,type,file){
+    definition=function(object,type,file,plotly_update){
 
         # check type argument
         type=match.arg(type,c("GOterms","GOclusters"))
@@ -125,6 +128,18 @@ setMethod(
             # GOclusters_heatmap
             GOclusters=slot(object,"heatmap")$GOclusters
         )
+
+        # redirect plotly html_dependency to local packages
+        if(plotly_update==TRUE){
+
+            for(i in seq_len(length(heatmap[["dependencies"]]))){
+                heatmap[["dependencies"]][[i]][["src"]][["file"]]<-gsub(
+                    "^.+[[:digit:]]\\.[[:digit:]]",
+                    .libPaths()[1],
+                    heatmap[["dependencies"]][[i]][["src"]][["file"]]
+                )
+            }
+        }
 
         # return interactive or static heatmap according file
         if(is.null(file)){

@@ -5,9 +5,9 @@
 \alias{show_heatmap,GO_clusters,character-method}
 \title{Display an interactive or static heatmap.}
 \usage{
-show_heatmap(object, type, file = NULL)
+show_heatmap(object, type, file = NULL, plotly_update = FALSE)
 
-\S4method{show_heatmap}{GO_clusters,character}(object, type, file = NULL)
+\S4method{show_heatmap}{GO_clusters,character}(object, type, file = NULL, plotly_update = FALSE)
 }
 \arguments{
 \item{object}{a \code{\link{GO_clusters-class}} object from \code{\link{GOterms_heatmap}} or \code{\link{GOclusters_heatmap}}.}
@@ -15,6 +15,8 @@ show_heatmap(object, type, file = NULL)
 \item{type}{could be "GOterms" to display GOterms clustering heatmap, or "GOclusters" to display GOclusters heatmap.}
 
 \item{file}{static image output file name (default to NULL).}
+
+\item{plotly_update}{update plotly html dependencies (default to FALSE).}
 }
 \value{
 display or print heatmap.
@@ -24,7 +26,9 @@ Display a heatmap in interactive or static mode.
 }
 \details{
 This method displays an interactive heatmap (if \code{file}=NULL) from \code{\link{GO_clusters-class}} object for "GOterms" or "GOclusters" type.\cr
-A static png image could be printed by setting \code{file} argument.
+A static png image could be printed by setting \code{file} argument.\cr
+Interactive heatmap cannot be displayed between two R versions.
+Then interactive view (build with previous R version) can be updated to new R version using \code{plotly_update} argument setting to TRUE.
 }
 \examples{
 # load data example
