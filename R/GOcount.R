@@ -156,7 +156,7 @@ setMethod(
         }else{
 
             # print heatmap
-            export(p,file=file)
+            orca(p,file=file)
         }
     }
 )

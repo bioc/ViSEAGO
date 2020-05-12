@@ -21,7 +21,7 @@ print table and upset.
 This method allows to visualize GO terms intersections between results of enrichment tests.
 }
 \details{
-This function displays the intersections of enriched GO terms (p<0.01) between all results provided by \code{\link{enrich_GO_terms-class}}
+This function displays and print the intersections of enriched GO terms (p<0.01) between all results provided by \code{\link{enrich_GO_terms-class}}
 or \code{\link{GO_clusters-class}} objects. The intersections are shown in an upset plot and printed in a table.
 }
 \examples{

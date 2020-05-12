@@ -7,7 +7,7 @@
 #' @param object an \code{\link{enrich_GO_terms-class}} or \code{\link{GO_clusters-class}} objects.
 #' @param file output file name (default to "./upset.xls")
 #' @details
-#' This function displays the intersections of enriched GO terms (p<0.01) between all results provided by \code{\link{enrich_GO_terms-class}}
+#' This function displays and print the intersections of enriched GO terms (p<0.01) between all results provided by \code{\link{enrich_GO_terms-class}}
 #' or \code{\link{GO_clusters-class}} objects. The intersections are shown in an upset plot and printed in a table.
 #' @return print table and upset.
 #' @include enrich_GO_terms.R GO_clusters.R
@@ -61,14 +61,28 @@ setMethod(
             Data[,lapply(.SD,function(x){val=x<0.01;x[val]<-1;x[!val]<-0;x}),.SDcols=2:ncol(Data)]
         )
 
-        # draw upset
-        upset(
-            Data,
-            sets=rev(names(Data)[-1]),
-            keep.order = TRUE,
-            text.scale=3
+        # draw upset at screen
+        print(
+            upset(
+                Data,
+                sets=rev(names(Data)[-1]),
+                keep.order = TRUE,
+                text.scale=3
+            )
         )
 
+        # print image to file
+        png(sub("\\..+$",".png",file))
+            print(    
+                upset(
+                    Data,
+                    sets=rev(names(Data)[-1]),
+                    keep.order = TRUE,
+                    text.scale=3
+                )
+            )
+        dev.off()
+        
         # build list vectors of significant GO.ID by conditions
         setlist<-lapply(2:ncol(Data),function(x){
 
