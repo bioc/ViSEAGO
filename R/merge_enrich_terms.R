@@ -154,7 +154,7 @@ setMethod(
                     # extract  quering objects names
                     x=Input[[x]]
 
-                    # check existance
+                    # check existence
                     values<-ls(envir=envir)
 
                     # check if available
@@ -171,7 +171,7 @@ setMethod(
                     # objects type
                     obj.type=vapply(x,class,"")
 
-                    # extract ontoloy type
+                    # extract ontology type
                     vapply(seq_along(x),function(y){
 
                         # extract ontology slot
@@ -265,8 +265,8 @@ setMethod(
                         # scored GOs
                         GO_scored=length(slot(x[[y]],"score")),
 
-                        # significant GOs
-                        GO_significant=table(slot(x[[y]],"score")<0.01)[2],
+                        # significant GOs according cutOff
+                        GO_significant=table(slot(x[[y]],"score")<as.numeric(sub("^.+[[:space:]]","",slot(x[[y]],"testName"))))[2],
 
                         # feasibles genes
                         feasible_genes=slot(x[[y]],"geneData")[1],
@@ -326,7 +326,7 @@ setMethod(
             # tested algorithm
             algorithms<-Data[pos]
 
-            # extract significvant pvalues results
+            # extract significant pvalues results
             unlist(
                 lapply(algorithms,function(y){
 
@@ -334,7 +334,11 @@ setMethod(
                     pvalues<-topGO::score(y)
 
                     # extract names of enrich terms
-                    as.vector(names(pvalues[pvalues<0.01]))
+                    as.vector(
+                        names(
+                            pvalues[pvalues<as.numeric(sub("^.+[[:space:]]","",slot(y,"testName")))]
+                        )
+                    )
                 })
             )
         })
@@ -375,7 +379,7 @@ setMethod(
             stop("No enrich GO terms available in at least one condition")
         }
 
-        # initialyse input
+        # initialize input
         input=list()
 
         # combine results
@@ -709,23 +713,23 @@ setMethod(
             pvalues=data.table(do.call("cbind",pvalues))
 
             # algoritms
-            algorithms=vapply(algorithms,function(x){slot(x,"algorithm")},"")
+            algo=vapply(algorithms,function(x){slot(x,"algorithm")},"")
 
             # if use of different algorithms
-            if(length(algorithms)>1){
+            if(length(algo)>1){
 
                 # add names
-                names(pvalues)[-1]<-paste(rep(algorithms,each=2),names(pvalues)[-1],sep=".")
-                }
+                names(pvalues)[-1]<-paste(rep(algo,each=2),names(pvalues)[-1],sep=".")
+            }
 
-                # return input params
-                assign(
-                    "input",
-                    c(input,list(algorithms)),
-                    inherits=TRUE
-                )
+            # return input params
+            assign(
+                "input",
+                c(input,list(algo)),
+                inherits=TRUE
+            )
 
-            ## combine results#
+            ## combine results
 
             # all results in list
             Results<-list(
@@ -751,8 +755,14 @@ setMethod(
             # remove NA in GO.Id column
             Results<-Results[!is.na(Results$GO.ID)]
 
+            # extract pvalue threshold
+            p<-unique(vapply(algorithms,function(x){ as.numeric(sub("^.+[[:space:]]","",slot(x,"testName")))},0))
+
+            # stop if more than one pvalue threshold among comparison
+            if(length(p)>1){stop("Only one pvalue theshold is allowed by list element.")}
+
             # Remove gene ID and symbol if GO term not significant
-            Results[Results$pvalue>=0.01,`:=`(Significant_genes=NA,Significant_genes_symbol=NA)]
+            Results[Results$pvalue>=p,`:=`(Significant_genes=NA,Significant_genes_symbol=NA)]
 
             if(!is.null(names(Input))){
 
@@ -817,7 +827,7 @@ setMethod(
             allResults[,"GO.ID":=NULL]
         )
 
-        # rename the fisrt 3 columns
+        # rename the first 3 columns
         names(allResults)[seq_len(3)]<-c("GO.ID","term","definition")
 
         # significant results in at least one condition

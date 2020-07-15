@@ -32,19 +32,33 @@ setMethod(
         # Extract pvalues
         Data<-Data[,grep("\\.pvalue",names(Data)),with=FALSE]
 
+        # pvalues threshlod according condition
+        p<-vapply(slot(object,"topGO"),function(x){
+
+            #  unlist
+            x=unlist(x)
+
+            # extract pvalue threshold
+            as.numeric(
+                sub(
+                    "^.+<",
+                    "",
+                    x[grep("test_name",names(x))]
+                )
+            )
+        },0)
+
         # count significant pvalues by condition
-        Data<-Data[,lapply(.SD,function(x){sum(x<0.01,na.rm = TRUE)}),.SDcols=seq_len(ncol(Data))]
-
-        # melt the table
-        Data<-melt.data.table(
-            Data,
-            measure.vars=names(Data),
-            variable.name = "conditions",
-            value.name = "significant GO terms number"
-        )
-
-        # remove .pvalue in conditions column
-        Data[,"conditions":=gsub("\\.pvalue","",Data$conditions)]
+        Data<-lapply(seq_len(ncol(Data)),function(x){
+            
+            data.table(
+                conditions=sub("\\.pvalue","",names(Data)[x]),
+                `significant GO terms number`=sum(Data[,x,with=FALSE]<p[x],na.rm=TRUE)
+            )
+        })
+        
+        # bind results
+        Data<-rbindlist(Data)
 
         # get topGO information
         topGO<-slot(object,"topGO")
@@ -86,7 +100,7 @@ setMethod(
             "\n- input:\n        ", paste(paste(names(object@input),
             vapply(slot(object,"input"),function(x){paste(x,collapse=", ")},""),sep=": "),collapse="\n        "),
             "\n- topGO summary:\n ", topGO,
-            "\n- enrich GOs data.table (p<0.01 in at least one list): ",nrow(slot(object,"data"))," GO terms of ",nrow(Data)," conditions.",
+            "\n- enrich GOs (in at least one list): ",nrow(slot(object,"data"))," GO terms of ",nrow(Data)," conditions.",
             paste("\n       ",Data$conditions,":",Data$`significant GO terms number`,"terms"),sep=""
         )
     }

@@ -179,23 +179,26 @@ Now, we perform the GO enrichment tests for BP category with Fisher's exact test
 <u>NB</u>: p-values of enriched GO terms are not adjusted and considered significant if below 0.01.
 
 ```{r Enrichment_data_tests}
-# perform TopGO tests
+# perform topGO tests
 elim_BP_PregnantvsLactate<-topGO::runTest(
     BP_PregnantvsLactate,
     algorithm ="elim",
-    statistic = "fisher"
+    statistic = "fisher",
+    cutOff=0.01
 )
 
 elim_BP_VirginvsLactate<-topGO::runTest(
     BP_VirginvsLactate,
     algorithm ="elim",
-    statistic = "fisher"
+    statistic = "fisher",
+    cutOff=0.01
 )
 
 elim_BP_VirginvsPregnant<-topGO::runTest(
     BP_VirginvsPregnant,
     algorithm ="elim",
-    statistic = "fisher"
+    statistic = "fisher",
+    cutOff=0.01
 )
 ```
 
@@ -206,7 +209,8 @@ The printed table contains for each enriched GO terms, additional columns includ
 
 ```{r Enrichment_merge}
 # merge topGO results
-BP_sResults<-ViSEAGO::merge_enrich_terms(
+ViSEAGO::
+BP_sResults<-merge_enrich_terms(
     Input=list(
         PregnantvsLactate=c(
             "BP_PregnantvsLactate",
