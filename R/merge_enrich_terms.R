@@ -151,7 +151,7 @@ setMethod(
             unlist(
                 lapply(seq_along(Input),function(x){
 
-                    # extract  quering objects names
+                    # extract quering objects names
                     x=Input[[x]]
 
                     # check existence
@@ -160,7 +160,7 @@ setMethod(
                     # check if available
                     available<-x%in%values
 
-                    # stop if not
+                    # stop if not found
                     if(!all(available)){
                         stop(paste("objects not found:",paste(x[!available],collapse=", "),sep="\n"))
                     }
@@ -193,7 +193,7 @@ setMethod(
         # check ontology
         if(length(check.onto)>1){
 
-            # stop if more than one godata by list
+            # stop if more than one topGOdata by list
             stop("Only one ontology supported")
         }
 
@@ -312,34 +312,25 @@ setMethod(
             }
 
             # objects type
-            if(sum(obj.type%in%"topGOresult")<1){
+            if(sum(obj.type%in%"topGOresult")>1){
 
                 # stop if more than one godata by list
-                stop("At least one topGOresult object needed by list")
+                stop("Only one topGOresult object is supported by list")
             }
 
             ## find and extract pvalues
 
-            # load GOdata
+            # find topGOresult
             pos=which(obj.type=="topGOresult")
 
-            # tested algorithm
-            algorithms<-Data[pos]
-
-            # extract significant pvalues results
-            unlist(
-                lapply(algorithms,function(y){
-
-                    # extract scores
-                    pvalues<-topGO::score(y)
-
-                    # extract names of enrich terms
-                    as.vector(
-                        names(
-                            pvalues[pvalues<as.numeric(sub("^.+[[:space:]]","",slot(y,"testName")))]
-                        )
-                    )
-                })
+            # extract scores
+            pvalues<-topGO::score(Data[[pos]])
+            
+            # extract names of enrich terms
+            as.vector(
+                names(
+                    pvalues[pvalues<as.numeric(sub("^.+[[:space:]]","",slot(Data[[pos]],"testName")))]
+                )
             )
         })
 
@@ -400,7 +391,7 @@ setMethod(
             GOdata=Data[[pos]]
 
             # tested algorithm
-            algorithms<-Data[-pos]
+            algorithm<-Data[-pos]
 
             ## extract some statistics from initial GOdata object (before enrichment test)
 
@@ -680,47 +671,21 @@ setMethod(
 
             ## extract pvalue according the algorithm results
 
-            # extract pvalues results
-            pvalues<-lapply(seq_along(algorithms),function(y){
+            # extract all pvalues from topGOresult
+            pvalue<-topGO::score(algorithm[[1]])
+            
+            # select pvalues from topGOresult
+            pvalue<-pvalue[GOs]
+            
+            # extract pvalue in data.table
+            pvalues<-data.table(
+                GO.ID=names(pvalue),
+                pvalue=as.numeric(format(pvalue,scientific = T)),
+                `-log10_pvalue`=round(-log10(pvalue),digits=2)
+            )
 
-                # extract all pvalues from topGOresult
-                pvalue<-topGO::score(algorithms[[y]])
-
-                # select pvalues from topGOresult
-                pvalue<-pvalue[GOs]
-
-                # extract pvalue in data.table
-                pvalue<-data.table(
-                    GO.ID=names(pvalue),
-                    pvalue=as.numeric(format(pvalue,scientific = T)),
-                    round(-log10(pvalue),digits=2)
-                )
-
-                # ordering pvalue by go term
-                names(pvalue)[ncol(pvalue)]="-log10_pvalue"
-
-                if(y>1){
-
-                    # remove GO.ID
-                    pvalue[,"GO.ID":=NULL]
-                }
-
-                # return
-                pvalue
-            })
-
-            # convert to data.table
-            pvalues=data.table(do.call("cbind",pvalues))
-
-            # algoritms
-            algo=vapply(algorithms,function(x){slot(x,"algorithm")},"")
-
-            # if use of different algorithms
-            if(length(algo)>1){
-
-                # add names
-                names(pvalues)[-1]<-paste(rep(algo,each=2),names(pvalues)[-1],sep=".")
-            }
+            # algorithm
+            algo=slot(algorithm[[1]],"algorithm")
 
             # return input params
             assign(
@@ -756,29 +721,19 @@ setMethod(
             Results<-Results[!is.na(Results$GO.ID)]
 
             # extract pvalue threshold
-            p<-unique(vapply(algorithms,function(x){ as.numeric(sub("^.+[[:space:]]","",slot(x,"testName")))},0))
-
-            # stop if more than one pvalue threshold among comparison
-            if(length(p)>1){stop("Only one pvalue theshold is allowed by list element.")}
+            p<-as.numeric(sub("^.+[[:space:]]","",slot(algorithm[[1]],"testName")))
 
             # Remove gene ID and symbol if GO term not significant
             Results[Results$pvalue>=p,`:=`(Significant_genes=NA,Significant_genes_symbol=NA)]
 
             if(!is.null(names(Input))){
 
-                # add GOdata name
-                if(x==1){
-
-                    # add GOdata name in the header
-                    names(Results)[-1]<-paste(names(Input)[x],
-                    names(Results)[-1],sep=".")
-
-                }else{
-
-                    # add GOdata name in the header
-                    names(Results)[-1]<-paste(names(Input)[x],
-                 names(Results)[-1],sep=".")
-                }
+                # add GOdata name in the header
+                names(Results)[-1]<-paste(
+                    names(Input)[x],
+                    names(Results)[-1],
+                    sep="."
+                )
             }
 
             # return Results

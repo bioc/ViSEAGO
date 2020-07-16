@@ -174,7 +174,7 @@ BP_VirginvsPregnant<-ViSEAGO::create_topGOdata(
 )
 ```
 
-Now, we perform the GO enrichment tests for BP category with Fisher's exact test and *elim* algorithm using `topGO::runTest` method.  
+Now, we perform the GO enrichment tests for BP category with Fisher's exact test and *elim* algorithm using `topGO::runTest` method.
 
 <u>NB</u>: p-values of enriched GO terms are not adjusted and considered significant if below 0.01.
 
@@ -209,8 +209,7 @@ The printed table contains for each enriched GO terms, additional columns includ
 
 ```{r Enrichment_merge}
 # merge topGO results
-ViSEAGO::
-BP_sResults<-merge_enrich_terms(
+BP_sResults<-ViSEAGO::merge_enrich_terms(
     Input=list(
         PregnantvsLactate=c(
             "BP_PregnantvsLactate",
