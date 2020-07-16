@@ -5,13 +5,15 @@
 \alias{merge_enrich_terms,list-method}
 \title{Merge enriched GO terms.}
 \usage{
-merge_enrich_terms(Input, envir = .GlobalEnv)
+merge_enrich_terms(Input, cutoff = 0.01, envir = .GlobalEnv)
 
-\S4method{merge_enrich_terms}{list}(Input, envir = .GlobalEnv)
+\S4method{merge_enrich_terms}{list}(Input, cutoff = 0.01, envir = .GlobalEnv)
 }
 \arguments{
 \item{Input}{a list containing named elements. Each element must contain the name of \code{\link[topGO]{topGOdata-class}}
 object created by \code{\link{create_topGOdata}} method and the associated  \code{\link[topGO]{topGOresult-class}} object(s).}
+
+\item{cutoff}{default pvalue cutoff (default to 0.01). Several cutoff can be use in the same order as list elements.}
 
 \item{envir}{objects environment (default to .GlobalEnv).}
 }
@@ -28,7 +30,7 @@ corresponding GO annotations (\code{\link[topGO]{topGOdata-class}} object):
 informations about GO term (identifiant, name, and description),
 gene frequency (number of significant genes / Annotated genes), pvalue, -log10(pvalue), significant genes
 identifiants (GeneID, or Ensembl ID, or uniprot accession), and gene symbols.
-At the last, this method builds a merged data.table of enriched GO terms (p<0.01)
+At the last, this method builds a merged data.table of enriched GO terms
 at least once and provides all mentionned columns.
 }
 \examples{

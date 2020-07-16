@@ -9,13 +9,14 @@
 #' @family GO_terms
 #' @param Input a list containing named elements. Each element must contain the name of \code{\link[topGO]{topGOdata-class}}
 #' object created by \code{\link{create_topGOdata}} method and the associated  \code{\link[topGO]{topGOresult-class}} object(s).
+#' @param cutoff default pvalue cutoff (default to 0.01). Several cutoff can be use in the same order as list elements.
 #' @param envir objects environment (default to .GlobalEnv).
 #' @details This method extracts for each result of GO enrichment test (\code{\link[topGO]{topGOresult-class}} object) and
 #' corresponding GO annotations (\code{\link[topGO]{topGOdata-class}} object):
 #' informations about GO term (identifiant, name, and description),
 #' gene frequency (number of significant genes / Annotated genes), pvalue, -log10(pvalue), significant genes
 #' identifiants (GeneID, or Ensembl ID, or uniprot accession), and gene symbols.
-#' At the last, this method builds a merged data.table of enriched GO terms (p<0.01)
+#' At the last, this method builds a merged data.table of enriched GO terms
 #' at least once and provides all mentionned columns.
 #' @return an \code{\link{enrich_GO_terms-class}} object.
 #' @references
@@ -129,6 +130,7 @@ setGeneric(
     name="merge_enrich_terms",
     def=function(
         Input,
+        cutoff=0.01,
         envir=.GlobalEnv
     ){
         standardGeneric("merge_enrich_terms")
@@ -142,7 +144,19 @@ setMethod(
     signature(
         Input="list"
     ),
-    definition=function(Input,envir){
+    definition=function(Input,cutoff,envir){
+
+        ## cutoff
+
+        # check cutoff length according Input
+        if(length(cutoff)>1 & length(cutoff)!=length(Input)){
+            stop("cutoff must be a single value to repet for each list element, or the same length than list")
+        }
+
+        # repet cutoff value according Input length
+        if(length(cutoff)==1){
+            cutoff<-rep(cutoff,length(Input))
+        }
 
         ## check ontology
 
@@ -201,6 +215,9 @@ setMethod(
 
         # build topGO summary
         topGO_summary=lapply(seq_along(Input),function(x){
+
+            # keep pos
+            pos=x
 
             # extract  quering objects names
             x=Input[[x]]
@@ -266,7 +283,7 @@ setMethod(
                         GO_scored=length(slot(x[[y]],"score")),
 
                         # significant GOs according cutOff
-                        GO_significant=table(slot(x[[y]],"score")<as.numeric(sub("^.+[[:space:]]","",slot(x[[y]],"testName"))))[2],
+                        GO_significant=table(slot(x[[y]],"score")<cutoff[pos])[2],
 
                         # feasibles genes
                         feasible_genes=slot(x[[y]],"geneData")[1],
@@ -329,7 +346,7 @@ setMethod(
             # extract names of enrich terms
             as.vector(
                 names(
-                    pvalues[pvalues<as.numeric(sub("^.+[[:space:]]","",slot(Data[[pos]],"testName")))]
+                    pvalues[pvalues<cutoff[x]]
                 )
             )
         })
@@ -595,12 +612,23 @@ setMethod(
             # if db  match to Ensembl
             if(db[1]=="Ensembl"){
 
-                # connect to Ensembl
-                mart<-useEnsembl(
-                    "ensembl",
-                    host=db[2],
-                    version=db[6]
-                )
+                if(db[3]!="http://grch37.ensembl.org"){
+
+                    # connect to Ensembl
+                    mart<-useEnsembl(
+                        biomart="genes",
+                        host=db[3],
+                        version=db[6]
+                    )
+                    
+                }else{
+                    # connect to Ensembl
+                    mart<-useEnsembl(
+                        biomart="genes",
+                        GRCh =37,
+                        version=db[6]
+                    )
+                }
 
                 # connect to ensembl specified dataset
                 myspecies<-useDataset(
@@ -720,11 +748,8 @@ setMethod(
             # remove NA in GO.Id column
             Results<-Results[!is.na(Results$GO.ID)]
 
-            # extract pvalue threshold
-            p<-as.numeric(sub("^.+[[:space:]]","",slot(algorithm[[1]],"testName")))
-
             # Remove gene ID and symbol if GO term not significant
-            Results[Results$pvalue>=p,`:=`(Significant_genes=NA,Significant_genes_symbol=NA)]
+            Results[Results$pvalue>=cutoff[x],`:=`(Significant_genes=NA,Significant_genes_symbol=NA)]
 
             if(!is.null(names(Input))){
 
@@ -792,6 +817,7 @@ setMethod(
             input=input,
             ont=check.onto,
             topGO=topGO_summary,
+            cutoff=list(cutoff),
             data=allResults
         )
     }

@@ -210,6 +210,7 @@ The printed table contains for each enriched GO terms, additional columns includ
 ```{r Enrichment_merge}
 # merge topGO results
 BP_sResults<-ViSEAGO::merge_enrich_terms(
+    cutoff=0.01,
     Input=list(
         PregnantvsLactate=c(
             "BP_PregnantvsLactate",

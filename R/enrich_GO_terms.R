@@ -14,6 +14,7 @@ setClass(
         same_genes_background="logical",
         input="list",
         ont="character",
+        cutoff="list",
         topGO="list",
         data="data.table"
     )
@@ -33,20 +34,7 @@ setMethod(
         Data<-Data[,grep("\\.pvalue",names(Data)),with=FALSE]
 
         # pvalues threshlod according condition
-        p<-vapply(slot(object,"topGO"),function(x){
-
-            #  unlist
-            x=unlist(x)
-
-            # extract pvalue threshold
-            as.numeric(
-                sub(
-                    "^.+<",
-                    "",
-                    x[grep("test_name",names(x))]
-                )
-            )
-        },0)
+        p<-unlist(slot(object,"cutoff"))
 
         # count significant pvalues by condition
         Data<-lapply(seq_len(ncol(Data)),function(x){
