@@ -389,7 +389,8 @@ setMethod(
                     sep=""
                 ),
                 destfile =temp,
-                quiet=TRUE
+                quiet=TRUE,
+                method="internal"
             )
 
             # unzip

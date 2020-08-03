@@ -182,6 +182,7 @@ setMethod(
                     levels=unique(res.mds$GO.cluster)
                 )
             }
+
         }else{
 
             # import SS_dist from object
@@ -219,7 +220,12 @@ setMethod(
             res.mds=rbindlist(res.mds)
 
             # custom text
-            res.mds[,`:=`("text"=res.mds$GO.cluster,GO.cluster=gsub("_.+$","",res.mds$GO.cluster))]
+            res.mds[,
+                `:=`(
+                    "text"=res.mds$GO.cluster,
+                    GO.cluster=gsub("_.+$","",res.mds$GO.cluster)
+                )
+            ]
 
             # add levels to measures
             res.mds$measure<-factor(
@@ -227,7 +233,7 @@ setMethod(
                 levels=unique(res.mds$measure)
             )
 
-            # add levels to GO.cluster
+            # add levels to GO.cluster 
             res.mds$GO.cluster<-factor(
                 res.mds$GO.cluster,
                 levels=unique(res.mds$GO.cluster)
@@ -292,6 +298,9 @@ setMethod(
                 xaxis=list(title="Dimension 1"),
                 yaxis=list(title="Dimension 2"),
 
+                # add margin
+                margin=list(t=100),
+
                 # add scrolling menu for availables measures
                 updatemenus = list(
 
@@ -347,6 +356,11 @@ setMethod(
                 sort=FALSE
             )
 
+            # ordering clusters
+            res.mds[,
+                GO.cluster:=factor(GO.cluster,levels=sort(unique(as.numeric(GO.cluster))))
+            ]
+
             # for terms
             if(type=="GOterms"){
 
@@ -378,7 +392,10 @@ setMethod(
 
                     # add axis legends
                     xaxis=list(title="Dimension 1"),
-                    yaxis=list(title="Dimension 2")
+                    yaxis=list(title="Dimension 2"),
+
+                    # add margin
+                    margin=list(t=100)
                 )
             }else{
 
@@ -424,6 +441,9 @@ setMethod(
           # add axis legends
           xaxis=list(title="Dimension 1"),
           yaxis=list(title="Dimension 2"),
+
+          # add margin
+          margin=list(t=100),
 
           # add scrolling menu for availables measures
           updatemenus = list(

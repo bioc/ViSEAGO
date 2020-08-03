@@ -2,11 +2,11 @@
 title: "An overview of ViSEAGO: Visualisation, Semantic similarity, Enrichment Analysis of Gene Ontology."
 author:
 - name: Aurelien Brionne
-  affiliation: Institut National de la Recherche Agronomique (INRA)
+  affiliation: "Institut national de recherche pour l'agriculture, l'alimentation et l'environnement (INRAE)"
 - name: Amelie Juanchich
-  affiliation: Institut National de la Recherche Agronomique (INRA)
+  affiliation: "Institut national de recherche pour l'agriculture, l'alimentation et l'environnement (INRAE)"
 - name: Christelle Hennequet-Antier
-  affiliation: Institut National de la Recherche Agronomique (INRA)
+  affiliation: "Institut national de recherche pour l'agriculture, l'alimentation et l'environnement (INRAE)"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   BiocStyle::html_document:
@@ -45,15 +45,8 @@ ViSEAGO is like a workflow with input lists of genes and associated genomic reso
 Firtsly, install the `r BiocStyle::Biocpkg("ViSEAGO")` R package from [Bioconductor](https://www.bioconductor.org/), or [ForgeMIA](https://forgemia.inra.fr/umr-boa/viseago) gitlab.
 
 ```{r ViSEAGO_install}
-# load ViSEAGO package from Bioconductor
+# Install ViSEAGO package from Bioconductor
 BiocManager::install("ViSEAGO")
-
-# load ViSEAGO package from gitLab
-remotes::install_gitlab(
-    "umr-boa/viseago",
-    host = "forgemia.inra.fr",
-    build_opts = c("--no-resave-data","--no-manual")
-)
 ```
 
 <u>NB:</u> This vignette is not runnable and provide a pseudo-code to illustrate ViSEAGO package capabilities.

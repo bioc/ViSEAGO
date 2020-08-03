@@ -142,7 +142,7 @@ setMethod(
             yaxis =list(
                 title =""
             ),
-             margin =list(b =100,l=150),
+             margin =list(t=100,b =100,l=150),
             title="number of significant (or not) GO terms by conditions",
             barmode = 'stack'
         )

@@ -74,4 +74,8 @@ CHANGES IN VERSION 1.3
  o merge_enrich_terms upgrade pvalue cutoff
  o merge_enrich_terms globale upgrade
  o GOterms_heatmap remove row side colors text
+ o vignettes update
+ o annotate() update for uniprot
+
+
 

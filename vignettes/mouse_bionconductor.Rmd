@@ -2,11 +2,11 @@
 title: "Functional analysis of mouse mammary gland RNA-Seq"
 author:
 - name: Aurelien Brionne
-  affiliation: BOA, Institut National de la Recherche Agronomique (INRA), Universitée de Tours, 37380 Nouzilly, France
+  affiliation: "Institut national de recherche pour l'agriculture, l'alimentation et l'environnement (INRAE)"
 - name: Amelie Juanchich
-  affiliation: BOA, Institut National de la Recherche Agronomique (INRA), Universitée de Tours, 37380 Nouzilly, France
+  affiliation: "Institut national de recherche pour l'agriculture, l'alimentation et l'environnement (INRAE)"
 - name: Christelle Hennequet-Antier
-  affiliation: BOA, Institut National de la Recherche Agronomique (INRA), Universitée de Tours, 37380 Nouzilly, France
+  affiliation:"Institut national de recherche pour l'agriculture, l'alimentation et l'environnement (INRAE)"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   BiocStyle::html_document:
@@ -129,13 +129,13 @@ myGENE2GO
 cat(
 "- object class: gene2GO
 - database: Bioconductor
-- stamp/version: 2018-Oct11
+- stamp/version: 2019-Jul10
 - organism id: org.Mm.eg.db
 
 GO annotations:
-- Molecular Function (MF): 22744 annotated genes with 90922 terms (4133 unique terms)
-- Biological Process (BP): 23239 annotated genes with 160094 terms (12087 unique terms)
-- Cellular Component (CC): 23416 annotated genes with 105430 terms (1727 unique terms)"  
+- Molecular Function (MF): 22707 annotated genes with 91986 terms (4121 unique terms)
+- Biological Process (BP): 23210 annotated genes with 164825 terms (12224 unique terms)
+- Cellular Component (CC): 23436 annotated genes with 107852 terms (1723 unique terms)"
 )
 ```
 
@@ -235,17 +235,7 @@ BP_sResults
 </br>
 ```{r Enrichment_merge_display,echo=FALSE,eval=TRUE}
 cat(
-"- object class: gene2GO
-- database: Bioconductor
-- stamp/version: 2018-Apr4
-- organism id: org.Mm.eg.db
-
-GO annotations:
-- Molecular Function (MF): 23049 annotated genes with 92018 terms (4118 unique terms)
-- Biological Process (BP): 23843 annotated genes with 162583 terms (11881 unique terms)
-- Cellular Component (CC): 23583 annotated genes with 102801 terms (1662 unique terms)
-> BP_sResults
-- object class: enrich_GO_terms
+"- object class: enrich_GO_terms
 - ontology: BP
 - input:
         PregnantvsLactate: elim
@@ -254,69 +244,69 @@ GO annotations:
 - topGO summary:
  PregnantvsLactate
       BP_PregnantvsLactate 
-        description: Bioconductor org.Mm.eg.db 2018-Apr4
+        description: Bioconductor org.Mm.eg.db 2019-Jul10
         available_genes: 15804
         available_genes_significant: 7699
-        feasible_genes: 14402
-        feasible_genes_significant: 7185
+        feasible_genes: 14091
+        feasible_genes_significant: 7044
         genes_nodeSize: 5
-        nodes_number: 8189
-        edges_number: 18887
+        nodes_number: 8463
+        edges_number: 19543
       elim_BP_PregnantvsLactate 
-        description: Bioconductor org.Mm.eg.db 2018-Apr4 
+        description: Bioconductor org.Mm.eg.db 2019-Jul10 
         test_name: fisher p<0.01
         algorithm_name: elim
-        GO_scored: 8189
-        GO_significant: 198
-        feasible_genes: 14402
-        feasible_genes_significant: 7185
+        GO_scored: 8463
+        GO_significant: 199
+        feasible_genes: 14091
+        feasible_genes_significant: 7044
         genes_nodeSize: 5
-        Nontrivial_nodes: 8155 
+        Nontrivial_nodes: 8433 
  VirginvsLactate
       BP_VirginvsLactate 
-        description: Bioconductor org.Mm.eg.db 2018-Apr4
+        description: Bioconductor org.Mm.eg.db 2019-Jul10
         available_genes: 15804
         available_genes_significant: 9583
-        feasible_genes: 14402
-        feasible_genes_significant: 8898
+        feasible_genes: 14091
+        feasible_genes_significant: 8734
         genes_nodeSize: 5
-        nodes_number: 8189
-        edges_number: 18887
+        nodes_number: 8463
+        edges_number: 19543
       elim_BP_VirginvsLactate 
-        description: Bioconductor org.Mm.eg.db 2018-Apr4 
+        description: Bioconductor org.Mm.eg.db 2019-Jul10 
         test_name: fisher p<0.01
         algorithm_name: elim
-        GO_scored: 8189
-        GO_significant: 151
-        feasible_genes: 14402
-        feasible_genes_significant: 8898
+        GO_scored: 8463
+        GO_significant: 152
+        feasible_genes: 14091
+        feasible_genes_significant: 8734
         genes_nodeSize: 5
-        Nontrivial_nodes: 8180 
+        Nontrivial_nodes: 8457 
  VirginvsPregnant
       BP_VirginvsPregnant 
-        description: Bioconductor org.Mm.eg.db 2018-Apr4
+        description: Bioconductor org.Mm.eg.db 2019-Jul10
         available_genes: 15804
         available_genes_significant: 7302
-        feasible_genes: 14402
-        feasible_genes_significant: 6875
+        feasible_genes: 14091
+        feasible_genes_significant: 6733
         genes_nodeSize: 5
-        nodes_number: 8189
-        edges_number: 18887
+        nodes_number: 8463
+        edges_number: 19543
       elim_BP_VirginvsPregnant 
-        description: Bioconductor org.Mm.eg.db 2018-Apr4 
+        description: Bioconductor org.Mm.eg.db 2019-Jul10 
         test_name: fisher p<0.01
         algorithm_name: elim
-        GO_scored: 8189
-        GO_significant: 232
-        feasible_genes: 14402
-        feasible_genes_significant: 6875
+        GO_scored: 8463
+        GO_significant: 243
+        feasible_genes: 14091
+        feasible_genes_significant: 6733
         genes_nodeSize: 5
-        Nontrivial_nodes: 8143 
+        Nontrivial_nodes: 8413 
  
-- enrich GOs data.table (p<0.01 in at least one list): 509 GO terms of 3 conditions.
-        PregnantvsLactate : 198 terms
-        VirginvsLactate : 151 terms
-        VirginvsPregnant : 232 terms"
+- enrich GOs (in at least one list): 521 GO terms of 3 conditions.
+        PregnantvsLactate : 199 terms
+        VirginvsLactate : 152 terms
+        VirginvsPregnant : 243 terms"
 )
 ```
 </br>
@@ -377,7 +367,7 @@ myGOs
 cat(
 "- object class: GO_SS
 - database: Bioconductor
-- stamp/version: 2018-Apr4
+- stamp/version: 2019-Jul10
 - organism id: org.Mm.eg.db
 - ontology: BP
 - input:
@@ -387,69 +377,69 @@ cat(
 - topGO summary:
  PregnantvsLactate
       BP_PregnantvsLactate 
-        description: Bioconductor org.Mm.eg.db 2018-Apr4
+        description: Bioconductor org.Mm.eg.db 2019-Jul10
         available_genes: 15804
         available_genes_significant: 7699
-        feasible_genes: 14402
-        feasible_genes_significant: 7185
+        feasible_genes: 14091
+        feasible_genes_significant: 7044
         genes_nodeSize: 5
-        nodes_number: 8189
-        edges_number: 18887
+        nodes_number: 8463
+        edges_number: 19543
       elim_BP_PregnantvsLactate 
-        description: Bioconductor org.Mm.eg.db 2018-Apr4 
+        description: Bioconductor org.Mm.eg.db 2019-Jul10 
         test_name: fisher p<0.01
         algorithm_name: elim
-        GO_scored: 8189
-        GO_significant: 198
-        feasible_genes: 14402
-        feasible_genes_significant: 7185
+        GO_scored: 8463
+        GO_significant: 199
+        feasible_genes: 14091
+        feasible_genes_significant: 7044
         genes_nodeSize: 5
-        Nontrivial_nodes: 8155 
+        Nontrivial_nodes: 8433 
  VirginvsLactate
       BP_VirginvsLactate 
-        description: Bioconductor org.Mm.eg.db 2018-Apr4
+        description: Bioconductor org.Mm.eg.db 2019-Jul10
         available_genes: 15804
         available_genes_significant: 9583
-        feasible_genes: 14402
-        feasible_genes_significant: 8898
+        feasible_genes: 14091
+        feasible_genes_significant: 8734
         genes_nodeSize: 5
-        nodes_number: 8189
-        edges_number: 18887
+        nodes_number: 8463
+        edges_number: 19543
       elim_BP_VirginvsLactate 
-        description: Bioconductor org.Mm.eg.db 2018-Apr4 
+        description: Bioconductor org.Mm.eg.db 2019-Jul10 
         test_name: fisher p<0.01
         algorithm_name: elim
-        GO_scored: 8189
-        GO_significant: 151
-        feasible_genes: 14402
-        feasible_genes_significant: 8898
+        GO_scored: 8463
+        GO_significant: 152
+        feasible_genes: 14091
+        feasible_genes_significant: 8734
         genes_nodeSize: 5
-        Nontrivial_nodes: 8180 
+        Nontrivial_nodes: 8457 
  VirginvsPregnant
       BP_VirginvsPregnant 
-        description: Bioconductor org.Mm.eg.db 2018-Apr4
+        description: Bioconductor org.Mm.eg.db 2019-Jul10
         available_genes: 15804
         available_genes_significant: 7302
-        feasible_genes: 14402
-        feasible_genes_significant: 6875
+        feasible_genes: 14091
+        feasible_genes_significant: 6733
         genes_nodeSize: 5
-        nodes_number: 8189
-        edges_number: 18887
+        nodes_number: 8463
+        edges_number: 19543
       elim_BP_VirginvsPregnant 
-        description: Bioconductor org.Mm.eg.db 2018-Apr4 
+        description: Bioconductor org.Mm.eg.db 2019-Jul10 
         test_name: fisher p<0.01
         algorithm_name: elim
-        GO_scored: 8189
-        GO_significant: 232
-        feasible_genes: 14402
-        feasible_genes_significant: 6875
+        GO_scored: 8463
+        GO_significant: 243
+        feasible_genes: 14091
+        feasible_genes_significant: 6733
         genes_nodeSize: 5
-        Nontrivial_nodes: 8143 
- 
-- enrich GOs data.table: 509 GO terms of 3 conditions.
-        PregnantvsLactate : 198 terms
-        VirginvsLactate : 151 terms
-        VirginvsPregnant : 232 terms
+        Nontrivial_nodes: 8413 
+
+- enrich GOs data.table: 521 GO terms of 3 conditions.
+        PregnantvsLactate : 199 terms
+        VirginvsLactate : 152 terms
+        VirginvsPregnant : 243 terms
 - terms distances:  Wang"
 )
 ```
@@ -514,7 +504,9 @@ The printed table contains for each enriched GO terms, additional columns includ
 
 ```{r SS_Wang-ward.D2_table}
 # display table
-ViSEAGO::show_table(Wang_clusters_wardD2)
+ViSEAGO::show_table(
+    Wang_clusters_wardD2
+)
 ```
 
 <img src=`r system.file("extdata/data/output","bioconductor_table2.png",package="ViSEAGO")` alt="bioconductor_table2" style="width:100%;height:100%;"/>
@@ -527,7 +519,10 @@ We also display a colored Multi Dimensional Scale (MDS) plot showing the overlay
 
 ```{r SS_Wang-ward.D2_mdsplot}
 # colored MDSplot
-ViSEAGO::MDSplot(Wang_clusters_wardD2)
+ViSEAGO::MDSplot(
+    Wang_clusters_wardD2,
+    "GOterms"
+)
 ```
 
 <img src=`r system.file("extdata/data/output","bioconductor_mds2.png",package="ViSEAGO")` alt="mds2" style="width:100%;height:100%;"/>
@@ -598,7 +593,7 @@ Wang_clusters_wardD2
 cat(
 "- object class: GO_clusters
 - database: Bioconductor
-- stamp/version: 2018-Apr4
+- stamp/version: 2019-Jul10
 - organism id: org.Mm.eg.db
 - ontology: BP
 - input:
@@ -608,69 +603,69 @@ cat(
 - topGO summary:
  PregnantvsLactate
       BP_PregnantvsLactate 
-        description: Bioconductor org.Mm.eg.db 2018-Apr4
+        description: Bioconductor org.Mm.eg.db 2019-Jul10
         available_genes: 15804
         available_genes_significant: 7699
-        feasible_genes: 14402
-        feasible_genes_significant: 7185
+        feasible_genes: 14091
+        feasible_genes_significant: 7044
         genes_nodeSize: 5
-        nodes_number: 8189
-        edges_number: 18887
+        nodes_number: 8463
+        edges_number: 19543
       elim_BP_PregnantvsLactate 
-        description: Bioconductor org.Mm.eg.db 2018-Apr4 
+        description: Bioconductor org.Mm.eg.db 2019-Jul10 
         test_name: fisher p<0.01
         algorithm_name: elim
-        GO_scored: 8189
-        GO_significant: 198
-        feasible_genes: 14402
-        feasible_genes_significant: 7185
+        GO_scored: 8463
+        GO_significant: 199
+        feasible_genes: 14091
+        feasible_genes_significant: 7044
         genes_nodeSize: 5
-        Nontrivial_nodes: 8155 
+        Nontrivial_nodes: 8433 
  VirginvsLactate
       BP_VirginvsLactate 
-        description: Bioconductor org.Mm.eg.db 2018-Apr4
+        description: Bioconductor org.Mm.eg.db 2019-Jul10
         available_genes: 15804
         available_genes_significant: 9583
-        feasible_genes: 14402
-        feasible_genes_significant: 8898
+        feasible_genes: 14091
+        feasible_genes_significant: 8734
         genes_nodeSize: 5
-        nodes_number: 8189
-        edges_number: 18887
+        nodes_number: 8463
+        edges_number: 19543
       elim_BP_VirginvsLactate 
-        description: Bioconductor org.Mm.eg.db 2018-Apr4 
+        description: Bioconductor org.Mm.eg.db 2019-Jul10 
         test_name: fisher p<0.01
         algorithm_name: elim
-        GO_scored: 8189
-        GO_significant: 151
-        feasible_genes: 14402
-        feasible_genes_significant: 8898
+        GO_scored: 8463
+        GO_significant: 152
+        feasible_genes: 14091
+        feasible_genes_significant: 8734
         genes_nodeSize: 5
-        Nontrivial_nodes: 8180 
+        Nontrivial_nodes: 8457 
  VirginvsPregnant
       BP_VirginvsPregnant 
-        description: Bioconductor org.Mm.eg.db 2018-Apr4
+        description: Bioconductor org.Mm.eg.db 2019-Jul10
         available_genes: 15804
         available_genes_significant: 7302
-        feasible_genes: 14402
-        feasible_genes_significant: 6875
+        feasible_genes: 14091
+        feasible_genes_significant: 6733
         genes_nodeSize: 5
-        nodes_number: 8189
-        edges_number: 18887
+        nodes_number: 8463
+        edges_number: 19543
       elim_BP_VirginvsPregnant 
-        description: Bioconductor org.Mm.eg.db 2018-Apr4 
+        description: Bioconductor org.Mm.eg.db 2019-Jul10 
         test_name: fisher p<0.01
         algorithm_name: elim
-        GO_scored: 8189
-        GO_significant: 232
-        feasible_genes: 14402
-        feasible_genes_significant: 6875
+        GO_scored: 8463
+        GO_significant: 243
+        feasible_genes: 14091
+        feasible_genes_significant: 6733
         genes_nodeSize: 5
-        Nontrivial_nodes: 8143 
+        Nontrivial_nodes: 8413 
  
-- enrich GOs data.table: 509 GO terms of 3 conditions.
-        PregnantvsLactate : 198 terms
-        VirginvsLactate : 151 terms
-        VirginvsPregnant : 232 terms
+- enrich GOs data.table: 521 GO terms of 3 conditions.
+        PregnantvsLactate : 199 terms
+        VirginvsLactate : 152 terms
+        VirginvsPregnant : 243 terms
 - clusters distances: BMA
 - Heatmap:
           * GOterms: TRUE
@@ -681,10 +676,10 @@ cat(
                               cut.dynamic.pamRespectsDendro: TRUE
                               cut.dynamic.deepSplit: 2
                               cut.dynamic.minClusterSize: 2
-                              number of clusters: 56
-                              clusters min size: 1
-                              clusters mean size: 30
-                              clusters max size: 56
+                              number of clusters: 62
+                              clusters min size: 2
+                              clusters mean size: 8
+                              clusters max size: 32
                    - sample.tree: FALSE
           * GOclusters: TRUE
                        - tree:

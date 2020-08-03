@@ -908,7 +908,7 @@ setMethod(
             font=list(size=14),
 
             # set margin
-            margin=list(l=300,r=0,b=150,t=50)
+            margin=list(l=300,r=0,b=150,t=100)
         )
 
         # modify layout

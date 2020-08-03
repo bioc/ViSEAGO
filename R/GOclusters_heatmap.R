@@ -275,7 +275,7 @@ setMethod(
                 ticktext=row.text,
                 tickfont=list(size=10)
             ),
-            margin = list(l =300,r=0, b =150,t=50)
+            margin = list(l =300,r=0, b =150,t=100)
         )
 
         # hm to list

@@ -2,11 +2,11 @@
 title: "Evaluate impact of Semantic Similiarity choice"
 author:
 - name: Aurelien Brionne
-  affiliation: Institut National de la Recherche Agronomique (INRA)
+  affiliation: "Institut national de recherche pour l'agriculture, l'alimentation et l'environnement (INRAE)"
 - name: Amelie Juanchich
-  affiliation: Institut National de la Recherche Agronomique (INRA)
+  affiliation: "Institut national de recherche pour l'agriculture, l'alimentation et l'environnement (INRAE)"
 - name: Christelle Hennequet-Antier
-  affiliation: Institut National de la Recherche Agronomique (INRA)
+  affiliation: "Institut national de recherche pour l'agriculture, l'alimentation et l'environnement (INRAE)"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   BiocStyle::html_document:

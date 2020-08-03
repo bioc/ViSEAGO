@@ -67,18 +67,18 @@ setMethod(
                 Data,
                 sets=rev(names(Data)[-1]),
                 keep.order = TRUE,
-                text.scale=3
+                text.scale=2
             )
         )
 
         # print image to file
         png(sub("\\..+$",".png",file))
-            print(    
+            print(
                 upset(
                     Data,
                     sets=rev(names(Data)[-1]),
                     keep.order = TRUE,
-                    text.scale=3
+                    text.scale=2
                 )
             )
         dev.off()
