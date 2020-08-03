@@ -6,7 +6,7 @@ author:
 - name: Amelie Juanchich
   affiliation: "Institut national de recherche pour l'agriculture, l'alimentation et l'environnement (INRAE)"
 - name: Christelle Hennequet-Antier
-  affiliation:"Institut national de recherche pour l'agriculture, l'alimentation et l'environnement (INRAE)"
+  affiliation: "Institut national de recherche pour l'agriculture, l'alimentation et l'environnement (INRAE)"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   BiocStyle::html_document:
