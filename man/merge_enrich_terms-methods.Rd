@@ -10,8 +10,11 @@ merge_enrich_terms(Input, cutoff = 0.01, envir = .GlobalEnv)
 \S4method{merge_enrich_terms}{list}(Input, cutoff = 0.01, envir = .GlobalEnv)
 }
 \arguments{
-\item{Input}{a list containing named elements. Each element must contain the name of \code{\link[topGO]{topGOdata-class}}
-object created by \code{\link{create_topGOdata}} method and the associated  \code{\link[topGO]{topGOresult-class}} object(s).}
+\item{Input}{a list containing named elements. Each element must contain the name of:
+\itemize{
+    \item{\pkg{topGO}: \code{\link[topGO]{topGOdata-class}} object created by \code{\link{create_topGOdata}} method and the associated \code{\link[topGO]{topGOresult-class}} object.}
+    \item{\pkg{fgsea}: \code{\link{fgsea-class}} object created by \code{\link{runfgsea}} method.}
+}}
 
 \item{cutoff}{default pvalue cutoff (default to 0.01). Several cutoff can be use in the same order as list elements.}
 
@@ -21,12 +24,11 @@ object created by \code{\link{create_topGOdata}} method and the associated  \cod
 an \code{\link{enrich_GO_terms-class}} object.
 }
 \description{
-combine results from GO enrichment tests obtained with \pkg{topGO} package,
+combine results from GO enrichment tests (obtained with \pkg{topGO} package) or from \pkg{fgsea} (obtained with \code{\link{runfgsea}} method),
 for a given ontology (MF, BP, or CC).
 }
 \details{
-This method extracts for each result of GO enrichment test (\code{\link[topGO]{topGOresult-class}} object) and
-corresponding GO annotations (\code{\link[topGO]{topGOdata-class}} object):
+This method extracts for each result of GO enrichment test:
 informations about GO term (identifiant, name, and description),
 gene frequency (number of significant genes / Annotated genes), pvalue, -log10(pvalue), significant genes
 identifiants (GeneID, or Ensembl ID, or uniprot accession), and gene symbols.
@@ -34,6 +36,8 @@ At the last, this method builds a merged data.table of enriched GO terms
 at least once and provides all mentionned columns.
 }
 \examples{
+## topGO terms enrichment
+
 # load genes identifiants (GeneID,ENS...) universe/background (Expressed genes)
 background_L<-scan(
     system.file(
@@ -75,7 +79,17 @@ VirginvspregnantDE<-scan(
     quiet=TRUE,
     what=""
 )
+
 \dontrun{
+# connect to Bioconductor
+Bioconductor<-ViSEAGO::Bioconductor2GO()
+
+# load GO annotations from Bioconductor
+myGENE2GO<-ViSEAGO::annotate(
+    "org.Mm.eg.db",
+    Bioconductor
+)
+
 # create topGOdata for BP for each list of DE genes
 BP_Pregnantvslactate<-ViSEAGO::create_topGOdata(
     geneSel=PregnantvslactateDE,
@@ -129,10 +143,97 @@ BP_sResults<-ViSEAGO::merge_enrich_terms(
     )
 )
 }
+
+## fgsea analysis
+
+# load gene identifiants and padj test results from Differential Analysis complete tables
+PregnantvsLactate<-data.table::fread(
+    system.file(
+        "extdata/data/input",
+        "pregnantvslactate.complete.txt",
+        package = "ViSEAGO"
+    ),
+    select = c("Id","padj")
+)
+
+VirginvsLactate<-data.table::fread(
+    system.file(
+        "extdata/data/input",
+        "virginvslactate.complete.txt",
+        package = "ViSEAGO"
+   ),
+   select = c("Id","padj")
+)
+
+VirginvsPregnant<-data.table::fread(
+    system.file(
+       "extdata/data/input",
+       "virginvspregnant.complete.txt",
+        package = "ViSEAGO"
+    ),
+    select = c("Id","padj")
+)
+
+# rank Id based on statistical value (padj)
+PregnantvsLactate<-data.table::setorder(PregnantvsLactate,padj)
+
+VirginvsLactate<-data.table::setorder(VirginvsLactate,padj)
+
+VirginvsPregnant<-data.table::setorder(VirginvsPregnant,padj)
+
+\dontrun{
+# connect to Bioconductor
+Bioconductor<-ViSEAGO::Bioconductor2GO()
+
+# load GO annotations from Bioconductor
+myGENE2GO<-ViSEAGO::annotate(
+    "org.Mm.eg.db",
+    Bioconductor
+)
+
+# perform fgseaMultilevel tests
+BP_PregnantvsLactate<-runfgsea(
+    geneSel=PregnantvsLactate,
+    gene2GO=myGENE2GO, 
+    ont="BP",
+    params = list(
+        scoreType = "pos",
+        minSize=5
+    )
+)
+
+BP_VirginvsLactate<-runfgsea(
+    geneSel=VirginvsLactate,
+    gene2GO=myGENE2GO, 
+    ont="BP",
+    params = list(
+        scoreType = "pos",
+        minSize=5
+    )
+)
+
+BP_VirginvsPregnant<-runfgsea(
+    geneSel=VirginvsPregnant,
+    gene2GO=myGENE2GO, 
+    ont="BP",
+    params = list(
+        scoreType = "pos",
+        minSize=5
+    )
+)
+
+# merge fgsea results
+BP_sResults<-merge_enrich_terms(
+    cutoff=0.01,
+    Input=list(
+        PregnantvsLactate="BP_PregnantvsLactate",
+        VirginvsLactate="BP_VirginvsLactate",
+        VirginvsPregnant="BP_VirginvsPregnant"
+    )
+)
+}
 }
 \references{
-Alexa A and Rahnenfuhrer J (2016). topGO: Enrichment Analysis for Gene Ontology. R package version 2.28.0.
-
 Matt Dowle and Arun Srinivasan (2017). data.table: Extension of data.frame. R package version 1.10.4. https://CRAN.R-project.org/package=data.table
 
 Herve Pages, Marc Carlson, Seth Falcon and Nianhua Li (2017). AnnotationDbi: Annotation Database Interface. R package version 1.38.0.
@@ -143,6 +244,7 @@ Other GO_terms:
 \code{\link{GOterms_heatmap}()},
 \code{\link{annotate}()},
 \code{\link{create_topGOdata}()},
-\code{\link{gene2GO-class}}
+\code{\link{gene2GO-class}},
+\code{\link{runfgsea}()}
 }
 \concept{GO_terms}

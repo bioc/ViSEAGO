@@ -11,19 +11,11 @@ and GO terms or groups distances objects based on semantic similarity.
 \section{Slots}{
 
 \describe{
-\item{\code{db}}{should be "Bioconductor", "EntrezGene", "Ensembl", or "Uniprot" ressource name.}
-
-\item{\code{stamp}}{date of stamp or annotation version if available in \code{character}.}
-
-\item{\code{organism}}{target species GO anotation in \code{character}.}
-
-\item{\code{ont}}{used ontology with "MF", "BP", or "CC".}
-
-\item{\code{topGO}}{\code{list} with topGO objects summary informations.}
-
-\item{\code{IC}}{Information Content (IC)}
+\item{\code{ont}}{ontology used "MF", "BP", or "CC".}
 
 \item{\code{enrich_GOs}}{\code{\link{merge_enrich_terms}} output object (\code{\link{enrich_GO_terms-class}} object).}
+
+\item{\code{IC}}{Information Content (IC)}
 
 \item{\code{terms_dist}}{\code{list} of GO terms or groups distances objects based on semantic similarity.}
 }}

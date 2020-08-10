@@ -1,5 +1,5 @@
 #' @title Merge enriched GO terms.
-#' @description combine results from GO enrichment tests obtained with \pkg{topGO} package,
+#' @description combine results from GO enrichment tests (obtained with \pkg{topGO} package) or from \pkg{fgsea} (obtained with \code{\link{runfgsea}} method),
 #' for a given ontology (MF, BP, or CC).
 #' @importFrom data.table data.table rbindlist := .SD
 #' @importFrom biomaRt useDataset getBM useEnsembl
@@ -7,12 +7,14 @@
 #' @importFrom AnnotationDbi select keys
 #' @importFrom GO.db GO.db
 #' @family GO_terms
-#' @param Input a list containing named elements. Each element must contain the name of \code{\link[topGO]{topGOdata-class}}
-#' object created by \code{\link{create_topGOdata}} method and the associated  \code{\link[topGO]{topGOresult-class}} object(s).
+#' @param Input a list containing named elements. Each element must contain the name of:
+#' \itemize{
+#'     \item{\pkg{topGO}: \code{\link[topGO]{topGOdata-class}} object created by \code{\link{create_topGOdata}} method and the associated \code{\link[topGO]{topGOresult-class}} object.}
+#'     \item{\pkg{fgsea}: \code{\link{fgsea-class}} object created by \code{\link{runfgsea}} method.}
+#' }
 #' @param cutoff default pvalue cutoff (default to 0.01). Several cutoff can be use in the same order as list elements.
 #' @param envir objects environment (default to .GlobalEnv).
-#' @details This method extracts for each result of GO enrichment test (\code{\link[topGO]{topGOresult-class}} object) and
-#' corresponding GO annotations (\code{\link[topGO]{topGOdata-class}} object):
+#' @details This method extracts for each result of GO enrichment test:
 #' informations about GO term (identifiant, name, and description),
 #' gene frequency (number of significant genes / Annotated genes), pvalue, -log10(pvalue), significant genes
 #' identifiants (GeneID, or Ensembl ID, or uniprot accession), and gene symbols.
@@ -20,13 +22,13 @@
 #' at least once and provides all mentionned columns.
 #' @return an \code{\link{enrich_GO_terms-class}} object.
 #' @references
-#' Alexa A and Rahnenfuhrer J (2016). topGO: Enrichment Analysis for Gene Ontology. R package version 2.28.0.
-#'
 #' Matt Dowle and Arun Srinivasan (2017). data.table: Extension of data.frame. R package version 1.10.4. https://CRAN.R-project.org/package=data.table
 #'
 #' Herve Pages, Marc Carlson, Seth Falcon and Nianhua Li (2017). AnnotationDbi: Annotation Database Interface. R package version 1.38.0.
 #' @include enrich_GO_terms.R
 #' @examples
+#' ## topGO terms enrichment
+#'
 #' # load genes identifiants (GeneID,ENS...) universe/background (Expressed genes)
 #' background_L<-scan(
 #'     system.file(
@@ -68,7 +70,17 @@
 #'     quiet=TRUE,
 #'     what=""
 #' )
+#'
 #' \dontrun{
+#' # connect to Bioconductor
+#' Bioconductor<-ViSEAGO::Bioconductor2GO()
+#'
+#' # load GO annotations from Bioconductor
+#' myGENE2GO<-ViSEAGO::annotate(
+#'     "org.Mm.eg.db",
+#'     Bioconductor
+#' )
+#'
 #' # create topGOdata for BP for each list of DE genes
 #' BP_Pregnantvslactate<-ViSEAGO::create_topGOdata(
 #'     geneSel=PregnantvslactateDE,
@@ -119,6 +131,95 @@
 #'         Pregnantvslactate=c("BP_Pregnantvslactate","elim_BP_Pregnantvslactate"),
 #'         Virginvslactate=c("BP_Virginvslactate","elim_BP_Virginvslactate"),
 #'         Virginvspregnant=c("BP_Virginvspregnant","elim_BP_Virginvspregnant")
+#'     )
+#' )
+#' }
+#' 
+#' ## fgsea analysis
+#' 
+#' # load gene identifiants and padj test results from Differential Analysis complete tables
+#' PregnantvsLactate<-data.table::fread(
+#'     system.file(
+#'         "extdata/data/input",
+#'         "pregnantvslactate.complete.txt",
+#'         package = "ViSEAGO"
+#'     ),
+#'     select = c("Id","padj")
+#' )
+#'
+#'VirginvsLactate<-data.table::fread(
+#'     system.file(
+#'         "extdata/data/input",
+#'         "virginvslactate.complete.txt",
+#'         package = "ViSEAGO"
+#'    ),
+#'    select = c("Id","padj")
+#')
+#'
+#' VirginvsPregnant<-data.table::fread(
+#'     system.file(
+#'        "extdata/data/input",
+#'        "virginvspregnant.complete.txt",
+#'         package = "ViSEAGO"
+#'     ),
+#'     select = c("Id","padj")
+#' )
+#'
+#' # rank Id based on statistical value (padj)
+#' PregnantvsLactate<-data.table::setorder(PregnantvsLactate,padj)
+#'
+#' VirginvsLactate<-data.table::setorder(VirginvsLactate,padj)
+#'
+#' VirginvsPregnant<-data.table::setorder(VirginvsPregnant,padj)
+#'
+#' \dontrun{
+#' # connect to Bioconductor
+#' Bioconductor<-ViSEAGO::Bioconductor2GO()
+#'
+#' # load GO annotations from Bioconductor
+#' myGENE2GO<-ViSEAGO::annotate(
+#'     "org.Mm.eg.db",
+#'     Bioconductor
+#' )
+#'
+#' # perform fgseaMultilevel tests
+#' BP_PregnantvsLactate<-runfgsea(
+#'     geneSel=PregnantvsLactate,
+#'     gene2GO=myGENE2GO, 
+#'     ont="BP",
+#'     params = list(
+#'         scoreType = "pos",
+#'         minSize=5
+#'     )
+#' )
+#'
+#' BP_VirginvsLactate<-runfgsea(
+#'     geneSel=VirginvsLactate,
+#'     gene2GO=myGENE2GO, 
+#'     ont="BP",
+#'     params = list(
+#'         scoreType = "pos",
+#'         minSize=5
+#'     )
+#' )
+#'
+#' BP_VirginvsPregnant<-runfgsea(
+#'     geneSel=VirginvsPregnant,
+#'     gene2GO=myGENE2GO, 
+#'     ont="BP",
+#'     params = list(
+#'         scoreType = "pos",
+#'         minSize=5
+#'     )
+#' )
+#'
+#' # merge fgsea results
+#' BP_sResults<-merge_enrich_terms(
+#'     cutoff=0.01,
+#'     Input=list(
+#'         PregnantvsLactate="BP_PregnantvsLactate",
+#'         VirginvsLactate="BP_VirginvsLactate",
+#'         VirginvsPregnant="BP_VirginvsPregnant"
 #'     )
 #' )
 #' }
@@ -189,7 +290,7 @@ setMethod(
                     vapply(seq_along(x),function(y){
 
                         # extract ontology slot
-                        if(obj.type[y]=="topGOdata"){
+                        if(obj.type[y]%in%c("topGOdata","fgsea")){
 
                             # for topGOdata
                             slot(x[[y]],"ontology")
@@ -206,256 +307,36 @@ setMethod(
 
         # check ontology
         if(length(check.onto)>1){
-
-            # stop if more than one topGOdata by list
             stop("Only one ontology supported")
         }
 
-        ## topGO summary informations
-
-        # build topGO summary
-        topGO_summary=lapply(seq_along(Input),function(x){
-
-            # keep pos
-            pos=x
-
-            # extract  quering objects names
-            x=Input[[x]]
-
-            # keep names
-            x_names=x
-
-            # get objects
-             x=mget(x,envir=envir)
-
-            # objects type
-            obj.type=vapply(x,class,"")
-
-            # extract topGO objects summary
-            topGO<-lapply(seq_along(x),function(y){
-
-                # extract ontology slot
-                if(obj.type[y]=="topGOdata"){
-
-                    # for topGOdata
-                     list(
-
-                        # description
-                        description=slot(x[[y]],"description"),
-
-                        # availables genes
-                        available_genes=length(slot(x[[y]],"allGenes")),
-
-                        # availables genes significant
-                        available_genes_significant=table(slot(x[[y]],"allScores"))[2],
-
-                        # feasibles genes
-                        feasible_genes=table(slot(x[[y]],"feasible"))[2],
-
-                        # feasibles genes significant
-                        feasible_genes_significant=table(slot(x[[y]],"allScores")==1 & slot(x[[y]],"feasible")==TRUE)[2],
-
-                        # nodes with at least  x genes
-                        genes_nodeSize=slot(x[[y]],"nodeSize"),
-
-                        # number of nodes
-                        nodes_number=length(slot(slot(x[[y]],"graph"),"nodes")),
-
-                        # number of edges
-                        edges_number=length(slot(slot(slot(x[[y]],"graph"),"edgeData"),"data"))
-                    )
-
-                }else{
-
-                    # for topGO result
-                    list(
-
-                        # description
-                        description=slot(x[[y]],"description"),
-
-                        # test name
-                        test_name=sub(": ","p<",slot(x[[y]],"testName")),
-
-                        # algorithm name
-                        algorithm_name=slot(x[[y]],"algorithm"),
-
-                        # scored GOs
-                        GO_scored=length(slot(x[[y]],"score")),
-
-                        # significant GOs according cutOff
-                        GO_significant=table(slot(x[[y]],"score")<cutoff[pos])[2],
-
-                        # feasibles genes
-                        feasible_genes=slot(x[[y]],"geneData")[1],
-
-                        # feasibles genes significant
-                        feasible_genes_significant=slot(x[[y]],"geneData")[2],
-
-                        # nodes with at least  x genes
-                        genes_nodeSize=slot(x[[y]],"geneData")[3],
-
-                        # nodes with at least  x genes
-                        Nontrivial_nodes=slot(x[[y]],"geneData")[4]
-                    )
-                }
-            })
-
-            # extract topGO objects summary
-            names(topGO)<-x_names
-
-            # return topGO
-            topGO
-        })
-
-        # add names to topGO summary
-        names(topGO_summary)<-names(Input)
-
-        # find enrich GOs in a least one comparison
-        GOs<-lapply(seq_along(Input),function(x){
-
-            # objects type
-            Data=mget(Input[[x]],envir=envir)
-
-            ## checking step
-
-            # objects type
-            obj.type=vapply(Data,class,"")
-
-            # objects type
-            if(sum(obj.type%in%"topGOdata")>1){
-
-                # stop if more than one godata by list
-                stop("Only one topGOdata object is supported by list")
-            }
-
-            # objects type
-            if(sum(obj.type%in%"topGOresult")>1){
-
-                # stop if more than one godata by list
-                stop("Only one topGOresult object is supported by list")
-            }
-
-            ## find and extract pvalues
-
-            # find topGOresult
-            pos=which(obj.type=="topGOresult")
-
-            # extract scores
-            pvalues<-topGO::score(Data[[pos]])
-            
-            # extract names of enrich terms
-            as.vector(
-                names(
-                    pvalues[pvalues<cutoff[x]]
-                )
+        # extract method used (topGO or fgsea)
+        check.method=unique(
+            unlist(
+                lapply(seq_along(Input),function(x){
+                    
+                    # extract quering objects names
+                    x=Input[[x]]
+                    
+                    # get objects
+                    x=mget(x,envir=envir)
+                    
+                    # objects type
+                   vapply(x,class,"")
+                })
             )
-        })
+        )
 
-        # remove redondancy and convert to vector
-        GOs<-as.vector(unique(unlist(GOs)))
-
-        ## check genes background
-
-        # extract genes background
-        allgenes<-lapply(seq_along(Input),function(x){
-
-            # objects type
-            Data=mget(Input[[x]],envir=envir)
-
-            # objects type
-            obj.type=vapply(Data,class,"")
-
-            # load GOdata
-            pos=which(obj.type=="topGOdata")
-
-            slot(Data[[pos]],"allGenes")
-        })
-
-        # check if same gene background
-        if(length(Input)>1){
-            same_genes_background=all(
-                vapply(2:length(allgenes),function(x){
-                    identical(sort(allgenes[[1]]),sort(allgenes[[x]]))
-                },TRUE)
-            )
-        }else{
-            same_genes_background=TRUE
+        # same method used
+        if(length(check.method)==3){
+            stop("topGO enrichment and fgsea results can't be merged")
         }
 
-        # stop if no enrich GO terms
-        if(length(GOs)==0){
-            stop("No enrich GO terms available in at least one condition")
-        }
+        # if two object --> topGO
+        if(length(check.method)==2){check.method<-"topGO"}
 
-        # initialize input
-        input=list()
-
-        # combine results
-        allResults<-lapply(seq_along(Input),function(x){
-
-            ## extract Data
-
-            # objects type
-            Data=mget(Input[[x]],envir=envir)
-
-            # objects type
-            obj.type=vapply(Data,class,"")
-
-            # load GOdata
-            pos=which(obj.type=="topGOdata")
-
-            # load GOdata
-            GOdata=Data[[pos]]
-
-            # tested algorithm
-            algorithm<-Data[-pos]
-
-            ## extract some statistics from initial GOdata object (before enrichment test)
-
-            # get the GOdatatermStat(GOdata)
-            Stats<-termStat(
-                GOdata,
-                whichGO = GOs
-            )
-
-            # convert to data.table
-            Stats<-data.table(
-                GO.ID=row.names(Stats),
-                genes_frequency=paste(
-                    round(Stats$Significant/Stats$Annotated*100,digits=2),
-                    "% (",Stats$Significant,"/",Stats$Annotated,")",
-                    sep=""
-                )
-            )
-
-            ## extract genes identifiants
-
-            # extract counts genes by term according GeneList
-            genes<-scoresInTerm(
-                GOdata,GOs,
-                use.names = TRUE
-            )
-
-            # extract  genes  Ids according GeneList
-            genes=lapply(names(genes),function(x){
-
-                # extract significant terms
-                val=attr(genes[[x]][genes[[x]]==2],"names")
-
-                # build a table
-                data.table(
-                    GO.ID=x,
-                    Significant_genes=if(length(val)>0){val}else{NA}
-                )
-            })
-
-            # convert to data.table
-            genes<-rbindlist(genes)
-
-            ## add Genes symbols
-
-            # get db
-            db=strsplit(slot(GOdata,"description")," ")[[1]]
+        ## gene symbols add functions
+        genes_symbols_add=function(db,genes){
 
             # if db match to bioconductor
             if(db[1]=="Bioconductor"){
@@ -488,7 +369,7 @@ setMethod(
                 }
             }
 
-            # if db  match to enstrezGene
+            # if db match to enstrezGene
             if(db[1]=="EntrezGene"){
 
                 # function for generate data packets defined by the "by" argument
@@ -620,7 +501,7 @@ setMethod(
                         host=db[3],
                         version=db[6]
                     )
-                    
+
                 }else{
                     # connect to Ensembl
                     mart<-useEnsembl(
@@ -684,86 +565,504 @@ setMethod(
                     all.x=TRUE
                 )
             }
-
+        
             # load GeneID and symbols
             names(genes)[3]<-"Significant_genes_symbol"
-
+        
             # reorder columns
             genes<-genes[,c("GO.ID","Significant_genes","Significant_genes_symbol"),with=FALSE]
-
+        
             # collapse results
             genes<-genes[,lapply(.SD,function(x){paste(x,collapse=";")}),.SDcols=2:3,by="GO.ID"]
-
+        
             # replace all blank cells by NA
             genes[genes==""]<-NA
+        
+            # return genes
+            return(genes)
+        }
 
-            ## extract pvalue according the algorithm results
+        ## apply
 
-            # extract all pvalues from topGOresult
-            pvalue<-topGO::score(algorithm[[1]])
-            
-            # select pvalues from topGOresult
-            pvalue<-pvalue[GOs]
-            
-            # extract pvalue in data.table
-            pvalues<-data.table(
-                GO.ID=names(pvalue),
-                pvalue=as.numeric(format(pvalue,scientific = T)),
-                `-log10_pvalue`=round(-log10(pvalue),digits=2)
-            )
+        # topGO method
+        if(check.method=="topGO"){
 
-            # algorithm
-            algo=slot(algorithm[[1]],"algorithm")
+            ## topGO summary informations
 
-            # return input params
-            assign(
-                "input",
-                c(input,list(algo)),
-                inherits=TRUE
-            )
+            # build topGO summary
+            obj_summary=lapply(seq_along(Input),function(x){
 
-            ## combine results
+                # keep pos
+                pos=x
 
-            # all results in list
-            Results<-list(
-                data.table(GO.ID=GOs),
-                Stats,
-                pvalues,
-                genes
-            )
+                # extract quering objects names
+                x=Input[[x]]
 
-            # merge all
-            Results<-Reduce(
-                function(...){
-                    merge(
-                        ...,
-                        by ="GO.ID",
-                        sort=FALSE,
-                        all=TRUE
+                # keep names
+                x_names=x
+
+                # get objects
+                x=mget(x,envir=envir)
+
+                # objects type
+                obj.type=vapply(x,class,"")
+
+                # extract topGO objects summary
+                topGO<-lapply(seq_along(x),function(y){
+
+                    # extract ontology slot
+                    if(obj.type[y]=="topGOdata"){
+
+                        # for topGOdata
+                        list(
+
+                            # description
+                            description=slot(x[[y]],"description"),
+
+                            # availables genes
+                            available_genes=length(slot(x[[y]],"allGenes")),
+
+                            # availables genes significant
+                            available_genes_significant=table(slot(x[[y]],"allScores"))[2],
+
+                            # feasibles genes
+                            feasible_genes=table(slot(x[[y]],"feasible"))[2],
+
+                            # feasibles genes significant
+                            feasible_genes_significant=table(slot(x[[y]],"allScores")==1 & slot(x[[y]],"feasible")==TRUE)[2],
+
+                            # nodes with at least  x genes
+                            genes_nodeSize=slot(x[[y]],"nodeSize"),
+
+                            # number of nodes
+                            nodes_number=length(slot(slot(x[[y]],"graph"),"nodes")),
+
+                            # number of edges
+                            edges_number=length(slot(slot(slot(x[[y]],"graph"),"edgeData"),"data"))
+                        )
+
+                    }else{
+
+                        # for topGO result
+                        list(
+
+                            # description
+                            description=slot(x[[y]],"description"),
+
+                            # test name
+                            test_name=sub(": ","p<",slot(x[[y]],"testName")),
+
+                            # algorithm name
+                            algorithm_name=slot(x[[y]],"algorithm"),
+
+                            # scored GOs
+                            GO_scored=length(slot(x[[y]],"score")),
+
+                            # significant GOs according cutOff
+                            GO_significant=table(slot(x[[y]],"score")<cutoff[pos])[2],
+
+                            # feasibles genes
+                            feasible_genes=slot(x[[y]],"geneData")[1],
+
+                            # feasibles genes significant
+                            feasible_genes_significant=slot(x[[y]],"geneData")[2],
+
+                            # nodes with at least  x genes
+                            genes_nodeSize=slot(x[[y]],"geneData")[3],
+
+                            # nodes with at least  x genes
+                            Nontrivial_nodes=slot(x[[y]],"geneData")[4]
+                        )
+                    }
+                })
+
+                # extract topGO objects summary
+                names(topGO)<-x_names
+
+                # return topGO
+                topGO
+            })
+
+            # add names to topGO summary
+            names(obj_summary)<-names(Input)
+
+            # find enrich GOs in a least one comparison
+            GOs<-lapply(seq_along(Input),function(x){
+
+                # objects type
+                Data=mget(Input[[x]],envir=envir)
+
+                ## checking step
+
+                # objects type
+                obj.type=vapply(Data,class,"")
+
+                # objects type
+                if(sum(obj.type%in%"topGOdata")>1){
+
+                    # stop if more than one godata by list
+                    stop("Only one topGOdata object is supported by list")
+                }
+
+                # objects type
+                if(sum(obj.type%in%"topGOresult")>1){
+
+                    # stop if more than one godata by list
+                    stop("Only one topGOresult object is supported by list")
+                }
+
+                ## find and extract pvalues
+
+                # find topGOresult
+                pos=which(obj.type=="topGOresult")
+
+                # extract scores
+                pvalues<-topGO::score(Data[[pos]])
+
+                # extract names of enrich terms
+                as.vector(
+                    names(
+                        pvalues[pvalues<cutoff[x]]
                     )
-                },
-                Results
-            )
-
-            # remove NA in GO.Id column
-            Results<-Results[!is.na(Results$GO.ID)]
-
-            # Remove gene ID and symbol if GO term not significant
-            Results[Results$pvalue>=cutoff[x],`:=`(Significant_genes=NA,Significant_genes_symbol=NA)]
-
-            if(!is.null(names(Input))){
-
-                # add GOdata name in the header
-                names(Results)[-1]<-paste(
-                    names(Input)[x],
-                    names(Results)[-1],
-                    sep="."
                 )
+            })
+
+            # remove redondancy and convert to vector
+            GOs<-as.vector(unique(unlist(GOs)))
+
+            ## check genes background
+
+            # extract genes background
+            allgenes<-lapply(seq_along(Input),function(x){
+
+                # objects type
+                Data=mget(Input[[x]],envir=envir)
+
+                # objects type
+                obj.type=vapply(Data,class,"")
+
+                # load GOdata
+                pos=which(obj.type=="topGOdata")
+
+                slot(Data[[pos]],"allGenes")
+            })
+
+            # check if same gene background
+            if(length(Input)>1){
+                same_genes_background=all(
+                    vapply(2:length(allgenes),function(x){
+                        identical(sort(allgenes[[1]]),sort(allgenes[[x]]))
+                    },TRUE)
+                )
+            }else{
+                same_genes_background=TRUE
             }
 
-            # return Results
-            Results
-        })
+            # stop if no enrich GO terms
+            if(length(GOs)==0){
+                stop("No enrich GO terms available in at least one condition")
+            }
+
+            # initialize input
+            input=list()
+
+            # combine results
+            allResults<-lapply(seq_along(Input),function(x){
+
+                ## extract Data
+
+                # objects type
+                Data=mget(Input[[x]],envir=envir)
+
+                # objects type
+                obj.type=vapply(Data,class,"")
+
+                # load GOdata
+                pos=which(obj.type=="topGOdata")
+
+                # load GOdata
+                GOdata=Data[[pos]]
+
+                # tested algorithm
+                algorithm<-Data[-pos]
+
+                ## extract some statistics from initial GOdata object (before enrichment test)
+
+                # get the GOdatatermStat(GOdata)
+                Stats<-termStat(
+                    GOdata,
+                    whichGO = GOs
+                )
+
+                # convert to data.table
+                Stats<-data.table(
+                    GO.ID=row.names(Stats),
+                    genes_frequency=paste(
+                        round(Stats$Significant/Stats$Annotated*100,digits=3),
+                        "% (",Stats$Significant,"/",Stats$Annotated,")",
+                        sep=""
+                    )
+                )
+
+                ## extract genes identifiants
+
+                # extract counts genes by term according GeneList
+                genes<-scoresInTerm(
+                    GOdata,GOs,
+                    use.names = TRUE
+                )
+
+                # extract  genes Ids according GeneList
+                genes=lapply(names(genes),function(x){
+
+                    # extract significant terms
+                    val=attr(genes[[x]][genes[[x]]==2],"names")
+
+                    # build a table
+                    data.table(
+                        GO.ID=x,
+                        Significant_genes=if(length(val)>0){val}else{NA}
+                    )
+                })
+
+                # convert to data.table
+                genes<-rbindlist(genes)
+
+                ## add Genes symbols
+
+                # get db
+                db=strsplit(slot(GOdata,"description")," ")[[1]]
+
+                # add genes symbols
+                genes<-genes_symbols_add(db,genes)
+
+                ## extract pvalue according the algorithm results
+
+                # extract all pvalues from topGOresult
+                pvalue<-topGO::score(algorithm[[1]])
+
+                # select pvalues from topGOresult
+                pvalue<-pvalue[GOs]
+
+                # extract pvalue in data.table
+                pvalues<-data.table(
+                    GO.ID=names(pvalue),
+                    pvalue=as.numeric(format(pvalue,scientific = T)),
+                    `-log10_pvalue`=round(-log10(pvalue),digits=2)
+                )
+
+                # algorithm
+                algo=slot(algorithm[[1]],"algorithm")
+
+                # return input params
+                assign(
+                    "input",
+                    c(input,list(algo)),
+                    inherits=TRUE
+                )
+
+                ## combine results
+
+                # all results in list
+                Results<-list(
+                    data.table(GO.ID=GOs),
+                    Stats,
+                    pvalues,
+                    genes
+                )
+
+                # merge all
+                Results<-Reduce(
+                    function(...){
+                        merge(
+                            ...,
+                            by ="GO.ID",
+                            sort=FALSE,
+                            all=TRUE
+                        )
+                    },
+                    Results
+                )
+
+                # remove NA in GO.Id column
+                Results<-Results[!is.na(Results$GO.ID)]
+
+                # Remove gene ID and symbol if GO term not significant
+                Results[Results$pvalue>=cutoff[x],`:=`(Significant_genes=NA,Significant_genes_symbol=NA)]
+
+                if(!is.null(names(Input))){
+
+                    # add GOdata name in the header
+                    names(Results)[-1]<-paste(
+                        names(Input)[x],
+                        names(Results)[-1],
+                        sep="."
+                    )
+                }
+
+                # return Results
+                Results
+            })
+        }
+
+        # fgsea method
+        if(check.method=="fgsea"){
+
+            # get fgsea parameters
+            obj_summary=lapply(seq_along(Input),function(x){
+
+                # extract quering objects names
+                x=Input[[x]]
+
+                # get objects
+                x=get(x,envir=envir)
+
+                # extract parameters
+                c(
+                    method=slot(x,"method"),
+                    slot(x,"params")
+                )
+            })
+
+            # add names to fgsea summary
+            names(obj_summary)<-names(Input)
+
+            # find enrich GOs in a least one comparison
+            GOs<-lapply(seq_along(Input),function(x){
+
+                # objects type
+                Data=slot(get(Input[[x]],envir=envir),"data")[[1]]
+
+                # return enrich terms
+                Data[pval<cutoff[x],pathway]
+            })
+
+            # remove redondancy and convert to vector
+            GOs<-as.vector(unique(unlist(GOs)))
+
+            ## check genes background
+
+            # extract genes background
+            allgenes<-lapply(seq_along(Input),function(x){
+
+                # load input fgsea data input
+                Data=slot(get(Input[[x]],envir=envir),"input")[[1]]
+
+                # return gene identifiants
+                Data[,Id]
+            })
+
+            # check if same gene background
+            if(length(Input)>1){
+                same_genes_background=all(
+                    vapply(2:length(allgenes),function(x){
+                        identical(sort(allgenes[[1]]),sort(allgenes[[x]]))
+                    },TRUE)
+                )
+            }else{
+                same_genes_background=TRUE
+            }
+
+            # stop if no enrich GO terms
+            if(length(GOs)==0){
+                stop("No enrich GO terms available in at least one condition")
+            }
+
+            # initialize input
+            input=list()
+
+            # combine results
+            allResults<-lapply(seq_along(Input),function(x){
+
+                # get Data
+                Data=get(Input[[x]],envir=envir)
+
+                # if fgseaSimple
+                if(slot(Data,"method")=="fgseaSimple"){
+
+                    # build stats table
+                    Stats<-slot(Data,"data")[[1]][,.(GO.ID=pathway,padj,nMoreExtreme,ES,NES,size,genes_frequency)]
+                }
+                
+                if(slot(Data,"method")=="fgseaMultilevel"){
+
+                    # build stats table
+                    Stats<-slot(Data,"data")[[1]][,.(GO.ID=pathway,padj,log2err,ES,NES,size,genes_frequency)]
+                }
+
+                # build genes table
+                genes<-slot(Data,"data")[[1]][,.(GO.ID=pathway,Significant_genes=leadingEdge)]
+
+                # unlist Significant_genes
+                genes<-genes[,.(Significant_genes=unlist(Significant_genes)),by=GO.ID]
+
+                # get db
+                db=strsplit(slot(Data,"description")," ")[[1]]
+
+                # add genes symbols
+                genes<-genes_symbols_add(db,genes)
+
+                ## extract pvalue according the algorithm results
+                pvalues<-slot(Data,"data")[[1]][,.(GO.ID=pathway,pvalue=as.numeric(format(pval,scientific = T)),`-log10_pvalue`=round(-log10(pval),digits=2))]
+
+                # algorithm
+                algo=list(slot(Data,"params"))
+
+                names(algo)<-names(Input)[x]
+                
+                # return input params
+                assign(
+                    "input",
+                    c(input,algo),
+                    inherits=TRUE
+                )
+
+                ## combine results
+
+                # all results in list
+                Results<-list(
+                    data.table(GO.ID=GOs),
+                    Stats,
+                    pvalues,
+                    genes
+                )
+
+                # merge all
+                Results<-Reduce(
+                    function(...){
+                        merge(
+                            ...,
+                            by ="GO.ID",
+                            sort=FALSE,
+                            all.x=TRUE
+                        )
+                    },
+                    Results
+                )
+
+                # remove NA in GO.Id column
+                Results<-Results[!is.na(Results$GO.ID)]
+                
+                # Remove gene ID and symbol if GO term not significant
+                Results[as.numeric(Results$pvalue)>=cutoff[x],`:=`(Significant_genes=NA,Significant_genes_symbol=NA)]
+                
+                if(!is.null(names(Input))){
+                    
+                    # add GOdata name in the header
+                    names(Results)[-1]<-paste(
+                        names(Input)[x],
+                        names(Results)[-1],
+                        sep="."
+                    )
+                }
+
+                # return Results
+                Results
+            })
+            
+            
+            
+        }
 
         # number of Godata
         nb=length(allResults)
@@ -814,9 +1113,9 @@ setMethod(
         new(
             "enrich_GO_terms",
             same_genes_background=same_genes_background,
-            input=input,
             ont=check.onto,
-            topGO=topGO_summary,
+            method=check.method,
+            summary=obj_summary,
             cutoff=list(cutoff),
             data=allResults
         )

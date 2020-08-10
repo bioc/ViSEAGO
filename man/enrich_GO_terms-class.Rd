@@ -10,15 +10,14 @@ This class is invoked by \code{\link{merge_enrich_terms}} method in order to sto
 \section{Slots}{
 
 \describe{
-\item{\code{same_genes_background}}{logical.}
-
-\item{\code{input}}{a list containing named elements. Each element must contain the name of \code{\link[topGO]{topGOdata-class}}
-object created by \code{\link{create_topGOdata}} method and the associated  \code{\link[topGO]{topGOresult-class}}
+\item{\code{same_genes_background}}{logical.
 object(s) to combinate (see examples in \code{\link{merge_enrich_terms}}).}
 
 \item{\code{ont}}{ontology used "MF", "BP", or "CC".}
 
-\item{\code{topGO}}{a \code{list} with topGO objects summary informations.}
+\item{\code{method}}{enrichment test used "topGO", or "fgsea".}
+
+\item{\code{summary}}{a \code{list} with topGO or fgsea object(s) summary informations.}
 
 \item{\code{data}}{a merged \code{data.table}  of enriched GO terms (p<0.01) in at least once with GO descriptions and statistical values.}
 }}

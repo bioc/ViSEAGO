@@ -76,6 +76,6 @@ CHANGES IN VERSION 1.3
  o GOterms_heatmap remove row side colors text
  o vignettes update
  o annotate() update for uniprot
-
+ o fgsea support
 
 

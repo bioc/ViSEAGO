@@ -52,7 +52,7 @@ data(
 
 We load examples files from `r BiocStyle::Biocpkg("ViSEAGO")` package using `system.file` from the locally installed package. We read the gene identifiers for the background (= expressed genes) file and the three lists of DE genes of the study. Here, gene identifiers are GeneID from EntrezGene database.
 
-```{r geneList_input}
+```{r geneList_input,eval=TRUE}
 # load genes identifiants (GeneID,ENS...) background (expressed genes) 
 background<-scan(
     system.file(
@@ -96,7 +96,7 @@ VirginvsPregnantDE<-scan(
 )
 ```
 
-Here, we display the first 6 GeneID from the *L_pregnantvslactateDE* list.
+Here, we display the first 6 GeneID from the *PregnantvsLactateDE* list.
 
 ```{r geneList_input-head,echo=FALSE}
 # show the ten first lines of genes_DE (same as genes_ref)
@@ -237,12 +237,8 @@ BP_sResults
 cat(
 "- object class: enrich_GO_terms
 - ontology: BP
-- input:
-        PregnantvsLactate: elim
-        VirginvsLactate: elim
-        VirginvsPregnant: elim
-- topGO summary:
- PregnantvsLactate
+- method: topGO
+- summary:PregnantvsLactate
       BP_PregnantvsLactate 
         description: Bioconductor org.Mm.eg.db 2019-Jul10
         available_genes: 15804
@@ -303,6 +299,10 @@ cat(
         genes_nodeSize: 5
         Nontrivial_nodes: 8413 
  
+- enrichment pvalue cutoff:
+        PregnantvsLactate : 0.01
+        VirginvsLactate : 0.01
+        VirginvsPregnant : 0.01
 - enrich GOs (in at least one list): 521 GO terms of 3 conditions.
         PregnantvsLactate : 199 terms
         VirginvsLactate : 152 terms
@@ -366,16 +366,10 @@ myGOs
 ```{r SS_build_compute_display,echo=FALSE,eval=TRUE}
 cat(
 "- object class: GO_SS
-- database: Bioconductor
-- stamp/version: 2019-Jul10
-- organism id: org.Mm.eg.db
 - ontology: BP
-- input:
-        PregnantvsLactate: elim
-        VirginvsLactate: elim
-        VirginvsPregnant: elim
-- topGO summary:
- PregnantvsLactate
+- method: topGO
+- summary:
+PregnantvsLactate
       BP_PregnantvsLactate 
         description: Bioconductor org.Mm.eg.db 2019-Jul10
         available_genes: 15804
@@ -435,8 +429,11 @@ cat(
         feasible_genes_significant: 6733
         genes_nodeSize: 5
         Nontrivial_nodes: 8413 
-
-- enrich GOs data.table: 521 GO terms of 3 conditions.
+ - enrichment pvalue cutoff:
+        PregnantvsLactate : 0.01
+        VirginvsLactate : 0.01
+        VirginvsPregnant : 0.01
+- enrich GOs (in at least one list): 521 GO terms of 3 conditions.
         PregnantvsLactate : 199 terms
         VirginvsLactate : 152 terms
         VirginvsPregnant : 243 terms
@@ -592,16 +589,10 @@ Wang_clusters_wardD2
 ```{r SS_Wang-wardD2_groups_display,echo=FALSE,eval=TRUE}
 cat(
 "- object class: GO_clusters
-- database: Bioconductor
-- stamp/version: 2019-Jul10
-- organism id: org.Mm.eg.db
 - ontology: BP
-- input:
-        PregnantvsLactate: elim
-        VirginvsLactate: elim
-        VirginvsPregnant: elim
-- topGO summary:
- PregnantvsLactate
+- method: topGO
+- summary:
+PregnantvsLactate
       BP_PregnantvsLactate 
         description: Bioconductor org.Mm.eg.db 2019-Jul10
         available_genes: 15804
@@ -661,11 +652,15 @@ cat(
         feasible_genes_significant: 6733
         genes_nodeSize: 5
         Nontrivial_nodes: 8413 
- 
-- enrich GOs data.table: 521 GO terms of 3 conditions.
+ - enrichment pvalue cutoff:
+        PregnantvsLactate : 0.01
+        VirginvsLactate : 0.01
+        VirginvsPregnant : 0.01
+- enrich GOs (in at least one list): 521 GO terms of 3 conditions.
         PregnantvsLactate : 199 terms
         VirginvsLactate : 152 terms
         VirginvsPregnant : 243 terms
+- terms distances:  Wang
 - clusters distances: BMA
 - Heatmap:
           * GOterms: TRUE

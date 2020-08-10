@@ -38,14 +38,15 @@ pkgdiagram<-function(x=c("white","white","white","white","white")){
                 # a 'graph' statement
                 graph [layout = dot,overlap = false, fontsize = 10, splines= true, shape =oval,fixedsize = true,width = 2.5,fontname = Helvetica]
 
+                node [fillcolor=MistyRose2,style=filled]
                 subgraph cluster0 {
                     label='List(s) of genes'
                     fontsize = 25
                     fontcolor = MistyRose2
                     labelloc=t
                     color=",x[1],"
-                    node [fillcolor=MistyRose2,style=filled]
                     'Genes of interest \n and background'
+                    'preranked gene set with \nthe statistical values used'
                 }
 
                 node [fillcolor=orange,style=filled]
@@ -73,6 +74,7 @@ pkgdiagram<-function(x=c("white","white","white","white","white")){
                     color=",x[3],"
                     create_topGOdata
                     RunTest
+                    runfgsea
                     merge_enrich_terms
                 }
 
@@ -106,14 +108,17 @@ pkgdiagram<-function(x=c("white","white","white","white","white")){
 
                 # 'edge' statements
                 'Genes of interest \n and background'-> create_topGOdata
+                'preranked gene set with \nthe statistical values used' -> runfgsea
                 Bioconductor2GO->annotate
                 EntrezGene2GO->annotate
                 Ensembl2GO->annotate
                 Uniprot2GO->annotate
                 Custom2GO->annotate
                 annotate->create_topGOdata
+                annotate->runfgsea
                 create_topGOdata-> {RunTest merge_enrich_terms}
                 RunTest->merge_enrich_terms
+                runfgsea->merge_enrich_terms
                 merge_enrich_terms->{build_GO_SS show_table GOcount Upset}
                 build_GO_SS->{compute_SS_distances show_table GOcount Upset}
                 compute_SS_distances->{GOcount MDSplot Upset GOterms_heatmap GOclusters_heatmap}

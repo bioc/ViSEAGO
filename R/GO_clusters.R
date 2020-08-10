@@ -1,13 +1,9 @@
 #' @title GO_clusters class object
 #' @description This class is invoked by \code{\link{GOterms_heatmap}} and  \code{\link{GOclusters_heatmap}} methods to store all results produced.
 #' @family GO_clusters
-#' @slot db database source.
-#' @slot stamp date of stamp.
-#' @slot organism target species.
-#' @slot topGO topGO objects summary.
-#' @slot ont ontology (MF, BP, or CC).
-#' @slot IC Information Content (IC).
+#' @slot ont ontology used "MF", "BP", or "CC".
 #' @slot enrich_GOs \code{\link{enrich_GO_terms-class}} object.
+#' @slot IC Information Content (IC).
 #' @slot terms_dist distance between GO terms based on semantic similiarity.
 #' @slot clusters_dist distance between GO groups based on semantic similiarity.
 #' @slot hcl_params Hierarchical clustering parameters used.
@@ -18,13 +14,9 @@
 setClass(
     "GO_clusters",
     slots=c(
-        db="character",
-        stamp = "character",
-        organism="character",
         ont="character",
-        topGO="list",
-        IC="numeric",
         enrich_GOs="enrich_GO_terms",
+        IC ="numeric",
         terms_dist="list",
         clusters_dist="list",
         hcl_params="list",
@@ -41,197 +33,210 @@ setMethod(
     signature="GO_clusters",
     function(object){
 
+        # keep full object
+        full_object<-object
+
+        # extract object
+        object<-slot(object,"enrich_GOs")
+
         # Extract table
-        Data<-slot(
-            slot(
-                object,
-                "enrich_GOs"
-            ),
-        "data"
-        )
+        Data<-slot(object,"data")
 
         # Extract pvalues
         Data<-Data[,grep("\\.pvalue",names(Data)),with=FALSE]
 
+        # pvalues threshlod according condition
+        p<-unlist(slot(object,"cutoff"))
+
         # count significant pvalues by condition
-        Data<-Data[,lapply(.SD,function(x){sum(x<0.01,na.rm = T)}),.SDcols=seq_len(ncol(Data))]
-
-        # melt the table
-        Data<-melt.data.table(
-            Data,
-            measure.vars=names(Data),
-            variable.name = "conditions",
-            value.name = "significant GO terms number"
-        )
-
-        # remove .pvalue in conditions column
-        Data[,"conditions":=gsub("\\.pvalue","",Data$conditions)]
-
-        # get topGO information
-        topGO<-slot(object,"topGO")
-
-        # format topGO information
-        topGO<-vapply(names(topGO),function(x){
-
-            # topGO subset
-            Data<-topGO[[x]]
-
-            # summery by element
-            elems<-paste(
-                vapply(names(Data),function(y){
-
-                    # summery by element
-                    paste(
-                        paste("   ",y),
-                        "\n       ",
-                        paste(
-                            paste(
-                                names(Data[[y]]),
-                                sub("\n.+$","",unlist(Data[[y]])),
-                                sep=": "
-                            ),
-                            collapse="\n        "
-                        )
-                    )
-                },""),
-                collapse="\n  "
+        Data<-lapply(seq_len(ncol(Data)),function(x){
+            data.table(
+                conditions=sub("\\.pvalue","",names(Data)[x]),
+                `significant GO terms number`=sum(Data[,x,with=FALSE]<p[x],na.rm=TRUE)
             )
+        })
 
-            # summery by element
-            paste(paste(x,elems,sep ="\n  "),"\n ")
+        # bind results
+        Data<-rbindlist(Data)
+        
+        # get topGO information
+        obj_summary<-slot(object,"summary")
+
+        # summary according method
+        obj_summary<-vapply(names(obj_summary),function(x){
+
+            # subset
+            Data<-obj_summary[[x]]
+
+            # topGO summary
+            if(slot(object,"method")=="topGO"){
+                
+                # topGO summary by element
+                elems<-paste(
+                    vapply(names(Data),function(y){
+                        
+                        # summery by element
+                        paste(
+                            paste("   ",y),
+                            "\n       ",
+                            paste(
+                                paste(
+                                    names(Data[[y]]),
+                                    sub("\n.+$","",unlist(Data[[y]])),
+                                    sep=": "
+                                ),
+                                collapse="\n        "
+                            )
+                        )
+                    },""),
+                    collapse="\n  "
+                )
+
+                # summary by element
+                return(paste(paste(x,elems,sep ="\n  "),"\n "))
+            }
+
+            # fgsea summary
+            if(slot(object,"method")=="fgsea"){
+
+                # fgsea summary by element
+                elems<-paste(
+                    paste(
+                        "\n    ",
+                        names(
+                            Data
+                        ),
+                        " : ",
+                        unlist(
+                            Data
+                        ),
+                        sep=""
+                    ),
+                    collapse=""
+                )
+
+                # summary by element
+                return(paste(paste("\n ",x,elems,sep =""),collapse="/n"))
+            }
         },"")
 
         # cat some text
         cat("- object class: GO_clusters",
-            "\n- database: ",slot(object,"db"),
-            "\n- stamp/version: ",slot(object,"stamp"),
-            "\n- organism id: ",slot(object,"organism"),
             "\n- ontology: ",slot(object,"ont"),
-            "\n- input:\n        ",
-            paste(
+            "\n- method: ",slot(object,"method"),
+            "\n- summary:\n", obj_summary,
+            "- enrichment pvalue cutoff:",
+            paste("\n       ",Data$conditions,":",slot(object,"cutoff")[[1]]),
+            "\n- enrich GOs (in at least one list): ",nrow(slot(object,"data"))," GO terms of ",nrow(Data)," conditions.",
+            paste("\n       ",Data$conditions,":",Data$`significant GO terms number`,"terms"),
+            if(length(slot(full_object,"terms_dist"))>0){
                 paste(
-                    names(slot(slot(object,"enrich_GOs"),"input")),
-                    vapply(slot(slot(object,"enrich_GOs"),"input"),function(x){paste(x,collapse=", ")},""),
-                    sep=": "
-                ),
-                collapse="\n        "
-            ),
-            "\n- topGO summary:\n ",
-            topGO,
-            "\n- enrich GOs data.table: ",
-            nrow(slot(slot(object,"enrich_GOs"),"data")),
-            " GO terms of ",
-            length(
-                grep(
-                    "\\.pvalue",
-                    names(slot(slot(object,"enrich_GOs"),"data"))
+                    "\n- terms distances: ",
+                    paste(
+                        names(
+                            slot(full_object,"terms_dist")
+                        ),
+                        collapse=", "
+                    )
                 )
-            ),
-            " conditions.",
+            },
+            "\n- clusters distances: ",
             paste(
-                "\n       ",
-                Data$conditions,
-                ":",
-                 Data$`significant GO terms number`,
-                "terms"
+                names(
+                    slot(full_object,"clusters_dist")
                 ),
-                "\n- clusters distances: ",
+                collapse=", "
+            ),
+            "\n- Heatmap:",
+            "\n          * GOterms: ",
+            !is.null(
+                slot(full_object,"heatmap")$GOterms
+            ),
+            "\n                    - GO.tree:\n                              ",
+            paste(
                 paste(
                     names(
-                        slot(object,"clusters_dist")
-                    ),
-                    collapse=", "
-                ),
-                "\n- Heatmap:",
-                "\n          * GOterms: ",
-                !is.null(
-                    slot(object,"heatmap")$GOterms
-                ),
-                "\n                    - GO.tree:\n                              ",
-                paste(
-                    paste(
-                        names(
-                            unlist(
-                                slot(object,"hcl_params")$GO.tree
-                            )
-                        ),
                         unlist(
-                            slot(object,"hcl_params")$GO.tree
-                        ),sep=": "
+                            slot(full_object,"hcl_params")$GO.tree
+                        )
                     ),
-                    collapse="\n                              "
+                    unlist(
+                        slot(full_object,"hcl_params")$GO.tree
+                    ),sep=": "
                 ),
-                "\n                              number of clusters: ",
-                length(
-                    unique(
-                        unlist(slot(slot(object,"enrich_GOs"),"data")[,"GO.cluster",with=FALSE])
-                    )
+                collapse="\n                              "
+            ),
+            "\n                              number of clusters: ",
+            length(
+                unique(
+                    unlist(slot(slot(full_object,"enrich_GOs"),"data")[,"GO.cluster",with=FALSE])
+                )
+            ),
+            "\n                              clusters min size: ",
+            round(
+                min(
+                    table(slot(slot(full_object,"enrich_GOs"),"data")[,"GO.cluster",with=FALSE]),
+                    na.rm=TRUE
                 ),
-                "\n                              clusters min size: ",
-                round(
-                    min(
-                        table(slot(slot(object,"enrich_GOs"),"data")[,"GO.cluster",with=FALSE]),
-                        na.rm=TRUE
-                    ),
-                    digits=0
+                digits=0
+            ),
+            "\n                              clusters mean size: ",
+            round(
+                mean(
+                    table(slot(slot(full_object,"enrich_GOs"),"data")[,"GO.cluster",with=FALSE]),
+                    na.rm=TRUE
                 ),
-                "\n                              clusters mean size: ",
-                round(
-                    mean(
-                        table(slot(slot(object,"enrich_GOs"),"data")[,"GO.cluster",with=FALSE]),
-                        na.rm=TRUE
-                    ),
-                    digits=0
+                digits=0
+            ),
+            "\n                              clusters max size: ",
+            round(
+                max(
+                    table(slot(slot(full_object,"enrich_GOs"),"data")[,"GO.cluster",with=FALSE]),
+                    na.rm=TRUE
                 ),
-                "\n                              clusters max size: ",
-                round(
-                    max(
-                        table(slot(slot(object,"enrich_GOs"),"data")[,"GO.cluster",with=FALSE]),
-                        na.rm=TRUE
-                    ),
-                    digits=0
-                ),
-                "\n                   - sample.tree: ",
+                digits=0
+            ),
+            "\n                   - sample.tree: ",
+            paste(
                 paste(
-                    paste(
-                        names(
-                            unlist(
-                                slot(object,"hcl_params")$samples.tree
-                            )
-                        ),
+                    names(
                         unlist(
-                            slot(object,"hcl_params")$samples.tree
-                        ),
-                        sep=": "
+                            slot(full_object,"hcl_params")$samples.tree
+                        )
                     ),
-                    collapse="\n                                 "
+                    unlist(
+                        slot(full_object,"hcl_params")$samples.tree
+                    ),
+                    sep=": "
                 ),
-                if(is.null(slot(object,"hcl_params")$samples.tree)){"FALSE"},
-                "\n          * GOclusters: ",
-                !is.null(
-                    slot(object,"heatmap")$GOclusters
-                ),
-                if(!is.null(slot(object,"heatmap")$GOclusters)){
+                collapse="\n                                 "
+            ),
+            if(is.null(slot(full_object,"hcl_params")$samples.tree)){"FALSE"},
+            "\n          * GOclusters: ",
+            !is.null(
+                slot(full_object,"heatmap")$GOclusters
+            ),
+            if(!is.null(slot(full_object,"heatmap")$GOclusters)){
+                paste(
+                    "\n                       - tree:\n                             ",
                     paste(
-                        "\n                       - tree:\n                             ",
                         paste(
-                            paste(
-                                names(
-                                    unlist(
-                                        slot(object,"hcl_params")$GO.clusters
-                                    )
-                                ),
+                            names(
                                 unlist(
-                                    slot(object,"hcl_params")$GO.clusters
-                                ),
-                            sep=": "
+                                    slot(full_object,"hcl_params")$GO.clusters
+                                )
                             ),
-                            collapse="\n                              "
+                            unlist(
+                                slot(full_object,"hcl_params")$GO.clusters
+                            ),
+                            sep=": "
                         ),
-                        collapse=""
-                    )
-                },
-                sep=""
-            )
+                        collapse="\n                              "
+                    ),
+                    collapse=""
+                )
+            },
+            sep=""
+        )
     }
 )

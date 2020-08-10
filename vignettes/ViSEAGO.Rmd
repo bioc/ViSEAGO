@@ -168,7 +168,9 @@ myGENE2GO<-ViSEAGO::annotate(
 
 ## GO enrichment tests
 
-The GO terms enrichment tests are performed with the `r BiocStyle::Biocpkg("topGO")` package @pmid16606683, which support several algorithms that improve GO group scoring using the underlying GO graph topology.
+### topGO
+
+The GO terms enrichment tests can be performed with the `r BiocStyle::Biocpkg("topGO")` package @pmid16606683, which support several algorithms that improve GO group scoring using the underlying GO graph topology.
 
 First, we create a `topGOdata` object, using `ViSEAGO::create_topGOdata` method, with inputs as: genes selection, genes background, GO terms category used (*MF*, *BP*, or *CC*), and minimum of annotated genes by GO terms (nodeSize).
 
@@ -194,7 +196,15 @@ classic<-topGO::runTest(
 )
 ```
 
-<u>NB</u>: p-values of GO terms are not adjusted and considered significant below 0.01 (see `r BiocStyle::Biocpkg("topGO")` vignette).
+### fgsea
+
+Alternatively, the GO terms enrichment tests can performed with the `r BiocStyle::Biocpkg("fgsea")` package @fgsea, which support several algorithms that improve GO group scoring using the underlying GO graph topology.
+
+First, we create a `topGOdata` object, using `ViSEAGO::create_topGOdata` method, with inputs as: genes selection, genes background, GO terms category used (*MF*, *BP*, or *CC*), and minimum of annotated genes by GO terms (nodeSize).
+
+
+
+
 
 ## Combine enriched GO terms
 

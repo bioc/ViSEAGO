@@ -12,7 +12,7 @@ output:
   BiocStyle::html_document:
     highlight: tango
 vignette: >
-  %\VignetteIndexEntry{3: SS_choice}
+  %\VignetteIndexEntry{4: SS_choice}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: "`r system.file('extdata','bibliography.bib',package='ViSEAGO')`"

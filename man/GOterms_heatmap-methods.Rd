@@ -161,7 +161,8 @@ Other GO_terms:
 \code{\link{annotate}()},
 \code{\link{create_topGOdata}()},
 \code{\link{gene2GO-class}},
-\code{\link{merge_enrich_terms}()}
+\code{\link{merge_enrich_terms}()},
+\code{\link{runfgsea}()}
 
 Other semantic_similiarity: 
 \code{\link{GOclusters_heatmap}()}

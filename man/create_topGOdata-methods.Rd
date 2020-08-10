@@ -81,6 +81,7 @@ Other GO_terms:
 \code{\link{GOterms_heatmap}()},
 \code{\link{annotate}()},
 \code{\link{gene2GO-class}},
-\code{\link{merge_enrich_terms}()}
+\code{\link{merge_enrich_terms}()},
+\code{\link{runfgsea}()}
 }
 \concept{GO_terms}

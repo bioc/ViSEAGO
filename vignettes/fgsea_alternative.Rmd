@@ -1,0 +1,238 @@
+---
+title: "Functional analysis of mouse mammary gland RNA-Seq using fgsea instead of topGO"
+author:
+- name: Aurelien Brionne
+  affiliation: "Institut national de recherche pour l'agriculture, l'alimentation et l'environnement (INRAE)"
+- name: Amelie Juanchich
+  affiliation: "Institut national de recherche pour l'agriculture, l'alimentation et l'environnement (INRAE)"
+- name: Christelle Hennequet-Antier
+  affiliation: "Institut national de recherche pour l'agriculture, l'alimentation et l'environnement (INRAE)"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  BiocStyle::html_document:
+    highlight: tango
+vignette: >
+  %\VignetteIndexEntry{3: fgsea_alternative}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: "`r system.file('extdata/','bibliography.bib',package='ViSEAGO')`"
+csl: "`r system.file('extdata/','bmc-genomics.csl',package='ViSEAGO')`"
+---
+
+```{r setup,include=FALSE}
+# load ViSEAGO and mouse db package
+library(ViSEAGO)
+
+# knitr document options
+knitr::opts_chunk$set(
+    eval=FALSE,echo=TRUE,fig.pos = 'H',
+    fig.width=6,message=FALSE,comment=NA,warning=FALSE
+)
+```
+
+# Introduction{-}
+
+In this vignette, we perform a functional Gene Set Enrichment Analysis (GSEA) from differential Expression analysis from genes of luminal cells in the mammary gland. (see `utils::vignette("mouse_bioconducor", package ="ViSEAGO")`)
+
+# Genes of interest
+
+We load examples files from `r BiocStyle::Biocpkg("ViSEAGO")` package using `system.file` from the locally installed package. We read gene identifiers (GeneID) and corresponding statistical values (BH padj) for all results.
+
+in this example, gene identifiers were **ranked** based on the BH padj from Differential expression analysis.
+
+```{r geneList_input,eval=TRUE}
+# load gene identifiants and padj test results from Differential Analysis complete tables
+PregnantvsLactate<-data.table::fread(
+    system.file(
+        "extdata/data/input",
+        "pregnantvslactate.complete.txt",
+        package = "ViSEAGO"
+    ),
+    select = c("Id","padj")
+)
+
+VirginvsLactate<-data.table::fread(
+     system.file(
+        "extdata/data/input",
+        "virginvslactate.complete.txt",
+        package = "ViSEAGO"
+    ),
+    select = c("Id","padj")
+)
+
+VirginvsPregnant<-data.table::fread(
+    system.file(
+        "extdata/data/input",
+        "virginvspregnant.complete.txt",
+        package = "ViSEAGO"
+    ),
+    select = c("Id","padj")
+)
+
+# rank Id based on statistical value (BH padj in this example)
+data.table::setorder(PregnantvsLactate,padj)
+data.table::setorder(VirginvsLactate,padj)
+data.table::setorder(VirginvsPregnant,padj)
+```
+
+Here, we display the header from the *PregnantvsLactate* **ranked** data.table.
+
+```{r geneList_input-head,echo=FALSE,eval=TRUE}
+# show the ten first lines of genes_DE (same as genes_ref)
+PregnantvsLactate
+```
+
+# GO annotation of genes
+
+In this study, we build a `myGENE2GO` object using the Bioconductor `r BiocStyle::Biocpkg("org.Mm.eg.db")` database package for the mouse species. This object contains all available GO annotations for categories Molecular Function (MF), Biological Process (BP), and Cellular Component (CC).
+
+<u>NB</u>: Don't forget to check if the last current annotation database version is installed in your R session! See `ViSEAGO::available_organisms(Bioconductor)`.
+
+```{r Genomic-ressources}
+# connect to Bioconductor
+Bioconductor<-ViSEAGO::Bioconductor2GO()
+
+# load GO annotations from Bioconductor
+myGENE2GO<-ViSEAGO::annotate(
+    "org.Mm.eg.db",
+    Bioconductor
+)
+```
+</br> 
+```{r Genomic-ressources_show}
+# display summary
+myGENE2GO
+```
+</br> 
+```{r Genomic-ressources_display,echo=FALSE,eval=TRUE}
+cat(
+"- object class: gene2GO
+- database: Bioconductor
+- stamp/version: 2019-Jul10
+- organism id: org.Mm.eg.db
+
+GO annotations:
+- Molecular Function (MF): 22707 annotated genes with 91986 terms (4121 unique terms)
+- Biological Process (BP): 23210 annotated genes with 164825 terms (12224 unique terms)
+- Cellular Component (CC): 23436 annotated genes with 107852 terms (1723 unique terms)"
+)
+```
+
+# Functional GO enrichment
+
+## GO enrichment tests
+
+We perform a functional Gene Set Enrichment Analysis (GSEA) from differential Expression analysis from genes of luminal cells in the mammary gland. 
+Here, gene list were **ranked** based on the BH padj from Differential expression analysis.
+The enriched **Biological process** (BP) are obtained using a GSEA test with `ViSEAGO::runfgsea`, which is a wrapper from  algorithms developped in `r BiocStyle::Biocpkg("fgsea")` package @fgsea.
+we perform the GO enrichment tests for BP category with `fgseaMultilevel`algorithm.
+
+```{r Enrichment_data}
+# perform fgseaMultilevel tests
+BP_PregnantvsLactate<-ViSEAGO::runfgsea(
+    geneSel=PregnantvsLactate,
+    ont="BP",
+    gene2GO=myGENE2GO, 
+    method ="fgseaMultilevel",
+    params = list(
+        scoreType = "pos",
+         minSize=5
+    )
+)
+
+BP_VirginvsLactate<-ViSEAGO::runfgsea(
+    geneSel=VirginvsLactate,
+    gene2GO=myGENE2GO,
+    ont="BP",
+    method ="fgseaMultilevel",
+    params = list(
+        scoreType = "pos",
+         minSize=5
+    )
+)
+
+BP_VirginvsPregnant<-ViSEAGO::runfgsea(
+    geneSel=VirginvsPregnant,
+    gene2GO=myGENE2GO,
+    ont="BP",
+    method ="fgseaMultilevel",
+    params = list(
+        scoreType = "pos",
+         minSize=5
+    )
+)
+```
+
+## Combine enriched GO terms
+
+We combine the results of the three GSEA tests into an object using `ViSEAGO::merge_enrich_terms` method.
+
+```{r Enrichment_merge}
+# merge fgsea results
+BP_sResults<-ViSEAGO::merge_enrich_terms(
+    cutoff=0.01,
+    Input=list(
+        PregnantvsLactate="BP_PregnantvsLactate",
+        VirginvsLactate="BP_VirginvsLactate",
+        VirginvsPregnant="BP_VirginvsPregnant"
+    )
+)
+```
+</br>
+```{r Enrichment_merge_show}
+# display a summary
+BP_sResults
+```
+</br>
+```{r Enrichment_merge_display,echo=FALSE,eval=TRUE}
+cat(
+"- object class: enrich_GO_terms
+- ontology: BP
+- method: fgsea
+- summary:
+ PregnantvsLactate
+    method : fgseaMultilevel
+    sampleSize : 101
+    minSize : 5
+    maxSize : Inf
+    eps : 0
+    scoreType : pos
+    nproc : 0
+    gseaParam : 1
+    BPPARAM : fgseaMultilevel
+    absEps : 101
+ VirginvsLactate
+    method : fgseaMultilevel
+    sampleSize : 101
+    minSize : 5
+    maxSize : Inf
+    eps : 0
+    scoreType : pos
+    nproc : 0
+    gseaParam : 1
+    BPPARAM : fgseaMultilevel
+    absEps : 101
+ VirginvsPregnant
+    method : fgseaMultilevel
+    sampleSize : 101
+    minSize : 5
+    maxSize : Inf
+    eps : 0
+    scoreType : pos
+    nproc : 0
+    gseaParam : 1
+    BPPARAM : fgseaMultilevel
+    absEps : 101- enrichment pvalue cutoff:
+        PregnantvsLactate : 0.01
+        VirginvsLactate : 0.01
+        VirginvsPregnant : 0.01
+- enrich GOs (in at least one list): 184 GO terms of 3 conditions.
+        PregnantvsLactate : 67 terms
+        VirginvsLactate : 58 terms
+        VirginvsPregnant : 64 terms"
+)
+```
+</br>
+Now you can follow mouse bioconductor vignette for next steps beginning with *3.3 Graphs of GO enrichment tests* section (`utils::vignette("mouse_bioconducor", package ="ViSEAGO")`).
+
+# References{-}

@@ -10,19 +10,11 @@ This class is invoked by \code{\link{GOterms_heatmap}} and  \code{\link{GOcluste
 \section{Slots}{
 
 \describe{
-\item{\code{db}}{database source.}
-
-\item{\code{stamp}}{date of stamp.}
-
-\item{\code{organism}}{target species.}
-
-\item{\code{topGO}}{topGO objects summary.}
-
-\item{\code{ont}}{ontology (MF, BP, or CC).}
-
-\item{\code{IC}}{Information Content (IC).}
+\item{\code{ont}}{ontology used "MF", "BP", or "CC".}
 
 \item{\code{enrich_GOs}}{\code{\link{enrich_GO_terms-class}} object.}
+
+\item{\code{IC}}{Information Content (IC).}
 
 \item{\code{terms_dist}}{distance between GO terms based on semantic similiarity.}
 

@@ -80,40 +80,35 @@ setMethod(
         # count significant (or not) pvalues by condition
         Data<-data[,pvalues,with=FALSE]
 
-        # count
-        Data<-data.table(
-            pvalue=c("not enriched GO terms","enriched GO terms"),
-            
+        # count significant according cutoff
+        Data<-lapply(1:ncol(Data), function(x){
+
+            # count
+            res<-table(Data[,x,with=FALSE]<slot(object,"cutoff")[[1]][x])
+
+            # count
+            if(length(res)==1){
                 
-                essai<-Data[,
-                    lapply(.SD,function(x){
-    
-                        # count
-                        res<-table(x<0.01)
-    
-                        # count
-                        if(length(res)==1){
-                            
-                            if(names(res)=="TRUE"){c(0,res)}else{c(res,0)}
-                            
-                        }else{
-                            as.vector(res)
-                        } 
-                    }),
-                    .SDcols=seq_len(ncol(Data))
-                ]
-        )
+                if(names(res)=="TRUE"){
+                    res<-c(0,res)
+                }else{
+                    res<-c(res,0)
+                }
 
-        # remove pvalue in names
-        names(Data)<-gsub("\\.pvalue","",names(Data))
+            }else{
+                res<-as.vector(res)
+            } 
 
-        # melt the table
-        Data<-melt.data.table(
-            Data,
-            id.vars=names(Data)[1],
-            variable.name="condition",
-            value.name="count"
+            # convert to data.table
+            data.table(
+                pvalue=c("not enriched GO terms","enriched GO terms"),
+                condition=gsub("\\.pvalue","",names(Data)[x]),
+                count=res
             )
+        })
+        
+        # bind results
+        Data<-rbindlist(Data)
 
         # assign class values
         Data[,

@@ -73,60 +73,57 @@ setMethod(
         go<-select(
             GO.db,
             keys=keys(GO.db),
-        columns=c("GOID","ONTOLOGY")
-    )
-
-    # select a given category (MF,BP,CC)
-    goids<-go$GOID[go$ONTOLOGY==ont]
-
-    # count number of genes by term
-    gocount<-lengths(
-        inverseList(
-            slot(gene2GO,ont)
+            columns=c("GOID","ONTOLOGY")
         )
-    )
 
-    ## From GOSemsim compute IC content
+        # select a given category (MF,BP,CC)
+        goids<-go$GOID[go$ONTOLOGY==ont]
 
-    # extract gcount term names
-    goname<-names(gocount)
+        # count number of genes by term
+        gocount<-lengths(
+            inverseList(
+                slot(gene2GO,ont)
+            )
+        )
 
-    # ensure goterms not appearing in the specific annotation have 0 frequency
-    go.diff<-setdiff(goids, goname)
-    m<- double(length(go.diff))
-    names(m)<-go.diff
-    gocount<- as.vector(gocount)
-    names(gocount)<- goname
-    gocount<-c(gocount, m)
+        ## From GOSemsim compute IC content
 
-    # select offspings
-    Offsprings <- switch(
-        ont,
-        MF =as.list(GOMFOFFSPRING),
-        BP =as.list(GOBPOFFSPRING),
-        CC =as.list(GOCCOFFSPRING)
-    )
+        # extract gcount term names
+        goname<-names(gocount)
 
-    # add for each term offsprings their counted values
-    cnt <- gocount[goids] + vapply(goids, function(i){
-        sum(gocount[Offsprings[[i]]], na.rm=TRUE)
-    },0)
-    names(cnt)<-goids
+        # ensure goterms not appearing in the specific annotation have 0 frequency
+        go.diff<-setdiff(goids, goname)
+        m<- double(length(go.diff))
+        names(m)<-go.diff
+        gocount<- as.vector(gocount)
+        names(gocount)<- goname
+        gocount<-c(gocount, m)
 
-    # the probabilities of occurrence of GO terms in a specific corpus.
-    IC<- -log(cnt/sum(gocount))
+        # select offspings
+        Offsprings <- switch(
+            ont,
+            MF =as.list(GOMFOFFSPRING),
+            BP =as.list(GOBPOFFSPRING),
+            CC =as.list(GOCCOFFSPRING)
+        )
 
-    ## return value et S4 object with compatibility with GOSemSim package
+        # add for each term offsprings their counted values
+        cnt <- gocount[goids] + vapply(goids, function(i){
+            sum(gocount[Offsprings[[i]]], na.rm=TRUE)
+        },0)
+        names(cnt)<-goids
 
-    # create object
-    new(
-        "GO_SS",
-        db=slot(gene2GO,"db"),
-        stamp =slot(gene2GO,"stamp"),
-        organism=slot(gene2GO,"organism"),
-        ont=ont,
-        topGO=slot(enrich_GO_terms,"topGO"),
-        enrich_GOs=enrich_GO_terms,
-        IC = IC
-    )
-})
+        # the probabilities of occurrence of GO terms in a specific corpus.
+        IC<- -log(cnt/sum(gocount))
+
+        ## return value et S4 object with compatibility with GOSemSim package
+
+        # create object
+        new(
+            "GO_SS",
+            ont=slot(enrich_GO_terms,"ont"),
+            enrich_GOs=enrich_GO_terms,
+            IC = IC
+        )
+    }
+)

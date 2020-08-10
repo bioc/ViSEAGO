@@ -1035,13 +1035,9 @@ setMethod(
         # return heatmap
         new(
             "GO_clusters",
-            db=slot(myGOs,"db"),
-            stamp =slot(myGOs,"stamp"),
-            organism=slot(myGOs,"organism"),
             ont=slot(myGOs,"ont"),
-            topGO=slot(myGOs,"topGO"),
-            IC=slot(myGOs,"IC"),
             enrich_GOs=slot(myGOs,"enrich_GOs"),
+            IC=slot(myGOs,"IC"),
             terms_dist=slot(myGOs,"terms_dist")[row.tree$tree$distance],
             hcl_params=list(
                 GO.tree=row.tree,
