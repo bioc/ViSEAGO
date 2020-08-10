@@ -57,6 +57,9 @@ setMethod(
                 "data"
             )
 
+            # cut off
+            cutoff<-slot(object,"cutoff")[[1]]
+            
         }else{
 
             # data
@@ -67,6 +70,15 @@ setMethod(
                 ),
                 "data"
             )
+
+            # cutoff
+            cutoff<-slot(
+                slot(
+                    object,
+                    "enrich_GOs"
+                ),
+                "cutoff"
+            )[[1]]
         }
 
         # find pvalues columns
@@ -84,7 +96,7 @@ setMethod(
         Data<-lapply(1:ncol(Data), function(x){
 
             # count
-            res<-table(Data[,x,with=FALSE]<slot(object,"cutoff")[[1]][x])
+            res<-table(Data[,x,with=FALSE]<cutoff[x])
 
             # count
             if(length(res)==1){
