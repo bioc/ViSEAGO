@@ -168,7 +168,7 @@ myGENE2GO<-ViSEAGO::annotate(
 
 ## GO enrichment tests
 
-### topGO
+### topGO{-}
 
 The GO terms enrichment tests can be performed with the `r BiocStyle::Biocpkg("topGO")` package @pmid16606683, which support several algorithms that improve GO group scoring using the underlying GO graph topology.
 
@@ -196,25 +196,40 @@ classic<-topGO::runTest(
 )
 ```
 
-### fgsea
+### fgsea{-}
 
-Alternatively, the GO terms enrichment tests can performed with the `r BiocStyle::Biocpkg("fgsea")` package @fgsea, which support several algorithms that improve GO group scoring using the underlying GO graph topology.
+The GO terms enrichment tests can be performed with the `r BiocStyle::Biocpkg("fgsea")` package @fgsea, with inputs as: preranked gene identifiers with statistical values , GO terms category used (*MF*, *BP*, or *CC*), fgsea algorithm, and fgsea parameters to use.
 
-First, we create a `topGOdata` object, using `ViSEAGO::create_topGOdata` method, with inputs as: genes selection, genes background, GO terms category used (*MF*, *BP*, or *CC*), and minimum of annotated genes by GO terms (nodeSize).
-
-
-
-
+```{r fgsea}
+# perform fgseaMultilevel tests
+BP<-ViSEAGO::runfgsea(
+    geneSel=table,
+    ont="BP",
+    gene2GO=myGENE2GO, 
+    method ="fgseaMultilevel",
+    params = list(
+        scoreType = "pos",
+         minSize=5
+    )
+)
+```
 
 ## Combine enriched GO terms
 
 We combine results of enrichment tests into an object using `ViSEAGO::merge_enrich_terms` method. A table of enriched GO terms in at least one comparison is displayed in interactive mode, or printed in a file using `ViSEAGO::show_table` method. The printed table contains for each enriched GO terms, additional columns including the list of significant genes and frequency (ratio of number of significant genes to number of background genes) evaluated by comparison. 
-  
+
 ```{r Enrichment_merge}
-# merge results
+# merge results from topGO
 BP_sResults<-ViSEAGO::merge_enrich_terms(
     Input=list(
         condition=c("BP","classic")
+    )
+)
+
+# merge results from fgsea
+BP_sResults<-ViSEAGO::merge_enrich_terms(
+    Input=list(
+        condition="BP"
     )
 )
 ```
