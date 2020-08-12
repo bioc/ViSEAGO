@@ -53,9 +53,11 @@ BiocManager::install("ViSEAGO")
 
 # Genes of interest
 
+## topGO{-}
+
 Firstly, you need to provide the gene *background* (= expressed genes) and *selection* files.
 
-```{r geneList_input}
+```{r geneList_input_topGO}
 # load genes background
 background<-scan(
     "background.txt",
@@ -69,6 +71,18 @@ selection<-scan(
     quiet=TRUE,
     what=""
 )
+```
+
+## fgsea{-}
+
+Or a table with gene identifiers and statistical value to use for ranking.
+
+```{r geneList_input_fgsea}
+# load gene identifiers column 1) and corresponding statistical value (column 2)
+table<-data.table::fread("table.txt")
+
+# rank gene identifiers according statistical value
+data.table::setorder(table,value)
 ```
 
 # GO annotation of genes

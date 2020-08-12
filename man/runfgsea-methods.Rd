@@ -57,7 +57,7 @@ A gene frequency (\%) of leadingEdge/size is added to output \code{data.table}.
 }
 \examples{
 # gene list
-pregnantvslactate<-data.table::fread(
+PregnantvsLactate<-data.table::fread(
     system.file(
         "extdata/data/input",
         "pregnantvslactate.complete.txt",
@@ -80,7 +80,7 @@ myGENE2GO<-ViSEAGO::annotate(
 
 # run fgseaMultilevel
 pregnantvslactate<-ViSEAGO::runfgsea(
-    geneSel=pregnantvslactate,
+    geneSel=PregnantvsLactate,
     gene2GO=myGENE2GO,
     ont="BP",
     method="fgseaMultilevel",
