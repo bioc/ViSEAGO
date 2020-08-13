@@ -546,6 +546,54 @@ setMethod(
             }
 
             # if db  match to Custom
+            if(db[1]=="Uniprot-GOA"){
+
+                # temp file
+                temp<-paste(
+                    tempfile(),
+                    "gz",
+                    sep="."
+                )
+
+                # load the file
+                download.file(
+                    paste(
+                        'ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/',
+                        toupper(db[2]),
+                        '/goa_',
+                        db[2],
+                        '.gaf.gz',
+                        sep=""
+                    ),
+                    destfile =temp,
+                    quiet=TRUE,
+                    method="internal"
+                )
+
+                # unzip
+                gunzip(temp)
+                
+                # read file
+                annot<-unique(
+                    fread(
+                        sub("\\.gz","",temp),
+                        skip=12,
+                        select=c(2,3),
+                        col.names=c("gene_id","gene_symbol")
+                    )
+                )
+
+                # merge gene_symbol
+                genes<-merge(
+                    genes,
+                    annot,
+                    by.x="Significant_genes",
+                    by.y="gene_id",
+                    all.x=TRUE
+                )
+            }
+
+            # if db  match to Custom
             if(db[1]=="Custom"){
 
                 # load GeneID and symbols
