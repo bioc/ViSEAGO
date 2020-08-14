@@ -987,7 +987,9 @@ setMethod(
         }
 
         # remove row side colors text mention
-        hm$x$layout$annotations[[1]]$text<-""
+        if(length(hm$x$layout$annotations)>0){
+            hm$x$layout$annotations[[1]]$text<-""
+        }
 
         # hm to list
         hm<-list(hm)

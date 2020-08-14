@@ -20,7 +20,7 @@
 #' Defaults fgseaMultilevel parameters were used for perform test 
 #' except the \code{eps} arg that was set to 0 for better pvalues estimation.\cr
 #' A gene frequency (\%) of leadingEdge/size is added to output \code{data.table}.
-#' @return a \code{\link[fgsea]{fgsea-class}} object.
+#' @return a \code{\link{fgsea-class}} object.
 #' @references
 #' Korotkevich G, Sukhov V, Sergushichev A (2019). "Fast gene set enrichment analysis." bioRxiv. doi: 10.1101/060012, http://biorxiv.org/content/early/2016/06/20/060012.
 #' @include fgsea.R

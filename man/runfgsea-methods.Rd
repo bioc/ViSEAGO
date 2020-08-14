@@ -37,7 +37,7 @@ runfgsea(
 \item{params}{a \code{list} with \code{\link[fgsea]{fgseaSimple}} or \code{\link[fgsea]{fgseaMultilevel}} parameters.}
 }
 \value{
-a \code{\link[fgsea]{fgsea-class}} object.
+a \code{\link{fgsea-class}} object.
 }
 \description{
 This method perform fast gene set enrichment analysis (GSEA) using \pkg{fgsea} package.

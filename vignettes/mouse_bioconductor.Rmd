@@ -466,7 +466,7 @@ Enriched GO terms are ranked in a dendrogram and colored depending on their clus
 # Create GOterms heatmap
 Wang_clusters_wardD2<-ViSEAGO::GOterms_heatmap(
     myGOs,
-    showIC=TRUE,
+    showIC=FALSE,
     showGOlabels =FALSE,
     GO.tree=list(
         tree=list(
