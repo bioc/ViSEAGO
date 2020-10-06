@@ -2,7 +2,7 @@
 #' @description This method displays in barplot the count of GO terms splitted in two categories (significant or not)
 #' for each result of GO enrichment tests.
 #' @importFrom data.table data.table melt := .SD
-#' @importFrom plotly plot_ly layout export
+#' @importFrom plotly plot_ly layout export orca
 #' @importFrom methods is slot
 #' @family GO_terms
 #' @family visualization
