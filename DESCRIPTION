@@ -1,5 +1,5 @@
 Package: ViSEAGO
-Version: 1.3.17
+Version: 1.3.18
 Title: ViSEAGO: a Bioconductor package for clustering biological functions using Gene Ontology and semantic similarity
 Author: Aurelien Brionne [aut, cre],
         Amelie Juanchich [aut],

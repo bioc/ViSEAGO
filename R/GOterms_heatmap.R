@@ -777,59 +777,111 @@ setMethod(
             mat<-ifelse(mat < 2, 0, 1)
         }
 
-        # draw heatmapply
-        hm<-heatmaply::heatmaply(
+        if(showIC==TRUE){
 
-            # the initial matrix
-            x=mat,
+            # draw heatmapply
+            hm<-heatmaply::heatmaply(
 
-            # row labels
-            labRow=row.names(mat),
+                # the initial matrix
+                x=mat,
 
-            # columns labels
-            labCol=colnames(mat),
+                # row labels
+                labRow=row.names(mat),
 
-            # the row dendrogram
-            Rowv=dd.row,
+                # columns labels
+                labCol=colnames(mat),
 
-            # the ordered matrix according dendrograms for columns
-            Colv=if(!is.null(col.dist)){dd.col}else{FALSE},
+                # the row dendrogram
+                Rowv=dd.row,
 
-            # the IC information
-            RowSideColors=if(showIC==TRUE){data.table(IC=IC)}else{NULL},
+                # the ordered matrix according dendrograms for columns
+                Colv=if(!is.null(col.dist)){dd.col}else{FALSE},
 
-            # the IC information
-            row_side_palette =if(showIC==TRUE){colorRampPalette(c("#FFFFFF","#49006A"))}else{NULL},
+                # the IC information,
+                row_side_colors=data.table(IC=IC),
 
-            # the color palette
-            scale_fill_gradient_fun=if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")==TRUE){
+                # the IC information
+                row_side_palette =colorRampPalette(c("#FFFFFF","#49006A")),
 
-                # if same gene background
+                # the color palette
+                scale_fill_gradient_fun=if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")==TRUE){
+
+                    # if same gene background
                     scale_fill_gradient2(
-                    name="-log10pvalue",
-                    low= heatmap_colors[1],
-                    mid= heatmap_colors[1],
-                    high =heatmap_colors[2],
-                    midpoint = 1.3
-                )
-            }else{
+                        name="-log10pvalue",
+                        low= heatmap_colors[1],
+                        mid= heatmap_colors[1],
+                        high =heatmap_colors[2],
+                        midpoint = 1.3
+                    )
+                }else{
 
-                # if not same gene background
-                scale_fill_gradient2(
-                    name="-log10pvalue",
-                    low=heatmap_colors[1],
-                    mid=heatmap_colors[1],
-                    high =heatmap_colors[2],
-                    midpoint =0
-                )
-            },
+                    # if not same gene background
+                    scale_fill_gradient2(
+                        name="-log10pvalue",
+                        low=heatmap_colors[1],
+                        mid=heatmap_colors[1],
+                        high =heatmap_colors[2],
+                        midpoint =0
+                    )
+                },
 
-            # the width of dendrogramm
-            branches_lwd = 0.4,
+                # the width of dendrogramm
+                branches_lwd = 0.4,
 
-            # color bar length
-            colorbar_len=0.05
-        )
+                # color bar length
+                colorbar_len=0.05
+            )
+        }else{
+
+            # draw heatmapply
+            hm<-heatmaply::heatmaply(
+
+                # the initial matrix
+                x=mat,
+
+                # row labels
+                labRow=row.names(mat),
+
+                # columns labels
+                labCol=colnames(mat),
+
+                # the row dendrogram
+                Rowv=dd.row,
+
+                # the ordered matrix according dendrograms for columns
+                Colv=if(!is.null(col.dist)){dd.col}else{FALSE},
+
+                # the color palette
+                scale_fill_gradient_fun=if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")==TRUE){
+
+                    # if same gene background
+                    scale_fill_gradient2(
+                        name="-log10pvalue",
+                        low= heatmap_colors[1],
+                        mid= heatmap_colors[1],
+                        high =heatmap_colors[2],
+                        midpoint = 1.3
+                    )
+                }else{
+
+                    # if not same gene background
+                    scale_fill_gradient2(
+                        name="-log10pvalue",
+                        low=heatmap_colors[1],
+                        mid=heatmap_colors[1],
+                        high =heatmap_colors[2],
+                        midpoint =0
+                    )
+                },
+                
+                # the width of dendrogramm
+                branches_lwd = 0.4,
+                
+                # color bar length
+                colorbar_len=0.05
+            )
+        }
 
         # with column dendrogram and showIC
         col=vapply(hm$x$data,function(x){length(x$text)},0)
