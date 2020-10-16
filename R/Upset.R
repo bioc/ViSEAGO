@@ -72,7 +72,7 @@ setMethod(
         )
 
         # print image to file
-        png(sub("\\..+$",".png",file))
+        png(sub("\\.[^\\.]+$",".png",file))
             print(
                 upset(
                     Data,
