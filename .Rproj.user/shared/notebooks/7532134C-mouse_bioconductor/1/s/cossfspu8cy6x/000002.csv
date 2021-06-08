@@ -1,8 +1,0 @@
-"0","# GOclusters heatmap"
-"0","Wang_clusters_wardD2<-ViSEAGO::GOclusters_heatmap("
-"0","    Wang_clusters_wardD2,"
-"0","    tree=list("
-"0","        distance=""BMA"","
-"0","        aggreg.method=""ward.D2"""
-"0","    )"
-"0",")"

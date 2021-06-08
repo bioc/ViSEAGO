@@ -1,8 +1,0 @@
-"0","# connect to Bioconductor"
-"0","Bioconductor<-ViSEAGO::Bioconductor2GO()"
-"0",""
-"0","# load GO annotations from Bioconductor"
-"0","myGENE2GO<-ViSEAGO::annotate("
-"0","    ""org.Mm.eg.db"","
-"0","    Bioconductor"
-"0",")"
