@@ -1,0 +1,5 @@
+"0","# load vignette data"
+"0","data("
+"0","    myGOs,"
+"0","    package=""ViSEAGO"""
+"0",")"

@@ -1,0 +1,5 @@
+"0","# create GO_SS-class object"
+"0","myGOs<-ViSEAGO::build_GO_SS("
+"0","    gene2GO=myGENE2GO,"
+"0","    enrich_GO_terms=BP_sResults"
+"0",")"

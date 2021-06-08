@@ -1,0 +1,5 @@
+"0","# display the heatmap"
+"0","ViSEAGO::show_heatmap("
+"0","    Wang_clusters_wardD2,"
+"0","    ""GOterms"""
+"0",")"

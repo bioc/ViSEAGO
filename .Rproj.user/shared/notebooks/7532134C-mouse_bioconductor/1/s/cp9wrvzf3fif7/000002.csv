@@ -1,0 +1,5 @@
+"0","# compute Semantic Similarity (SS)"
+"0","myGOs<-ViSEAGO::compute_SS_distances("
+"0","    myGOs,"
+"0","    distance=""Wang"""
+"0",")"

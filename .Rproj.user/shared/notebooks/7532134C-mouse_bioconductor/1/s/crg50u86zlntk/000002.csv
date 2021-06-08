@@ -1,0 +1,5 @@
+"0","# calculate semantic similarites between clusters of GO terms"
+"0","Wang_clusters_wardD2<-ViSEAGO::compute_SS_distances("
+"0","    Wang_clusters_wardD2,"
+"0","    distance=""BMA"""
+"0",")"

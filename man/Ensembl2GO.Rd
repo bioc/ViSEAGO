@@ -4,15 +4,10 @@
 \alias{Ensembl2GO}
 \title{Check available organisms datasets at Ensembl.}
 \usage{
-Ensembl2GO(biomart = "genes", host = "www.ensembl.org", version = NULL)
+Ensembl2GO(biomart = "genes", version = NULL)
 }
 \arguments{
-\item{biomart}{the biomart name (eg. "genes", the default) available with \pkg{biomaRt} package \code{\link[biomaRt]{listEnsembl}}.}
-
-\item{host}{the Ensembl host adress for \href{http://www.ensembl.org/index.html}{vertebrate} ("www.ensembl.org", the default value),
-\href{http://www.plants.ensembl.org/index.html}{plants} ("plants.ensembl.org"),
-\href{http://www.metazoa.ensembl.org/index.html}{metazoa} ("metazoa.ensembl.org"),
- or \href{http://www.fungi.ensembl.org/index.html}{fungi} ("fungi.ensembl.org").}
+\item{biomart}{the biomart name available with \pkg{biomaRt} package \code{\link[biomaRt]{listEnsembl}} ("genes", the default) or \code{\link[biomaRt]{listEnsemblGenomes}} ("protists_mart", "fungi_mart", "plants_mart").}
 
 \item{version}{the annotation version to use (eg. NULL for the default current version, or a version number in \code{character})}
 }
@@ -27,23 +22,13 @@ This function gives referenced organisms genomes at \href{http://ensemblgenomes.
 It uses the \code{\link[biomaRt]{useEnsembl}} and  \code{\link[biomaRt]{listDatasets}} from \pkg{biomaRt} package.
 }
 \examples{
-# host address to use for Ensembl vertebrate/Plants/Protists/Metazoa/Fungi
-# host="www.ensembl.org" # vertebrate
-# host="plants.ensembl.org"
-# host="protists.ensembl.org"
-# host="metazoa.ensembl.org"
-# host="fungi.ensembl.org"
-# biomart is not available for bacteria
-
 \dontrun{
 # check the Ensembl available biomart (if not known)
-# for Animals (host="www.ensembl.org", the default)
 biomaRt::listEnsembl()
 
 # List Ensembl available organisms
 Ensembl<-ViSEAGO::Ensembl2GO(
  biomart="genes",
- host="www.ensembl.org",
  version=NULL
 )
 }
