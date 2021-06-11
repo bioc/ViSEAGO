@@ -493,21 +493,31 @@ setMethod(
             # if db  match to Ensembl
             if(db[1]=="Ensembl"){
 
-                if(db[3]!="http://grch37.ensembl.org"){
+                if(db[4]==""){
 
-                    # connect to Ensembl
-                    mart<-useEnsembl(
-                        biomart="genes",
-                        host=db[3],
-                        version=db[6]
-                    )
+                    # Connect to Ensembl
+                    if(db[3]=="genes"){
 
+                        # connect to Ensembl
+                        mart<-useEnsembl(
+                            biomart=db[3],
+                            version=tail(db,n=1)
+                            
+                        )
+                        
+                    }else{
+
+                        # connect to Ensembl
+                        mart<-useEnsemblGenomes(
+                            biomart=db[3]
+                        )
+                    }
                 }else{
                     # connect to Ensembl
                     mart<-useEnsembl(
                         biomart="genes",
-                        GRCh =37,
-                        version=db[6]
+                        GRCh =db[4],
+                        version=tail(db,n=1)
                     )
                 }
 

@@ -4,10 +4,12 @@
 \alias{Ensembl2GO}
 \title{Check available organisms datasets at Ensembl.}
 \usage{
-Ensembl2GO(biomart = "genes", version = NULL)
+Ensembl2GO(biomart = "genes", GRCh = NULL, version = NULL)
 }
 \arguments{
 \item{biomart}{the biomart name available with \pkg{biomaRt} package \code{\link[biomaRt]{listEnsembl}} ("genes", the default) or \code{\link[biomaRt]{listEnsemblGenomes}} ("protists_mart", "fungi_mart", "plants_mart").}
+
+\item{GRCh}{GRCh version to connect to if not the current GRCh38, currently this can only be 37}
 
 \item{version}{the annotation version to use (eg. NULL for the default current version, or a version number in \code{character})}
 }
@@ -29,6 +31,7 @@ biomaRt::listEnsembl()
 # List Ensembl available organisms
 Ensembl<-ViSEAGO::Ensembl2GO(
  biomart="genes",
+ GRCh = NULL,
  version=NULL
 )
 }

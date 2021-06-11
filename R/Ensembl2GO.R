@@ -3,6 +3,7 @@
 #' @importFrom biomaRt useEnsembl listEnsembl listEnsemblGenomes useEnsemblGenomes listDatasets 
 #' @importFrom data.table data.table
 #' @param biomart the biomart name available with \pkg{biomaRt} package \code{\link[biomaRt]{listEnsembl}} ("genes", the default) or \code{\link[biomaRt]{listEnsemblGenomes}} ("protists_mart", "fungi_mart", "plants_mart").
+#' @param GRCh GRCh version to connect to if not the current GRCh38, currently this can only be 37
 #' @param version the annotation version to use (eg. NULL for the default current version, or a version number in \code{character})
 #' @family genomic_ressource
 #' @details
@@ -27,11 +28,12 @@
 #' # List Ensembl available organisms
 #' Ensembl<-ViSEAGO::Ensembl2GO(
 #'  biomart="genes",
+#'  GRCh = NULL,
 #'  version=NULL
 #' )
 #' }
 #' @export
-Ensembl2GO=function(biomart="genes",version=NULL){
+Ensembl2GO=function(biomart="genes",GRCh = NULL,version=NULL){
 
     # check the ensembl host versus mart name
     match.arg(biomart,c("genes","protists_mart","fungi_mart","metazoa_mart","plants_mart"))
@@ -40,10 +42,17 @@ Ensembl2GO=function(biomart="genes",version=NULL){
     if(biomart=="genes"){
 
         # check the ensembl genes releases
-        Ensembl<-listEnsembl(version=version)
+        Ensembl<-listEnsembl(
+            GRCh =GRCh,
+            version=version
+        )
 
         # connect to Ensembl
-        mart<-useEnsembl(biomart,version=version)
+        mart<-useEnsembl(
+            biomart,
+            GRCh =GRCh,
+            version=version
+        )
 
     }else{
 
@@ -58,7 +67,7 @@ Ensembl2GO=function(biomart="genes",version=NULL){
     new(
         "genomic_ressource",
         db="Ensembl",
-        stamp=paste(biomart,Ensembl$version[Ensembl$biomart==biomart]),
+        stamp=paste(biomart,GRCh,Ensembl$version[Ensembl$biomart==biomart]),
         data=data.table(),
         mart=list(mart),
         organisms=data.table(listDatasets(mart))
