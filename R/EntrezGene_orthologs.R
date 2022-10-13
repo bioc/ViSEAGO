@@ -23,7 +23,7 @@ EntrezGene_orthologs=function(){
 
     # import gene_group from NCBI
     download.file(
-        "ftp://ftp.ncbi.nih.gov/gene/DATA/gene_orthologs.gz",
+        "https://ftp.ncbi.nih.gov/gene/DATA/gene_orthologs.gz",
         quiet=TRUE,
         destfile =temp
     )
