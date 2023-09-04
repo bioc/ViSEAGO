@@ -28,12 +28,9 @@ EntrezGene_orthologs=function(){
         destfile =temp
     )
 
-    # uncompress
-    gunzip(temp)
-
     # read the file
     gene_orthologs=fread(
-        sub("\\.gz","",temp),
+        temp,
         verbose=FALSE,
         showProgress=FALSE
     )
