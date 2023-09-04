@@ -381,7 +381,7 @@ setMethod(
             # load the file
             download.file(
                 paste(
-                    'ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/',
+                    'https://ftp.ebi.ac.uk/pub/databases/GO/goa/',
                     toupper(id),
                     '/goa_',
                     id,
