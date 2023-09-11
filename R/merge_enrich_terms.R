@@ -568,7 +568,7 @@ setMethod(
                 # load the file
                 download.file(
                     paste(
-                        'ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/',
+                        'https://ftp.ebi.ac.uk/pub/databases/GO/goa/',
                         toupper(db[2]),
                         '/goa_',
                         db[2],
@@ -577,7 +577,7 @@ setMethod(
                     ),
                     destfile =temp,
                     quiet=TRUE,
-                    method="internal"
+                   # method="internal"
                 )
 
                 # unzip
