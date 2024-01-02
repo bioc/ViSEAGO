@@ -923,7 +923,7 @@ setMethod(
                 text<-hm$x$data[[i]]$text
 
                 # extract the corresponding row names value
-                text<-row.names(mat)[as.numeric(gsub("^.+ ","",text))]
+                text<-row.names(mat)[as.numeric(gsub("^.+row:[[:space:]]|<br />value.+$","",text))]
 
                 # return values
                 hm$x$data[[i]]$text<-paste(
