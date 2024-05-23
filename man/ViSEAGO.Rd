@@ -2,6 +2,7 @@
 % Please edit documentation in R/ViSEAGO.R
 \docType{package}
 \name{ViSEAGO}
+\alias{ViSEAGO-package}
 \alias{ViSEAGO}
 \title{ViSEAGO package}
 \description{
@@ -31,4 +32,13 @@ coherence supplied by semantic similarity (\code{\link{build_GO_SS}}, \code{\lin
 ViSEAGO has been successfully applied on several datasets from different species with a variety
 of biological questions. Results can be easily shared between bioinformaticians and biologists, enhancing reporting capabilities while
  maintaining reproducibility.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://www.bioconductor.org/packages/release/bioc/html/ViSEAGO.html}
+  \item \url{https://forgemia.inra.fr/UMR-BOA/ViSEAGO}
+  \item Report bugs at \url{https://forgemia.inra.fr/UMR-BOA/ViSEAGO/issues}
+}
+
 }

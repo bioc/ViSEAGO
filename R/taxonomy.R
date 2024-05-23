@@ -60,44 +60,57 @@ taxonomy=function(...){
     # core address
     core="https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?version=2.0&db=taxonomy"
 
-    # create submission query
-    query <-paste(
-        core,
-        "&id=",
-        paste(taxid,collapse=","),
-        sep = ""
+    # split species per block
+    species<-split(
+        taxid,
+        ceiling(seq_along(taxid) / 500)
     )
+    
+    # extract
+    Data<-lapply(species,function(x){
 
-  # submit and retrieve
-    query=paste(
-        scan(
+        # create submission query
+        query <-paste(
+            core,
+            "&id=",
+            paste(x,collapse=","),
+            sep = ""
+        )
+
+        # submit and retrieve
+        query=paste(
+            scan(
+                query,
+                what ="",
+                sep="\n",
+                quiet = TRUE
+            ),
+            collapse=""
+        )
+
+        # parse results
+        query<-substring(
             query,
-            what ="",
-            sep="\n",
-            quiet = TRUE
-        ),
-        collapse=""
-    )
+            unlist(gregexpr("<DocumentSummary ",query)),
+            unlist(gregexpr("</DocumentSummary>",query))
+        )
 
-    # parse results
-    query<-substring(
-        query,
-        unlist(gregexpr("<DocumentSummary ",query)),
-        unlist(gregexpr("</DocumentSummary>",query))
-    )
+        # extraction pattern
+        pattern=c("<DocumentSummary uid=\"(?<taxid>[[:digit:]]*)\"",
+        ".*<ScientificName>(?<ScientificName>.*)</ScientificName>",
+        "\t<CommonName>(?<CommonName>.*)</CommonName>.*")
 
-    # extraction pattern
-    pattern=c("<DocumentSummary uid=\"(?<taxid>[[:digit:]]*)\"",
-    ".*<ScientificName>(?<ScientificName>.*)</ScientificName>",
-    "\t<CommonName>(?<CommonName>.*)</CommonName>.*")
+        # find pattern
+        m=gregexpr(
+            paste(pattern,collapse=""),
+            query,
+            perl=TRUE
+        )
 
-    # find pattern
-    m=gregexpr(
-        paste(pattern,collapse=""),
-        query,
-        perl=TRUE
-    )
-
-    # extract  results in data.frame and return
-    pattern.extract(query,m)
+        # extract  results in data.frame and return
+        pattern.extract(query,m)
+    })
+    
+    # bind and return
+    data.table::rbindlist(Data)
 }
