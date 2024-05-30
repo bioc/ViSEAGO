@@ -885,7 +885,7 @@ setMethod(
 
         # with column dendrogram and showIC
         col=vapply(hm$x$data,function(x){length(x$text)},0)
-        col<-which(col==(nrow(mat)*ncol(mat)))
+        col<-which(col==(nrow(mat)*ncol(mat)))[1]
 
         # for each column
         text<-hm$x$data[[col]]$text
