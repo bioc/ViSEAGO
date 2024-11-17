@@ -167,7 +167,8 @@ setMethod(
             }
 
             # print heatmap
-            orca(heatmap,file=file)
+            #orca(heatmap,file=file)
+            save_image(heatmap,file=file)
         }
     }
 )

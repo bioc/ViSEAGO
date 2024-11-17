@@ -51,7 +51,7 @@ URL: https://www.bioconductor.org/packages/release/bioc/html/ViSEAGO.html,
      https://forgemia.inra.fr/UMR-BOA/ViSEAGO
 BugReports: https://forgemia.inra.fr/UMR-BOA/ViSEAGO/issues
 biocViews: Software, Annotation, GO, GeneSetEnrichment,  MultipleComparison, Clustering, Visualization
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Collate: 
     'genomic_ressource.R'
     'Bioconductor2GO.R'
