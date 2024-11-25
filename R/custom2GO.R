@@ -17,14 +17,12 @@
 #' @include genomic_ressource.R
 #' @examples
 #' # Download custom GO annotations
-#' \dontrun{
-#' Custom<-ViSEAGO::Custom2GO(
-#'     system.file(
-#'         "extdata/customfile.txt",
-#'         package = "ViSEAGO"
-#'     )
+#' # Custom<-ViSEAGO::Custom2GO(
+#' #    system.file(
+#' #        "extdata/customfile.txt",
+#' #        package = "ViSEAGO"
+#' #    )
 #' )
-#' }
 #' @export
 Custom2GO=function(file){
 
