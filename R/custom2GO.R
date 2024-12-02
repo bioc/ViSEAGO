@@ -22,7 +22,7 @@
 #' #        "extdata/customfile.txt",
 #' #        package = "ViSEAGO"
 #' #    )
-#' )
+#' # )
 #' @export
 Custom2GO=function(file){
 

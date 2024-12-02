@@ -27,12 +27,12 @@ This function load a custom GO annotation database table that must contain colum
 }
 \examples{
 # Download custom GO annotations
-Custom<-ViSEAGO::Custom2GO(
-    system.file(
-        "extdata/customfile.txt",
-        package = "ViSEAGO"
-    )
-)
+# Custom<-ViSEAGO::Custom2GO(
+#    system.file(
+#        "extdata/customfile.txt",
+#        package = "ViSEAGO"
+#    )
+# )
 }
 \references{
 Matt Dowle and Arun Srinivasan (2017). data.table: Extension of `data.frame`. R package version 1.10.4. https://CRAN.R-project.org/package=data.table.
