@@ -1,6 +1,8 @@
 #' @title Store organisms GO annotations from custom database file.
 #' @description  Store the available species and current GO annotations from a custom table file
 #' @importFrom data.table data.table fread rbindlist :=
+#' @importFrom AnnotationDbi select keys
+#' @import GO.db
 #' @family genomic_ressource
 #' @param file custom GO annotation file
 #' @details This function load a custom GO annotation database table that must contain columns:
@@ -16,13 +18,15 @@
 #' Matt Dowle and Arun Srinivasan (2017). data.table: Extension of `data.frame`. R package version 1.10.4. https://CRAN.R-project.org/package=data.table.
 #' @include genomic_ressource.R
 #' @examples
+#' \dontrun{
 #' # Download custom GO annotations
-#' # Custom<-ViSEAGO::Custom2GO(
-#' #    system.file(
-#' #        "extdata/customfile.txt",
-#' #        package = "ViSEAGO"
-#' #    )
-#' # )
+#' Custom<-ViSEAGO::Custom2GO(
+#'     system.file(
+#'         "extdata/customfile.txt",
+#'         package = "ViSEAGO"
+#'     )
+#' )
+#' }
 #' @export
 Custom2GO=function(file){
 
@@ -44,7 +48,14 @@ Custom2GO=function(file){
 
     # check GOID validity
     if(!all(gene2go$GOID%in%keys(GO.db))){
-        stop('GOID must be a valid identifiant. see select(GO.db,columns=columns(GO.db),keys=keys(GO.db)')
+        #stop('GOID must be a valid identifiant. see select(GO.db,columns=columns(GO.db),keys=keys(GO.db)')
+        warning('Invalid GOIDs have been removed. see select(GO.db,columns=columns(GO.db),keys=keys(GO.db)')
+
+        # load GO database
+        GO<-select(GO.db,columns=columns(GO.db),keys=keys(GO.db))
+
+        # subset valid GOID
+        gene2go<-gene2go[GOID%in%GO$GOID]
     }
 
     # extract Go category
