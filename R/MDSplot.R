@@ -1,6 +1,6 @@
 #' @title Multi Dimensional Scale (MDS) plot
 #' @description Generate a Multi Dimensional Scale (MDS) plot from distance objects.
-#' @importFrom data.table data.table rbindlist setorder := .N
+#' @import data.table
 #' @importFrom dendextend get_leaves_attr
 #' @importFrom plotly plot_ly add_markers layout export
 #' @importFrom stats cmdscale
@@ -177,9 +177,9 @@ setMethod(
                 setorder(res.mds,"GO.cluster")
 
                 # add levels to measures
-                res.mds$GO.cluster<-factor(
-                    res.mds$GO.cluster,
-                    levels=unique(res.mds$GO.cluster)
+                res.mds$`GO.cluster`<-factor(
+                    res.mds$`GO.cluster`,
+                    levels=unique(res.mds$`GO.cluster`)
                 )
             }
 
@@ -222,8 +222,8 @@ setMethod(
             # custom text
             res.mds[,
                 `:=`(
-                    "text"=res.mds$GO.cluster,
-                    GO.cluster=gsub("_.+$","",res.mds$GO.cluster)
+                    "text"=res.mds$`GO.cluster`,
+                    GO.cluster=gsub("_.+$","",res.mds$`GO.cluster`)
                 )
             ]
 
@@ -234,9 +234,9 @@ setMethod(
             )
 
             # add levels to GO.cluster 
-            res.mds$GO.cluster<-factor(
-                res.mds$GO.cluster,
-                levels=unique(res.mds$GO.cluster)
+            res.mds$`GO.cluster`<-factor(
+                res.mds$`GO.cluster`,
+                levels=unique(res.mds$`GO.cluster`)
             )
 
             # add GO.ID for GO
@@ -273,7 +273,7 @@ setMethod(
                     x=~Dim.1,
                     y=~Dim.2,
                     name=measures[x],
-                    text=~paste('GO.ID:',GO.ID,'<br>GO.name:',term),
+                    text=~paste('GO.ID:',`GO.ID`,'<br>GO.name:',term),
                     showlegend=FALSE,
                     marker =list(
                         size =20,
@@ -371,7 +371,7 @@ setMethod(
                     x=~Dim.1,
                     y=~Dim.2,
                     color=~GO.cluster,
-                    text = ~paste("cluster:",GO.cluster,"<br>GO.ID:",GO.ID,"<br>GO.name:",term),
+                    text = ~paste("cluster:",GO.cluster,"<br>GO.ID:",`GO.ID`,"<br>GO.name:",term),
                     showlegend=TRUE,
                     colors=colors,
                     marker =list(

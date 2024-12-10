@@ -1,6 +1,9 @@
 #' @title Display an interactive or static heatmap.
 #' @description Display a heatmap in interactive or static mode.
 #' @importFrom plotly export layout
+#' @importFrom grDevices dev.off png
+#' @importFrom graphics text
+#' @importFrom stats end start
 #' @family enrich_GO_terms
 #' @family GO_clusters
 #' @family visualization

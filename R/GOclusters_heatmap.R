@@ -226,7 +226,7 @@ setMethod(
             ),
 
             # the width of dendrogramm
-            branches_lwd = 0.4,
+            branches_lwd = 0.1,
 
             # color bar length
             colorbar_len=0.05

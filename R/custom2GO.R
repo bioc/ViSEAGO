@@ -1,7 +1,7 @@
 #' @title Store organisms GO annotations from custom database file.
 #' @description  Store the available species and current GO annotations from a custom table file
-#' @importFrom data.table data.table fread rbindlist :=
-#' @importFrom AnnotationDbi select keys
+#' @import data.table
+#' @import AnnotationDbi
 #' @import GO.db
 #' @family genomic_ressource
 #' @param file custom GO annotation file

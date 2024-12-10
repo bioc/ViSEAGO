@@ -1,6 +1,6 @@
 #' @title Enriched GO terms intersections plot.
 #' @description This method allows to visualize GO terms intersections between results of enrichment tests.
-#' @importFrom data.table data.table .SD fwrite
+#' @import data.table
 #' @importFrom UpSetR upset
 #' @family enrich_GO_terms
 #' @family visualization

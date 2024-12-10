@@ -1,10 +1,10 @@
 #' @title Merge enriched GO terms.
 #' @description combine results from GO enrichment tests (obtained with \pkg{topGO} package) or from \pkg{fgsea} (obtained with \code{\link{runfgsea}} method),
 #' for a given ontology (MF, BP, or CC).
-#' @importFrom data.table data.table rbindlist := .SD
-#' @importFrom biomaRt useDataset getBM useEnsembl
-#' @importFrom topGO termStat scoresInTerm
-#' @importFrom AnnotationDbi select keys
+#' @import data.table
+#' @import biomaRt
+#' @import topGO
+#' @import AnnotationDbi
 #' @importFrom GO.db GO.db
 #' @family GO_terms
 #' @param Input a list containing named elements. Each element must contain the name of:
@@ -531,7 +531,7 @@ setMethod(
                 annot<-data.table(
                     getBM(
                         attributes =c("ensembl_gene_id","external_gene_name"),
-                        value=TRUE,
+                        values=TRUE,
                         mart =myspecies
                     )
                 )
@@ -1117,9 +1117,6 @@ setMethod(
                 # return Results
                 Results
             })
-            
-            
-            
         }
 
         # number of Godata

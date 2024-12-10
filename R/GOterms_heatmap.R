@@ -1,6 +1,6 @@
 #' @title Build a clustering heatmap on GO terms.
 #' @description This method computes a clustering heatmap based on GO terms semantic similarity.
-#' @importFrom data.table data.table
+#' @import data.table
 #' @importFrom ggplot2 scale_fill_gradient2
 #' @importFrom plotly layout
 #' @importFrom heatmaply heatmaply
@@ -343,7 +343,7 @@ setMethod(
         Data<-sResults
 
         # add modfied terms definition
-        row.names(mat)<-paste("<br>GO.ID:",Data$GO.ID,"<br>GO.name:",Data$term)
+        row.names(mat)<-paste("<br>GO.ID:",Data$`GO.ID`,"<br>GO.name:",Data$term)
 
         # if Inf in -log10pvalue, set 9
         for(i in  seq_len(ncol(mat))){mat[mat[,i]=="Inf",i]<-9}
@@ -357,11 +357,11 @@ setMethod(
         )
 
         # add row_names
-        row.names(genes_frequency)<-sResults[,GO.ID]
+        row.names(genes_frequency)<-sResults[,`GO.ID`]
 
         # IC
         IC<-round(
-            slot(myGOs,"IC")[sResults$GO.ID],
+            slot(myGOs,"IC")[sResults$`GO.ID`],
             digits=2
         )
 
@@ -775,6 +775,9 @@ setMethod(
 
             # reduce to significant or not (p<0.01, -log10(p)>2)
             mat<-ifelse(mat < 2, 0, 1)
+
+            # replace NA per 0
+            mat[is.na(mat)]<-0
         }
 
         if(showIC==TRUE){
@@ -827,7 +830,7 @@ setMethod(
                 },
 
                 # the width of dendrogramm
-                branches_lwd = 0.4,
+                branches_lwd = 0.1,
 
                 # color bar length
                 colorbar_len=0.05
@@ -876,7 +879,7 @@ setMethod(
                 },
                 
                 # the width of dendrogramm
-                branches_lwd = 0.4,
+                branches_lwd = 0.1,
                 
                 # color bar length
                 colorbar_len=0.05

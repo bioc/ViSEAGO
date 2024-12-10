@@ -1,8 +1,8 @@
 #' @title perform multilevel preranked gene set enrichment analysis.
 #' @description This method perform fast gene set enrichment analysis (GSEA) using \pkg{fgsea} package.
 #' @import data.table
-#' @importFrom topGO inverseList
-#' @importFrom fgsea fgseaSimple fgseaMultilevel
+#' @import topGO
+#' @import fgsea
 #' @family GO_terms
 #' @param geneSel a 2 columns \code{data.table} with \bold{preranked} gene identifiants (in first column) based on the statistical values (second column).
 #' @param gene2GO a \code{\link{gene2GO-class}} object created by \code{\link{annotate}} method.
@@ -163,7 +163,7 @@ setMethod(
 
         # add leadingEdge gene frequency
         data<-data[,
-            genes_frequency:=paste(
+            `genes_frequency`:=paste(
                 round(
                     length(unlist(leadingEdge))/size*100,
                     digits=3

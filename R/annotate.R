@@ -2,9 +2,9 @@
 #' @description This method retrieves and stores GO annotations for the
 #' organism of interest from one of genomic ressource database
 #' (Bioconductor, EntrezGene, Ensembl, Uniprot).
-#' @importFrom AnnotationDbi select keys
+#' @import AnnotationDbi
 #' @importFrom biomaRt listFilters useDataset getBM
-#' @importFrom data.table data.table := fread setorderv rbindlist
+#' @import data.table
 #' @importFrom utils installed.packages
 #' @family genomic_ressource
 #' @family GO_terms
@@ -351,7 +351,7 @@ setMethod(
                         "name",
                         with=FALSE
                     ]),
-                  value=TRUE,
+                  values=TRUE,
                   mart =myspecies
                 )
             )
