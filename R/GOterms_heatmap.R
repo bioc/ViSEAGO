@@ -820,12 +820,10 @@ setMethod(
                 }else{
 
                     # if not same gene background
-                    scale_fill_gradient2(
-                        name="-log10pvalue",
+                    scale_fill_gradient(
                         low=heatmap_colors[1],
-                        mid=heatmap_colors[1],
-                        high =heatmap_colors[2],
-                        midpoint =0
+                        high=heatmap_colors[2],
+                        name="significance"
                     )
                 },
 
@@ -869,12 +867,10 @@ setMethod(
                 }else{
 
                     # if not same gene background
-                    scale_fill_gradient2(
-                        name="-log10pvalue",
+                    scale_fill_gradient(
                         low=heatmap_colors[1],
-                        mid=heatmap_colors[1],
-                        high =heatmap_colors[2],
-                        midpoint =0
+                        high=heatmap_colors[2],
+                        name="significance"
                     )
                 },
                 
