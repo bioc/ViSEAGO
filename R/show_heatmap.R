@@ -9,7 +9,9 @@
 #' @family visualization
 #' @param object a \code{\link{GO_clusters-class}} object from \code{\link{GOterms_heatmap}} or \code{\link{GOclusters_heatmap}}.
 #' @param type could be "GOterms" to display GOterms clustering heatmap, or "GOclusters" to display GOclusters heatmap.
-#' @param file static image output file name (default to NULL).
+#' @param file static png output file name (default to NULL).
+#' @param width static image width (default to 1000).
+#' @param height static image height (default to 1000).
 #' @param plotly_update update plotly html dependencies (default to FALSE).
 #' @details
 #' This method displays an interactive heatmap (if \code{file}=NULL) from \code{\link{GO_clusters-class}} object for "GOterms" or "GOclusters" type.\cr
@@ -103,7 +105,7 @@
 #' @exportMethod show_heatmap
 setGeneric(
     name="show_heatmap",
-    def=function(object,type,file=NULL,plotly_update=FALSE) {
+    def=function(object,type,file=NULL,plotly_update=FALSE,height=1000,width=600) {
         standardGeneric("show_heatmap")
     }
 )
@@ -116,7 +118,7 @@ setMethod(
         object="GO_clusters",
         type="character"
     ),
-    definition=function(object,type,file,plotly_update){
+    definition=function(object,type,file,plotly_update,height,width){
 
         # check type argument
         type=match.arg(type,c("GOterms","GOclusters"))
@@ -151,27 +153,19 @@ setMethod(
 
         }else{
 
-            if(type=="GOterms"){
+            # static heatmap according type
+            heatmap<-switch(
+                type,
+                GOterms=slot(object,"heatmap")$GOterms_static,
+                GOclusters=slot(object,"heatmap")$GOclusters_static
+            )
 
-                # number of rows
-                rowlen=nrow(slot(slot(object,"enrich_GOs"),"data"))
-
-                # adjust minimum size
-                if(rowlen<10){rowlen=10}
-
-                # compute height
-                rowlen=rowlen^(1.70+1.70*exp(-rowlen/20))
-
-                # max height limit
-                if(rowlen>10000){rowlen=10000}
-
-                # adjust heatmpa size
-                heatmap<-layout(heatmap,height=rowlen)
-            }
-
-            # print heatmap
-            #orca(heatmap,file=file)
-            save_image(heatmap,file=file)
+            # plot
+            png(file,width=width,height=height)
+                print(
+                    heatmap
+                )
+            dev.off()
         }
     }
 )

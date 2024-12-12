@@ -4,6 +4,8 @@
 #' @importFrom ggplot2 scale_fill_gradient2
 #' @importFrom plotly layout
 #' @importFrom heatmaply heatmaply
+#' @importFrom ComplexHeatmap Heatmap rowAnnotation
+#' @importFrom circlize colorRamp2
 #' @importFrom dendextend branches_attr_by_clusters get_nodes_attr set
 #' @importFrom dynamicTreeCut cutreeDynamic
 #' @importFrom RColorBrewer brewer.pal
@@ -1042,11 +1044,55 @@ setMethod(
             hm$x$layout$annotations[[1]]$text<-""
         }
 
+        # static heatmap
+        if(showIC){
+            hs<-Heatmap(
+                mat,
+                raster_device="png",
+                use_raster = TRUE,
+                cluster_rows=dd.row,
+                cluster_columns = if(!is.null(col.dist)){dd.col}else{FALSE},
+                show_row_names = showGOlabels,
+                show_column_names = TRUE,
+                col=if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")==TRUE){
+                    structure(c(heatmap_colors[1],heatmap_colors[2]),names = c("0","1"))
+                }else{
+                    colorRamp2(c(0,1.3,max(mat)), c(heatmap_colors[1],heatmap_colors[1],heatmap_colors[2]))
+                },
+                row_dend_width = grid::unit(4, "cm"),
+                name=if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")==TRUE){"significance"}else{"-Log10 pvalue"},
+                right_annotation=rowAnnotation(
+                    IC=IC,
+                    col=list(
+                        IC=colorRamp2(c(0,max(IC[is.finite(IC)])), c("#FFFFFF","#49006A"))
+                    ),
+                    annotation_name_gp=grid::gpar(fontsize = 10)
+                )
+            )
+        }else{
+            hs<-Heatmap(
+                mat,
+                raster_device="png",
+                use_raster = TRUE,
+                cluster_rows=dd.row,
+                cluster_columns = if(!is.null(col.dist)){dd.col}else{FALSE},
+                show_row_names = showGOlabels,
+                show_column_names = TRUE,
+                col=if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")){
+                    structure(c(heatmap_colors[1],heatmap_colors[2]),names = c("0","1"))
+                }else{
+                    colorRamp2(c(0,1.3,max(mat)), c(heatmap_colors[1],heatmap_colors[1],heatmap_colors[2]))
+                },
+                row_dend_width = grid::unit(4, "cm"),
+                name=if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")==TRUE){"significance"}else{"-Log10 pvalue"}
+            )
+        }
+
         # hm to list
-        hm<-list(hm)
+        hm<-list(hm,hs)
 
         # give names to hm list
-        names(hm)<-"GOterms"
+        names(hm)<-c("GOterms","GOterms_static")
 
         # create an empty column dendrogram if needed
         if(!"dd.col"%in%ls()){dd.col=NULL}

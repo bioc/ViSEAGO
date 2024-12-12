@@ -5,18 +5,36 @@
 \alias{show_heatmap,GO_clusters,character-method}
 \title{Display an interactive or static heatmap.}
 \usage{
-show_heatmap(object, type, file = NULL, plotly_update = FALSE)
+show_heatmap(
+  object,
+  type,
+  file = NULL,
+  plotly_update = FALSE,
+  height = 1000,
+  width = 600
+)
 
-\S4method{show_heatmap}{GO_clusters,character}(object, type, file = NULL, plotly_update = FALSE)
+\S4method{show_heatmap}{GO_clusters,character}(
+  object,
+  type,
+  file = NULL,
+  plotly_update = FALSE,
+  height = 1000,
+  width = 600
+)
 }
 \arguments{
 \item{object}{a \code{\link{GO_clusters-class}} object from \code{\link{GOterms_heatmap}} or \code{\link{GOclusters_heatmap}}.}
 
 \item{type}{could be "GOterms" to display GOterms clustering heatmap, or "GOclusters" to display GOclusters heatmap.}
 
-\item{file}{static image output file name (default to NULL).}
+\item{file}{static png output file name (default to NULL).}
 
 \item{plotly_update}{update plotly html dependencies (default to FALSE).}
+
+\item{height}{static image height (default to 1000).}
+
+\item{width}{static image width (default to 1000).}
 }
 \value{
 display or print heatmap.

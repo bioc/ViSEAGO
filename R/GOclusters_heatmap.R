@@ -6,6 +6,8 @@
 #' @importFrom stats hclust as.dendrogram order.dendrogram
 #' @importFrom plotly layout
 #' @importFrom heatmaply heatmaply
+#' @importFrom ComplexHeatmap Heatmap
+#' @importFrom circlize colorRamp2
 #' @import dendextend
 #' @importFrom RColorBrewer brewer.pal
 #' @family GO_clusters
@@ -277,12 +279,29 @@ setMethod(
             ),
             margin = list(l =300,r=0, b =150,t=100)
         )
+        
+        # rename
+        row.names(mat)<-gsub("<br>"," ",row.names(mat))
+        
+        # draw static heatmap
+        hs<-Heatmap(
+            mat,
+            raster_device="png",
+            use_raster = TRUE,
+            cluster_rows=dend,
+            row_names_side = "left",
+            show_row_names = TRUE,
+            show_column_names = TRUE,
+            col=colorRamp2(c(0,max(mat)), c("#FCFBFD","#3F007D")),
+            row_dend_width = grid::unit(4, "cm"),
+            name="GO terms count"
+        )
 
         # hm to list
-        hm<-list(hm)
+        hm<-list(hm,hs)
 
         # give names to hm list
-        names(hm)<-"GOclusters"
+        names(hm)<-c("GOclusters","GOclusters_static")
 
         # give names to hm list
         slot(object,"heatmap")<-c(slot(object,"heatmap"),hm)
