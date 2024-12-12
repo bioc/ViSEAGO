@@ -1048,6 +1048,20 @@ setMethod(
         # give names to hm list
         names(hm)<-"GOterms"
 
+        # static hcl
+        p<-ComplexHeatmap::Heatmap(
+            raster_device="png",
+            mat,
+            #mat[,c(grep("cl01",colnames(mat)),grep("cl02",colnames(mat)),grep("cl03",colnames(mat)),grep("cl04",colnames(mat)))],
+            col=structure(c("white","purple"),names = c("0","1")),
+            row_dend_width = grid::unit(4, "cm"),
+            name="GO term significance",
+            cluster_rows=dd,
+            cluster_columns = FALSE,
+            show_row_names = FALSE,
+            show_column_names = TRUE
+        )
+
         # create an empty column dendrogram if needed
         if(!"dd.col"%in%ls()){dd.col=NULL}
 
@@ -1093,6 +1107,11 @@ setMethod(
             IC=slot(myGOs,"IC"),
             terms_dist=slot(myGOs,"terms_dist")[row.tree$tree$distance],
             hcl_params=list(
+                heatmap=list(
+                    showIC=showIC,
+                    showGOlabels=showGOlabels,
+                    heatmap_colors=heatmap_colors
+                ),
                 GO.tree=row.tree,
                 sample.tree=col.tree
             ),

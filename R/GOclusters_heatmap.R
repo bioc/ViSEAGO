@@ -6,7 +6,7 @@
 #' @importFrom stats hclust as.dendrogram order.dendrogram
 #' @importFrom plotly layout
 #' @importFrom heatmaply heatmaply
-#' @importFrom dendextend branches_attr_by_clusters set get_leaves_attr rotate
+#' @import dendextend
 #' @importFrom RColorBrewer brewer.pal
 #' @family GO_clusters
 #' @family semantic_similiarity
@@ -187,7 +187,7 @@ setMethod(
         )
 
         # assign text color
-        dend<-set(dend,"labels_col",colors$color)
+        dend<-set(dend,"labels_colors",value=colors$color)
 
         # create dendrogram
         dend<-set(dend,"labels_cex",0.3)
@@ -226,7 +226,7 @@ setMethod(
             ),
 
             # the width of dendrogramm
-            branches_lwd = 0.1,
+            branches_lwd =0.1,
 
             # color bar length
             colorbar_len=0.05
