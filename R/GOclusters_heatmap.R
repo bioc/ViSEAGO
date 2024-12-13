@@ -279,10 +279,7 @@ setMethod(
             ),
             margin = list(l =300,r=0, b =150,t=100)
         )
-        
-        
-        
-        
+
         # custom row text
         row.text=gsub("^.+GO.name: ","",row.names(mat))
         

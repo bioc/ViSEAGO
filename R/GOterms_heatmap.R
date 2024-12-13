@@ -1044,6 +1044,27 @@ setMethod(
             hm$x$layout$annotations[[1]]$text<-""
         }
 
+        # custom row text
+        row.text=gsub(
+            "^.+GO.name: ",
+            "",
+            row.names(mat)
+        )
+        
+        # cut very long definition
+        row.text[nchar(row.text)>50]<-paste(
+            substring(
+                row.text[nchar(row.text)>50],
+                1,
+                50
+            ),
+            "...",
+            sep=""
+        )
+    
+        # copy
+        row.names(mat)<-row.text
+
         # static heatmap
         if(showIC){
             hs<-Heatmap(
@@ -1059,7 +1080,12 @@ setMethod(
                 }else{
                     colorRamp2(c(0,1.3,max(mat)), c(heatmap_colors[1],heatmap_colors[1],heatmap_colors[2]))
                 },
+                row_names_side = "left",
+                row_dend_side = "right",
                 row_dend_width = grid::unit(4, "cm"),
+                row_names_max_width = max_text_width(
+                    rownames(mat), 
+                ),
                 name=if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")){"significance"}else{"-Log10 pvalue"},
                 right_annotation=rowAnnotation(
                     IC=IC,
@@ -1083,7 +1109,12 @@ setMethod(
                 }else{
                     colorRamp2(c(0,1.3,max(mat)), c(heatmap_colors[1],heatmap_colors[1],heatmap_colors[2]))
                 },
+                row_names_side = "left",
+                row_dend_side = "right",
                 row_dend_width = grid::unit(4, "cm"),
+                row_names_max_width = max_text_width(
+                    rownames(mat), 
+                ),
                 name=if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")){"significance"}else{"-Log10 pvalue"}
             )
         }
