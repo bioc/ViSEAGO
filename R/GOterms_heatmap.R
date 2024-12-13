@@ -767,7 +767,7 @@ setMethod(
         ## draw heatmap
 
         # If gene background not the same
-        if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")==FALSE){
+        if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")){
 
             # show warning
             warning(
@@ -1054,13 +1054,13 @@ setMethod(
                 cluster_columns = if(!is.null(col.dist)){dd.col}else{FALSE},
                 show_row_names = showGOlabels,
                 show_column_names = TRUE,
-                col=if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")==TRUE){
+                col=if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")){
                     structure(c(heatmap_colors[1],heatmap_colors[2]),names = c("0","1"))
                 }else{
                     colorRamp2(c(0,1.3,max(mat)), c(heatmap_colors[1],heatmap_colors[1],heatmap_colors[2]))
                 },
                 row_dend_width = grid::unit(4, "cm"),
-                name=if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")==TRUE){"significance"}else{"-Log10 pvalue"},
+                name=if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")){"significance"}else{"-Log10 pvalue"},
                 right_annotation=rowAnnotation(
                     IC=IC,
                     col=list(
@@ -1084,7 +1084,7 @@ setMethod(
                     colorRamp2(c(0,1.3,max(mat)), c(heatmap_colors[1],heatmap_colors[1],heatmap_colors[2]))
                 },
                 row_dend_width = grid::unit(4, "cm"),
-                name=if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")==TRUE){"significance"}else{"-Log10 pvalue"}
+                name=if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")){"significance"}else{"-Log10 pvalue"}
             )
         }
 

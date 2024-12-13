@@ -11,7 +11,7 @@ show_heatmap(
   file = NULL,
   plotly_update = FALSE,
   height = 1000,
-  width = 600
+  width = 800
 )
 
 \S4method{show_heatmap}{GO_clusters,character}(
@@ -20,7 +20,7 @@ show_heatmap(
   file = NULL,
   plotly_update = FALSE,
   height = 1000,
-  width = 600
+  width = 800
 )
 }
 \arguments{
