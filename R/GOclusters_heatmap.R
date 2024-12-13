@@ -189,10 +189,10 @@ setMethod(
         )
 
         # assign text color
-        dend<-set(dend,"labels_colors",value=colors$color)
+        dend<-dendextend::set(dend,"labels_colors",value=colors$color)
 
         # create dendrogram
-        dend<-set(dend,"labels_cex",0.3)
+        dend<-dendextend::set(dend,"labels_cex",0.3)
 
         # extract GO terms and clusters
         row.names(mat)<-attr(dist,"Labels")
@@ -280,9 +280,35 @@ setMethod(
             margin = list(l =300,r=0, b =150,t=100)
         )
         
-        # rename
-        row.names(mat)<-gsub("<br>"," ",row.names(mat))
         
+        
+        
+        # custom row text
+        row.text=gsub("^.+GO.name: ","",row.names(mat))
+        
+        # cut very long definition
+        row.text[nchar(row.text)>50]<-paste(
+            substring(
+            row.text[nchar(row.text)>50],1,50),"...",
+            sep=""
+        )
+        
+        # add cluster number in brackets
+        row.text=paste(
+            row.text,
+            " (cl",
+            gsub(
+                "^<br>cluster: |<br>GO.ID.+$",
+                "",
+                row.names(mat)
+            ),
+            ")",
+            sep=""
+        )
+
+        # replace
+        row.names(mat)<-row.text
+
         # draw static heatmap
         hs<-Heatmap(
             mat,
@@ -290,10 +316,14 @@ setMethod(
             use_raster = TRUE,
             cluster_rows=dend,
             row_names_side = "left",
+            row_dend_side = "right",
             show_row_names = TRUE,
             show_column_names = TRUE,
             col=colorRamp2(c(0,max(mat)), c("#FCFBFD","#3F007D")),
-            row_dend_width = grid::unit(4, "cm"),
+            row_dend_width = grid::unit(10, "cm"),
+            row_names_max_width = max_text_width(
+                rownames(mat), 
+            ),
             name="GO terms count"
         )
 
