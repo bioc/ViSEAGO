@@ -767,7 +767,7 @@ setMethod(
         ## draw heatmap
 
         # If gene background not the same
-        if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")){
+        if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")==FALSE){
 
             # show warning
             warning(
@@ -809,7 +809,7 @@ setMethod(
                 row_side_palette =colorRampPalette(c("#FFFFFF","#49006A")),
 
                 # the color palette
-                scale_fill_gradient_fun=if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")==TRUE){
+                scale_fill_gradient_fun=if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")){
 
                     # if same gene background
                     scale_fill_gradient2(
@@ -856,7 +856,7 @@ setMethod(
                 Colv=if(!is.null(col.dist)){dd.col}else{FALSE},
 
                 # the color palette
-                scale_fill_gradient_fun=if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")==TRUE){
+                scale_fill_gradient_fun=if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")){
 
                     # if same gene background
                     scale_fill_gradient2(
