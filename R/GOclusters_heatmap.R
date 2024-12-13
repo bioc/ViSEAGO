@@ -6,7 +6,7 @@
 #' @importFrom stats hclust as.dendrogram order.dendrogram
 #' @importFrom plotly layout
 #' @importFrom heatmaply heatmaply
-#' @importFrom ComplexHeatmap Heatmap
+#' @importFrom ComplexHeatmap Heatmap max_text_width
 #' @importFrom circlize colorRamp2
 #' @import dendextend
 #' @importFrom RColorBrewer brewer.pal
