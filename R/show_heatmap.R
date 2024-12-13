@@ -105,7 +105,7 @@
 #' @exportMethod show_heatmap
 setGeneric(
     name="show_heatmap",
-    def=function(object,type,file=NULL,plotly_update=FALSE,height=1000,width=600) {
+    def=function(object,type,file=NULL,plotly_update=FALSE,height=1000,width=800) {
         standardGeneric("show_heatmap")
     }
 )
