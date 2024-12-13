@@ -1076,9 +1076,9 @@ setMethod(
                 show_row_names = showGOlabels,
                 show_column_names = TRUE,
                 col=if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")){
-                    structure(c(heatmap_colors[1],heatmap_colors[2]),names = c("0","1"))
-                }else{
                     colorRamp2(c(0,1.3,max(mat)), c(heatmap_colors[1],heatmap_colors[1],heatmap_colors[2]))
+                }else{
+                    structure(c(heatmap_colors[1],heatmap_colors[2]),names = c("0","1"))
                 },
                 row_names_side = "left",
                 row_dend_side = "right",
@@ -1086,7 +1086,7 @@ setMethod(
                 row_names_max_width = max_text_width(
                     rownames(mat), 
                 ),
-                name=if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")){"significance"}else{"-Log10 pvalue"},
+                name=if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")){"-Log10 pvalue"}else{"significance"},
                 right_annotation=rowAnnotation(
                     IC=IC,
                     col=list(
@@ -1105,9 +1105,9 @@ setMethod(
                 show_row_names = showGOlabels,
                 show_column_names = TRUE,
                 col=if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")){
-                    structure(c(heatmap_colors[1],heatmap_colors[2]),names = c("0","1"))
-                }else{
                     colorRamp2(c(0,1.3,max(mat)), c(heatmap_colors[1],heatmap_colors[1],heatmap_colors[2]))
+                }else{
+                    structure(c(heatmap_colors[1],heatmap_colors[2]),names = c("0","1"))
                 },
                 row_names_side = "left",
                 row_dend_side = "right",
@@ -1115,7 +1115,7 @@ setMethod(
                 row_names_max_width = max_text_width(
                     rownames(mat), 
                 ),
-                name=if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")){"significance"}else{"-Log10 pvalue"}
+                name=if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")){"-Log10 pvalue"}else{"significance"},
             )
         }
 
