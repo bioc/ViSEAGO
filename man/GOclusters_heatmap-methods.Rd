@@ -116,9 +116,6 @@ Other GO_clusters:
 \code{\link{show_heatmap}()},
 \code{\link{show_table}()}
 
-Other semantic_similiarity: 
-\code{\link{GOterms_heatmap}()}
-
 Other visualization: 
 \code{\link{GOcount}()},
 \code{\link{GOterms_heatmap}()},
@@ -129,5 +126,5 @@ Other visualization:
 \code{\link{show_table}()}
 }
 \concept{GO_clusters}
-\concept{semantic_similiarity}
+\concept{semantic_similarity}
 \concept{visualization}

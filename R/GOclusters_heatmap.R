@@ -11,7 +11,7 @@
 #' @import dendextend
 #' @importFrom RColorBrewer brewer.pal
 #' @family GO_clusters
-#' @family semantic_similiarity
+#' @family semantic_similarity
 #' @family visualization
 #' @param object a  \code{\link{GO_clusters-class}} object from \code{\link{compute_SS_distances}}.
 #' @param tree a named list with:

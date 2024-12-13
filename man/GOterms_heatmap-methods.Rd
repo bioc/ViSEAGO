@@ -164,9 +164,6 @@ Other GO_terms:
 \code{\link{merge_enrich_terms}()},
 \code{\link{runfgsea}()}
 
-Other semantic_similiarity: 
-\code{\link{GOclusters_heatmap}()}
-
 Other visualization: 
 \code{\link{GOclusters_heatmap}()},
 \code{\link{GOcount}()},

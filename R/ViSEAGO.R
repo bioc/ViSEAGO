@@ -24,6 +24,6 @@
 #' of biological questions. Results can be easily shared between bioinformaticians and biologists, enhancing reporting capabilities while
 #'  maintaining reproducibility.
 #'
-#' @docType "_PACKAGE"
+#' @docType package
 #' @name ViSEAGO
 NULL
