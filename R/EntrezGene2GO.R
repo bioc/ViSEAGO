@@ -38,7 +38,8 @@ EntrezGene2GO=function(){
     download.file(
       "ftp://ftp.ncbi.nih.gov/gene/DATA/gene2go.gz",
       quiet=TRUE,
-      destfile =temp
+      destfile =temp,
+      method = "libcurl"
     )
 
     # uncompress
