@@ -25,7 +25,8 @@ EntrezGene_orthologs=function(){
     download.file(
         "https://ftp.ncbi.nih.gov/gene/DATA/gene_orthologs.gz",
         quiet=TRUE,
-        destfile =temp
+        destfile =temp,
+        method = "libcurl"
     )
 
     # read the file

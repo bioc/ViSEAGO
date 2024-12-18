@@ -390,7 +390,7 @@ setMethod(
                 ),
                 destfile =temp,
                 quiet=TRUE,
-              #  method="internal"
+                method = "libcurl"
             )
 
             # unzip
