@@ -378,6 +378,9 @@ setMethod(
                 sep="."
             )
 
+            # time out option
+            options(timeout = max(300, getOption("timeout")))
+
             # load the file
             download.file(
                 paste(

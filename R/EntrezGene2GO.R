@@ -34,6 +34,9 @@ EntrezGene2GO=function(){
       sep="."
     )
 
+    # time out option
+    options(timeout = max(300, getOption("timeout")))
+
     # import Gene to Gene Ontology from NCBI Gene database
     download.file(
       "ftp://ftp.ncbi.nih.gov/gene/DATA/gene2go.gz",
