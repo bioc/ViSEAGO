@@ -1076,7 +1076,7 @@ setMethod(
                 show_row_names = showGOlabels,
                 show_column_names = TRUE,
                 col=if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")){
-                    colorRamp2(c(0,1.3,max(mat)), c(heatmap_colors[1],heatmap_colors[1],heatmap_colors[2]))
+                    colorRamp2(c(0,1.3,max(mat,na.rm=TRUE)), c(heatmap_colors[1],heatmap_colors[1],heatmap_colors[2]))
                 }else{
                     structure(c(heatmap_colors[1],heatmap_colors[2]),names = c("0","1"))
                 },
@@ -1105,7 +1105,7 @@ setMethod(
                 show_row_names = showGOlabels,
                 show_column_names = TRUE,
                 col=if(slot(slot(myGOs,"enrich_GOs"),"same_genes_background")){
-                    colorRamp2(c(0,1.3,max(mat)), c(heatmap_colors[1],heatmap_colors[1],heatmap_colors[2]))
+                    colorRamp2(c(0,1.3,max(mat,na.rm=TRUE)), c(heatmap_colors[1],heatmap_colors[1],heatmap_colors[2]))
                 }else{
                     structure(c(heatmap_colors[1],heatmap_colors[2]),names = c("0","1"))
                 },
