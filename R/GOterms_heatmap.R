@@ -169,6 +169,9 @@ setMethod(
     ),
     definition=function(myGOs,showIC,showGOlabels,heatmap_colors,GO.tree,samples.tree){
 
+        # check dendrogram entry
+        if(is.null(row.tree$tree$distance)){
+     
         ## check entry
         if(length(slot(myGOs,"terms_dist"))==0){
             stop("Please compute Semantic Similarity distance with ViSEAGO::compute_SS_distances()")
@@ -310,10 +313,7 @@ setMethod(
 
         # col.tree with default if NA
         col.tree<-Tree.params("samples.tree")
-
-        # check dendrogram entry
-        if(is.null(row.tree$tree$distance)){
-            stop(
+       stop(
                 paste(
                     "please enter a myGOs object computed SS distance name (",
                     paste(
